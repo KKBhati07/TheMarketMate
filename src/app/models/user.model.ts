@@ -1,10 +1,11 @@
 export interface User {
-  id: number,
-  name: string,
-  uuid: string,
-  profileUrl?: string,
-  email: string,
-  isAdmin: string
+  id: number;
+  name: string;
+  uuid: string;
+  profileUrl?: string;
+  email: string;
+  is_admin: boolean;
+  deleted?:boolean;
 }
 
 export interface ProfileDetails {

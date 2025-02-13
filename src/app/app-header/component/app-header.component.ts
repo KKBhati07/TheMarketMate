@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from "@angular/core";
 import {NavigationEnd, Router} from "@angular/router";
 import {BehaviorSubject} from "rxjs";
-import {AuthService} from "../../services/auth-service";
+import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Redirect} from "../../models/login-signup.model";
 import {URLS} from "../../urls";
@@ -20,9 +20,10 @@ export class AppHeaderComponent implements OnInit{
   categories:string[]=[]
   protected readonly CONSTANTS = CONSTANTS;
   isMobile = false;
+  isLoading = true;
+  isAdmin = false;
 
   isAuthenticated$ = new BehaviorSubject<boolean>(false);
-  isLoading$ = new BehaviorSubject<boolean>(true);
   user:User | null = null;
   renderIcon = false;
   expandProfile = false;
@@ -92,12 +93,9 @@ export class AppHeaderComponent implements OnInit{
       this.isAuthenticated$.next(true);
       this.user = this.authService.UserDetails
       if(!this.user?.profileUrl) this.renderIcon = true;
+      this.isAdmin = this.user?.is_admin ?? false;
     }
-    this.isLoading$.next(false);
-    setTimeout(()=>{
-      this.cdr.detectChanges();
-
-    },0);
+    this.isLoading = false;
     this.cdr.detectChanges();
   }
 
@@ -121,6 +119,11 @@ export class AppHeaderComponent implements OnInit{
 
     this.cdr.markForCheck();
   }
+
+  onAdminClick() {
+    this.router.navigate([URLS.ADMIN.LANDING]).then(r => null)
+  }
+
   onCategoriesClick(){
     if(this.expandedCategories){
       this.expandedCategories = !this.expandedCategories;

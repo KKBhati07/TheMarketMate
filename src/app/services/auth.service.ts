@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Observable, tap} from "rxjs";
-import {ApiService} from "./api-service";
+import {ApiService} from "./api.service";
 import {URLS} from "../urls";
 import {Login, Signup} from "../models/login-signup.model";
 import {ApiHttpResponse} from "../app-util/api-response.util";

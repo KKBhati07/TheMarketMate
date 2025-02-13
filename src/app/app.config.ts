@@ -7,7 +7,7 @@ import {provideHttpClient, withFetch} from "@angular/common/http";
 
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 import {appInitializerFactory} from "./app-util/app-initializer.factory";
-import {AuthService} from "./services/auth-service";
+import {AuthService} from "./services/auth.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [

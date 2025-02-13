@@ -1,11 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {AuthService} from "./services/auth-service";
+import {AuthService} from "./services/auth.service";
 import {HttpClientModule} from "@angular/common/http";
 import {AppHeaderModule} from "./app-header/app-header.module";
 import {FormsContainerModule} from "./forms-container/forms-container.module";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
 import {UserProfileModule} from "./user-profile/user-profile.module";
+import {AppAdminModule} from "./app-admin/app-admin.module";
+import {AppSharedModule} from "./shared/app-shared.module";
+import {MatDialogModule} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-root',
@@ -13,7 +16,10 @@ import {UserProfileModule} from "./user-profile/user-profile.module";
   imports: [
     RouterOutlet, HttpClientModule, AppHeaderModule,
     FormsContainerModule,
-    UserProfileModule
+    UserProfileModule,
+    AppAdminModule,
+    AppSharedModule,
+    MatDialogModule
   ],
   providers: [
     { provide: MAT_BOTTOM_SHEET_DATA, useValue: {} },

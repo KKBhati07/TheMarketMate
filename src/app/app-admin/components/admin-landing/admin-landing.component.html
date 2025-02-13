@@ -1,0 +1,37 @@
+<!--<h1>Admin Dashboard</h1>-->
+
+
+<div [ngClass]="isMobile?'flex-column':'flex-row'" class="admin-container mt-100 pl-20 pr-20">
+
+  <div class="left-container" [ngClass]="isMobile?'w-100p flex-row gap-20 justify-content-center' :'w-20p'">
+    <div (click)="onNavItemClick(true)"
+         [ngClass]="{
+      'item-selected':isUsersSelected,
+      'w-52':isMobile
+      }"
+         class="nav-item-container cursor-pointer flex-row gap-20 align-i-center justify-content-center h-52 mb-20 br-10">
+      <div class="flex-row align-i-center gap-20">
+        <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'group'"></mat-icon>
+        <p *ngIf="!isMobile" class="fw-7"> USERS</p>
+      </div>
+    </div>
+
+    <div (click)="onNavItemClick(false)"
+         [ngClass]="{
+      'item-selected':!isUsersSelected,
+      'w-52':isMobile
+      }"
+         class="nav-item-container cursor-pointer flex-row gap-20 align-i-center justify-content-center h-50 mb-20 br-10">
+      <div class="flex-row align-i-center gap-20">
+        <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'list'"></mat-icon>
+        <p *ngIf="!isMobile" class="fw-7"> LISTINGS</p>
+      </div>
+    </div>
+  </div>
+  <div class="right-container w-100p">
+
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
+

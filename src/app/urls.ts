@@ -8,6 +8,11 @@ export const URLS = {
   USER:{
     USER_PROFILE: (uuid:string|null=null)=> (`user/${uuid?uuid:':uuid'}`)
   },
+  ADMIN:{
+    LANDING:'admin',
+    USERS: 'admin/users',
+    LISTINGS: 'admin/listings',
+  },
   API: {
     V1: {
       USER: {
@@ -23,6 +28,20 @@ export const URLS = {
       },
       CATEGORY: {
         GET_ALL: 'v1/category/get_all',
+      },
+      ADMIN: {
+        USERS: {
+          GET_ALL: 'v1/admin/users/get_all',
+          USER_DETAILS: (uuid:string)=> (`v1/admin/users/${uuid}/get_details`),
+          UPDATE: 'v1/admin/users/update_user',
+          DELETE: (uuid:string)=> (`v1/admin/users/delete_user/${uuid}`),
+        },
+        LISTINGS:{
+          GET_ALL: 'v1/admin/listings/get_all',
+          GET_DETAILS: (listingId:string)=> (`v1/admin/listings/${listingId}/get_details`),
+          UPDATE: 'v1/admin/listings/update_item',
+          DELETE: 'v1/admin/listings/delete_item',
+        }
       }
     }
   }

@@ -38,7 +38,9 @@ export class FormContainerComponent implements OnInit, OnDestroy {
   }
 
   private setISMobile() {
-    this.deviceDetector.isMobile().subscribe(isMobile => {
+    this.deviceDetector.isMobile()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isMobile => {
       this.isMobile = isMobile;
       if(this.isMobile){
         this.openFormInBottomSheet()

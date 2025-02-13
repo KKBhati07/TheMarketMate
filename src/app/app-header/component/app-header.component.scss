@@ -34,21 +34,10 @@
             color: var(--primary-color);
           }
 
-          .ls-option-text {
-            color: var(--primary-color);
-
-          }
-
         }
         .categories-hover{
           &:hover {
             width: 140px;
-          }
-        }
-
-        .icons-hover{
-          &:hover {
-            width: 104px;
           }
         }
       }
