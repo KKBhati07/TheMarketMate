@@ -15,3 +15,5 @@ export interface ErrorText{
   password?: string;
   confirmPassword?: string;
 }
+
+export type Redirect = 'login' | 'signup'

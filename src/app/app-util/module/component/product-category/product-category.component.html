@@ -1,0 +1,15 @@
+<div (click)="onCategoryClickEmitter.emit(category)"
+     *ngIf="loadComponent" class="cursor-pointer border-circle
+ flex-column align-i-center gap-20 category-container
+  justify-content-center"
+     [ngClass]="isMobile?'h-144 w-144':'h-164 w-164'"
+>
+  <mat-icon
+
+    [fontIcon]="iconName"
+    [ngClass]="isMobile?'':''"
+    class="category-icon fs-44 w-44 h-44 "
+  >
+  </mat-icon>
+  <p class="heading fs-20 fw-6 ">{{ title }}</p>
+</div>

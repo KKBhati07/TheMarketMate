@@ -1,0 +1,12 @@
+.root-container{
+  background: url("/assets/backgrounds/background.jpeg");
+  background-size: cover;
+  width: 100%;
+  height: calc(100vh - 56px);
+}
+
+@media screen and (max-width: 979px) {
+  .root-container{
+    background: url("/assets/backgrounds/background-portrait.jpeg");
+  }
+}

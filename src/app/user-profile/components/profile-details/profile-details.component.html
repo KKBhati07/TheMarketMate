@@ -1,0 +1,19 @@
+<div
+  [ngClass]="hideComponent?'hide-comp':''"
+  class="profile-details-container justify-content-center gap-20 p-20 flex-column align-i-center br-2">
+  <div class="profile-pic-container flex-row w-100 h-100 border-circle
+      align-i-center justify-content-center">
+    <ng-container *ngIf="userDetails?.profileUrl; else renderProfileIcon">
+      <img [src]="userDetails?.profileUrl">
+    </ng-container>
+  </div>
+  <p class="fs-40">{{ userDetails?.name || 'USER' }}</p>
+  <p class="fs-32">{{ userDetails?.email || 'Email' }}</p>
+  <p *ngIf="userDetails?.contactNo" class="fs-24">Contact No:{{ userDetails?.contactNo }}</p>
+  <mm-button *ngIf="userDetails?.self" (click)="onEditProfileClick()" class="w-100p h-56 mt-32" [type]="'button'"
+             [class]="'w-100p h-34'" [text]="'EDIT PROFILE'"></mm-button>
+</div>
+
+<ng-template #renderProfileIcon>
+  <mat-icon class="fs-60 w-60 h-60" [fontIcon]="'person'"></mat-icon>
+</ng-template>

@@ -1,0 +1,18 @@
+.profile-details-container {
+  width: 24vw;
+  height: 80vh;
+  border: 1px solid var(--border-color);
+  box-shadow: 0px 0px 40px #b1b1b1;
+  background-color: var(--header-color);
+  transition: all 0.9s linear;
+
+  &.hide-comp {
+  }
+
+  &:hover {
+  }
+
+  .profile-pic-container {
+    border: 1px solid black
+  }
+}

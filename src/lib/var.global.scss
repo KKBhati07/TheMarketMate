@@ -1,14 +1,19 @@
 :root {
-  --font-family: 'Mulish' Consolas;
+  //--font-family: 'Mulish' Consolas;
+  --font-family: "Sofadi One", sans-serif;;
   --hover-color: rgb(255, 102, 0);
   --item-color: rgb(82, 82, 82);
-  --header-color: rgb(68, 115, 177);
   --background-color: rgb(255, 255, 255);
   --border-color: rgb(110, 110, 110);
   --button-color: rgb(68, 115, 177);
   --success-notify-color: rgb(0, 88, 81);
   --error-notify-color: rgb(187, 40, 33);
-  --primary-color: rgb(0, 46, 42);
+  //--primary-color: rgb(0, 121, 111);
+  //--primary-color: rgb(0, 46, 42);
+  --primary-color: rgb(0, 48, 44);
+  //--primary-color: rgb(12, 48, 0);
+  //--primary-color: rgb(48, 72, 40);
+  --header-color: #F9F6ED;
   --button-color-disable:#f1f2f2;
   --text-color-disable:#adadae
 }

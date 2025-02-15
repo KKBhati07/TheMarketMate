@@ -110,7 +110,23 @@
   }
 }
 
-@include height-classes(4, 800);
+@mixin flex-gap-classes($min, $max) {
+  @for $i from $min through $max {
+    .gap-#{$i}{
+      gap: #{$i}px !important;
+    }
+  }
+}
+
+@mixin font-weight-classes($min, $max) {
+  @for $i from $min through $max {
+    .fw-#{$i}{
+      font-weight: #{$i}00 !important;
+    }
+  }
+}
+
+@include height-classes(0, 800);
 @include width-classes(4, 800);
 @include padding-classes(4, 200);
 @include padding-top-classes(4, 200);
@@ -123,7 +139,9 @@
 @include margin-bottom-classes(4, 800);
 @include margin-left-classes(4, 800);
 @include margin-right-classes(4, 800);
-@include font-size-classes(4, 60);
+@include font-size-classes(4, 100);
+@include flex-gap-classes(4, 100);
+@include font-weight-classes(1, 10);
 
 // Utility classes
 .flex-row {
@@ -173,4 +191,20 @@
 
 .border-circle{
   border-radius: 50%;
+}
+
+.w-100p{
+  width: 100%!important;
+}
+.w-20p{
+  width: 20%!important;
+}
+.w-30p{
+  width: 30%!important;
+}
+.w-80p{
+  width: 80%!important;
+}
+.h-100p{
+  height: 100%!important;
 }

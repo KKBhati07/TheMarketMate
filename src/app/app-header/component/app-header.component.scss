@@ -1,28 +1,76 @@
-/* app.component.scss or any other component stylesheet */
+.header-container {
+  border: 1px solid;
+  overflow-x: hidden;
+  background-color: var(--primary-color);
 
-::ng-deep .cdk-overlay-container
-::ng-deep .cdk-overlay-container {
+  .header {
+    z-index: 1;
+    transition: height 0.5s ease;
+    background-color: var(--header-color);
+    width: calc(100% - 40px);
+    border: 1px solid var(--border-color);
+    top: 20px;
+    left: 20px;
 
-}
+    &.height-90{
+      height: 90%;
+    }
 
-::ng-deep .cdk-overlay-container {
+    .upper-container{
+      .right-section {
+        flex-direction: row-reverse;
+        .profile-pic-container {
+          &.styles{
+            border: 1px solid red;
+          }
+        }
 
-  .mm-login-dialog-container {
-    /* Style the dialog panel */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 16px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    max-width: 100%; /* Ensure the dialog is responsive */
+        .ls-option-container {
+          border-radius: 20px;
+          overflow: hidden;
+          transition: width 200ms ease-in-out;
+          width: 40px;
+
+          .ls-option-icon {
+            color: var(--primary-color);
+          }
+
+        }
+        .categories-hover{
+          &:hover {
+            width: 140px;
+          }
+        }
+      }
+    }
+
+    .expanded-container{
+      overflow: hidden;
+      transition: height 500ms ease;
+
+      &.h-90p{
+        height: 90%;
+      }
+      .expanded-profile-container{
+        flex-direction: row-reverse;
+        .name-logout-container{
+          p{
+            text-align: end;
+          }
+        }
+      }
+      .expanded-cat-container{
+        flex-wrap: wrap;
+        overflow: scroll;
+      }
+    }
   }
 
-
-  .mm-login-dialog-backdrop {
-    width: 100vw;
-    //height: 100vh;
-    /* Style the backdrop */
-    background-color: rgb(0, 0, 0); /* Semi-transparent black */
+  @media screen and (max-width: 969px) {
+    .header{
+      left: 10px;
+      width: calc(100% - 20px);
+    }
   }
 }
+

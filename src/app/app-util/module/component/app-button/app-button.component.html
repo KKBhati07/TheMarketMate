@@ -1,0 +1,26 @@
+<ng-container *ngIf="type">
+  <button
+    class=" border-none flex-row justify-content-center align-i-center
+     br-10 {{disabled?'disable':'enable cursor-pointer'}} "
+
+    [type]="type"
+    [ngClass]="class"
+    [disabled]="disabled"
+    [ngStyle]="style"
+  >
+    <mat-icon *ngIf="position === 'before'"
+              class="{{disabled? 'icon-disable':'icon-enable'}}"
+              [ngClass]="iconClass"
+              [fontIcon]="icon"
+    ></mat-icon>
+    <p>
+      {{ text }}
+    </p>
+    <mat-icon *ngIf="position === 'after'"
+              class="{{disabled? 'icon-disable':'icon-enable'}}"
+              [ngClass]="iconClass"
+              [fontIcon]="icon"
+    ></mat-icon>
+  </button>
+</ng-container>
+

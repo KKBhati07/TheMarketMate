@@ -1,11 +1,8 @@
 .login-signup-form-container-i {
   top: 0;
   border: 1px solid rgba(0, 0, 0, 0);
-  width: 600px;
-  height: 100vh;
-  border-bottom-left-radius: 20px;
   border-top-left-radius: 20px;
-  background-color: var(--background-color);
+  background-color: var(--header-color);
   transition: all 0.5s linear;
 
   .close-icon-container{
@@ -79,9 +76,9 @@
       }
     }
   }
-  .login-signup-text-container{
-    .login-signup-text{
-      color: #f7f7f7;
+  .signup-text-container{
+    .signup-text{
+      color: #b21010;
       span{
         color: var(--primary-color);
         text-decoration: underline;
@@ -94,13 +91,6 @@
   }
 }
 
+@media only screen and (max-width: 969px) {
 
-///* Responsive Styles */
-//@media only screen and (max-width: 768px) {
-//  form {
-//    width: 90vw;
-//  }
-//  form input {
-//    width: 90vw;
-//  }
-//}
+}
