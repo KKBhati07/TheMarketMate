@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from "@angular/core";
 import {NavigationEnd, Router} from "@angular/router";
-import {BehaviorSubject} from "rxjs";
-import {AuthService} from "../../services/auth-service";
+import {BehaviorSubject, filter} from "rxjs";
+import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Redirect} from "../../models/login-signup.model";
 import {URLS} from "../../urls";
@@ -20,9 +20,11 @@ export class AppHeaderComponent implements OnInit{
   categories:string[]=[]
   protected readonly CONSTANTS = CONSTANTS;
   isMobile = false;
+  isLoading = true;
+  isAdmin = false;
+  showHeader = true;
 
   isAuthenticated$ = new BehaviorSubject<boolean>(false);
-  isLoading$ = new BehaviorSubject<boolean>(true);
   user:User | null = null;
   renderIcon = false;
   expandProfile = false;
@@ -36,8 +38,19 @@ export class AppHeaderComponent implements OnInit{
               ) {}
 
   ngOnInit() {
+    this.checkForActiveRoute();
     this.checkForAuthenticationAndSetUser();
     this.setIsMobile()
+  }
+
+  checkForActiveRoute() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.showHeader = !(event.url.includes(URLS.AUTH.LOGIN)
+        || event.url.includes(URLS.AUTH.SIGNUP));
+      this.cdr.markForCheck();
+    });
   }
   onUsernameClick(){
     const uuid = this.authService.UserDetails?.uuid;
@@ -92,19 +105,17 @@ export class AppHeaderComponent implements OnInit{
       this.isAuthenticated$.next(true);
       this.user = this.authService.UserDetails
       if(!this.user?.profileUrl) this.renderIcon = true;
+      this.isAdmin = this.user?.is_admin ?? false;
     }
-    this.isLoading$.next(false);
-    setTimeout(()=>{
-      this.cdr.detectChanges();
-
-    },0);
+    this.isLoading = false;
     this.cdr.detectChanges();
   }
 
   onNavigationClick(redirectTo:Redirect){
     if(!redirectTo) return;
     if(redirectTo === 'login'){
-      this.router.navigate(URLS.AUTH.LOGIN.split('/'),{queryParams:{redirect:this.router.url}}).then(r=>null)
+      this.router.navigate(URLS.AUTH.LOGIN.split('/'),
+        {queryParams: {redirect: this.router.url}}).then(r => null)
     }else if(redirectTo === 'signup'){
       this.router.navigate(URLS.AUTH.SIGNUP.split('/')).then(r=>null)
     }
@@ -121,6 +132,12 @@ export class AppHeaderComponent implements OnInit{
 
     this.cdr.markForCheck();
   }
+
+  onAdminClick() {
+    this.router.navigate([URLS.ADMIN.LANDING]).then(r => null)
+    this.closeHeader();
+  }
+
   onCategoriesClick(){
     if(this.expandedCategories){
       this.expandedCategories = !this.expandedCategories;

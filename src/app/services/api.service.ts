@@ -39,14 +39,21 @@ export class ApiService {
   put<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
     const headers = this.getAuthHeaders();
     return apiResponse(
-      this.http.put<T>(`${this.baseUrl}${endpoint}`, body, { headers, observe: 'response' })
+      this.http.put<T>(`${this.baseUrl}${endpoint}`, body, { headers, observe: 'response', withCredentials: true })
+    );
+  }
+
+  patch<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
+    const headers = this.getAuthHeaders();
+    return apiResponse(
+      this.http.patch<T>(`${this.baseUrl}${endpoint}`, body, {headers, observe: 'response', withCredentials: true})
     );
   }
 
   delete<T>(endpoint: string): Observable<ApiHttpResponse<T>> {
     const headers = this.getAuthHeaders();
     return apiResponse(
-      this.http.delete<T>(`${this.baseUrl}${endpoint}`, { headers, observe: 'response' })
+      this.http.delete<T>(`${this.baseUrl}${endpoint}`, { headers, observe: 'response', withCredentials: true })
     );
   }
 }

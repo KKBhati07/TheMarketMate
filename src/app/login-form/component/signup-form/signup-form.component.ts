@@ -3,9 +3,10 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {ActivatedRoute, Router} from "@angular/router";
 import {PasswordValidator} from "./validator";
 import {ErrorText, Signup} from "../../../models/login-signup.model";
-import {AuthService} from "../../../services/auth-service";
+import {AuthService} from "../../../services/auth.service";
 import {URLS} from "../../../urls";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: "mm-signup-form",
@@ -13,7 +14,7 @@ import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom
   styleUrls: ["./signup-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignupFormComponent implements OnInit {
+export class SignupFormComponent implements OnInit, OnDestroy {
 
   renderComponent = false;
   formHeading = 'Signup to MM!'
@@ -23,6 +24,7 @@ export class SignupFormComponent implements OnInit {
   formData: Signup | undefined;
   errorText: ErrorText = {}
   isBottomSheet = false;
+  destroy$ = new Subject();
 
   constructor(
     private fb: FormBuilder,
@@ -142,7 +144,8 @@ export class SignupFormComponent implements OnInit {
     if (name && email && password) {
       this.authService.signupUser({
         name, email, password
-      }).subscribe(res => {
+      }).pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
         if (res.isSuccessful()) {
           const data = res.body?.data;
           if (data) {
@@ -161,5 +164,9 @@ export class SignupFormComponent implements OnInit {
     }else{
       //TODO :: Implement notification service
     }
+  }
+  ngOnDestroy() {
+    this.destroy$.next(null)
+    this.destroy$.complete()
   }
 }

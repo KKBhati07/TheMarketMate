@@ -139,7 +139,7 @@
 @include margin-bottom-classes(4, 800);
 @include margin-left-classes(4, 800);
 @include margin-right-classes(4, 800);
-@include font-size-classes(4, 60);
+@include font-size-classes(4, 100);
 @include flex-gap-classes(4, 100);
 @include font-weight-classes(1, 10);
 
@@ -195,6 +195,15 @@
 
 .w-100p{
   width: 100%!important;
+}
+.w-20p{
+  width: 20%!important;
+}
+.w-30p{
+  width: 30%!important;
+}
+.w-80p{
+  width: 80%!important;
 }
 .h-100p{
   height: 100%!important;

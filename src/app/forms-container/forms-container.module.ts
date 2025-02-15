@@ -6,7 +6,7 @@ import {CommonModule} from "@angular/common";
 
 @NgModule({
   declarations:[FormContainerComponent],
-  imports: [FormsModule, AppHeaderModule, CommonModule],
+  imports: [FormsModule, AppHeaderModule, CommonModule,],
   exports:[]
 })
 export class FormsContainerModule{}

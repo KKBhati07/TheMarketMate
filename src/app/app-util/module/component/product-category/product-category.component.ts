@@ -1,11 +1,11 @@
-import {Component, Input, OnInit, Output,EventEmitter} from "@angular/core";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {CONSTANTS} from "../../../../app.constants";
-import {Router} from "@angular/router";
 
 @Component({
   selector:'mm-product-category',
   templateUrl:'./product-category.component.html',
-  styleUrls:['./product-category.component.scss']
+  styleUrls:['./product-category.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class ProductCategoryComponent implements OnInit {
   @Output() onCategoryClickEmitter = new EventEmitter<string>();

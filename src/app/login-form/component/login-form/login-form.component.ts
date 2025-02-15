@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from "../../../services/auth-service";
+import {AuthService} from "../../../services/auth.service";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
 import {URLS} from "../../../urls";
 import {Subject, takeUntil} from "rxjs";
@@ -92,7 +92,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       return;
     }
     const {email, password} = this.loginForm.value;
-    this.authService.loginUser({email, password}).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.authService.loginUser({email, password})
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res=>{
       // TODO::Notification Service
       const redirectUrl = this.route.snapshot.queryParamMap.get('redirect');
       this.router.navigateByUrl(redirectUrl||URLS.ROOT).then(r=>{window.location.reload();});
