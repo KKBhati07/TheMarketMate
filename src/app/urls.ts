@@ -13,6 +13,7 @@ export const URLS = {
     USERS: 'admin/users',
     LISTINGS: 'admin/listings',
   },
+  FOUROFOUR:'fourofour',
   API: {
     V1: {
       USER: {

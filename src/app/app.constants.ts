@@ -8,6 +8,7 @@ export const CONSTANTS = {
   BACKGROUND:{
     DESKTOP:'assets/backgrounds/background.jpeg',
     MOBILE:'assets/backgrounds/background-portrait.jpeg',
+    FOUROFOUR:'assets/backgrounds/fourofour.svg'
   },
 
   CATEGORY:{
