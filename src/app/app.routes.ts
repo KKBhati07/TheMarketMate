@@ -8,6 +8,7 @@ import {UserProfileComponent} from "./user-profile/components/user-profile/user-
 import {AdminLandingComponent} from "./app-admin/components/admin-landing/admin-landing.component";
 import {AdminUsersComponent} from "./app-admin/components/admin-users/admin-users.component";
 import {AdminListingComponent} from "./app-admin/components/admin-listings/admin-listing.component";
+import {FourOFourComponent} from "./shared/components/four-o-four/four-o-four.component";
 
 export const routes: Routes = [
   { path: URLS.ROOT, component: AppRootComponent },
@@ -36,5 +37,8 @@ export const routes: Routes = [
       {path: 'users', component: AdminUsersComponent},
       {path: 'listings', component: AdminListingComponent}
     ]
-  }
+  },
+  {path: URLS.FOUROFOUR, component: FourOFourComponent},
+  {path: '**', redirectTo:URLS.FOUROFOUR, pathMatch:"full"}
+
 ];
