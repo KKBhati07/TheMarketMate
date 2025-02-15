@@ -15,8 +15,8 @@ import {Subject, takeUntil} from "rxjs";
 export class AdminUserListComponent implements OnDestroy {
   @Input() user: User | null = null;
   @Input() isMobile: boolean = false;
-  @Output() deleteOrRestoreUser: EventEmitter<{ delete: boolean, uuid: string }>
-    = new EventEmitter<{ delete: boolean, uuid: string }>()
+  @Output() deleteOrRestoreUser: EventEmitter<{ action: string, uuid: string }>
+    = new EventEmitter<{ action: string, uuid: string }>()
   destroy$ = new Subject();
 
   constructor(private dialog: MatDialog) {
@@ -24,7 +24,6 @@ export class AdminUserListComponent implements OnDestroy {
 
   onDeleteClick(): void {
     if (!this.user) return;
-
     const dialogRef = this.dialog.open(AppConfirmDeleteDialogComponent, {
       width: '400px',
       hasBackdrop: true,
@@ -39,9 +38,8 @@ export class AdminUserListComponent implements OnDestroy {
     dialogRef.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe(confirmDelete => {
-        if (confirmDelete) {
-
-          console.log(`User ${this.user?.name} deleted!`);
+        if (confirmDelete && this.user?.uuid) {
+          this.deleteOrRestoreUser.emit({action: 'DELETE', uuid: this.user.uuid});
         }
       });
   }
@@ -49,5 +47,10 @@ export class AdminUserListComponent implements OnDestroy {
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  onRestoreClick() {
+    if (!this.user) return;
+    this.deleteOrRestoreUser.emit({action: 'RESTORE', uuid: this.user.uuid});
   }
 }

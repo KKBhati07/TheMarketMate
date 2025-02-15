@@ -17,7 +17,15 @@ export class UserService {
     return this.apiService.get(URLS.API.V1.USER.USER_DETAILS(uuid))
   }
 
-  getAllUsers(): Observable<ApiHttpResponse<ApiResponse>>{
+  getAllUsers(): Observable<ApiHttpResponse<ApiResponse>> {
     return this.apiService.get(URLS.API.V1.ADMIN.USERS.GET_ALL)
+  }
+
+  deleteUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+    return this.apiService.delete(URLS.API.V1.ADMIN.USERS.DELETE(uuid))
+  }
+
+  restoreUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+    return this.apiService.patch(URLS.API.V1.ADMIN.USERS.RESTORE(uuid), {restore: true})
   }
 }

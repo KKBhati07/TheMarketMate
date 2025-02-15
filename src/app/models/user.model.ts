@@ -5,7 +5,8 @@ export interface User {
   profileUrl?: string;
   email: string;
   is_admin: boolean;
-  deleted?:boolean;
+  admin: boolean;
+  deleted?: boolean;
 }
 
 export interface ProfileDetails {

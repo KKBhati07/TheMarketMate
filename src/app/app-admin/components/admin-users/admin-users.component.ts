@@ -53,4 +53,46 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
     this.destroy$.next(null);
     this.destroy$.complete();
   }
+
+  onDeleteOrRestroreUser(event: { action: string; uuid: string }) {
+    switch (event.action) {
+      case 'DELETE':
+        this.deleteUser(event.uuid);
+        break;
+      case 'RESTORE':
+        this.restoreUser(event.uuid);
+    }
+  }
+
+  deleteUser(uuid: string) {
+    this.userService.deleteUser(uuid)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        if (res.isSuccessful()) {
+          this.isLoading = true;
+          this.cdr.markForCheck();
+          this.getAllUsers();
+          console.log(`User with id ${uuid} deleted!`);
+          // TODO :: implement notifications
+        } else {
+          console.warn('Unable to delete user')
+        }
+      })
+  }
+
+  restoreUser(uuid: string) {
+    this.userService.restoreUser(uuid)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        if (res.isSuccessful()) {
+          this.isLoading = true;
+          this.cdr.markForCheck();
+          this.getAllUsers();
+          console.log(`User with id ${uuid} restored!`);
+          // TODO :: implement notifications
+        } else {
+          console.warn('Unable to restore user')
+        }
+      })
+  }
 }

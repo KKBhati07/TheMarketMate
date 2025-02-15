@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from "@angular/core";
-import {Router} from "@angular/router";
+import {NavigationStart, Router} from "@angular/router";
 import {URLS} from "../../../urls";
 import {DeviceDetectorService} from "../../../app-util/services/device-detector.service";
 import {Subject, takeUntil} from "rxjs";
@@ -26,6 +26,17 @@ export class AdminLandingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.navigateToUserList();
     this.setIsMobile();
+    this.subscribeToRoute();
+  }
+
+  subscribeToRoute() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart && event.url === '/' + URLS.ADMIN.LANDING) {
+        this.router.navigate([URLS.ADMIN.USERS]).then(r => null);
+        this.isUsersSelected = true;
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   navigateToUserList() {
@@ -38,7 +49,6 @@ export class AdminLandingComponent implements OnInit, OnDestroy {
       .subscribe(isMobile => {
         this.isMobile = isMobile;
         this.cdr.markForCheck();
-        console.warn(this.isMobile)
       });
   }
 

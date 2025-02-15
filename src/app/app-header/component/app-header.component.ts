@@ -102,7 +102,8 @@ export class AppHeaderComponent implements OnInit{
   onNavigationClick(redirectTo:Redirect){
     if(!redirectTo) return;
     if(redirectTo === 'login'){
-      this.router.navigate(URLS.AUTH.LOGIN.split('/'),{queryParams:{redirect:this.router.url}}).then(r=>null)
+      this.router.navigate(URLS.AUTH.LOGIN.split('/'),
+        {queryParams: {redirect: this.router.url}}).then(r => null)
     }else if(redirectTo === 'signup'){
       this.router.navigate(URLS.AUTH.SIGNUP.split('/')).then(r=>null)
     }
@@ -122,6 +123,7 @@ export class AppHeaderComponent implements OnInit{
 
   onAdminClick() {
     this.router.navigate([URLS.ADMIN.LANDING]).then(r => null)
+    this.closeHeader();
   }
 
   onCategoriesClick(){

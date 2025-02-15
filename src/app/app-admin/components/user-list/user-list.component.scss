@@ -1,23 +1,52 @@
 .user-container {
   border: 1px solid var(--primary-color);
   background-color: var(--header-color);
-  .right-container{
-    .delete-icon{
+  position: relative;
+
+  .left-container {
+    .image-icon-container {
+      div {
+        position: absolute !important;
+        top: 16px;
+        left: 16px;
+        transform: translate(-50%, -50%);
+        font-size: 50px;
+
+        .mat-icon {
+          color: var(--hover-color);
+        }
+      }
+    }
+  }
+
+  .right-container {
+    .delete-icon {
       color: red;
     }
-    .edit-icon{
+
+    .restore-icon {
       color: #868686;
-      &:hover{
+
+      &:hover {
+        color: var(--hover-color);
+      }
+    }
+
+    .edit-icon {
+      &:hover {
         color: var(--hover-color);
       }
     }
   }
-  mat-icon{
+
+  mat-icon {
     color: var(--primary-color);
   }
 }
+
 ::ng-deep .delete-dialog-backdrop.cdk-overlay-backdrop {
   background-color: rgba(0, 0, 0, 0.58);
+  z-index: 2;
   height: 100vh;
   width: 100vw;
   position: fixed;
@@ -25,7 +54,8 @@
 }
 
 ::ng-deep.cdk-overlay-container {
-  .delete-dialog-container{
+  .delete-dialog-container {
+    z-index: 3;
     border-radius: 10px;
     padding: 20px;
     width: 300px;
