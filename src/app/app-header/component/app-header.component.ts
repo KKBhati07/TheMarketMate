@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from "@angular/core";
 import {NavigationEnd, Router} from "@angular/router";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, filter} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Redirect} from "../../models/login-signup.model";
@@ -22,6 +22,7 @@ export class AppHeaderComponent implements OnInit{
   isMobile = false;
   isLoading = true;
   isAdmin = false;
+  showHeader = true;
 
   isAuthenticated$ = new BehaviorSubject<boolean>(false);
   user:User | null = null;
@@ -37,8 +38,19 @@ export class AppHeaderComponent implements OnInit{
               ) {}
 
   ngOnInit() {
+    this.checkForActiveRoute();
     this.checkForAuthenticationAndSetUser();
     this.setIsMobile()
+  }
+
+  checkForActiveRoute() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.showHeader = !(event.url.includes(URLS.AUTH.LOGIN)
+        || event.url.includes(URLS.AUTH.SIGNUP));
+      this.cdr.markForCheck();
+    });
   }
   onUsernameClick(){
     const uuid = this.authService.UserDetails?.uuid;
