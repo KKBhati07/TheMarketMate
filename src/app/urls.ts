@@ -21,6 +21,7 @@ export const URLS = {
         UPDATE: 'v1/user/update_user',
         DELETE: 'v1/user/delete_user',
         USER_DETAILS: (uuid: string) => (`v1/user/${uuid}/get_details`),
+        UPDATE_USER: 'v1/user/update_user',
       },
       AUTH: {
         LOGIN: 'v1/auth/login',

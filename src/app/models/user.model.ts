@@ -6,6 +6,7 @@ export interface User {
   email: string;
   is_admin: boolean;
   admin: boolean;
+  contactNo:string;
   deleted?: boolean;
 }
 
@@ -16,4 +17,12 @@ export interface ProfileDetails {
   profileUrl?: string;
   self?: boolean;
   contactNo?: string;
+}
+
+export interface UpdateUserPayload {
+  uuid: string;
+  name: string;
+  email: string;
+  contactNo?: string;
+  profileImage?: File;
 }

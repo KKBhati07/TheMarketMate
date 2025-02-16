@@ -16,6 +16,7 @@ export class AuthService {
 
   private userDetails: User | null = null;
   private isAuthenticated: boolean = false;
+  private isAdmin:boolean = false;
 
   constructor(private apiService: ApiService,private cookieService: CookieService) {
   }
@@ -27,6 +28,9 @@ export class AuthService {
         if (res.isSuccessful()) {
           this.isAuthenticated = res.body?.data?.is_authenticated || false;
           this.userDetails = res.body?.data?.user_details;
+          this.isAdmin = res.body?.data?.user_details?.is_admin;
+        }else{
+          this.cookieService.delete('sessionid');
         }
       })
     );
@@ -51,7 +55,7 @@ export class AuthService {
   logoutUser():Observable<ApiHttpResponse<ApiResponse>>{
     return this.apiService.get<ApiResponse>(URLS.API.V1.AUTH.LOGOUT).pipe(tap(res => {
       if (res.isSuccessful()) {
-        if(res.body?.data?.status === 2000){
+        if(res.body?.data?.status === 200){
           this.cookieService.delete('sessionid');
         }
       }
@@ -65,6 +69,10 @@ export class AuthService {
 
   get UserDetails(): User | null {
     return this.userDetails;
+  }
+
+  get IsAdmin(): boolean {
+    return this.isAdmin;
   }
 
 
