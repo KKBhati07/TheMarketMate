@@ -21,7 +21,7 @@ export class UserProfileEditComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<UserProfileEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { userDetails: User }
+    @Inject(MAT_DIALOG_DATA) public data: { userDetails: User, isMobile: boolean }
   ) {
     this.initForm();
   }
@@ -40,8 +40,9 @@ export class UserProfileEditComponent implements OnInit {
   }
 
   getAndSetUserDetails() {
-    this.userDetails = this.data.userDetails
-    this.setUserDetails(this.userDetails)
+    this.userDetails = this.data.userDetails;
+    this.setUserDetails(this.userDetails);
+    this.isMobile = this.data.isMobile;
   }
 
   setUserDetails(user: User | null) {
@@ -57,8 +58,32 @@ export class UserProfileEditComponent implements OnInit {
     this.isLoading = false;
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
+  isDragOver = false
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    this.isDragOver = true;
+  }
+
+  onDragLeave() {
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    this.isDragOver = false;
+
+    if (event.dataTransfer?.files.length) {
+      const file = event.dataTransfer.files[0];
+      this.onFileSelected(null, file)
+    }
+  }
+
+
+  onFileSelected(event: any, file: any = null) {
+    if (!file) {
+      file = event.target.files[0];
+    }
     if (file) {
       if (!file.type.startsWith('image/')) {
         console.warn("Please select a valid image file.");

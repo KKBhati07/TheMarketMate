@@ -1,7 +1,14 @@
-<div class="form-container flex-column w-100p">
+<div
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave()"
+  (drop)="onDrop($event)"
+  [class.dragover]="isDragOver"
+  class="form-container flex-column w-100p">
   <form
     class=" mt-20 profile-edit-form w-100p" [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
-    <div class="inner-container  w-100p flex-row h-100p">
+    <div
+      [ngClass]="isMobile?'flex-column pr-8':'flex-row'"
+      class="inner-container w-100p h-100p">
       <div
         [ngStyle]="{
      'max-width': isMobile? '100%': '800px',
@@ -27,26 +34,48 @@
           <input class="form-input fs-16 pl-4 display-block h-60 position-relative br-10" id="contactNo"
                  formControlName="contactNo" type="text">
         </div>
-        <div class="pl-12">
-          <mm-button [class]="'w-100p h-60 br-4 gap-20'"
-                     position="after"
-                     [disabled]="editProfileForm.invalid"
-                     icon="cloud_upload"
-                     iconClass="fs-20 w-20 h-20"
-                     type='submit'
-                     text="Update Profile"
-          ></mm-button>
-        </div>
+        <ng-container *ngIf="!isMobile">
+          <div class="pl-12">
+            <mm-button [class]="'w-100p h-60 br-4 gap-20'"
+                       position="after"
+                       [disabled]="editProfileForm.invalid"
+                       icon="cloud_upload"
+                       iconClass="fs-20 w-20 h-20"
+                       type='submit'
+                       text="Update Profile"
+            ></mm-button>
+          </div>
 
-        <div class="pl-12">
+          <div class="pl-12">
 
-          <mm-button [class]="'w-100p h-60 br-4 gap-20'"
-                     iconClass="fs-20 w-20 h-20"
-                     type='button'
-                     text="Close"
-                     (click)="closeDialog()"
-          ></mm-button>
-        </div>
+            <mm-button [class]="'w-100p h-60 br-4 gap-20'"
+                       iconClass="fs-20 w-20 h-20"
+                       type='button'
+                       text="Close"
+                       (click)="closeDialog()"
+            ></mm-button>
+          </div>
+        </ng-container>
+        <!--        <div class="pl-12">-->
+        <!--          <mm-button [class]="'w-100p h-60 br-4 gap-20'"-->
+        <!--                     position="after"-->
+        <!--                     [disabled]="editProfileForm.invalid"-->
+        <!--                     icon="cloud_upload"-->
+        <!--                     iconClass="fs-20 w-20 h-20"-->
+        <!--                     type='submit'-->
+        <!--                     text="Update Profile"-->
+        <!--          ></mm-button>-->
+        <!--        </div>-->
+
+        <!--        <div class="pl-12">-->
+
+        <!--          <mm-button [class]="'w-100p h-60 br-4 gap-20'"-->
+        <!--                     iconClass="fs-20 w-20 h-20"-->
+        <!--                     type='button'-->
+        <!--                     text="Close"-->
+        <!--                     (click)="closeDialog()"-->
+        <!--          ></mm-button>-->
+        <!--        </div>-->
       </div>
       <div class="right-container flex-column pt-36 align-i-center"
            [ngStyle]="{
@@ -73,6 +102,29 @@
                      text="Select Pic" (click)="fileInput.click()"></mm-button>
         </div>
       </div>
+    </div>
+    <div class="flex-column mt-20 gap-20 mb-20 pr-8" *ngIf="isMobile">
+      <div class="pl-12">
+        <mm-button [class]="'w-100p h-60 br-4 gap-20'"
+                   position="after"
+                   [disabled]="editProfileForm.invalid"
+                   icon="cloud_upload"
+                   iconClass="fs-20 w-20 h-20"
+                   type='submit'
+                   text="Update Profile"
+        ></mm-button>
+      </div>
+
+      <div class="pl-12">
+
+        <mm-button [class]="'w-100p h-60 br-4 gap-20'"
+                   iconClass="fs-20 w-20 h-20"
+                   type='button'
+                   text="Close"
+                   (click)="closeDialog()"
+        ></mm-button>
+      </div>
+
     </div>
   </form>
 </div>

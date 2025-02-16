@@ -1,4 +1,9 @@
-<div *ngIf="renderComponent" class=" main-container flex-row align-i-center w-100p">
+<div *ngIf="renderComponent"
+     [ngClass]="!isMobile?'flex-row':'flex-column'"
+     class=" main-container flex-row align-i-center w-100p">
+  <div class="profile-detail-mobile-container pt-60 pl-8 pr-8" *ngIf="isMobile">
+    <mm-profile-detail [userDetails]="userDetails" [isMobile]="isMobile"></mm-profile-detail>
+  </div>
   <div class="left-section"></div>
   <!--  <div *ngIf="true" class="divider" ></div>-->
   <div *ngIf="!isMobile" class="right-section flex-row justify-content-center align-i-center">

@@ -1,5 +1,13 @@
 <div
-  [ngClass]="hideComponent?'hide-comp':''"
+  [ngStyle]="{
+    width:isMobile ? '':'24vw',
+    borderRadius:isMobile ?'':'20px'
+  }"
+  [ngClass]="{
+    'hide-comp':hideComponent,
+    'br-2':!isMobile,
+    'br-8':isMobile
+  }"
   class="profile-details-container justify-content-center gap-20 p-20 flex-column align-i-center br-2">
   <div class="profile-pic-container p-4 flex-row w-100 h-100 border-circle
       align-i-center justify-content-center">

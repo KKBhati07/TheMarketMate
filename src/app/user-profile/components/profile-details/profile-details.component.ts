@@ -14,6 +14,7 @@ import {AuthService} from "../../../services/auth.service";
 })
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
   @Input() userDetails: ProfileDetails | null = null;
+  @Input() isMobile: boolean = false;
   hideComponent = false;
   idBottomSheet = false;
   destroy$: Subject<any> = new Subject();
@@ -30,9 +31,12 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     if (this.userDetails) {
       const dialogRef = this.dialog.open(UserProfileEditComponent, {
         backdropClass: 'profile-edit-from-backdrop',
-        panelClass: 'profile-edit-from-container',
+        panelClass: this.isMobile?'profile-edit-from-container-mobile':'profile-edit-from-container',
         hasBackdrop: true,
-        data: {userDetails: this.userDetails}
+        data: {
+          userDetails: this.userDetails,
+          isMobile: this.isMobile
+        }
       });
       dialogRef.afterClosed().subscribe((data: FormData | null) => {
         if (data) {

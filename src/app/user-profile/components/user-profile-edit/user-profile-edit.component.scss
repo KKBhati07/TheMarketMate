@@ -2,6 +2,11 @@
   background-color: var(--header-color);
   flex-grow: 1;
 
+  &.dragover {
+    border: 2px dashed #007bff;
+    background-color: #eef5ff;
+  }
+
   .profile-edit-form {
     flex-grow: 1;
     display: flex;
