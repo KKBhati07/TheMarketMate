@@ -17,8 +17,8 @@ export class UserService {
     return this.apiService.get(URLS.API.V1.USER.USER_DETAILS(uuid))
   }
 
-  updateUser(data:FormData): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.post(URLS.API.V1.USER.UPDATE_USER,data)
+  updateUser(data: FormData): Observable<ApiHttpResponse<ApiResponse>> {
+    return this.apiService.put(URLS.API.V1.USER.UPDATE_USER, data)
   }
 
   getAllUsers(): Observable<ApiHttpResponse<ApiResponse>> {

@@ -1,10 +1,10 @@
 <div
   [ngClass]="hideComponent?'hide-comp':''"
   class="profile-details-container justify-content-center gap-20 p-20 flex-column align-i-center br-2">
-  <div class="profile-pic-container flex-row w-100 h-100 border-circle
+  <div class="profile-pic-container p-4 flex-row w-100 h-100 border-circle
       align-i-center justify-content-center">
     <ng-container *ngIf="userDetails?.profileUrl; else renderProfileIcon">
-      <img [src]="userDetails?.profileUrl">
+      <img class="profile-pic border-circle w-100p h-100p" [src]="userDetails?.profileUrl">
     </ng-container>
   </div>
   <p class="fs-40">{{ userDetails?.name || 'USER' }}</p>

@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Observable, tap} from "rxjs";
+import {Observable, Subject, tap} from "rxjs";
 import {ApiService} from "./api.service";
 import {URLS} from "../urls";
 import {Login, Signup} from "../models/login-signup.model";
@@ -16,9 +16,10 @@ export class AuthService {
 
   private userDetails: User | null = null;
   private isAuthenticated: boolean = false;
-  private isAdmin:boolean = false;
+  private isAdmin: boolean = false;
+  private updateUser$: Subject<User> = new Subject();
 
-  constructor(private apiService: ApiService,private cookieService: CookieService) {
+  constructor(private apiService: ApiService, private cookieService: CookieService) {
   }
 
 
@@ -29,7 +30,7 @@ export class AuthService {
           this.isAuthenticated = res.body?.data?.is_authenticated || false;
           this.userDetails = res.body?.data?.user_details;
           this.isAdmin = res.body?.data?.user_details?.is_admin;
-        }else{
+        } else {
           this.cookieService.delete('sessionid');
         }
       })
@@ -44,7 +45,7 @@ export class AuthService {
     return this.apiService.post<ApiResponse>(URLS.API.V1.AUTH.LOGIN, body).pipe(tap(res => {
       if (res.isSuccessful()) {
         if (res.body?.data?.authenticated) {
-          this.cookieService.set('sessionid',res.body.data?.sessionId,undefined,'/');
+          this.cookieService.set('sessionid', res.body.data?.sessionId, undefined, '/');
           this.userDetails = res.body?.data?.user_details;
           this.isAuthenticated = true;
         }
@@ -52,14 +53,22 @@ export class AuthService {
     }))
   }
 
-  logoutUser():Observable<ApiHttpResponse<ApiResponse>>{
+  logoutUser(): Observable<ApiHttpResponse<ApiResponse>> {
     return this.apiService.get<ApiResponse>(URLS.API.V1.AUTH.LOGOUT).pipe(tap(res => {
       if (res.isSuccessful()) {
-        if(res.body?.data?.status === 200){
+        if (res.body?.data?.status === 200) {
           this.cookieService.delete('sessionid');
         }
       }
     }))
+  }
+
+  setUpdatedUser(user: User) {
+    this.updateUser$.next(user);
+  }
+
+  getUpdatedUser(): Observable<User> {
+    return this.updateUser$.asObservable();
   }
 
   get Authenticated(): boolean {

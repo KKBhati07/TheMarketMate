@@ -20,6 +20,13 @@
       .right-section {
         flex-direction: row-reverse;
         .profile-pic-container {
+          padding: 4px;
+          overflow: hidden;
+          border: 1px solid var(--primary-color);
+          .profile-pic{
+            overflow: hidden;
+            object-fit: cover;
+          }
           &.styles{
             border: 1px solid red;
           }

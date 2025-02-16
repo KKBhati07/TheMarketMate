@@ -13,7 +13,12 @@
   }
 
   .profile-pic-container {
-    border: 1px solid black
+    border: 1px solid black;
+
+    .profile-pic {
+      overflow: hidden;
+      object-fit: contain;
+    }
   }
 }
 
@@ -28,6 +33,7 @@
   position: fixed;
   top: 0;
 }
+
 ::ng-deep .cdk-overlay-container {
   .profile-edit-from-container {
     display: flex;

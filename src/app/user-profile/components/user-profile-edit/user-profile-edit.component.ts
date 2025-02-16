@@ -60,6 +60,10 @@ export class UserProfileEditComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        console.warn("Please select a valid image file.");
+        return;
+      }
       this.selectedFile = file;
       const reader = new FileReader();
       reader.onload = (e) => {

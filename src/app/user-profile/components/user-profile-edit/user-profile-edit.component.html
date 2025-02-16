@@ -63,7 +63,7 @@
               class="h-100p w-100p" [src]="previewUrl" alt="Profile Preview" width="100">
           </ng-container>
         </div>
-        <input #fileInput type="file" hidden (change)="onFileSelected($event)">
+        <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)">
         <div class="mt-16">
           <mm-button [class]="'w-200 br-4 gap-20 h-40 '"
                      position="after"

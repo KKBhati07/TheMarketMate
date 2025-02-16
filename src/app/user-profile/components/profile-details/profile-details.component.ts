@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {UserProfileEditComponent} from "../user-profile-edit/user-profile-edit.component";
 import {Subject, takeUntil} from "rxjs";
 import {UserService} from "../../../services/user.service";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'mm-profile-detail',
@@ -19,6 +20,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private cdr: ChangeDetectorRef,
               private userService: UserService,
+              private authService: AuthService,
               private dialog: MatDialog) {
   }
 
@@ -38,13 +40,28 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe(res => {
               if (res.isSuccessful()) {
+                this.userDetails = res.body?.data?.user_details ?? this.userDetails;
+                if (this.userDetails) {
+                  this.userDetails.self = res.body?.data?.self
+                  this.authService.setUpdatedUser({
+                    name: this.userDetails.name,
+                    email: this.userDetails.email,
+                    uuid: this.userDetails.uuid,
+                    profileUrl: this.userDetails.profileUrl,
+                    contactNo: this.userDetails.contactNo,
+                    is_admin: res.body?.data?.is_admin,
+                    admin: res.body?.data?.admin,
+                    deleted: res.body?.data?.deleted,
+                  })
+                }
+                this.cdr.markForCheck();
                 console.log("Profile updated successfully!");
               } else {
                 console.error("Error updating profile:", res.statusText);
               }
             });
         }
-      })
+      });
     }
   }
 

@@ -18,9 +18,9 @@
           <ng-container *ngIf="isAuthenticated$ | async; else loginSignupTemplate">
             <div (click)="onProfileClick()"
                  [ngClass]="!renderIcon?'styles_ri':''"
-                 class=" profile-pic-container border-circle align-i-center
+                 class=" profile-pic-container cursor-pointer border-circle align-i-center
                   justify-content-center flex-row w-40 h-40">
-              <img *ngIf="!renderIcon; else renderIconTemplate" [src]="user?.profileUrl">
+              <img class="profile-pic" *ngIf="!renderIcon; else renderIconTemplate" [src]="user?.profileUrl">
             </div>
           </ng-container>
           <ng-container *ngIf="isAdmin">
