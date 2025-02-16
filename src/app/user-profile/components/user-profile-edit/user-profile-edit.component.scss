@@ -1,0 +1,48 @@
+.form-container {
+  background-color: var(--header-color);
+  flex-grow: 1;
+
+  &.dragover {
+    border: 2px dashed #007bff;
+    background-color: #eef5ff;
+  }
+
+  .profile-edit-form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    .inner-container {
+      flex-grow: 1;
+
+      .left-container {
+        .form-input {
+          border: 1px solid var(--border-color);
+          background-color: #f7f7f7;
+          outline: none;
+          width: 100%;
+
+          &:hover {
+            border: 1px solid var(--hover-color);
+          }
+
+          &:focus {
+            border: 1px solid var(--hover-color);
+          }
+        }
+      }
+
+      .right-container {
+        .pic-container {
+          width: 100%;
+          height: 200px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.profile-pic-icon {
+  color: var(--primary-color);
+}

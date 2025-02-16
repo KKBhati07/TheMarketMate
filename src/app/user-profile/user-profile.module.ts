@@ -4,10 +4,22 @@ import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {AppUtilModule} from "../app-util/module/app-util.module";
 import {ProfileDetailsComponent} from "./components/profile-details/profile-details.component";
+import {UserProfileEditComponent} from "./components/user-profile-edit/user-profile-edit.component";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
-  declarations: [UserProfileComponent, ProfileDetailsComponent],
-  imports: [CommonModule, MatIconModule, AppUtilModule]
+  declarations: [
+    UserProfileComponent,
+    ProfileDetailsComponent,
+    UserProfileEditComponent
+  ],
+  imports: [CommonModule,
+    MatIconModule,
+    AppUtilModule,
+    ReactiveFormsModule,
+    MatDialogModule
+  ]
 })
 export class UserProfileModule {
 }

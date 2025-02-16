@@ -1,6 +1,12 @@
 .main-container {
   height: calc(100vh - 56px);
-  //background-color: #b21010;
+  width: 100vw;
+
+  .profile-detail-mobile-container {
+    width: 100vw;
+    flex-grow: 1;
+    border: 1px solid;
+  }
 
   .left-section {
     background-color: forestgreen;
