@@ -12,38 +12,41 @@
     top: 20px;
     left: 20px;
 
-    &.height-90{
+    &.height-90 {
       height: 90%;
     }
 
-    .upper-container{
+    .upper-container {
       .right-section {
         flex-direction: row-reverse;
+
         .profile-pic-container {
-          padding: 4px;
           overflow: hidden;
           border: 1px solid var(--primary-color);
-          .profile-pic{
+
+          .profile-pic {
             overflow: hidden;
             object-fit: cover;
           }
-          &.styles{
+
+          &.styles {
             border: 1px solid red;
+          }
+
+          .profile-pic-icon {
+            color: var(--primary-color);
           }
         }
 
         .ls-option-container {
-          border-radius: 20px;
-          overflow: hidden;
-          transition: width 200ms ease-in-out;
-          width: 40px;
 
           .ls-option-icon {
             color: var(--primary-color);
           }
 
         }
-        .categories-hover{
+
+        .categories-hover {
           &:hover {
             width: 140px;
           }
@@ -51,22 +54,26 @@
       }
     }
 
-    .expanded-container{
+    .expanded-container {
       overflow: hidden;
       transition: height 500ms ease;
 
-      &.h-90p{
+      &.h-90p {
         height: 90%;
       }
-      .expanded-profile-container{
+
+      .expanded-profile-container {
         flex-direction: row-reverse;
-        .name-logout-container{
-          p{
+
+        .name-logout-container {
+          p {
             text-align: end;
+            color: var(--primary-color);
           }
         }
       }
-      .expanded-cat-container{
+
+      .expanded-cat-container {
         flex-wrap: wrap;
         overflow: scroll;
       }
@@ -74,7 +81,7 @@
   }
 
   @media screen and (max-width: 969px) {
-    .header{
+    .header {
       left: 10px;
       width: calc(100% - 20px);
     }

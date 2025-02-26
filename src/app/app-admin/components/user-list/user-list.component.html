@@ -3,15 +3,16 @@
   <div class="user-container flex-row justify-content-space-b pl-20 pr-20 align-i-center h-88 ml-10 mr-10 mt-10">
     <div class="left-container flex-row align-i-center gap-10">
       <div class="cursor-default border-circle image-icon-container h-48 w-48">
-        <img *ngIf="user.profileUrl; else renderIconTemplate" [src]="user.profileUrl"/>
+        <img (error)="renderIcon = true" class="border-circle h-48 w-48"
+             *ngIf="user.profileUrl && !renderIcon; else renderIconTemplate" [src]="user.profileUrl"/>
         <div class="fs-16 w-16 h-16" *ngIf="user.admin">
           <mat-icon class="fs-16 w-16 h-16" [fontIcon]="'star'"></mat-icon>
 
         </div>
       </div>
       <div class="cursor-default">
-        <p class="fs-28">{{ user.name || 'User' }}</p>
-        <p class="fs-20">{{ user.email || 'Email' }}</p>
+        <p class="fs-24 fw-6">{{ user.name || 'User' }}</p>
+        <p class="fs-16">{{ user.email || 'Email' }}</p>
       </div>
     </div>
     <div class="right-container flex-row gap-20">

@@ -18,6 +18,7 @@ export class AdminUserListComponent implements OnDestroy {
   @Output() deleteOrRestoreUser: EventEmitter<{ action: string, uuid: string }>
     = new EventEmitter<{ action: string, uuid: string }>()
   destroy$ = new Subject();
+  renderIcon = false;
 
   constructor(private dialog: MatDialog) {
   }
@@ -52,5 +53,9 @@ export class AdminUserListComponent implements OnDestroy {
   onRestoreClick() {
     if (!this.user) return;
     this.deleteOrRestoreUser.emit({action: 'RESTORE', uuid: this.user.uuid});
+  }
+
+  onImageNotFound() {
+    // this.
   }
 }

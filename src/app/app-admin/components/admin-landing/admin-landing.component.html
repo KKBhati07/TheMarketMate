@@ -4,29 +4,32 @@
 <div [ngClass]="isMobile?'flex-column':'flex-row'" class="admin-container mt-100 pl-20 pr-20">
 
   <div class="left-container" [ngClass]="isMobile?'w-100p flex-row gap-20 justify-content-center' :'w-20p'">
-    <div (click)="onNavItemClick(true)"
-         [ngClass]="{
-      'item-selected':isUsersSelected,
-      'w-52':isMobile
-      }"
-         class="nav-item-container cursor-pointer flex-row gap-20 align-i-center justify-content-center h-52 mb-20 br-10">
-      <div class="flex-row align-i-center gap-20">
-        <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'group'"></mat-icon>
-        <p *ngIf="!isMobile" class="fw-7"> USERS</p>
-      </div>
-    </div>
+    <mm-nav-button
+      (click)="onNavItemClick(true)"
+      icon="group"
+      iconClass=" fs-32 h-32 w-32"
+      class=" h-52 mb-20"
+      [onMobileWidth]="isMobile?'w-52':''"
+      [active]="isUsersSelected"
+      text='USERS'
+      [isMobile]="isMobile"
+      textClass="fw-7"
+      type="button"
+    ></mm-nav-button>
 
-    <div (click)="onNavItemClick(false)"
-         [ngClass]="{
-      'item-selected':!isUsersSelected,
-      'w-52':isMobile
-      }"
-         class="nav-item-container cursor-pointer flex-row gap-20 align-i-center justify-content-center h-50 mb-20 br-10">
-      <div class="flex-row align-i-center gap-20">
-        <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'list'"></mat-icon>
-        <p *ngIf="!isMobile" class="fw-7"> LISTINGS</p>
-      </div>
-    </div>
+    <mm-nav-button
+      (click)="onNavItemClick(false)"
+      icon="list"
+      class=" h-52 mb-20"
+      iconClass=" fs-32 h-32 w-32"
+      textClass="fw-7"
+      [active]="!isUsersSelected"
+      [onMobileWidth]="isMobile?'w-52':''"
+      text='LISTINGS'
+      [isMobile]="isMobile"
+      type="button"
+    ></mm-nav-button>
+
   </div>
   <div class="right-container w-100p">
 

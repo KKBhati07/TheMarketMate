@@ -6,9 +6,9 @@
        'h-300':!expandProfile && expandedCategories && !isMobile,
        'height-90':!expandProfile && expandedCategories && isMobile
        }"
-       class="header position-absolute br-8 pr-16 pl-16">
+       class="header position-absolute pr-16 pl-16">
     <div class="upper-container h-92 flex-row align-i-center justify-content-space-b">
-      <img [src]="CONSTANTS.LOGO.TRANSPARENT" class="w-132 h-132" alt="app_logo">
+      <img (click)="onLogoClick()" [src]="CONSTANTS.LOGO.TRANSPARENT" class="w-132 cursor-pointer h-132" alt="app_logo">
       <div class="right-section flex-row align-i-center gap-20 h-100p"
            [ngClass]="(isAuthenticated$ | async)? 'w-300':'w-320'"
       >
@@ -18,9 +18,10 @@
           <ng-container *ngIf="isAuthenticated$ | async; else loginSignupTemplate">
             <div (click)="onProfileClick()"
                  [ngClass]="!renderIcon?'styles_ri':''"
-                 class=" profile-pic-container cursor-pointer border-circle align-i-center
+                 class=" profile-pic-container p-4 cursor-pointer border-circle align-i-center
                   justify-content-center flex-row w-40 h-40">
-              <img class="profile-pic" *ngIf="!renderIcon; else renderIconTemplate" [src]="user?.profileUrl">
+              <img (error)="renderIcon = true" class="profile-pic" *ngIf="!renderIcon; else renderIconTemplate"
+                   [src]="user?.profileUrl">
             </div>
           </ng-container>
           <ng-container *ngIf="isAdmin">
@@ -112,5 +113,5 @@
 
 <ng-template #renderIconTemplate>
   <mat-icon class=" profile-pic-icon ls-option-icon cursor-pointer fs-32 h-32 w-32"
-            [fontIcon]="'account_circle'"></mat-icon>
+            [fontIcon]="'person'"></mat-icon>
 </ng-template>

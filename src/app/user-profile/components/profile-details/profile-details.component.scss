@@ -12,12 +12,21 @@
   }
 
   .profile-pic-container {
-    border: 1px solid black;
+    border: 1px solid var(--primary-color);
 
     .profile-pic {
       overflow: hidden;
       object-fit: contain;
     }
+
+    .profile-icon {
+      color: var(--primary-color);
+    }
+  }
+
+  p {
+    color: var(--primary-color);
+    text-align: center;
   }
 }
 

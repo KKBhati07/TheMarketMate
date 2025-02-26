@@ -1,0 +1,9 @@
+<div
+  [ngClass]="active?'item-selected':'inactive'"
+  class="nav-item-container cursor-pointer flex-row gap-20 align-i-center justify-content-center {{class}} {{onMobileWidth}}">
+  <div class="flex-row align-i-center gap-20">
+    <mat-icon *ngIf="showIcon" class="cursor-pointer" [ngClass]="iconClass" [fontIcon]="icon"></mat-icon>
+    <p *ngIf="!isMobile " [ngClass]="textClass"> {{ text }}</p>
+  </div>
+
+</div>

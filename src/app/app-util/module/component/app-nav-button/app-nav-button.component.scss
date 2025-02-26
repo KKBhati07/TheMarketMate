@@ -1,0 +1,41 @@
+.nav-item-container {
+  border: 1px solid var(--primary-color);
+
+  background-color: var(--header-color);
+
+  mat-icon {
+    color: var(--primary-color);
+  }
+
+  p {
+    color: var(--primary-color);
+  }
+
+  &.item-selected {
+    background-color: var(--primary-color);
+
+    mat-icon {
+      color: var(--header-color) !important;
+    }
+
+    p {
+      color: var(--header-color) !important;
+    }
+  }
+
+  &.inactive {
+    &:hover {
+      border-color: var(--hover-color);
+
+      div {
+        p {
+          color: var(--hover-color)
+        }
+
+        mat-icon {
+          color: var(--hover-color)
+        }
+      }
+    }
+  }
+}

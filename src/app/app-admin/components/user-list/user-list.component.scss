@@ -5,6 +5,10 @@
 
   .left-container {
     .image-icon-container {
+      img {
+        border: 1px solid var(--primary-color);
+      }
+
       div {
         position: absolute !important;
         top: 16px;
@@ -16,6 +20,10 @@
           color: var(--hover-color);
         }
       }
+    }
+
+    p {
+      color: var(--primary-color);
     }
   }
 

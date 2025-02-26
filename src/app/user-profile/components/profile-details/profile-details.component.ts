@@ -18,6 +18,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   hideComponent = false;
   idBottomSheet = false;
   destroy$: Subject<any> = new Subject();
+  renderIcon = false
 
   constructor(private cdr: ChangeDetectorRef,
               private userService: UserService,
@@ -31,7 +32,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     if (this.userDetails) {
       const dialogRef = this.dialog.open(UserProfileEditComponent, {
         backdropClass: 'profile-edit-from-backdrop',
-        panelClass: this.isMobile?'profile-edit-from-container-mobile':'profile-edit-from-container',
+        panelClass: this.isMobile ? 'profile-edit-from-container-mobile' : 'profile-edit-from-container',
         hasBackdrop: true,
         data: {
           userDetails: this.userDetails,

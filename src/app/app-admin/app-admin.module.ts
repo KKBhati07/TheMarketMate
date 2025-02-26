@@ -7,6 +7,7 @@ import {AdminListingComponent} from "./components/admin-listings/admin-listing.c
 import {MatIcon} from "@angular/material/icon";
 import {AppLoaderModule} from "../app-loader/app-loader.module";
 import {AdminUserListComponent} from "./components/user-list/user-list.component";
+import {AppUtilModule} from "../app-util/module/app-util.module";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {AdminUserListComponent} from "./components/user-list/user-list.component
     // RouterModule.forChild([]),
     MatIcon,
     AppLoaderModule,
+    AppUtilModule,
     // ✅ Use forChild([]) in feature modules
   ]
 })

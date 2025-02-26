@@ -167,4 +167,8 @@ export class AppHeaderComponent implements OnInit {
       this.cdr.markForCheck();
     });
   }
+
+  onLogoClick() {
+    this.router.navigate(URLS.ROOT.split('/')).then(r => null);
+  }
 }
