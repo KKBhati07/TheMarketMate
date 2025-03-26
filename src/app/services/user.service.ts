@@ -21,12 +21,20 @@ export class UserService {
     return this.apiService.put(URLS.API.V1.USER.UPDATE_USER, data)
   }
 
+  updateUserByAdmin(data: FormData): Observable<ApiHttpResponse<ApiResponse>> {
+    return this.apiService.put(URLS.API.V1.ADMIN.USERS.UPDATE, data)
+  }
+
   getAllUsers(): Observable<ApiHttpResponse<ApiResponse>> {
     return this.apiService.get(URLS.API.V1.ADMIN.USERS.GET_ALL)
   }
 
-  deleteUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+  deleteUserByAdmin(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
     return this.apiService.delete(URLS.API.V1.ADMIN.USERS.DELETE(uuid))
+  }
+
+  deleteUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+    return this.apiService.delete(URLS.API.V1.USER.DELETE(uuid))
   }
 
   restoreUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {

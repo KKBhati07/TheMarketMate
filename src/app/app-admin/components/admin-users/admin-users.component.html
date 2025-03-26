@@ -2,7 +2,10 @@
   <div class="admin-users-container">
 
     <div *ngFor="let user of users">
-      <mm-admin-user-list [user]="user" (deleteOrRestoreUser)="onDeleteOrRestroreUser($event)"   [isMobile]="isMobile"></mm-admin-user-list>
+      <mm-admin-user-list [user]="user"
+                          (deleteOrRestoreUser)="onDeleteOrRestroreUser($event)"
+                          (getUpdatedList)="getAllUsers()"
+                          [isMobile]="isMobile"></mm-admin-user-list>
     </div>
 
 

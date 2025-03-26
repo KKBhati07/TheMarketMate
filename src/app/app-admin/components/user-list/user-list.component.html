@@ -17,7 +17,7 @@
     </div>
     <div class="right-container flex-row gap-20">
 
-      <mat-icon class="edit-icon cursor-pointer fs-34 h-34 w-34"
+      <mat-icon (click)="onEditProfileClick()" class="edit-icon cursor-pointer fs-34 h-34 w-34"
                 [fontIcon]="'edit'"></mat-icon>
       <mat-icon
         [ngClass]="user.deleted?'restore-icon':'delete-icon'"

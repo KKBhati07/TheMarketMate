@@ -65,7 +65,7 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
   }
 
   deleteUser(uuid: string) {
-    this.userService.deleteUser(uuid)
+    this.userService.deleteUserByAdmin(uuid)
       .pipe(takeUntil(this.destroy$))
       .subscribe(res => {
         if (res.isSuccessful()) {

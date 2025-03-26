@@ -1,10 +1,20 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {
   AppConfirmDeleteDialogComponent
 } from '../../../shared/components/confirm-delete-dialog/app-confirm-delete-dialog.component';
 import {User} from '../../../models/user.model';
 import {Subject, takeUntil} from "rxjs";
+import {UserProfileEditComponent} from "../../../user-profile/components/user-profile-edit/user-profile-edit.component";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'mm-admin-user-list',
@@ -17,10 +27,16 @@ export class AdminUserListComponent implements OnDestroy {
   @Input() isMobile: boolean = false;
   @Output() deleteOrRestoreUser: EventEmitter<{ action: string, uuid: string }>
     = new EventEmitter<{ action: string, uuid: string }>()
+  @Output() getUpdatedList: EventEmitter<boolean>
+    = new EventEmitter<boolean>()
   destroy$ = new Subject();
   renderIcon = false;
 
-  constructor(private dialog: MatDialog) {
+  constructor(
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
+    private userService: UserService
+  ) {
   }
 
   onDeleteClick(): void {
@@ -43,6 +59,35 @@ export class AdminUserListComponent implements OnDestroy {
           this.deleteOrRestoreUser.emit({action: 'DELETE', uuid: this.user.uuid});
         }
       });
+  }
+
+  onEditProfileClick() {
+    if (this.user) {
+      const dialogRef = this.dialog.open(UserProfileEditComponent, {
+        backdropClass: 'profile-edit-from-backdrop',
+        panelClass: this.isMobile ? 'profile-edit-from-container-mobile' : 'profile-edit-from-container',
+        hasBackdrop: true,
+        data: {
+          userDetails: this.user,
+          isMobile: this.isMobile
+        }
+      });
+      dialogRef.afterClosed().subscribe((data: FormData | null) => {
+        if (data) {
+          this.userService.updateUserByAdmin(data)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(res => {
+              if (res.isSuccessful()) {
+                this.getUpdatedList.emit(true);
+                this.cdr.markForCheck();
+                console.log("Profile updated successfully!");
+              } else {
+                console.error("Error updating profile:", res.statusText);
+              }
+            });
+        }
+      });
+    }
   }
 
   ngOnDestroy() {
