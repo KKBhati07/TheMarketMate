@@ -1,0 +1,25 @@
+# Dockerfile.dev
+
+FROM node:20
+
+# Set working directory inside container
+WORKDIR /app
+
+# Copy package files first to install dependencies
+COPY package*.json ./
+
+# Install dependencies (cache this layer)
+RUN npm install
+
+# Copy all files
+COPY . .
+
+# Expose Angular dev server port
+EXPOSE 4200
+
+# Use polling for file watch (important for Docker on Windows)
+ENV CHOKIDAR_USEPOLLING=true
+
+# Start Angular dev server
+CMD ["npx", "ng", "serve", "--port", "4200", "--host", "0.0.0.0", "--disable-host-check", "--poll", "1000"]
+
