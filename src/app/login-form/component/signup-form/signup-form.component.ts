@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {PasswordValidator} from "./validator";
 import {ErrorText, Signup} from "../../../models/login-signup.model";
 import {AuthService} from "../../../services/auth.service";
-import {URLS} from "../../../urls";
+import {AppUrls} from "../../../app.urls";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
 import {Subject, takeUntil} from "rxjs";
 
@@ -62,7 +62,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 
   closeForm() {
     this.signUpForm.reset();
-    this.router.navigate([URLS.ROOT]).then(r=>null)
+    this.router.navigate([AppUrls.ROOT]).then(r=>null)
   }
 
   onNextClick() {
@@ -151,7 +151,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
           if (data) {
             if (data.created) {
               // Notification Service
-              this.router.navigate(URLS.AUTH.LOGIN.split('/')).then(r=>null);
+              this.router.navigate(AppUrls.AUTH.LOGIN.split('/')).then(r=>null);
             } else if (!data.created && data.already_exists) {
               //Notifiy user
             } else {

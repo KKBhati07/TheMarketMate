@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from "@angular/core";
 import {NavigationStart, Router} from "@angular/router";
-import {URLS} from "../../../urls";
+import {AppUrls} from "../../../app.urls";
 import {DeviceDetectorService} from "../../../app-util/services/device-detector.service";
 import {Subject, takeUntil} from "rxjs";
 
@@ -31,8 +31,8 @@ export class AdminLandingComponent implements OnInit, OnDestroy {
 
   subscribeToRoute() {
     this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart && event.url === '/' + URLS.ADMIN.LANDING) {
-        this.router.navigate([URLS.ADMIN.USERS]).then(r => null);
+      if (event instanceof NavigationStart && event.url === '/' + AppUrls.ADMIN.LANDING) {
+        this.router.navigate([AppUrls.ADMIN.USERS]).then(r => null);
         this.isUsersSelected = true;
         this.cdr.markForCheck();
       }
@@ -40,7 +40,7 @@ export class AdminLandingComponent implements OnInit, OnDestroy {
   }
 
   navigateToUserList() {
-    this.router.navigate([URLS.ADMIN.USERS]).then(r => null);
+    this.router.navigate([AppUrls.ADMIN.USERS]).then(r => null);
   }
 
   setIsMobile() {
@@ -54,13 +54,13 @@ export class AdminLandingComponent implements OnInit, OnDestroy {
 
   onNavItemClick(navToUser: boolean) {
     if (navToUser) {
-      this.router.navigate([URLS.ADMIN.USERS]).then(r => null);
+      this.router.navigate([AppUrls.ADMIN.USERS]).then(r => null);
       this.isUsersSelected = true;
       this.cdr.markForCheck();
       return
     }
     this.isUsersSelected = false;
-    this.router.navigate([URLS.ADMIN.LISTINGS]).then(r => null);
+    this.router.navigate([AppUrls.ADMIN.LISTINGS]).then(r => null);
     this.cdr.markForCheck();
   }
 

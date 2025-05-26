@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, Subject, tap} from "rxjs";
 import {ApiService} from "./api.service";
-import {URLS} from "../urls";
+import {AppUrls} from "../app.urls";
 import {Login, Signup} from "../models/login-signup.model";
 import {ApiHttpResponse} from "../app-util/api-response.util";
 import {ApiResponse} from "../models/api-response.model";
@@ -24,7 +24,7 @@ export class AuthService {
 
 
   loadUserDetails(): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.get<ApiResponse>(URLS.API.V1.AUTH.AUTH_DETAILS).pipe(
+    return this.apiService.get<ApiResponse>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
       tap(res => {
         if (res.isSuccessful()) {
           this.isAuthenticated = res.body?.data?.is_authenticated || false;
@@ -38,11 +38,12 @@ export class AuthService {
   }
 
   signupUser(body: Signup): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.post(URLS.API.V1.USER.CREATE, body)
+    return this.apiService.post(AppUrls.API.V1.USER.CREATE, body)
   }
 
   loginUser(body: Login): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.post<ApiResponse>(URLS.API.V1.AUTH.LOGIN, body).pipe(tap(res => {
+    return this.apiService.post<ApiResponse>(AppUrls.API.V1.AUTH.LOGIN, body).pipe(
+        tap((res: ApiHttpResponse<ApiResponse>) => {
       if (res.isSuccessful()) {
         if (res.body?.data?.authenticated) {
           this.cookieService.set('sessionid', res.body.data?.sessionId, undefined, '/');
@@ -54,7 +55,8 @@ export class AuthService {
   }
 
   logoutUser(): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.get<ApiResponse>(URLS.API.V1.AUTH.LOGOUT).pipe(tap(res => {
+    return this.apiService.post<ApiResponse>(AppUrls.API.V1.AUTH.LOGOUT,{}).pipe(
+      tap((res: ApiHttpResponse<ApiResponse>) => {
       if (res.isSuccessful()) {
         if (res.body?.data?.status === 200) {
           this.cookieService.delete('sessionid');

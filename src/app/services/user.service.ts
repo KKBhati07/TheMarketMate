@@ -3,7 +3,7 @@ import {ApiService} from "./api.service";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../models/api-response.model";
 import {ApiHttpResponse} from "../app-util/api-response.util";
-import {URLS} from "../urls";
+import {AppUrls} from "../app.urls";
 
 @Injectable({
   providedIn: "root",
@@ -14,30 +14,30 @@ export class UserService {
   }
 
   getDetails(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.get(URLS.API.V1.USER.USER_DETAILS(uuid))
+    return this.apiService.get(AppUrls.API.V1.USER.USER_DETAILS(uuid))
   }
 
   updateUser(data: FormData): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.put(URLS.API.V1.USER.UPDATE_USER, data)
+    return this.apiService.put(AppUrls.API.V1.USER.UPDATE_USER, data)
   }
 
   updateUserByAdmin(data: FormData): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.put(URLS.API.V1.ADMIN.USERS.UPDATE, data)
+    return this.apiService.put(AppUrls.API.V1.ADMIN.USERS.UPDATE, data)
   }
 
   getAllUsers(): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.get(URLS.API.V1.ADMIN.USERS.GET_ALL)
+    return this.apiService.get(AppUrls.API.V1.ADMIN.USERS.GET_ALL)
   }
 
   deleteUserByAdmin(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.delete(URLS.API.V1.ADMIN.USERS.DELETE(uuid))
+    return this.apiService.delete(AppUrls.API.V1.ADMIN.USERS.DELETE(uuid))
   }
 
   deleteUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.delete(URLS.API.V1.USER.DELETE(uuid))
+    return this.apiService.delete(AppUrls.API.V1.USER.DELETE(uuid))
   }
 
   restoreUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
-    return this.apiService.patch(URLS.API.V1.ADMIN.USERS.RESTORE(uuid), {restore: true})
+    return this.apiService.patch(AppUrls.API.V1.ADMIN.USERS.RESTORE(uuid), {restore: true})
   }
 }

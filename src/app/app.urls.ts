@@ -1,4 +1,4 @@
-export const URLS = {
+export const AppUrls = {
   ROOT: '',
   HOME: 'home',
   AUTH: {
@@ -14,6 +14,7 @@ export const URLS = {
     LISTINGS: 'admin/listings',
   },
   FOUROFOUR:'fourofour',
+
   API: {
     V1: {
       USER: {

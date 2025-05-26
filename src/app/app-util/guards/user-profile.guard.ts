@@ -7,7 +7,7 @@ import {
   RouterStateSnapshot
 } from "@angular/router";
 import {AuthService} from "../../services/auth.service";
-import {URLS} from "../../urls";
+import {AppUrls} from "../../app.urls";
 import {Injectable} from "@angular/core";
 
 @Injectable({
@@ -26,7 +26,7 @@ export class UserProfileGuard implements CanActivate {
       this.authService.UserDetails?.uuid) {
       return true;
     } else {
-      this.router.navigate([URLS.USER.USER_PROFILE(profileUuid)]).then(r => null);
+      this.router.navigate([AppUrls.USER.USER_PROFILE(profileUuid)]).then(r => null);
       return false
     }
   }

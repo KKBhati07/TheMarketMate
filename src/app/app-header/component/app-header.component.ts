@@ -4,7 +4,7 @@ import {BehaviorSubject, filter} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Redirect} from "../../models/login-signup.model";
-import {URLS} from "../../urls";
+import {AppUrls} from "../../app.urls";
 import {CONSTANTS} from "../../app.constants";
 import {DeviceDetectorService} from "../../app-util/services/device-detector.service";
 import {CategoryService} from "../../services/category.service";
@@ -58,8 +58,8 @@ export class AppHeaderComponent implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      this.showHeader = !(event.url.includes(URLS.AUTH.LOGIN)
-        || event.url.includes(URLS.AUTH.SIGNUP));
+      this.showHeader = !(event.url.includes(AppUrls.AUTH.LOGIN)
+        || event.url.includes(AppUrls.AUTH.SIGNUP));
       this.cdr.markForCheck();
     });
   }
@@ -68,7 +68,7 @@ export class AppHeaderComponent implements OnInit {
     const uuid = this.authService.UserDetails?.uuid;
     if (!uuid) return;
     this.router.navigate(
-      [URLS.USER.USER_PROFILE(uuid)]
+      [AppUrls.USER.USER_PROFILE(uuid)]
     ).then(r => {
       this.closeHeader();
     });
@@ -86,7 +86,7 @@ export class AppHeaderComponent implements OnInit {
       if (res.isSuccessful()) {
         console.warn(res.body)
         if (res.body?.data?.status === 200) {
-          this.router.navigate([URLS.ROOT]).then(r => {
+          this.router.navigate([AppUrls.ROOT]).then(r => {
             window.location.reload();
           });
         } else {
@@ -98,7 +98,7 @@ export class AppHeaderComponent implements OnInit {
 
   onCategoryAndHomeClick(category: any = '') {
     const queryParams = category ? {queryParams: {category}} : {}
-    this.router.navigate([URLS.HOME], queryParams).then(r => {
+    this.router.navigate([AppUrls.HOME], queryParams).then(r => {
       this.closeHeader();
     });
   }
@@ -126,10 +126,10 @@ export class AppHeaderComponent implements OnInit {
   onNavigationClick(redirectTo: Redirect) {
     if (!redirectTo) return;
     if (redirectTo === 'login') {
-      this.router.navigate(URLS.AUTH.LOGIN.split('/'),
+      this.router.navigate(AppUrls.AUTH.LOGIN.split('/'),
         {queryParams: {redirect: this.router.url}}).then(r => null)
     } else if (redirectTo === 'signup') {
-      this.router.navigate(URLS.AUTH.SIGNUP.split('/')).then(r => null)
+      this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r => null)
     }
   }
 
@@ -146,7 +146,7 @@ export class AppHeaderComponent implements OnInit {
   }
 
   onAdminClick() {
-    this.router.navigate([URLS.ADMIN.LANDING]).then(r => null)
+    this.router.navigate([AppUrls.ADMIN.LANDING]).then(r => null)
     this.closeHeader();
   }
 
@@ -169,6 +169,6 @@ export class AppHeaderComponent implements OnInit {
   }
 
   onLogoClick() {
-    this.router.navigate(URLS.ROOT.split('/')).then(r => null);
+    this.router.navigate(AppUrls.ROOT.split('/')).then(r => null);
   }
 }

@@ -5,7 +5,7 @@ import {MatBottomSheet, MatBottomSheetRef} from "@angular/material/bottom-sheet"
 import {LoginFormComponent} from "../../login-form/component/login-form/login-form.component";
 import {SignupFormComponent} from "../../login-form/component/signup-form/signup-form.component";
 import {Subject, takeUntil} from "rxjs";
-import {URLS} from "../../urls";
+import {AppUrls} from "../../app.urls";
 
 @Component({
   selector: 'mm-form-container',
@@ -63,9 +63,9 @@ export class FormContainerComponent implements OnInit, OnDestroy {
 
     }).afterDismissed().pipe(takeUntil(this.destroy$)).subscribe(action => {
       if(action === 'redirect_to_signup'){
-        this.router.navigate(URLS.AUTH.SIGNUP.split('/')).then(r=>null);
+        this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r=>null);
       }else if(!action){
-        this.router.navigate([URLS.ROOT]).then(r=>null);
+        this.router.navigate([AppUrls.ROOT]).then(r=>null);
       }
     })
   }

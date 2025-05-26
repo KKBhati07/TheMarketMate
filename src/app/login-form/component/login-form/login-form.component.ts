@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from "../../../services/auth.service";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
-import {URLS} from "../../../urls";
+import {AppUrls} from "../../../app.urls";
 import {Subject, takeUntil} from "rxjs";
 
 @Component({
@@ -56,13 +56,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     if(this.isBottomSheet){
       this.bsr?.dismiss('redirect_to_signup');
     }else{
-      this.router.navigate(URLS.AUTH.SIGNUP.split('/')).then(r => null);
+      this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r => null);
     }
   }
 
   closeForm() {
     this.loginForm.reset();
-    this.router.navigate([URLS.ROOT]).then(r => null);
+    this.router.navigate([AppUrls.ROOT]).then(r => null);
   }
 
   getEmailValidation(submitBtnValidations = false) {
@@ -97,7 +97,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       .subscribe(res=>{
       // TODO::Notification Service
       const redirectUrl = this.route.snapshot.queryParamMap.get('redirect');
-      this.router.navigateByUrl(redirectUrl||URLS.ROOT).then(r=>{window.location.reload();});
+      this.router.navigateByUrl(redirectUrl||AppUrls.ROOT).then(r=>{window.location.reload();});
     })
 
 

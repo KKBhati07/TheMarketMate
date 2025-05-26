@@ -4,7 +4,7 @@ import {DeviceDetectorService} from "../../../app-util/services/device-detector.
 import {UserService} from "../../../services/user.service";
 import {ProfileDetails} from "../../../models/user.model";
 import {Subject, takeUntil} from "rxjs";
-import {URLS} from "../../../urls";
+import {AppUrls} from "../../../app.urls";
 
 @Component({
   selector: "mm-user-profile",
@@ -50,7 +50,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           this.renderComponent = true;
           this.cdr.markForCheck();
         }else{
-          this.router.navigate([URLS.FOUROFOUR]).then(r=>null);
+          this.router.navigate([AppUrls.FOUROFOUR]).then(r=>null);
         }
       })
   }

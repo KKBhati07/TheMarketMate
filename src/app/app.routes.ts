@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
 import {FormContainerComponent} from "./forms-container/form-container/form-container.component";
-import {URLS} from "./urls";
+import {AppUrls} from "./app.urls";
 import {AuthGuard} from "./app-util/guards/auth.guard";
 import {AppRootComponent} from "./app-root/components/app-root.component";
 import {HomeComponent} from "./app-root/components/home-component/home.component";
@@ -11,34 +11,34 @@ import {AdminListingComponent} from "./app-admin/components/admin-listings/admin
 import {FourOFourComponent} from "./shared/components/four-o-four/four-o-four.component";
 
 export const routes: Routes = [
-  { path: URLS.ROOT, component: AppRootComponent },
-  { path: URLS.HOME, component: HomeComponent },
+  { path: AppUrls.ROOT, component: AppRootComponent },
+  { path: AppUrls.HOME, component: HomeComponent },
   {
-    path: URLS.AUTH.LOGIN,
+    path: AppUrls.AUTH.LOGIN,
     component: FormContainerComponent,
     data: {type: 'login'},
     canActivate: [AuthGuard]
   },
   {
-    path: URLS.AUTH.SIGNUP,
+    path: AppUrls.AUTH.SIGNUP,
     component: FormContainerComponent,
     data: {type: 'signup'},
     canActivate: [AuthGuard]
   },
   {
-    path: URLS.USER.USER_PROFILE(),
+    path: AppUrls.USER.USER_PROFILE(),
     component: UserProfileComponent
   },
   {
-    path: URLS.ADMIN.LANDING,
+    path: AppUrls.ADMIN.LANDING,
     component: AdminLandingComponent,
     children: [
-      {path: '', redirectTo: URLS.ADMIN.USERS, pathMatch: 'full'},
+      {path: '', redirectTo: AppUrls.ADMIN.USERS, pathMatch: 'full'},
       {path: 'users', component: AdminUsersComponent},
       {path: 'listings', component: AdminListingComponent}
     ]
   },
-  {path: URLS.FOUROFOUR, component: FourOFourComponent},
-  {path: '**', redirectTo:URLS.FOUROFOUR, pathMatch:"full"}
+  {path: AppUrls.FOUROFOUR, component: FourOFourComponent},
+  {path: '**', redirectTo:AppUrls.FOUROFOUR, pathMatch:"full"}
 
 ];

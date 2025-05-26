@@ -3,7 +3,7 @@
   (dragleave)="onDragLeave()"
   (drop)="onDrop($event)"
   [class.dragover]="isDragOver"
-  class="form-container flex-column w-100p">
+  class="form-container pb-10 flex-column w-100p">
   <form
     class=" mt-20 profile-edit-form w-100p" [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
     <div
@@ -39,7 +39,7 @@
             <mm-button [class]="'w-100p h-60 br-4 gap-20'"
                        position="after"
                        [disabled]="editProfileForm.invalid"
-                       icon="cloud_upload"
+                       icon="cloud_done"
                        iconClass="fs-20 w-20 h-20"
                        type='submit'
                        text="Update Profile"
@@ -96,7 +96,7 @@
         <div class="mt-16">
           <mm-button [class]="'w-200 br-4 gap-20 h-40 '"
                      position="after"
-                     icon="cloud_done"
+                     icon="cloud_upload"
                      iconClass="fs-20 w-20 h-20"
                      type='button'
                      text="Select Pic" (click)="fileInput.click()"></mm-button>
