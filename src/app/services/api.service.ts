@@ -15,7 +15,7 @@ export class ApiService {
 
   private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-    const cookie = this.cookieService.get('sessionid');
+    const cookie = this.cookieService.get('sessionid')?.trim();
     if (cookie) {
       headers = headers.set('sessionid', cookie);
     }

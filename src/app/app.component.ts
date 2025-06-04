@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {AuthService} from "./services/auth.service";
-import {HttpClientModule} from "@angular/common/http";
 import {AppHeaderModule} from "./app-header/app-header.module";
 import {FormsContainerModule} from "./forms-container/forms-container.module";
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from "@angular/material/bottom-sheet";
@@ -15,7 +14,6 @@ import {MatDialogModule} from "@angular/material/dialog";
   standalone: true,
   imports: [
     RouterOutlet,
-    HttpClientModule,
     AppHeaderModule,
     FormsContainerModule,
     UserProfileModule,
