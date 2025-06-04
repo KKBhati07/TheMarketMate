@@ -10,10 +10,10 @@
     //right: 0px;
     right: -600px;
     position: absolute;
-    animation: slideIn 0.5s linear 0.5s forwards;
+    animation: slideIn 0.5s linear 0.2s forwards;
     .slide-in{
       right: -600px;
-      animation: slideIn 0.5s linear 0.5s forwards;
+      animation: slideIn 0.5s linear 0.2s forwards;
     }
     @keyframes slideIn {
       to {

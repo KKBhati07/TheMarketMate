@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild
+} from "@angular/core";
 import {NavigationEnd, Router} from "@angular/router";
 import {BehaviorSubject, filter} from "rxjs";
 import {AuthService} from "../../services/auth.service";
@@ -29,7 +37,8 @@ export class AppHeaderComponent implements OnInit {
   renderIcon = false;
   expandProfile = false;
   expandedCategories = false;
-  renderExpandedContent = false
+  renderExpandedContent = false;
+  @ViewChild('header') header!: ElementRef;
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -46,6 +55,19 @@ export class AppHeaderComponent implements OnInit {
     this.checkForUserUpdate();
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event:MouseEvent): void {
+    if (!this.header?.nativeElement.contains(event.target)) {
+      this.closeExpandedHeader();
+    }
+  }
+
+  closeExpandedHeader(): void {
+    if (this.expandedCategories || this.expandProfile) {
+      this.expandedCategories = false;
+      this.expandProfile = false;
+    }
+  }
   checkForUserUpdate() {
     this.authService.getUpdatedUser().subscribe(user => {
       this.user = user;
