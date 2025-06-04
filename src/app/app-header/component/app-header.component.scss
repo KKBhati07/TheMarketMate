@@ -1,14 +1,13 @@
 .header-container {
-  border: 1px solid;
   overflow-x: hidden;
-  background-color: var(--primary-color);
+  background: var(--primary-color-bg);
 
   .header {
     z-index: 1;
     transition: height 0.5s ease;
     background-color: var(--header-color);
     width: calc(100% - 40px);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--primary-color);
     top: 20px;
     left: 20px;
 
@@ -22,7 +21,8 @@
 
         .profile-pic-container {
           overflow: hidden;
-          border: 1px solid var(--primary-color);
+          backdrop-filter: blur(10px);
+          background: #0083B06E;
 
           .profile-pic {
             overflow: hidden;
@@ -34,14 +34,14 @@
           }
 
           .profile-pic-icon {
-            color: var(--primary-color);
+            color: white;
           }
         }
 
         .ls-option-container {
 
           .ls-option-icon {
-            color: var(--primary-color);
+            color: var(--icon-color);
           }
 
         }
@@ -79,6 +79,21 @@
       }
     }
   }
+
+  .glass-icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15); // translucent background
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+
+    .profile-pic-icon {
+      color: var(--primary-color);
+    }
+  }
+
 
   @media screen and (max-width: 969px) {
     .header {

@@ -14,7 +14,9 @@ import {MatDialogModule} from "@angular/material/dialog";
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, HttpClientModule, AppHeaderModule,
+    RouterOutlet,
+    HttpClientModule,
+    AppHeaderModule,
     FormsContainerModule,
     UserProfileModule,
     AppAdminModule,

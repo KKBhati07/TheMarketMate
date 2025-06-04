@@ -1,13 +1,13 @@
-<div class="header-container w-100p h-56">
+<div class="header-container w-100p h-44">
   <div *ngIf="showHeader"
        [ngClass]="{
-       'h-92':!expandedCategories && !expandedCategories,
+       'h-52':!expandedCategories && !expandedCategories,
        'h-200':!expandedCategories && expandProfile,
        'h-300':!expandProfile && expandedCategories && !isMobile,
        'height-90':!expandProfile && expandedCategories && isMobile
        }"
-       class="header position-absolute pr-16 pl-16">
-    <div class="upper-container h-92 flex-row align-i-center justify-content-space-b">
+       class="header position-absolute pr-16 br-5 pl-16">
+    <div class="upper-container h-52 flex-row align-i-center justify-content-space-b">
       <img (click)="onLogoClick()" [src]="CONSTANTS.LOGO.TRANSPARENT" class="w-132 cursor-pointer h-132" alt="app_logo">
       <div class="right-section flex-row align-i-center gap-20 h-100p"
            [ngClass]="(isAuthenticated$ | async)? 'w-300':'w-320'"
@@ -19,7 +19,7 @@
             <div (click)="onProfileClick()"
                  [ngClass]="!renderIcon?'styles_ri':''"
                  class=" profile-pic-container p-4 cursor-pointer border-circle align-i-center
-                  justify-content-center flex-row w-40 h-40">
+                  justify-content-center flex-row w-36 h-36">
               <img (error)="renderIcon = true" class="profile-pic" *ngIf="!renderIcon; else renderIconTemplate"
                    [src]="user?.profileUrl">
             </div>
@@ -28,7 +28,11 @@
             <div (click)="onAdminClick()"
                  class="ls-option-container h-40 align-i-center flex-row justify-content-space-b">
               <div class="ls-option-content l-s-o-i-i flex-row align-i-center pl-4 gap-8">
-                <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'shield_person'"></mat-icon>
+                <mat-icon class="ls-option-icon cursor-pointer fs-28 h-28 w-28"
+                          matTooltip="Admin"
+                          matTooltipShowDelay="500"
+                          matTooltipPosition="below"
+                          [fontIcon]="'shield_person'"></mat-icon>
                 <!--              <p class="ls-option-text cursor-pointer fw-7">CATEGORIES</p>-->
               </div>
             </div>
@@ -38,14 +42,24 @@
           <div (click)="onCategoriesClick()"
                class="ls-option-container h-40 align-i-center flex-row justify-content-space-b">
             <div class="ls-option-content l-s-o-i-i flex-row align-i-center pl-4 gap-8">
-              <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'category'"></mat-icon>
+              <mat-icon
+                      matTooltip="Categories"
+                      matTooltipShowDelay="500"
+                      matTooltipPosition="below"
+                      class="ls-option-icon cursor-pointer fs-28 h-28 w-28"
+                      [fontIcon]="'category'"></mat-icon>
             </div>
           </div>
           <div
-            (click)="onCategoryAndHomeClick()"
+            (click)="onCategoryOrHomeClick()"
             class="ls-option-container h-40 align-i-center flex-row justify-content-space-b">
             <div class="ls-option-content l-s-o-i-i flex-row align-i-center pl-4 gap-8">
-              <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'home'"></mat-icon>
+              <mat-icon class="ls-option-icon cursor-pointer fs-28 h-28 w-28"
+                        matTooltip="Home"
+                        matTooltipShowDelay="500"
+                        matTooltipPosition="below"
+                        [fontIcon]="'home'"></mat-icon>
+
             </div>
           </div>
         </ng-container>
@@ -61,7 +75,7 @@
       <ng-container *ngIf="expandedCategories">
         <div
           [ngClass]="isMobile?'':'pl-20 pr-20'"
-          class="flex-row h-100p gap-16 expanded-cat-container justify-content-space-b">
+          class="flex-row align-i-center h-100p gap-16 expanded-cat-container justify-content-space-b">
           <ng-container *ngTemplateOutlet="expandedCategoryTemplate"></ng-container>
         </div>
       </ng-container>
@@ -84,34 +98,40 @@
 <ng-template #expandedCategoryTemplate>
   <ng-container *ngFor="let category of categories">
     <mm-product-category
-      (onCategoryClickEmitter)="onCategoryAndHomeClick($event)"
+      (onCategoryClickEmitter)="onCategoryOrHomeClick($event)"
       [isMobile]="isMobile"
       [category]="category"></mm-product-category>
   </ng-container>
 </ng-template>
 
 <ng-template #loginSignupTemplate>
-  <div
+    <div
     (click)="onNavigationClick('login')"
     class=" ls-option-container h-40 align-i-center flex-row justify-content-space-b"
   >
     <div class="ls-option-content flex-row align-i-center gap-8 pl-4">
-      <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32" [fontIcon]="'login'"></mat-icon>
-      <p class="ls-option-text cursor-pointer fw-7">LOGIN</p>
+      <mat-icon
+              matTooltip="Sign up"
+              matTooltipShowDelay="500"
+              matTooltipPosition="below"
+              class="ls-option-icon cursor-pointer fs-28 h-28 w-28"
+              [fontIcon]="'login'"></mat-icon>
     </div>
   </div>
   <div (click)="onNavigationClick('signup')"
        class="ls-option-container h-40 align-i-center flex-row justify-content-space-b"
   >
     <div class="ls-option-content justify-content-space-b flex-row align-i-center pl-4 gap-8">
-      <mat-icon class="ls-option-icon cursor-pointer fs-32 h-32 w-32"
+      <mat-icon class="ls-option-icon cursor-pointer fs-28 h-28 w-28"
+                matTooltip="Sign up"
+                matTooltipShowDelay="500"
+                matTooltipPosition="below"
                 [fontIcon]="'person_add'"></mat-icon>
-      <p class="ls-option-text cursor-pointer fw-7 ">SIGNUP</p>
     </div>
   </div>
 </ng-template>
 
 <ng-template #renderIconTemplate>
-  <mat-icon class=" profile-pic-icon ls-option-icon cursor-pointer fs-32 h-32 w-32"
+  <mat-icon class=" profile-pic-icon ls-option-icon cursor-pointer fs-28 h-28 w-28"
             [fontIcon]="'person'"></mat-icon>
 </ng-template>

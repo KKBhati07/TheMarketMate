@@ -96,7 +96,7 @@ export class AppHeaderComponent implements OnInit {
     })
   }
 
-  onCategoryAndHomeClick(category: any = '') {
+  onCategoryOrHomeClick(category: any = '') {
     const queryParams = category ? {queryParams: {category}} : {}
     this.router.navigate([AppUrls.HOME], queryParams).then(r => {
       this.closeHeader();

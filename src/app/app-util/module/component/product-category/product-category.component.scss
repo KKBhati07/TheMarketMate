@@ -1,23 +1,28 @@
 .category-container {
-  border: 1px solid var(--primary-color);
+  transition: all 0.3s ease;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 
   &:hover {
-    border: 1px solid var(--hover-color);
+    transform: translateY(-4px) scale(1.03);
 
-    .heading {
-      color: var(--hover-color);
-    }
-
-    .category-icon {
-      color: var(--hover-color);
+    .icon-wrapper {
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
     }
   }
 
-  .category-icon {
-    color: var(--primary-color);
+  .icon-wrapper {
+    background: linear-gradient(135deg, #00b4db, #0083b0);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+
+    .category-icon{
+      color: #fff;
+    }
   }
 
-  .heading {
-    color: var(--primary-color);
+  .category-title {
+    color: #333;
+    transition: color 0.3s ease;
   }
 }
