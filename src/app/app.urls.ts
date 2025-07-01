@@ -26,7 +26,7 @@ export const AppUrls = {
         UPDATE_USER: 'v1/user/update_user',
       },
       AUTH: {
-        LOGIN: 'v1/auth/login',
+        LOGIN: 'v1/auth/login_with_password',
         LOGOUT: 'v1/auth/logout',
         AUTH_DETAILS: 'v1/auth/auth_details'
       },
@@ -35,7 +35,7 @@ export const AppUrls = {
       },
       ADMIN: {
         USERS: {
-          GET_ALL: 'v1/admin/users/get_all',
+          GET_ALL: 'v1/admin/users/fetch_all',
           USER_DETAILS: (uuid: string) => (`v1/admin/users/${uuid}/get_details`),
           UPDATE: 'v1/admin/users/update_user',
           DELETE: (uuid: string) => (`v1/admin/users/delete_user/${uuid}`),

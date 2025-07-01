@@ -4,7 +4,7 @@
     <div class="left-container flex-row align-i-center gap-10">
       <div class="cursor-default border-circle image-icon-container h-48 w-48">
         <img (error)="renderIcon = true" class="border-circle h-48 w-48"
-             *ngIf="user.profileUrl && !renderIcon; else renderIconTemplate" [src]="user.profileUrl"/>
+             *ngIf="user.profile_url && !renderIcon; else renderIconTemplate" [src]="user.profile_url"/>
         <div class="fs-16 w-16 h-16" *ngIf="user.admin">
           <mat-icon class="fs-16 w-16 h-16" [fontIcon]="'star'"></mat-icon>
 

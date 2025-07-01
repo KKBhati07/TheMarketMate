@@ -22,7 +22,7 @@
                  class=" profile-pic-container p-4 cursor-pointer border-circle align-i-center
                   justify-content-center flex-row w-36 h-36">
               <img (error)="renderIcon = true" class="profile-pic" *ngIf="!renderIcon; else renderIconTemplate"
-                   [src]="user?.profileUrl">
+                   [src]="user?.profile_url">
             </div>
           </ng-container>
           <ng-container *ngIf="isAdmin">

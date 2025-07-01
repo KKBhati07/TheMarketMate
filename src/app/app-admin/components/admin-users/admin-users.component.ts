@@ -33,7 +33,7 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(res => {
         if (res.isSuccessful()) {
-          this.users = res.body?.data?.users ?? [];
+          this.users = res.body?.data?.items ?? [];
           this.isLoading = false;
           this.cdr.markForCheck();
         }

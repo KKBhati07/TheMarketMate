@@ -71,7 +71,7 @@ export class AppHeaderComponent implements OnInit {
   checkForUserUpdate() {
     this.authService.getUpdatedUser().subscribe(user => {
       this.user = user;
-      this.isAdmin = this.user.is_admin;
+      this.isAdmin = this.user.admin;
       this.cdr.markForCheck();
     })
   }
@@ -138,8 +138,8 @@ export class AppHeaderComponent implements OnInit {
     if (this.authService.Authenticated) {
       this.isAuthenticated$.next(true);
       this.user = this.authService.UserDetails
-      if (!this.user?.profileUrl) this.renderIcon = true;
-      this.isAdmin = this.user?.is_admin ?? false;
+      if (!this.user?.profile_url) this.renderIcon = true;
+      this.isAdmin = this.user?.is_admin ?? this.user?.admin ?? false;
     }
     this.isLoading = false;
     this.cdr.detectChanges();

@@ -51,9 +51,9 @@ export class UserProfileEditComponent implements OnInit {
       this.editProfileForm.patchValue({
         name: user.name,
         email: user.email,
-        contactNo: user.contactNo,
+        contactNo: user.contact_no,
       });
-      this.previewUrl = user.profileUrl || null;
+      this.previewUrl = user.profile_url || null;
     }
     this.isLoading = false;
   }
@@ -117,7 +117,7 @@ export class UserProfileEditComponent implements OnInit {
     formData.append("uuid", this.userDetails?.uuid ?? "");
     formData.append("name", formValues.name);
     formData.append("email", formValues.email);
-    if (formValues.contactNo !== this.userDetails?.contactNo) {
+    if (formValues.contactNo !== this.userDetails?.contact_no) {
       formData.append("contactNo", formValues.contactNo);
     }
     if (this.selectedFile) {
@@ -131,7 +131,7 @@ export class UserProfileEditComponent implements OnInit {
   areValuesChanged(formValues: any) {
     return formValues.name !== this.userDetails?.name ||
       formValues.email !== this.userDetails?.email ||
-      formValues.contactNo !== this.userDetails?.contactNo ||
+      formValues.contactNo !== this.userDetails?.contact_no ||
       this.selectedFile;
   }
 

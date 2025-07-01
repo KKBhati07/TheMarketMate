@@ -2,11 +2,11 @@ export interface User {
   id?: number;
   name: string;
   uuid: string;
-  profileUrl?: string;
+  profile_url?: string;
   email: string;
   is_admin: boolean;
   admin: boolean;
-  contactNo: string | null;
+  contact_no: string | null;
   deleted?: boolean;
 }
 
@@ -14,9 +14,9 @@ export interface ProfileDetails {
   name: string;
   email: string;
   uuid: string;
-  profileUrl?: string;
+  profile_url?: string;
   self?: boolean;
-  contactNo: string | null;
+  contact_no: string | null;
 }
 
 export interface UpdateUserPayload {
