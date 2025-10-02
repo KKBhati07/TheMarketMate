@@ -1,5 +1,6 @@
 <div (click)="onItemClick.emit()"
      class="header-menu-outer-container
+     position-absolute
      flex-row justify-content-center p-8
      w-100p h-100p">
   <div
@@ -7,27 +8,30 @@
       class="header-menu-container br-40 h-200
        w-100p mt-72 pl-8 pr-8">
     <ng-container *ngIf="!isAuthenticated">
-      <mm-nav-button
-          (click)="onItemClick.emit('SIGNUP')"
-          class="pl-4 pr-4 h-40 w-128 br-20"
-          textClass="fw-6"
-          text="Open Account"
-          gap="5"
-          [isOpenAccountBtn]="true"
-          [headerNav]="true"
-      ></mm-nav-button>
-      <mm-nav-button
-          (click)="onItemClick.emit('LOGIN')"
-          class="pl-4 pr-4 h-40 w-100 br-20"
-          iconContainerClass="h-32 w-32"
-          iconClass="h-20 w-20 fs-20"
-          textClass="fw-6"
-          text="Login"
-          gap="5"
-          [showIcon]="true"
-          [headerNav]="true"
-          icon="login"
-      ></mm-nav-button>
+      <div class="flex-row-reverse pr-8 gap-12 pt-12">
+        <mm-nav-button
+            (click)="onItemClick.emit('SIGNUP')"
+            class="pl-4 pr-4 h-40 w-128 br-20"
+            textClass="fw-6"
+            text="Open Account"
+            gap="5"
+            [isOpenAccountBtn]="true"
+            [headerNav]="true"
+        ></mm-nav-button>
+        <mm-nav-button
+            (click)="onItemClick.emit('LOGIN')"
+            class="pl-4 pr-4 h-40 w-100 br-20"
+            iconContainerClass="h-32 w-32"
+            iconClass="h-20 w-20 fs-20"
+            textClass="fw-6"
+            text="Login"
+            gap="5"
+            [showIcon]="true"
+            [headerNav]="true"
+            icon="login"
+        ></mm-nav-button>
+      </div>
+
     </ng-container>
     <ng-container *ngIf="isAdmin">
       <mm-nav-button

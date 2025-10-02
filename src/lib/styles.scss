@@ -148,6 +148,11 @@
   display: flex;
 }
 
+.flex-row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .justify-content-center {
   justify-content: center !important;
 }

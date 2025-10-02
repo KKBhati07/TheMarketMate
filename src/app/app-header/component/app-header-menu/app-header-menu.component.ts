@@ -3,7 +3,7 @@ import {NavOption} from '../../../models/nav-options.model';
 import { fadeInOut } from '../../../app-util/animations/fade-in-out.animation';
 
 @Component({
-  selector: 'app-header-menu',
+  selector: 'mm-header-menu',
   templateUrl: './app-header-menu.component.html',
   styleUrls: ['./app-header-menu.component.scss'],
   animations: [fadeInOut],

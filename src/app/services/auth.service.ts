@@ -19,7 +19,8 @@ export class AuthService {
 	private isAdmin: boolean = false;
 	private updateUser$: Subject<User> = new Subject();
 
-	constructor(private apiService: ApiService, private cookieService: CookieService) {
+	constructor(private apiService: ApiService,
+							private cookieService: CookieService) {
 	}
 
 

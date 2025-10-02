@@ -12,7 +12,7 @@
       <img (click)="onLogoClick()"
            [src]="CONSTANTS.LOGO.TRANSPARENT"
            class="w-132 cursor-pointer h-132" alt="app_logo">
-      <div class="right-section flex-row align-i-center gap-12 h-100p"
+      <div class="right-section flex-row-reverse align-i-center gap-12 h-100p"
            [ngClass]="(isAuthenticated$ | async)? 'w-426':'w-446'"
       >
 
@@ -91,7 +91,7 @@
       </ng-container>
       <ng-container *ngIf="expandedCategories">
         <div
-            [ngClass]="isMobile?'':'pl-20 pr-20'"
+            [ngClass]="isMobile?'mt-20':'pl-20 pr-20'"
             class="flex-row align-i-center h-100p gap-16
             expanded-cat-container justify-content-space-b">
           <ng-container *ngTemplateOutlet="expandedCategoryTemplate"></ng-container>
@@ -105,7 +105,7 @@
 </div>
 
 <ng-template #expandedProfileTemplate>
-  <div class=" expanded-profile-container mt-20 w-100p h-100p flex-row">
+  <div class=" expanded-profile-container mt-20 w-100p h-100p flex-row-reverse">
     <div class="h-100p gap-10 name-logout-container flex-column ">
       <mm-nav-button
           (click)="onUsernameClick()"
@@ -180,10 +180,10 @@
 </ng-template>
 
 <ng-container *ngIf="showHeaderMenu">
-  <app-header-menu
+  <mm-header-menu
       [isAdmin]="isAdmin"
       [isAuthenticated]="(isAuthenticated$ | async) ?? false"
       (onItemClick)="onMenuItemClick($event)"
   >
-  </app-header-menu>
+  </mm-header-menu>
 </ng-container>

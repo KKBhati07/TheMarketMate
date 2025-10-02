@@ -1,6 +1,7 @@
-.form-container {
+.profile-edit-from-container {
   background-color: var(--header-color);
   flex-grow: 1;
+  overflow: scroll;
 
   &.dragover {
     border: 2px dashed #007bff;
@@ -9,16 +10,16 @@
 
   .profile-edit-form {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
 
     .inner-container {
       flex-grow: 1;
 
       .left-container {
+        label{
+          color: #707070;
+        }
         .form-input {
-          border: 1px solid var(--border-color);
-          background-color: #f7f7f7;
+          background-color: var(--items-bg);
           outline: none;
           width: 100%;
 
@@ -34,8 +35,8 @@
 
       .right-container {
         .pic-container {
+          background: var(--items-bg);
           width: 100%;
-          height: 200px;
           cursor: pointer;
         }
       }

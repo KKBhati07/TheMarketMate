@@ -1,14 +1,12 @@
 .login-signup-form-container {
   width: 100vw;
   height: 100vh;
-  position: absolute;
   top: 0;
   left: 0;
   background-color: grey;
 
   .form-container {
     right: -600px;
-    position: absolute;
     animation: slideIn 0.5s linear 0.2s forwards;
 
     .slide-in {

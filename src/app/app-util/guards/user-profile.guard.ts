@@ -1,10 +1,8 @@
 import {
 	ActivatedRouteSnapshot,
 	CanActivate,
-	GuardResult,
-	MaybeAsync,
 	Router,
-	RouterStateSnapshot
+	RouterStateSnapshot, UrlTree
 } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { AppUrls } from "../../app.urls";
@@ -19,16 +17,15 @@ export class UserProfileGuard implements CanActivate {
 							private router: Router) {
 	}
 
-	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
+	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
 		const profileUuid = route.params['uuid'];
 		if (this.authService.IsAdmin
 				|| profileUuid ===
 				this.authService.UserDetails?.uuid) {
 			return true;
-		} else {
-			this.router.navigate([AppUrls.USER.USER_PROFILE(profileUuid)]).then(r => null);
-			return false
 		}
+		return this.router.createUrlTree([AppUrls.USER.USER_PROFILE(profileUuid)]);
+
 	}
 
 }

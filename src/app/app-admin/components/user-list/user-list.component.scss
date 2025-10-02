@@ -98,6 +98,12 @@
   }
 }
 
+::ng-deep .mat-mdc-dialog-surface {
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
 ::ng-deep .cdk-overlay-container {
   .profile-edit-from-container-mobile {
     display: flex;

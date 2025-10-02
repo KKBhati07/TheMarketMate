@@ -52,8 +52,8 @@ export class AppHeaderComponent implements OnInit {
 
 	ngOnInit() {
 		this.checkForActiveRoute();
-		this.checkForAuthenticationAndSetUser();
 		this.setIsMobile()
+		this.checkForAuthenticationAndSetUser();
 		this.checkForUserUpdate();
 	}
 
