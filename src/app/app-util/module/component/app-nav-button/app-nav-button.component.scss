@@ -1,7 +1,31 @@
 .nav-item-container {
-  border: 1px solid var(--primary-color);
-
   background-color: var(--header-color);
+
+  &.in-header-bg{
+    background: var(--items-bg);
+  }
+  &.bg{
+    background: #fdfdfd;
+  }
+
+  &.open-account-btn{
+    background: #62ee3e;
+  }
+
+  &.log-out-btn{
+    background: #ff5a5a;
+  }
+
+  .icon-container{
+
+    &.in-header-ic-bg{
+      background: var(--header-color);
+    }
+    &.ic-bg{
+      background: #e0e0e0;
+    }
+  }
+
 
   mat-icon {
     color: var(--primary-color);

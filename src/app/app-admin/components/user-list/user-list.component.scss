@@ -1,30 +1,20 @@
 .user-container {
-  border: 1px solid var(--primary-color);
-  background-color: var(--header-color);
+  background: var(--items-bg);
   position: relative;
 
   .left-container {
     .image-icon-container {
-      img {
-        border: 1px solid var(--primary-color);
-      }
-
-      div {
-        position: absolute !important;
-        top: 16px;
-        left: 16px;
-        transform: translate(-50%, -50%);
-        font-size: 50px;
-
-        .mat-icon {
-          color: var(--hover-color);
-        }
-      }
+      background: var(--header-color);
     }
 
-    p {
+    .name-text {
       color: var(--primary-color);
     }
+
+    .email-text {
+      color: #737373;
+    }
+
   }
 
   .right-container {
@@ -67,8 +57,6 @@
 ::ng-deep .cdk-overlay-container {
   .delete-dialog-container {
     z-index: 3;
-    border-radius: 10px;
-    padding: 20px;
     width: 300px;
     left: 50%;
     right: calc(50% - 150px);
@@ -127,4 +115,6 @@
     margin: 0 auto;
   }}
 
-
+.icons-container{
+  background: white;
+}

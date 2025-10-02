@@ -16,7 +16,8 @@ import {AppUrls} from "../../app.urls";
 import {CONSTANTS} from "../../app.constants";
 import {DeviceDetectorService} from "../../app-util/services/device-detector.service";
 import {CategoryService} from "../../services/category.service";
-
+import {Category} from '../../models/category.model';
+import {NavOption} from '../../models/nav-options.model';
 
 @Component({
   selector: 'mm-app-header',
@@ -25,12 +26,13 @@ import {CategoryService} from "../../services/category.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppHeaderComponent implements OnInit {
-  categories: string[] = []
+  categories: Category[] = []
   protected readonly CONSTANTS = CONSTANTS;
   isMobile = false;
   isLoading = true;
   isAdmin = false;
   showHeader = true;
+  showHeaderMenu = false;
 
   isAuthenticated$ = new BehaviorSubject<boolean>(false);
   user: User | null = null;
@@ -56,8 +58,12 @@ export class AppHeaderComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event:MouseEvent): void {
-    if (!this.header?.nativeElement.contains(event.target)) {
+  onDocumentClick(event: MouseEvent): void {
+    const headerMenu = document.querySelector('.header-menu-container');
+    const target = event.target as Node;
+      if (!this.header?.nativeElement.contains(target)
+        && !headerMenu?.contains(target)
+    ) {
       this.closeExpandedHeader();
     }
   }
@@ -68,6 +74,7 @@ export class AppHeaderComponent implements OnInit {
       this.expandProfile = false;
     }
   }
+
   checkForUserUpdate() {
     this.authService.getUpdatedUser().subscribe(user => {
       this.user = user;
@@ -78,10 +85,10 @@ export class AppHeaderComponent implements OnInit {
 
   checkForActiveRoute() {
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+        filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.showHeader = !(event.url.includes(AppUrls.AUTH.LOGIN)
-        || event.url.includes(AppUrls.AUTH.SIGNUP));
+          || event.url.includes(AppUrls.AUTH.SIGNUP));
       this.cdr.markForCheck();
     });
   }
@@ -90,10 +97,35 @@ export class AppHeaderComponent implements OnInit {
     const uuid = this.authService.UserDetails?.uuid;
     if (!uuid) return;
     this.router.navigate(
-      [AppUrls.USER.USER_PROFILE(uuid)]
+        [AppUrls.USER.USER_PROFILE(uuid)]
     ).then(r => {
       this.closeHeader();
     });
+  }
+
+  onMenuItemClick(type: NavOption | null) {
+    switch (type) {
+      case 'LOGIN':
+        this.onNavigationClick(type);
+        break;
+      case 'SIGNUP':
+        this.onNavigationClick(type);
+        break;
+      case 'USER_PROFILE':
+        this.onProfileClick();
+        break;
+      case 'CATEGORIES':
+        this.onCategoriesClick();
+        break;
+      case 'HOME':
+        this.onCategoryOrHomeClick();
+        break;
+      case 'ADMIN':
+        this.onAdminClick();
+        break;
+    }
+    this.showHeaderMenu = false;
+    this.cdr.markForCheck();
   }
 
   closeHeader() {
@@ -118,11 +150,18 @@ export class AppHeaderComponent implements OnInit {
     })
   }
 
-  onCategoryOrHomeClick(category: any = '') {
-    const queryParams = category ? {queryParams: {category}} : {}
+  onCategoryOrHomeClick(category: Category | null = null) {
+    const queryParams = category ?
+        {queryParams: {category: category.id}} : {};
     this.router.navigate([AppUrls.HOME], queryParams).then(r => {
       this.closeHeader();
     });
+  }
+
+  onHeaderMenuClick(){
+    this.showHeaderMenu = !this.showHeaderMenu;
+    this.closeExpandedHeader();
+    this.cdr.markForCheck();
   }
 
   getCategories() {
@@ -147,10 +186,10 @@ export class AppHeaderComponent implements OnInit {
 
   onNavigationClick(redirectTo: Redirect) {
     if (!redirectTo) return;
-    if (redirectTo === 'login') {
+    if (redirectTo === 'LOGIN') {
       this.router.navigate(AppUrls.AUTH.LOGIN.split('/'),
-        {queryParams: {redirect: this.router.url}}).then(r => null)
-    } else if (redirectTo === 'signup') {
+          {queryParams: {redirect: this.router.url}}).then(r => null)
+    } else if (redirectTo === 'SIGNUP') {
       this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r => null)
     }
   }

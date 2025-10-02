@@ -1,13 +1,11 @@
 .header-container {
   overflow-x: hidden;
-  background: var(--primary-color-bg);
 
   .header {
     z-index: 1;
     transition: height 0.5s ease;
     background-color: var(--header-color);
     width: calc(100% - 40px);
-    border: 1px solid var(--primary-color);
     top: 20px;
     left: 20px;
 
@@ -85,7 +83,7 @@
     height: 48px;
     border-radius: 50%;
     backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.15); // translucent background
+    background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 

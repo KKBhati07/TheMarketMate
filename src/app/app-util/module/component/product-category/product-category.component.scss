@@ -1,6 +1,6 @@
 .category-container {
   transition: all 0.3s ease;
-  background-color: #fff;
+  background: var(--items-bg);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 
   &:hover {
@@ -12,12 +12,12 @@
   }
 
   .icon-wrapper {
-    background: linear-gradient(135deg, #00b4db, #0083b0);
+    background: var(--header-color);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
 
     .category-icon{
-      color: #fff;
+      color: black;
     }
   }
 

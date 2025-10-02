@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {CONSTANTS} from "../../../../app.constants";
+import {Category} from '../../../../models/category.model';
 
 @Component({
   selector:'mm-product-category',
@@ -8,16 +9,19 @@ import {CONSTANTS} from "../../../../app.constants";
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class ProductCategoryComponent implements OnInit {
-  @Output() onCategoryClickEmitter = new EventEmitter<string>();
-  @Input('category') set setTitleAnIcon(category:string){
+  @Output() onCategoryClickEmitter = new EventEmitter<Category | null>();
+  @Input('category') set setTitleAnIcon(category:Category){
     this.category = category;
-    this.setIcon(category);
-    if(category === CONSTANTS.CATEGORY.MOBILE) this.title = 'MOBILE'
-    else this.title = category.toUpperCase();
+    const categoryName = category.name;
+    this.isActive = category.active;
+    this.setIcon(categoryName);
+    if(categoryName === CONSTANTS.CATEGORY.MOBILE) this.title = 'MOBILE'
+    else this.title = categoryName.toUpperCase();
     this.loadComponent = true;
   }
   @Input() isMobile = false;
-  category = '';
+  isActive = false;
+  category: Category | null = null;
   title = '';
   iconName = '';
   loadComponent = false;
@@ -27,8 +31,8 @@ export class ProductCategoryComponent implements OnInit {
 
   ngOnInit() {}
 
-  setIcon(category: string) {
-    switch (category) {
+  setIcon(categoryName: string) {
+    switch (categoryName) {
       case CONSTANTS.CATEGORY.CAR:
         this.iconName = CONSTANTS.CATEGORY_ICON.CAR;
         break;

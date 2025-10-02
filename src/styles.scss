@@ -2,7 +2,7 @@
 @import "./lib/var.global";
 
 body{
-  background-color: #f7f7f7;
+  background-color: var(--app-background-color);
   overflow-x: hidden;
 }
 

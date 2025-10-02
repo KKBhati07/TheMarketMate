@@ -27,9 +27,9 @@ export class AuthService {
     return this.apiService.get<ApiResponse>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
       tap(res => {
         if (res.isSuccessful()) {
-          this.isAuthenticated = res.body?.data?.is_authenticated || false;
-          this.userDetails = res.body?.data?.user_details;
-          this.isAdmin = res.body?.data?.user_details?.is_admin;
+          this.isAuthenticated = res.body?.data?.authenticated || false;
+          this.userDetails = res.body?.data?.auth_details;
+          this.isAdmin = res.body?.data?.auth_details?.admin;
         } else {
           this.cookieService.delete('sessionid');
         }
@@ -47,7 +47,7 @@ export class AuthService {
       if (res.isSuccessful()) {
         if (res.body?.data?.authenticated) {
           this.cookieService.set('sessionid', res.body.data?.sessionId, undefined, '/');
-          this.userDetails = res.body?.data?.user_details;
+          this.userDetails = res.body?.data?.auth_details;
           this.isAuthenticated = true;
         }
       }

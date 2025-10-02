@@ -8,12 +8,16 @@ import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
 })
 export class AppNavButtonComponent {
     @Input() isMobile = false;
+    @Input() headerNav = false;
+    @Input() isOpenAccountBtn = false;
+    @Input() isLogoutBtn = false;
     @Input() class = '';
-    @Input() dynamicClass = '';
     @Input() text = '';
+    @Input() gap = '';
     @Input() icon = '';
-    @Input() showIcon = true;
+    @Input() showIcon = false;
     @Input() iconClass = '';
+    @Input() iconContainerClass = '';
     @Input() active = false;
     @Input() textClass = '';
     @Input() onMobileWidth = '';

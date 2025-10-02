@@ -1,33 +1,39 @@
 <!--<h1>Admin Dashboard</h1>-->
 
 
-<div [ngClass]="isMobile?'flex-column':'flex-row'" class="admin-container mt-100 pl-20 pr-20">
+<div [ngClass]="isMobile?'flex-column':'flex-row'"
+     class="admin-container mt-100 pl-20 pr-20">
 
-  <div class="left-container" [ngClass]="isMobile?'w-100p flex-row gap-20 justify-content-center' :'w-20p'">
+  <div class="left-container" [ngClass]="isMobile?'w-100p' +
+   ' flex-row gap-20 justify-content-center' :'w-20p'">
     <mm-nav-button
-      (click)="onNavItemClick(true)"
-      icon="group"
-      iconClass=" fs-32 h-32 w-32"
-      class=" h-52 mb-20"
-      [onMobileWidth]="isMobile?'w-52':''"
-      [active]="isUsersSelected"
-      text='USERS'
-      [isMobile]="isMobile"
-      textClass="fw-7"
-      type="button"
+        (click)="onNavItemClick(true)"
+        icon="group"
+        iconClass="fs-32 h-32 w-32"
+        class="h-60 br-36 mb-20"
+        gap="20"
+        iconContainerClass="h-58 w-58"
+        [onMobileWidth]="isMobile?'w-52':''"
+        [active]="isUsersSelected"
+        text='USERS'
+        [isMobile]="isMobile"
+        textClass="fw-7"
+        type="button"
     ></mm-nav-button>
 
     <mm-nav-button
-      (click)="onNavItemClick(false)"
-      icon="list"
-      class=" h-52 mb-20"
-      iconClass=" fs-32 h-32 w-32"
-      textClass="fw-7"
-      [active]="!isUsersSelected"
-      [onMobileWidth]="isMobile?'w-52':''"
-      text='LISTINGS'
-      [isMobile]="isMobile"
-      type="button"
+        (click)="onNavItemClick(false)"
+        icon="list"
+        class=" h-60 br-36 mb-20"
+        iconClass=" fs-32 h-32 w-32"
+        gap="20"
+        iconContainerClass="h-58 w-58"
+        textClass="fw-7"
+        [active]="!isUsersSelected"
+        [onMobileWidth]="isMobile?'w-52':''"
+        text='LISTINGS'
+        [isMobile]="isMobile"
+        type="button"
     ></mm-nav-button>
 
   </div>

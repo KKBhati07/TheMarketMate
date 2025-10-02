@@ -1,35 +1,46 @@
 <ng-container *ngIf="user">
-
-  <div class="user-container flex-row justify-content-space-b pl-20 pr-20 align-i-center h-88 ml-10 mr-10 mt-10">
+  <div class="user-container flex-row br-40
+   justify-content-space-b pl-4 pr-4
+   align-i-center h-48 ml-10 mr-10 mt-10">
     <div class="left-container flex-row align-i-center gap-10">
-      <div class="cursor-default border-circle image-icon-container h-48 w-48">
-        <img (error)="renderIcon = true" class="border-circle h-48 w-48"
-             *ngIf="user.profile_url && !renderIcon; else renderIconTemplate" [src]="user.profile_url"/>
-        <div class="fs-16 w-16 h-16" *ngIf="user.admin">
-          <mat-icon class="fs-16 w-16 h-16" [fontIcon]="'star'"></mat-icon>
-
-        </div>
+      <div
+          class="cursor-default flex-row align-i-center
+           justify-content-center border-circle
+           image-icon-container h-40 w-40">
+        <img (error)="renderIcon = true" class="border-circle h-40 w-40"
+             *ngIf="user.profile_url && !renderIcon;
+              else renderIconTemplate" [src]="user.profile_url"/>
       </div>
       <div class="cursor-default">
-        <p class="fs-24 fw-6">{{ user.name || 'User' }}</p>
-        <p class="fs-16">{{ user.email || 'Email' }}</p>
+        <p class="name-text fs-20 fw-6">{{ user.name || 'User' }}</p>
+        <p class=" email-text fs-12">{{ user.email || 'Email' }}</p>
       </div>
     </div>
-    <div class="right-container flex-row gap-20">
+    <div class="right-container flex-row gap-8">
+      <div class="icons-container h-40 w-40
+       flex-row justify-content-center
+        align-i-center border-circle" >
+        <mat-icon (click)="onEditProfileClick()"
+                  class="edit-icon cursor-pointer fs-28 h-28 w-28"
+                  [fontIcon]="'edit'"></mat-icon>
+      </div>
 
-      <mat-icon (click)="onEditProfileClick()" class="edit-icon cursor-pointer fs-34 h-34 w-34"
-                [fontIcon]="'edit'"></mat-icon>
-      <mat-icon
-        [ngClass]="user.deleted?'restore-icon':'delete-icon'"
-        (click)="user.deleted?onRestoreClick():onDeleteClick()" class="cursor-pointer fs-38 h-38 w-38"
-        [fontIcon]="user.deleted ?'settings_backup_restore':'delete_forever'"></mat-icon>
+      <div class="icons-container h-40 w-40 flex-row
+       justify-content-center align-i-center
+        border-circle " >
+        <mat-icon
+            [ngClass]="user.deleted?'restore-icon':'delete-icon'"
+            (click)="user.deleted?onRestoreClick():onDeleteClick()"
+            class="cursor-pointer fs-28 h-28 w-28"
+            [fontIcon]="user.deleted ?
+            'settings_backup_restore':'delete_forever'"></mat-icon>
+      </div>
     </div>
-
   </div>
 
 </ng-container>
 
 <ng-template #renderIconTemplate>
-  <mat-icon class="cursor-default fs-48 h-48 w-48  "
-            [fontIcon]="'account_circle'"></mat-icon>
+  <mat-icon class="cursor-default fs-36 h-36 w-36"
+            [fontIcon]="'person'"></mat-icon>
 </ng-template>

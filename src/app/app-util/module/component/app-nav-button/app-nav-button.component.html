@@ -1,8 +1,25 @@
 <div
-  [ngClass]="active?'item-selected':'inactive'"
-  class="nav-item-container cursor-pointer flex-row gap-20 align-i-center justify-content-center {{class}} {{onMobileWidth}}">
-  <div class="flex-row align-i-center gap-20">
-    <mat-icon *ngIf="showIcon" class="cursor-pointer" [ngClass]="iconClass" [fontIcon]="icon"></mat-icon>
+    [ngClass]="{
+  'item-selected': active,
+  'justify-content-center': !showIcon,
+  'inactive': !active,
+  'in-header-bg': headerNav,
+  'bg':! headerNav,
+  'open-account-btn': isOpenAccountBtn,
+  'log-out-btn': isLogoutBtn
+  }"
+    class="nav-item-container cursor-pointer flex-row
+   gap-20 align-i-center {{class}} {{onMobileWidth}}">
+  <div
+      [ngClass]="!showIcon?'justify-content-center':''"
+      class="flex-row align-i-center gap-{{isMobile? '':gap}} ">
+    <div *ngIf="showIcon" [ngClass]="iconContainerClass"
+         class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}}
+            align-i-center justify-content-center icon-container
+             border-circle">
+      <mat-icon class="cursor-pointer" [ngClass]="iconClass"
+                [fontIcon]="icon"></mat-icon>
+    </div>
     <p *ngIf="!isMobile " [ngClass]="textClass"> {{ text }}</p>
   </div>
 
