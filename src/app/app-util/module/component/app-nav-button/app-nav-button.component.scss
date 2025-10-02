@@ -1,27 +1,29 @@
 .nav-item-container {
   background-color: var(--header-color);
 
-  &.in-header-bg{
+  &.in-header-bg {
     background: var(--items-bg);
   }
-  &.bg{
+
+  &.bg {
     background: #fdfdfd;
   }
 
-  &.open-account-btn{
+  &.open-account-btn {
     background: #62ee3e;
   }
 
-  &.log-out-btn{
+  &.log-out-btn {
     background: #ff5a5a;
   }
 
-  .icon-container{
+  .icon-container {
 
-    &.in-header-ic-bg{
+    &.in-header-ic-bg {
       background: var(--header-color);
     }
-    &.ic-bg{
+
+    &.ic-bg {
       background: #e0e0e0;
     }
   }

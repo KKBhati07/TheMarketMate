@@ -179,7 +179,7 @@
             [fontIcon]="'menu'"></mat-icon>
 </ng-template>
 
-<ng-container *ngIf="showHeaderMenu" >
+<ng-container *ngIf="showHeaderMenu">
   <app-header-menu
       [isAdmin]="isAdmin"
       [isAuthenticated]="(isAuthenticated$ | async) ?? false"

@@ -6,7 +6,7 @@
                   'border-bottom-left-radius':isBottomSheet?'': '20px'
        }"
   >
-  <app-bottomsheet-pill *ngIf="isBottomSheet" ></app-bottomsheet-pill>
+    <app-bottomsheet-pill *ngIf="isBottomSheet"></app-bottomsheet-pill>
 
     <div *ngIf="!isBottomSheet" (click)="closeForm()"
          class="close-icon-container position-absolute cursor-pointer flex-row justify-content-center align-i-center border-circle w-36 h-36">
@@ -31,9 +31,9 @@
                type="{{showPassword?'text':'password'}}"
                placeholder="Enter your password"/>
         <mat-icon
-          (click)="toggleShowPassword()"
-          [fontIcon]="showPassword?'visibility_off':'visibility'"
-          class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
+            (click)="toggleShowPassword()"
+            [fontIcon]="showPassword?'visibility_off':'visibility'"
+            class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
         </mat-icon>
       </div>
 
@@ -42,11 +42,11 @@
       </div>
 
       <mm-button
-        [type]="'submit'"
-        [text]="'LOG IN'"
-        [class]="'h-60 w-100p fs-16'"
-        [iconClass]="'fw-1'"
-        [disabled]=" getEmailValidation(true) || false"
+          [type]="'submit'"
+          [text]="'LOG IN'"
+          [class]="'h-60 w-100p fs-16'"
+          [iconClass]="'fw-1'"
+          [disabled]=" getEmailValidation(true) || false"
       ></mm-button>
     </form>
 

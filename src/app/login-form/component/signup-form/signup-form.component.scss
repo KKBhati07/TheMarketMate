@@ -5,17 +5,18 @@
   background-color: var(--header-color);
   transition: all 0.5s linear;
 
-  .back-icon-container{
-    .back-icon{
+  .back-icon-container {
+    .back-icon {
       color: var(--text-color-disable);
     }
   }
-  .close-icon-container{
+
+  .close-icon-container {
     top: 20px;
     right: 20px;
     background-color: #bbbbbb;
 
-    .close-icon{
+    .close-icon {
       color: var(--primary-color);
       font-weight: 550;
     }
@@ -32,10 +33,10 @@
       font-weight: 800;
     }
 
-    .invalid-text-container{
+    .invalid-text-container {
       width: 100%;
 
-      .invalid-text{
+      .invalid-text {
         color: red;
       }
     }
@@ -76,13 +77,16 @@
       width: 100%;
     }
   }
-  .login-signup-text-container{
-    .login-signup-text{
+
+  .login-signup-text-container {
+    .login-signup-text {
       color: #f7f7f7;
-      span{
+
+      span {
         color: var(--primary-color);
         text-decoration: underline;
-        &:hover{
+
+        &:hover {
           color: var(--hover-color);
         }
       }
@@ -96,17 +100,20 @@
   .next-btn {
     border: 1px solid var(--primary-color);
     box-sizing: border-box;
-    p{
+
+    p {
       font-weight: 700;
     }
 
-    &.next-btn-disabled{
-      background-color: var(--button-color-disable)!important;
+    &.next-btn-disabled {
+      background-color: var(--button-color-disable) !important;
       border: none;
-      p{
+
+      p {
         color: var(--text-color-disable);
       }
-      mat-icon{
+
+      mat-icon {
         color: var(--text-color-disable);
       }
     }

@@ -6,54 +6,63 @@ import { CookieService } from 'ngx-cookie-service';
 import { ApiHttpResponse, apiResponse } from '../app-util/api-response.util';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class ApiService {
-  protected baseUrl = environment.apiUrl;
+	protected baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+	constructor(private http: HttpClient, private cookieService: CookieService) {
+	}
 
-  private getAuthHeaders(): HttpHeaders {
-    let headers = new HttpHeaders();
-    const cookie = this.cookieService.get('sessionid')?.trim();
-    if (cookie) {
-      headers = headers.set('sessionid', cookie);
-    }
-    return headers;
-  }
+	private getAuthHeaders(): HttpHeaders {
+		let headers = new HttpHeaders();
+		const cookie = this.cookieService.get('sessionid')?.trim();
+		if (cookie) {
+			headers = headers.set('sessionid', cookie);
+		}
+		return headers;
+	}
 
-  get<T>(endpoint: string): Observable<ApiHttpResponse<T>> {
-    const headers = this.getAuthHeaders();
-    return apiResponse(
-      this.http.get<T>(`${this.baseUrl}${endpoint}`, { headers, observe: 'response' })
-    );
-  }
+	get<T>(endpoint: string): Observable<ApiHttpResponse<T>> {
+		const headers = this.getAuthHeaders();
+		return apiResponse(
+				this.http.get<T>(`${ this.baseUrl }${ endpoint }`, { headers, observe: 'response' })
+		);
+	}
 
-  post<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
-    const headers = this.getAuthHeaders();
-    return apiResponse(
-      this.http.post<T>(`${this.baseUrl}${endpoint}`, body, { headers, observe: 'response' })
-    );
-  }
+	post<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
+		const headers = this.getAuthHeaders();
+		return apiResponse(
+				this.http.post<T>(`${ this.baseUrl }${ endpoint }`, body, { headers, observe: 'response' })
+		);
+	}
 
-  put<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
-    const headers = this.getAuthHeaders();
-    return apiResponse(
-      this.http.put<T>(`${this.baseUrl}${endpoint}`, body, { headers, observe: 'response', withCredentials: true })
-    );
-  }
+	put<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
+		const headers = this.getAuthHeaders();
+		return apiResponse(
+				this.http.put<T>(`${ this.baseUrl }${ endpoint }`, body, {
+					headers,
+					observe: 'response',
+					withCredentials: true
+				})
+		);
+	}
 
-  patch<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
-    const headers = this.getAuthHeaders();
-    return apiResponse(
-      this.http.patch<T>(`${this.baseUrl}${endpoint}`, body, {headers, observe: 'response', withCredentials: true})
-    );
-  }
+	patch<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
+		const headers = this.getAuthHeaders();
+		return apiResponse(
+				this.http.patch<T>(`${ this.baseUrl }${ endpoint }`, body, {
+					headers,
+					observe: 'response',
+					withCredentials: true
+				})
+		);
+	}
 
-  delete<T>(endpoint: string): Observable<ApiHttpResponse<T>> {
-    const headers = this.getAuthHeaders();
-    return apiResponse(
-      this.http.delete<T>(`${this.baseUrl}${endpoint}`, { headers, observe: 'response', withCredentials: true })
-    );
-  }
+	delete<T>(endpoint: string): Observable<ApiHttpResponse<T>> {
+		const headers = this.getAuthHeaders();
+		return apiResponse(
+				this.http.delete<T>(`${ this.baseUrl }${ endpoint }`, { headers, observe: 'response', withCredentials: true })
+		);
+	}
 }

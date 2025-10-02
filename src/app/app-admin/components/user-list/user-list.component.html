@@ -19,7 +19,7 @@
     <div class="right-container flex-row gap-8">
       <div class="icons-container h-40 w-40
        flex-row justify-content-center
-        align-i-center border-circle" >
+        align-i-center border-circle">
         <mat-icon (click)="onEditProfileClick()"
                   class="edit-icon cursor-pointer fs-28 h-28 w-28"
                   [fontIcon]="'edit'"></mat-icon>
@@ -27,7 +27,7 @@
 
       <div class="icons-container h-40 w-40 flex-row
        justify-content-center align-i-center
-        border-circle " >
+        border-circle ">
         <mat-icon
             [ngClass]="user.deleted?'restore-icon':'delete-icon'"
             (click)="user.deleted?onRestoreClick():onDeleteClick()"

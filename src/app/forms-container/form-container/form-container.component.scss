@@ -7,14 +7,15 @@
   background-color: grey;
 
   .form-container {
-    //right: 0px;
     right: -600px;
     position: absolute;
     animation: slideIn 0.5s linear 0.2s forwards;
-    .slide-in{
+
+    .slide-in {
       right: -600px;
       animation: slideIn 0.5s linear 0.2s forwards;
     }
+
     @keyframes slideIn {
       to {
         right: 0;
@@ -37,11 +38,12 @@
   position: fixed;
   border: 0;
   bottom: 0;
+
   .login-signup-bottomsheet-container {
     display: flex;
     justify-content: center;
 
-    .mat-bottom-sheet-container{
+    .mat-bottom-sheet-container {
       box-shadow: none;
       padding: 0;
       margin: 0;

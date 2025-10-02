@@ -9,7 +9,7 @@
   >
     <app-bottomsheet-pill *ngIf="isBottomSheet"></app-bottomsheet-pill>
     <div *ngIf="step===2" (click)="step = 1" class="back-icon-container m-20 cursor-pointer ">
-      <mat-icon fontIcon="arrow_back" class="back-icon h-32 w-32 fs-32" >
+      <mat-icon fontIcon="arrow_back" class="back-icon h-32 w-32 fs-32">
       </mat-icon>
     </div>
 
@@ -21,7 +21,7 @@
     </div>
 
     <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="signUpForm">
-      <p class="form-heading cursor-default">{{formHeading}}</p>
+      <p class="form-heading cursor-default">{{ formHeading }}</p>
       <ng-container *ngIf="step === 1">
         <input id="user-name"
                [ngStyle]="{'border-color':
@@ -34,7 +34,7 @@
 
         <div class="invalid-text-container h-36 p-20">
           <p *ngIf="checkForNameEmailValidation(false,'name')"
-             class="invalid-text fs-12">* {{errorText.name}}</p>
+             class="invalid-text fs-12">* {{ errorText.name }}</p>
         </div>
 
         <input id="signupEmail"
@@ -45,21 +45,21 @@
                placeholder="Enter your email"/>
         <div class="invalid-text-container h-36 p-20">
           <p *ngIf="checkForNameEmailValidation()"
-             class="invalid-text fs-12">* {{errorText.email}}</p>
+             class="invalid-text fs-12">* {{ errorText.email }}</p>
         </div>
 
         <div (click)="onNextClick()"
-             class="next-btn-container h-60 flex-row " >
+             class="next-btn-container h-60 flex-row ">
 
           <mm-button [ngClass]="isBottomSheet?'w-100p':''"
-            [type]="'button'"
-            [text]="'Next'"
-            [class]="isBottomSheet? 'h-60 fs-16 gap-20 fw-6 w-100p':
+                     [type]="'button'"
+                     [text]="'Next'"
+                     [class]="isBottomSheet? 'h-60 fs-16 gap-20 fw-6 w-100p':
             'h-60 fs-16 gap-20 fw-6 w-100'"
-            [iconClass]="'fw-5'"
-            [icon]="'arrow_forward'"
-            [position]="'after'"
-            [disabled]="checkForNameEmailValidation(true) || false"
+                     [iconClass]="'fw-5'"
+                     [icon]="'arrow_forward'"
+                     [position]="'after'"
+                     [disabled]="checkForNameEmailValidation(true) || false"
           ></mm-button>
         </div>
 
@@ -74,14 +74,14 @@
                  type="{{showPassword?'text':'password'}}"
                  placeholder="Enter your password"/>
           <mat-icon
-            (click)="toggleShowPassword()"
-            [fontIcon]="showPassword?'visibility_off':'visibility'"
-            class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
+              (click)="toggleShowPassword()"
+              [fontIcon]="showPassword?'visibility_off':'visibility'"
+              class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
           </mat-icon>
         </div>
         <div class="invalid-text-container h-36 p-20">
           <p *ngIf="checkForPasswordValidation()"
-             class="invalid-text fs-12">* {{errorText.password}}</p>
+             class="invalid-text fs-12">* {{ errorText.password }}</p>
         </div>
         <div class="pass-input-container display-block
          h-60 position-relative br-10 pl-5 mt-30"
@@ -94,15 +94,15 @@
         </div>
 
         <div class="invalid-text-container h-36 p-20">
-              <p *ngIf="checkForPasswordValidation(true)"
-                 class="invalid-text fs-12">* {{errorText.confirmPassword}}</p>
+          <p *ngIf="checkForPasswordValidation(true)"
+             class="invalid-text fs-12">* {{ errorText.confirmPassword }}</p>
         </div>
         <mm-button
-          [type]="'submit'"
-          [text]="'Sign up'"
-          [class]="'h-60 w-100p fs-16'"
-          [iconClass]="'fw-1'"
-          [disabled]="checkForPasswordValidation(false,true) || false"
+            [type]="'submit'"
+            [text]="'Sign up'"
+            [class]="'h-60 w-100p fs-16'"
+            [iconClass]="'fw-1'"
+            [disabled]="checkForPasswordValidation(false,true) || false"
         ></mm-button>
       </ng-container>
     </form>

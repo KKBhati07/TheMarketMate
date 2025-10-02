@@ -5,12 +5,12 @@
   background-color: var(--header-color);
   transition: all 0.5s linear;
 
-  .close-icon-container{
+  .close-icon-container {
     top: 20px;
     right: 20px;
     background-color: #bbbbbb;
 
-    .close-icon{
+    .close-icon {
       color: var(--primary-color);
       font-weight: 550;
     }
@@ -27,10 +27,10 @@
       font-weight: 800;
     }
 
-    .invalid-text-container{
+    .invalid-text-container {
       width: 100%;
 
-      .invalid-text{
+      .invalid-text {
         color: red;
       }
     }
@@ -70,19 +70,22 @@
       font-weight: 700;
       width: 100%;
 
-      &.submit-btn-disabled{
-      background-color: var(--button-color-disable)!important;
-      color: var(--text-color-disable)!important;
+      &.submit-btn-disabled {
+        background-color: var(--button-color-disable) !important;
+        color: var(--text-color-disable) !important;
       }
     }
   }
-  .signup-text-container{
-    .signup-text{
+
+  .signup-text-container {
+    .signup-text {
       color: #b21010;
-      span{
+
+      span {
         color: var(--primary-color);
         text-decoration: underline;
-        &:hover{
+
+        &:hover {
           color: var(--hover-color);
 
         }
