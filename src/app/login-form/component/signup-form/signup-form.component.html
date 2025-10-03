@@ -21,14 +21,17 @@
     </div>
 
     <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="signUpForm">
-      <p class="form-heading cursor-default">{{ formHeading }}</p>
+      <div class="form-heading-container flex-row
+      align-i-center justify-content-center h-44" >
+        <p class="pl-12 pr-12 fs-28 form-heading br-32 fw-8 h-48 cursor-default">{{ formHeading }}</p>
+      </div>
       <ng-container *ngIf="step === 1">
         <input id="user-name"
                [ngStyle]="{'border-color':
                checkForNameEmailValidation(false,'name')?'red':''}"
                class="pass-input-container fs-12
                 display-block h-60 position-relative
-                 br-10 pl-5 mt-30" formControlName="name"
+                 br-32 pl-12 mt-30" formControlName="name"
                type="text"
                placeholder="Enter your Name"/>
 
@@ -40,7 +43,7 @@
         <input id="signupEmail"
                [ngStyle]="{'border-color':checkForNameEmailValidation()?'red':''}"
                class="pass-input-container fs-12 display-block
-                h-60 position-relative br-10 pl-5 mt-30"
+                h-60 position-relative br-32 pl-12 mt-30"
                formControlName="email" type="email"
                placeholder="Enter your email"/>
         <div class="invalid-text-container h-36 p-20">
@@ -55,8 +58,8 @@
                      [type]="'button'"
                      [text]="'Next'"
                      [class]="isBottomSheet? 'h-60 fs-16 gap-20 fw-6 w-100p':
-            'h-60 fs-16 gap-20 fw-6 w-100'"
-                     [iconClass]="'fw-5'"
+            'h-48 fs-12 gap-20 fw-6 w-100'"
+                     [iconClass]="'fw-4 fs-16 w-16 h-16'"
                      [icon]="'arrow_forward'"
                      [position]="'after'"
                      [disabled]="checkForNameEmailValidation(true) || false"
@@ -67,9 +70,9 @@
 
       <ng-container *ngIf="step===2">
         <div class="pass-input-container display-block h-60
-        position-relative br-10 pl-5 mt-30"
+        position-relative br-32 pl-12 mt-30"
              [ngStyle]="{'border-color':checkForPasswordValidation() ? 'red':''}">
-          <input class="fs-12 pass-input border-none br-5"
+          <input class="fs-12 br-32 pass-input border-none"
                  id="signupPassword" formControlName="password"
                  type="{{showPassword?'text':'password'}}"
                  placeholder="Enter your password"/>
@@ -79,15 +82,15 @@
               class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
           </mat-icon>
         </div>
-        <div class="invalid-text-container h-36 p-20">
+        <div class="invalid-text-container h-28 p-20">
           <p *ngIf="checkForPasswordValidation()"
              class="invalid-text fs-12">* {{ errorText.password }}</p>
         </div>
         <div class="pass-input-container display-block
-         h-60 position-relative br-10 pl-5 mt-30"
+         h-60 position-relative br-32 pl-12 mt-16"
              [ngStyle]="{'border-color':
              checkForPasswordValidation(true)? 'red':''}">
-          <input class="fs-12 pass-input border-none br-5"
+          <input class="fs-12 pass-input border-none br-32"
                  id="confirmPassword" formControlName="confirmPassword"
                  type="{{showPassword?'text':'password'}}"
                  placeholder="Confirm your password"/>

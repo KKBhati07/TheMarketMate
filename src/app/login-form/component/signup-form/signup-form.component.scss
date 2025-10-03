@@ -26,11 +26,11 @@
     width: 100%;
     margin-top: 20vh;
 
-    .form-heading {
-      font-size: 2rem;
-      text-align: center;
-      color: var(--primary-color);
-      font-weight: 800;
+    .form-heading-container {
+      .form-heading {
+        text-align: center;
+        color: var(--primary-color);
+      }
     }
 
     .invalid-text-container {
@@ -42,8 +42,8 @@
     }
 
     .pass-input-container {
-      border: 1px solid var(--border-color);
-      background-color: #f7f7f7;
+      border: none;
+      background-color: var(--items-bg);
       outline: none;
       width: 100%;
 
@@ -59,7 +59,7 @@
         width: 80%;
         outline: none;
         height: 100%;
-        background-color: #f7f7f7;
+        background-color: var(--item-bg);
       }
 
       .visibility-icon {
@@ -119,14 +119,3 @@
     }
   }
 }
-
-
-///* Responsive Styles */
-//@media only screen and (max-width: 768px) {
-//  form {
-//    width: 90vw;
-//  }
-//  form input {
-//    width: 90vw;
-//  }
-//}

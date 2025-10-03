@@ -138,14 +138,12 @@ export class AppHeaderComponent implements OnInit {
 	onLogOutClick() {
 		this.authService.logoutUser().subscribe(res => {
 			if (res.isSuccessful()) {
-				console.warn(res.body)
-				if (res.body?.data?.status === 200) {
-					this.router.navigate([AppUrls.ROOT]).then(r => {
-						window.location.reload();
-					});
-				} else {
-					//TODO:: Notification Service for failed logout!
-				}
+				this.router.navigate([AppUrls.ROOT]).then(r => {
+					window.location.reload();
+				});
+			} else {
+				//TODO:: Notification Service for failed logout!
+
 			}
 		})
 	}

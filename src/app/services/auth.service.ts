@@ -59,9 +59,8 @@ export class AuthService {
 		return this.apiService.post<ApiResponse>(AppUrls.API.V1.AUTH.LOGOUT, {}).pipe(
 				tap((res: ApiHttpResponse<ApiResponse>) => {
 					if (res.isSuccessful()) {
-						if (res.body?.data?.status === 200) {
-							this.cookieService.delete('sessionid');
-						}
+						this.cookieService.delete('sessionid');
+
 					}
 				}))
 	}

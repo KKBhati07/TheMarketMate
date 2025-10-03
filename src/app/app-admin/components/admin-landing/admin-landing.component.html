@@ -5,18 +5,17 @@
      class="admin-container mt-100 pl-20 pr-20">
 
   <div class="left-container" [ngClass]="isMobile?'w-100p' +
-   ' flex-row gap-20 justify-content-center' :'w-20p'">
+   ' flex-row gap-12 justify-content-center' :'w-20p'">
     <mm-nav-button
         (click)="onNavItemClick(true)"
         icon="group"
         iconClass="fs-32 h-32 w-32"
-        class="h-60 br-36 mb-20"
-        gap="20"
-        iconContainerClass="h-58 w-58"
-        [onMobileWidth]="isMobile?'w-52':''"
+        class="h-60 br-36 pl-4 pr-8"
+        iconContainerClass="h-52 w-52"
+        [gap]="isMobile? '8':'12'"
         [active]="isUsersSelected"
+        [showIcon]="true"
         text='USERS'
-        [isMobile]="isMobile"
         textClass="fw-7"
         type="button"
     ></mm-nav-button>
@@ -24,15 +23,14 @@
     <mm-nav-button
         (click)="onNavItemClick(false)"
         icon="list"
-        class=" h-60 br-36 mb-20"
+        class=" h-60 br-36 pl-4 pr-8 mb-20"
         iconClass=" fs-32 h-32 w-32"
-        gap="20"
-        iconContainerClass="h-58 w-58"
+        iconContainerClass="h-52 w-52"
         textClass="fw-7"
+        [gap]="isMobile? '8':'12'"
         [active]="!isUsersSelected"
-        [onMobileWidth]="isMobile?'w-52':''"
+        [showIcon]="true"
         text='LISTINGS'
-        [isMobile]="isMobile"
         type="button"
     ></mm-nav-button>
 

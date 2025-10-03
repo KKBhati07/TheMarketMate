@@ -1,13 +1,25 @@
 <div *ngIf="renderComponent"
      [ngClass]="!isMobile?'flex-row':'flex-column'"
-     class=" main-container flex-row align-i-center w-100p">
-  <div class="profile-detail-mobile-container pt-60 pl-8 pr-8" *ngIf="isMobile">
-    <mm-profile-detail [userDetails]="userDetails" [isMobile]="isMobile"></mm-profile-detail>
-  </div>
-  <div class="left-section"></div>
-  <!--  <div *ngIf="true" class="divider" ></div>-->
-  <div *ngIf="!isMobile" class="right-section flex-row justify-content-center align-i-center">
-    <mm-profile-detail [userDetails]="userDetails"></mm-profile-detail>
+     class="mt-100 main-container flex-row align-i-center w-100p">
+  <div
+      [ngStyle]="{
+    width:expandProfileDetails ? '75%':'calc(100% - 70px)',
+  }"
+      class="left-section ml-12 br-32 h-100p"></div>
+  <div
+      [ngStyle]="{
+    width:expandProfileDetails ? '25%':'70px',
+  }"
+      *ngIf="!isMobile" class="right-section pr-12 flex-row
+   align-i-center">
+    <div class="">
+
+      <mm-profile-detail
+          [isExpanded]="expandProfileDetails"
+          (expandComponent)="onExpandProfileDetails($event)"
+          [userDetails]="userDetails">
+      </mm-profile-detail>
+    </div>
   </div>
 </div>
 

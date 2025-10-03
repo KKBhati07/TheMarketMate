@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from "@angular/core";
 import {ProfileDetails} from "../../../models/user.model";
 import {MatDialog} from "@angular/material/dialog";
 import {UserProfileEditComponent} from "../user-profile-edit/user-profile-edit.component";
@@ -13,12 +22,14 @@ import {AuthService} from "../../../services/auth.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
+
+  @Input() isExpanded = false;
   @Input() userDetails: ProfileDetails | null = null;
   @Input() isMobile: boolean = false;
-  hideComponent = false;
-  idBottomSheet = false;
+  isBottomSheet = false;
   destroy$: Subject<any> = new Subject();
   renderIcon = false
+  @Output() expandComponent = new EventEmitter<boolean>();
 
   constructor(private cdr: ChangeDetectorRef,
               private userService: UserService,

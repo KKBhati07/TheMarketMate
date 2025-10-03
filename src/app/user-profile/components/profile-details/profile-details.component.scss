@@ -1,9 +1,18 @@
 .profile-details-container {
   height: 80vh;
+  position: relative;
+  right: 0;
   border: 1px solid var(--border-color);
-  box-shadow: 0px 0px 40px #b1b1b1;
   background-color: var(--header-color);
-  transition: all 0.9s linear;
+
+  .expand-icon-container{
+    top: 12px;
+    left: 0;
+
+    mat-icon {
+      color: #949494;
+    }
+  }
 
   &.hide-comp {
   }
@@ -50,7 +59,7 @@
     height: 80vh;
     border-radius: 10px;
     width: 60vw;
-    box-shadow: 0px 0px 40px #b1b1b1;
+    //box-shadow: 0px 0px 40px #b1b1b1;
     max-width: 600px;
     left: 50%;
     right: calc(50% - 150px);
@@ -68,8 +77,8 @@
     z-index: 3;
     height: 80vh;
     border-radius: 10px;
-    width: 80vw;
-    box-shadow: 0px 0px 40px #b1b1b1;
+    width: 60vw;
+    max-width: 600px;
     left: 50%;
     right: calc(50% - 150px);
     top: 50%;
@@ -77,4 +86,11 @@
     transform: translate(-50%, -50%);
     margin: 0 auto;
   }
+
+  ::ng-deep .mat-mdc-dialog-surface {
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
 }

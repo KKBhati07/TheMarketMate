@@ -1,29 +1,38 @@
 <div
-  [ngStyle]="{
-    width:isMobile ? '':'24vw',
-    borderRadius:isMobile ?'':'20px'
-  }"
-  [ngClass]="{
-    'hide-comp':hideComponent,
-    'br-2':!isMobile,
-    'br-8':isMobile
-  }"
-  class="profile-details-container justify-content-center gap-12 p-20 flex-column align-i-center br-2">
-  <div class="profile-pic-container p-4 flex-row w-100 h-100 border-circle
+  [ngClass]="'w-100p'"
+  class=" position-relative br-32 profile-details-container justify-content-center
+  gap-12 p-20 flex-column align-i-center br-2">
+  <div
+      (click)="expandComponent.emit(!isExpanded)"
+      [ngClass]="isExpanded? 'ml-8': 'justify-content-center'"
+      class="expand-icon-container cursor-pointer flex-row
+       w-100p position-absolute">
+    <mat-icon
+              class="fs-16 w-16 h-16"
+              [fontIcon]="isExpanded?
+              'arrow_forward_ios'
+              :'arrow_back_ios'"
+    ></mat-icon>
+  </div>
+  <ng-container *ngIf="isExpanded">
+    <div class="profile-pic-container p-4 flex-row w-100 h-100 border-circle
       align-i-center justify-content-center">
-    <ng-container *ngIf="userDetails?.profile_url && !renderIcon; else renderProfileIcon">
-      <img (error)="renderIcon=true" class="profile-pic border-circle w-100p h-100p"
-           [src]="userDetails?.profile_url">
-    </ng-container>
-  </div>
-  <p class="fs-36 fw-7">{{ userDetails?.name || 'USER' }}</p>
-  <div class="flex-column gap-8">
+      <ng-container *ngIf="userDetails?.profile_url && !renderIcon; else renderProfileIcon">
+        <img (error)="renderIcon=true" class="profile-pic border-circle w-100p h-100p"
+             [src]="userDetails?.profile_url">
+      </ng-container>
+    </div>
+    <p class="fs-36 fw-7">{{ userDetails?.name || 'USER' }}</p>
+    <div class="flex-column gap-8">
 
-    <p class="fs-24">{{ userDetails?.email || 'Email' }}</p>
-    <p *ngIf="userDetails?.contact_no" class="fs-24">Contact: {{ userDetails?.contact_no }}</p>
-  </div>
-  <mm-button *ngIf="userDetails?.self" (click)="onEditProfileClick()" class="w-100p h-56 mt-32" [type]="'button'"
-             [class]="'w-100p h-34'" [text]="'EDIT PROFILE'"></mm-button>
+      <p class="fs-24">{{ userDetails?.email || 'Email' }}</p>
+      <p *ngIf="userDetails?.contact_no" class="fs-24">Contact: {{ userDetails?.contact_no }}</p>
+    </div>
+    <mm-button *ngIf="userDetails?.self" (click)="onEditProfileClick()"
+               class="w-100p h-56 mt-32" [type]="'button'"
+               [class]="'w-100p h-34'" [text]="'EDIT PROFILE'"></mm-button>
+  </ng-container>
+
 </div>
 
 <ng-template #renderProfileIcon>
