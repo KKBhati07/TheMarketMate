@@ -1,0 +1,27 @@
+<div
+    (click)="showProfileDetails.emit(true)"
+    class="profile-details-bar pl-4 pr-4 cursor-pointer
+align-i-center gap-8 flex-row h-44 br-32 w-100p">
+  <div class="profile-pic-container flex-row justify-content-center
+   align-i-center border-circle h-36 w-36">
+    <ng-container *ngIf="userProfileUrl && !renderIcon;
+     else renderProfileIcon">
+      <img (error)="renderIcon=true"
+           class="profile-pic border-circle w-100p h-100p"
+           [src]="userProfileUrl">
+    </ng-container>
+  </div>
+
+  <div class="username-container justify-content-center pl-8 w-100p pr-8 flex-row
+  align-i-center h-36 br-32">
+    <p class="fs-16 fw-6">{{ userName }}</p>
+  </div>
+
+
+</div>
+
+
+<ng-template #renderProfileIcon>
+  <mat-icon class="profile-icon fs-24 w-24 h-24"
+            [fontIcon]="'person'"></mat-icon>
+</ng-template>

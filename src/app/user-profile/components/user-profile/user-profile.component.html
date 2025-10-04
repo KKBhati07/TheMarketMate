@@ -21,5 +21,17 @@
       </mm-profile-detail>
     </div>
   </div>
+  <ng-container *ngIf="isMobile">
+    <div class="profile-details-bar-container w-100p pl-8 pr-8
+     position-absolute">
+      <mm-user-profile-bar
+          [userProfileUrl]="userDetails?.profile_url ?? null"
+          [userName]="userDetails?.name ?? null"
+          (showProfileDetails)="showDetailsBottomSheet($event)"
+      >
+
+      </mm-user-profile-bar>
+    </div>
+  </ng-container>
 </div>
 

@@ -7,7 +7,7 @@
        }"
 
   >
-    <app-bottomsheet-pill *ngIf="isBottomSheet"></app-bottomsheet-pill>
+    <mm-bottomsheet-pill *ngIf="isBottomSheet"></mm-bottomsheet-pill>
     <div *ngIf="step===2" (click)="step = 1" class="back-icon-container m-20 cursor-pointer ">
       <mat-icon fontIcon="arrow_back" class="back-icon h-32 w-32 fs-32">
       </mat-icon>
@@ -22,7 +22,7 @@
 
     <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="signUpForm">
       <div class="form-heading-container flex-row
-      align-i-center justify-content-center h-44" >
+      align-i-center justify-content-center h-44">
         <p class="pl-12 pr-12 fs-28 form-heading br-32 fw-8 h-48 cursor-default">{{ formHeading }}</p>
       </div>
       <ng-container *ngIf="step === 1">

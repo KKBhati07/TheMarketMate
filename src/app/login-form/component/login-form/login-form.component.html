@@ -6,7 +6,7 @@
                   'border-bottom-left-radius':isBottomSheet?'': '20px'
        }"
   >
-    <app-bottomsheet-pill *ngIf="isBottomSheet"></app-bottomsheet-pill>
+    <mm-bottomsheet-pill *ngIf="isBottomSheet"></mm-bottomsheet-pill>
 
     <div *ngIf="!isBottomSheet" (click)="closeForm()"
          class="close-icon-container position-absolute cursor-pointer flex-row justify-content-center align-i-center border-circle w-36 h-36">

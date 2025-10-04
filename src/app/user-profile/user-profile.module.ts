@@ -7,12 +7,14 @@ import {ProfileDetailsComponent} from "./components/profile-details/profile-deta
 import {UserProfileEditComponent} from "./components/user-profile-edit/user-profile-edit.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from "@angular/material/dialog";
+import { MyUserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 
 @NgModule({
   declarations: [
     UserProfileComponent,
     ProfileDetailsComponent,
-    UserProfileEditComponent
+    UserProfileEditComponent,
+    MyUserProfileBarComponent
   ],
   imports: [CommonModule,
     MatIconModule,

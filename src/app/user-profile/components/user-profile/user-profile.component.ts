@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Type } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DeviceDetectorService } from "../../../app-util/services/device-detector.service";
 import { UserService } from "../../../services/user.service";
 import { ProfileDetails } from "../../../models/user.model";
 import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
+import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
 	selector: "mm-user-profile",
@@ -24,7 +26,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 			private deviceDetector: DeviceDetectorService,
 			private cdr: ChangeDetectorRef,
 			private userService: UserService,
-			private activatedRoute: ActivatedRoute
+			private activatedRoute: ActivatedRoute,
+			private bottomSheet: MatBottomSheet
 	) {
 	}
 
@@ -43,6 +46,20 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 	onExpandProfileDetails(expand: boolean) {
 		this.expandProfileDetails = expand;
 		this.cdr.markForCheck();
+	}
+
+	showDetailsBottomSheet(open: boolean) {
+		const panelClass = 'profile-details-bottomsheet-container'
+		const backdropClass = 'profile-details-bottomsheet-backdrop'
+		this.bottomSheet.open(ProfileDetailsComponent, {
+			panelClass: panelClass,
+			backdropClass: backdropClass,
+			data: {
+				isBottomSheet: true,
+				userDetails: this.userDetails,
+				isMobile: this.isMobile,
+			}
+		});
 	}
 
 	getUserDetails() {
