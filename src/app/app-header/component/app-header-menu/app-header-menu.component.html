@@ -4,23 +4,45 @@
      flex-row justify-content-center p-8
      w-100p h-100p">
   <div
+      [ngClass]="{
+      'h-264':!isAuthenticated,
+      'h-212':isAuthenticated && isAdmin,
+      'h-160':isAuthenticated && !isAdmin
+      }"
       [@fadeInOut]
-      class="header-menu-container br-32 h-200
-       w-100p mt-72 pl-8 pr-8">
+      class="header-menu-container
+       br-32 flex-column gap-12
+       w-100p mt-72 p-8">
+
+    <mm-nav-button
+        (click)="onItemClick.emit('SELL_ITEM')"
+        class="pl-4 pr-4 h-40 br-20"
+        textClass="fw-6"
+        text="Sell Item"
+        iconPosition="RIGHT"
+        icon = "arrow_outward"
+        iconClass="h-20 w-20 fs-20"
+        [showIcon] = "true"
+        gap="5"
+        [isSellItemBtn]="true"
+        [headerNav]="true"
+    ></mm-nav-button>
     <ng-container *ngIf="!isAuthenticated">
-      <div class="flex-row-reverse pr-8 gap-12 pt-12">
         <mm-nav-button
             (click)="onItemClick.emit('SIGNUP')"
-            class="pl-4 pr-4 h-40 w-128 br-20"
+            class="pl-4 pr-4 h-40 br-20"
+            iconContainerClass="h-32 w-32"
+            iconClass="h-20 w-20 fs-20"
             textClass="fw-6"
             text="Open Account"
             gap="5"
-            [isOpenAccountBtn]="true"
+            icon="person_add"
+            [showIcon]="true"
             [headerNav]="true"
         ></mm-nav-button>
         <mm-nav-button
             (click)="onItemClick.emit('LOGIN')"
-            class="pl-4 pr-4 h-40 w-100 br-20"
+            class="pl-4 pr-4 h-40 br-20"
             iconContainerClass="h-32 w-32"
             iconClass="h-20 w-20 fs-20"
             textClass="fw-6"
@@ -30,13 +52,12 @@
             [headerNav]="true"
             icon="login"
         ></mm-nav-button>
-      </div>
 
     </ng-container>
     <ng-container *ngIf="isAdmin">
       <mm-nav-button
           (click)="onItemClick.emit('ADMIN')"
-          class="pl-4 pr-12 h-40 br-20"
+          class="pl-4 h-40 br-20"
           iconContainerClass="h-32 w-32"
           iconClass="h-20 w-20 fs-20"
           textClass="fw-6"

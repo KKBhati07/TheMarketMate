@@ -1,4 +1,3 @@
 import { Redirect } from './login-signup.model';
 
-export type NavOption = Redirect | 'USER_PROFILE'
-		| 'CATEGORIES' | 'HOME' | 'ADMIN';
+export type NavOption = Redirect | 'CATEGORIES' | 'HOME' | 'ADMIN' | 'SELL_ITEM';

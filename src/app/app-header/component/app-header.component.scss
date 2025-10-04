@@ -63,6 +63,7 @@
         flex-direction: row-reverse;
 
         .name-logout-container {
+          align-items: end;
           p {
             text-align: end;
             color: var(--primary-color);

@@ -103,6 +103,16 @@ export class AppHeaderComponent implements OnInit {
 		});
 	}
 
+	onSellItemClick() {
+		if(this.isAuthenticated$.value){
+			console.warn('Here in authenticated !!')
+			//TODO:: Open create Listing form Dialog
+			this.cdr.markForCheck();
+			return;
+		}
+		this.onNavigationClick('LOGIN')
+	}
+
 	onMenuItemClick(type: NavOption | null) {
 		switch (type) {
 			case 'LOGIN':
@@ -111,8 +121,8 @@ export class AppHeaderComponent implements OnInit {
 			case 'SIGNUP':
 				this.onNavigationClick(type);
 				break;
-			case 'USER_PROFILE':
-				this.onProfileClick();
+			case 'SELL_ITEM':
+				this.onSellItemClick();
 				break;
 			case 'CATEGORIES':
 				this.onCategoriesClick();

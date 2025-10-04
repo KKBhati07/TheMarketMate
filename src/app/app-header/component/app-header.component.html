@@ -12,8 +12,7 @@
       <img (click)="onLogoClick()"
            [src]="CONSTANTS.LOGO.TRANSPARENT"
            class="w-132 cursor-pointer h-132" alt="app_logo">
-      <div class="right-section flex-row-reverse align-i-center gap-12 h-100p"
-           [ngClass]="(isAuthenticated$ | async)? 'w-426':'w-446'"
+      <div class="right-section flex-row-reverse align-i-center gap-12 w-100p h-100p"
       >
 
 
@@ -38,6 +37,7 @@
                      *ngIf="!renderIcon; else renderIconTemplate"
                      [src]="user?.profile_url">
               </div>
+              <ng-container *ngTemplateOutlet="sellItemTemplate" ></ng-container>
             </ng-container>
             <ng-container *ngIf="isAdmin">
               <mm-nav-button
@@ -106,7 +106,7 @@
 
 <ng-template #expandedProfileTemplate>
   <div class=" expanded-profile-container mt-20 w-100p h-100p flex-row-reverse">
-    <div class="h-100p gap-10 name-logout-container flex-column ">
+    <div class="h-100p gap-10 name-logout-container flex-column pr-20 ">
       <mm-nav-button
           (click)="onUsernameClick()"
           class="pl-4 pr-12 h-40 br-20"
@@ -151,7 +151,6 @@
       textClass="fw-6"
       text="Open Account"
       gap="5"
-      [isOpenAccountBtn]="true"
       [headerNav]="true"
   ></mm-nav-button>
   <mm-nav-button
@@ -166,6 +165,7 @@
       [headerNav]="true"
       icon="login"
   ></mm-nav-button>
+  <ng-container *ngTemplateOutlet="sellItemTemplate" ></ng-container>
 </ng-template>
 
 <ng-template #renderIconTemplate>
@@ -179,6 +179,21 @@
             [fontIcon]="'menu'"></mat-icon>
 </ng-template>
 
+<ng-template #sellItemTemplate >
+  <mm-nav-button
+      (click)="onSellItemClick()"
+      class="pl-4 pr-4 h-40 w-128 br-20"
+      textClass="fw-6"
+      text="Sell Item"
+      iconPosition="RIGHT"
+      icon = "arrow_outward"
+      iconClass="h-20 w-20 fs-20"
+      gap="5"
+      [showIcon] = "true"
+      [isSellItemBtn]="true"
+      [headerNav]="true"
+  ></mm-nav-button>
+</ng-template>
 <ng-container *ngIf="showHeaderMenu">
   <mm-header-menu
       [isAdmin]="isAdmin"

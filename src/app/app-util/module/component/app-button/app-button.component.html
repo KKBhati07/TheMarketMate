@@ -9,7 +9,7 @@
       [disabled]="disabled"
       [ngStyle]="style"
   >
-    <mat-icon *ngIf="position === 'before'"
+    <mat-icon *ngIf=" showIcon && position === 'LEFT'"
               class="{{disabled? 'icon-disable':'icon-enable'}}"
               [ngClass]="iconClass"
               [fontIcon]="icon"
@@ -17,7 +17,7 @@
     <p>
       {{ text }}
     </p>
-    <mat-icon *ngIf="position === 'after'"
+    <mat-icon *ngIf=" showIcon && position === 'RIGHT'"
               class="{{disabled? 'icon-disable':'icon-enable'}}"
               [ngClass]="iconClass"
               [fontIcon]="icon"

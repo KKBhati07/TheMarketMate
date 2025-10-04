@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { IconPosition } from '../../../../models/button-options.model';
 
 @Component({
 	selector: 'mm-nav-button',
@@ -9,7 +10,8 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 export class AppNavButtonComponent {
 	@Input() isMobile = false;
 	@Input() headerNav = false;
-	@Input() isOpenAccountBtn = false;
+	@Input() iconPosition: IconPosition = 'LEFT' ;
+	@Input() isSellItemBtn = false;
 	@Input() isLogoutBtn = false;
 	@Input() class = '';
 	@Input() text = '';
