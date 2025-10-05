@@ -12,21 +12,20 @@
        [ngClass]="isExpanded? 'ml-8': 'justify-content-center'"
        class="expand-icon-container cursor-pointer flex-row
        w-100p position-absolute">
-    <div class="border-circle w-20 h-20 flex-row
-    justify-content-center align-i-center">
-      <mat-icon
-          class="fs-16 w-16 h-16"
-          [fontIcon]="isExpanded?
-              'arrow_forward_ios'
-              :'arrow_back_ios'"
-      ></mat-icon>
-    </div>
+    <mm-back-fw-icon
+        [isForwardIcon]="isExpanded"
+        backgroundColor="var(--border-color)"
+        iconClass="fs-16 w-16 h-16"
+        containerClass="w-20 h-20"
+    >
+    </mm-back-fw-icon>
 
   </div>
   <ng-container *ngIf="isExpanded || isBottomSheet">
     <div
         [ngStyle]="{'height': isBottomSheet ? '100%'
     :'80vh'}"
+        (click)="userDetails?.profile_url && !renderIcon ? onProfilePicClick():null"
         class="profile-pic-container p-4 flex-row
          w-100 h-100 border-circle cursor-pointer
       align-i-center justify-content-center">
@@ -64,3 +63,10 @@
   <mat-icon class="profile-icon fs-60 w-60 h-60"
             [fontIcon]="'person'"></mat-icon>
 </ng-template>
+
+<mm-image-viewer
+    *ngIf="showImageViewer"
+    (close)="showImageViewer = false"
+    [images]="[userDetails?.profile_url ?? '']"
+>
+</mm-image-viewer>

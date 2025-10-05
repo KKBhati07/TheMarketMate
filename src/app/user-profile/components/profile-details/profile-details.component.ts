@@ -31,6 +31,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 	isBottomSheet = false;
 	destroy$: Subject<any> = new Subject();
 	renderIcon = false
+	showImageViewer = false;
 	@Output() expandComponent = new EventEmitter<boolean>();
 
 	constructor(private cdr: ChangeDetectorRef,
@@ -44,16 +45,21 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.checkForBottomSheet();
+		this.onProfilePicClick();
 	}
 
 	checkForBottomSheet() {
-		console.warn('Here DATA :: ', this.data)
 		if (this.data?.isBottomSheet) {
 			this.isBottomSheet = this.data.isBottomSheet;
 			this.userDetails = this.data.userDetails;
 			this.isMobile = this.data.isMobile;
 			this.cdr.markForCheck();
 		}
+	}
+
+	onProfilePicClick(){
+		this.showImageViewer = true;
+		this.cdr.markForCheck();
 	}
 
 	onEditProfileClick() {
