@@ -115,3 +115,12 @@
   }
 
 }
+
+::ng-deep .full-screen-dialog .mat-mdc-dialog-surface {
+  background: transparent;
+  box-shadow: none;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}

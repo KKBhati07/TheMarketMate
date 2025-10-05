@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	Inject,
+	Input,
+	OnInit,
+	Output
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
 	selector: 'mm-image-viewer',
@@ -9,9 +18,27 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 export class ImageViewerComponent implements OnInit {
 	currentIndex = 0;
 	renderFallback = false;
+	isDialogOpen = false;
 	@Input() images: string[] = [];
 	@Output() close: EventEmitter<void> =
 			new EventEmitter<void>();
+
+	constructor(@Inject(MAT_DIALOG_DATA)
+							public data: { images: string[] },
+							private dialogRef: MatDialogRef<ImageViewerComponent>,
+	) {
+		if (data) {
+			this.images = data.images;
+			this.isDialogOpen = true;
+		}
+	}
+
+	onCloseClick(): void {
+		if (this.isDialogOpen) {
+			return this.dialogRef.close();
+		}
+		return this.close.emit();
+	}
 
 
 	ngOnInit() {

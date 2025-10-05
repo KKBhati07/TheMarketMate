@@ -16,6 +16,7 @@ import { UserService } from "../../../services/user.service";
 import { AuthService } from "../../../services/auth.service";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { ProfileDetailsBottomSheetData } from '../../../models/bottomsheet.model';
+import { ImageViewerComponent } from '../../../shared/components/image-viewer/image-viewer.component';
 
 @Component({
 	selector: 'mm-profile-detail',
@@ -31,7 +32,6 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 	isBottomSheet = false;
 	destroy$: Subject<any> = new Subject();
 	renderIcon = false
-	showImageViewer = false;
 	@Output() expandComponent = new EventEmitter<boolean>();
 
 	constructor(private cdr: ChangeDetectorRef,
@@ -45,7 +45,6 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.checkForBottomSheet();
-		this.onProfilePicClick();
 	}
 
 	checkForBottomSheet() {
@@ -57,9 +56,18 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onProfilePicClick(){
-		this.showImageViewer = true;
-		this.cdr.markForCheck();
+	onProfilePicClick() {
+		return this.openImageViewerInMatDialog();
+	}
+
+	openImageViewerInMatDialog() {
+		this.dialog.open(ImageViewerComponent, {
+			data: { images: [this.userDetails?.profile_url ?? ''] },
+			panelClass: 'full-screen-dialog',
+			hasBackdrop: true,
+			width: '100vw',
+			height: '100vh',
+		});
 	}
 
 	onEditProfileClick() {
