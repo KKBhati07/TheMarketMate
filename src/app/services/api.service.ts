@@ -23,10 +23,23 @@ export class ApiService {
 		return headers;
 	}
 
-	get<T>(endpoint: string): Observable<ApiHttpResponse<T>> {
+	get<T>(endpoint: string, queryParams?: Record<string, any>)
+			: Observable<ApiHttpResponse<T>> {
 		const headers = this.getAuthHeaders();
+
+		let url = `${this.baseUrl}${endpoint}`;
+		if (queryParams && Object.keys(queryParams).length > 0) {
+			const queryString = new URLSearchParams(
+					Object.entries(queryParams)
+							.filter(([_, value]) => value !== undefined && value !== null)
+							.map(([key, value]) => [key, String(value)])
+			).toString();
+
+			url += `?${queryString}`;
+		}
+
 		return apiResponse(
-				this.http.get<T>(`${ this.baseUrl }${ endpoint }`, { headers, observe: 'response' })
+				this.http.get<T>(url, { headers, observe: 'response' })
 		);
 	}
 

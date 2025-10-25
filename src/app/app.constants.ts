@@ -28,5 +28,11 @@ export const CONSTANTS = {
 		FURNITURE: 'event_seat',
 		OTHER: 'dynamic_feed',
 		PROPERTY: 'home'
+	},
+
+	LISTING: {
+		IMAGES: {
+			MAX_LIMIT: 6
+		}
 	}
 }

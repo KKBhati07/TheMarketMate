@@ -1,0 +1,48 @@
+.publish-listing-from-container {
+  background-color: var(--header-color);
+  box-sizing: content-box;
+
+  &.dragover {
+    border: 1px dotted #007bff;
+    opacity: 0.8;
+  }
+
+  .publish-listing-form {
+    flex-grow: 1;
+    overflow: scroll;
+
+    .inner-container {
+      flex-grow: 1;
+
+      label {
+        color: #707070;
+      }
+
+      .form-input {
+        background-color: var(--items-bg);
+        outline: none;
+        width: 100%;
+
+        &:hover {
+          border: 1px solid var(--primary-color);
+        }
+
+        &:focus {
+          border: 1px solid var(--primary-color);
+        }
+      }
+
+      .images-container {
+        flex-wrap: wrap;
+
+        &:hover {
+          border: none !important;
+        }
+      }
+    }
+  }
+}
+
+.flex-1 {
+  flex: 1;
+}

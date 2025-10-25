@@ -8,24 +8,35 @@ import { FourOFourComponent } from "./components/four-o-four/four-o-four.compone
 import { AppUtilModule } from '../app-util/module/app-util.module';
 import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 import { CommonModule, NgIf } from '@angular/common';
+import { PublishEditListingFormComponent } from './components/publish-listing-form/publish-edit-listing-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormatTextPipe } from '../app-util/pipes/format-text.pipe';
+import { ImageUploadIconComponent } from './components/image-upload-icon/image-upload-icon.component';
+import { ImagePreviewComponent } from './components/image-preview/image-preview.component';
 
 @NgModule({
 	declarations: [
 		AppConfirmDeleteDialogComponent,
 		FourOFourComponent,
-		ImageViewerComponent
+		ImageViewerComponent,
+		PublishEditListingFormComponent,
+		ImagePreviewComponent,
+		ImageUploadIconComponent
 	],
 	imports: [
 		MatDialogActions,
 		MatDialogContent,
 		MatIcon,
 		AppUtilModule,
-		CommonModule
+		ReactiveFormsModule,
+		CommonModule,
+		FormatTextPipe
 	],
 	exports: [
 		ImageViewerComponent,
 		FourOFourComponent,
-		AppConfirmDeleteDialogComponent
+		AppConfirmDeleteDialogComponent,
+		PublishEditListingFormComponent
 	],
 })
 export class AppSharedModule {

@@ -18,6 +18,10 @@ import { DeviceDetectorService } from "../../app-util/services/device-detector.s
 import { CategoryService } from "../../services/category.service";
 import { Category } from '../../models/category.model';
 import { NavOption } from '../../models/nav-options.model';
+import {
+	PublishEditListingFormComponent
+} from '../../shared/components/publish-listing-form/publish-edit-listing-form.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: 'mm-app-header',
@@ -46,7 +50,8 @@ export class AppHeaderComponent implements OnInit {
 							private authService: AuthService,
 							private cdr: ChangeDetectorRef,
 							private deviceDetector: DeviceDetectorService,
-							private categoryService: CategoryService
+							private categoryService: CategoryService,
+							private dialog: MatDialog
 	) {
 	}
 
@@ -104,13 +109,25 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onSellItemClick() {
-		if(this.isAuthenticated$.value){
-			console.warn('Here in authenticated !!')
-			//TODO:: Open create Listing form Dialog
+		if (this.isAuthenticated$.value) {
+			this.openPublishListingForm();
 			this.cdr.markForCheck();
 			return;
 		}
 		this.onNavigationClick('LOGIN')
+	}
+
+	openPublishListingForm() {
+		this.dialog.open(PublishEditListingFormComponent, {
+			backdropClass: 'publish-listing-from-backdrop',
+			panelClass: this.isMobile ?
+					'publish-listing-from-container-mobile'
+					: 'profile-edit-from-container',
+			hasBackdrop: true,
+			data: {
+				isMobile: this.isMobile,
+			}
+		});
 	}
 
 	onMenuItemClick(type: NavOption | null) {

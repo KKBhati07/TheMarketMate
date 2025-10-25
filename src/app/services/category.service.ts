@@ -13,12 +13,12 @@ export class CategoryService {
 	constructor(private apiService: ApiService) {
 	}
 
-	private categories$: Observable<ApiHttpResponse<ApiResponse>> | null = null;
+	private categories$: Observable<ApiHttpResponse<ApiResponse<any>>> | null = null;
 
-	getCategories(): Observable<ApiHttpResponse<ApiResponse>> {
+	getCategories(): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		if (this.categories$) return this.categories$;
 		this.categories$ = this.apiService
-				.get<ApiResponse>(AppUrls.API.V1.CATEGORY.GET_ALL)
+				.get<ApiResponse<any>>(AppUrls.API.V1.CATEGORY.GET_ALL)
 				.pipe(shareReplay(1));
 		return this.categories$;
 	}

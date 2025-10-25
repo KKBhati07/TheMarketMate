@@ -47,6 +47,14 @@ export const AppUrls = {
 					UPDATE: 'v1/admin/listings/update_item',
 					DELETE: 'v1/admin/listings/delete_item',
 				}
+			},
+			LISTING: {
+				CREATE: 'v1/listing/create',
+			},
+			LOCATION: {
+				GET_COUNTRIES: 'v1/location/get_countries',
+				GET_STATES: 'v1/location/get_states',
+				GET_CITIES: 'v1/location/get_cities',
 			}
 		}
 	}

@@ -15,20 +15,21 @@
       flex-grow: 1;
 
       .left-container {
-        label{
+        label {
           color: #707070;
         }
+
         .form-input {
           background-color: var(--items-bg);
           outline: none;
           width: 100%;
 
           &:hover {
-            border: 1px solid var(--hover-color);
+            border: 1px solid var(--primary-color);
           }
 
           &:focus {
-            border: 1px solid var(--hover-color);
+            border: 1px solid var(--primary-color);
           }
         }
       }

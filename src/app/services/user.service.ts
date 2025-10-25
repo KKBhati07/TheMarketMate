@@ -13,31 +13,31 @@ export class UserService {
 	constructor(private apiService: ApiService) {
 	}
 
-	getDetails(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+	getDetails(uuid: string): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.get(AppUrls.API.V1.USER.USER_DETAILS(uuid))
 	}
 
-	updateUser(data: FormData): Observable<ApiHttpResponse<ApiResponse>> {
+	updateUser(data: FormData): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.put(AppUrls.API.V1.USER.UPDATE_USER, data)
 	}
 
-	updateUserByAdmin(data: FormData): Observable<ApiHttpResponse<ApiResponse>> {
+	updateUserByAdmin(data: FormData): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.put(AppUrls.API.V1.ADMIN.USERS.UPDATE, data)
 	}
 
-	getAllUsers(): Observable<ApiHttpResponse<ApiResponse>> {
+	getAllUsers(): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.get(AppUrls.API.V1.ADMIN.USERS.GET_ALL)
 	}
 
-	deleteUserByAdmin(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+	deleteUserByAdmin(uuid: string): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.delete(AppUrls.API.V1.ADMIN.USERS.DELETE(uuid))
 	}
 
-	deleteUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+	deleteUser(uuid: string): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.delete(AppUrls.API.V1.USER.DELETE(uuid))
 	}
 
-	restoreUser(uuid: string): Observable<ApiHttpResponse<ApiResponse>> {
+	restoreUser(uuid: string): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.patch(AppUrls.API.V1.ADMIN.USERS.RESTORE(uuid), { restore: true })
 	}
 }

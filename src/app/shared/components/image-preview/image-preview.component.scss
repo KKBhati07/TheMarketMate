@@ -1,0 +1,15 @@
+.image {
+  .broken-icon-container {
+    border: 1px solid #ccc;
+  }
+
+  img {
+    object-fit: cover;
+  }
+
+  .remove-btn {
+    top: 2px;
+    right: 2px;
+    background-color: var(--header-color);
+  }
+}

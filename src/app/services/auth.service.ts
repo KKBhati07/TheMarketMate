@@ -24,8 +24,8 @@ export class AuthService {
 	}
 
 
-	loadUserDetails(): Observable<ApiHttpResponse<ApiResponse>> {
-		return this.apiService.get<ApiResponse>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
+	loadUserDetails(): Observable<ApiHttpResponse<ApiResponse<any>>> {
+		return this.apiService.get<ApiResponse<any>>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
 				tap(res => {
 					if (res.isSuccessful()) {
 						this.isAuthenticated = res.body?.data?.authenticated || false;
@@ -38,13 +38,13 @@ export class AuthService {
 		);
 	}
 
-	signupUser(body: Signup): Observable<ApiHttpResponse<ApiResponse>> {
+	signupUser(body: Signup): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.post(AppUrls.API.V1.USER.CREATE, body)
 	}
 
-	loginUser(body: Login): Observable<ApiHttpResponse<ApiResponse>> {
-		return this.apiService.post<ApiResponse>(AppUrls.API.V1.AUTH.LOGIN, body).pipe(
-				tap((res: ApiHttpResponse<ApiResponse>) => {
+	loginUser(body: Login): Observable<ApiHttpResponse<ApiResponse<any>>> {
+		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGIN, body).pipe(
+				tap((res: ApiHttpResponse<ApiResponse<any>>) => {
 					if (res.isSuccessful()) {
 						if (res.body?.data?.authenticated) {
 							this.cookieService.set('sessionid', res.body.data?.sessionId, undefined, '/');
@@ -55,9 +55,9 @@ export class AuthService {
 				}))
 	}
 
-	logoutUser(): Observable<ApiHttpResponse<ApiResponse>> {
-		return this.apiService.post<ApiResponse>(AppUrls.API.V1.AUTH.LOGOUT, {}).pipe(
-				tap((res: ApiHttpResponse<ApiResponse>) => {
+	logoutUser(): Observable<ApiHttpResponse<ApiResponse<any>>> {
+		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGOUT, {}).pipe(
+				tap((res: ApiHttpResponse<ApiResponse<any>>) => {
 					if (res.isSuccessful()) {
 						this.cookieService.delete('sessionid');
 

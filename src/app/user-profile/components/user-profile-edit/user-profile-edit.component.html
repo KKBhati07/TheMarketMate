@@ -1,23 +1,23 @@
 <div
-  (dragover)="onDragOver($event)"
-  (dragleave)="onDragLeave()"
-  (drop)="onDrop($event)"
-  [class.dragover]="isDragOver"
-  class="profile-edit-from-container br-36 flex-column w-100p">
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave()"
+    (drop)="onDrop($event)"
+    [class.dragover]="isDragOver"
+    class="profile-edit-from-container br-36 flex-column w-100p">
   <form
-    class=" mt-20 profile-edit-form w-100p"
-    [formGroup]="editProfileForm"
-    (ngSubmit)="onSubmit()">
+      class=" mt-20 profile-edit-form w-100p"
+      [formGroup]="editProfileForm"
+      (ngSubmit)="onSubmit()">
     <div
-      [ngClass]="isMobile?'flex-column pr-8':'flex-row h-100p'"
-      class="inner-container w-100p">
+        [ngClass]="isMobile?'flex-column pr-8':'flex-row h-100p'"
+        class="inner-container w-100p">
       <div
-        [ngStyle]="{
+          [ngStyle]="{
      'max-width': isMobile? '100%': '800px',
       'width': isMobile? '100%': '60%',
       'height': isMobile? '': '100%'
     }"
-        class="left-container flex-column gap-20">
+          class="left-container flex-column gap-20">
 
         <div class="flex-column pl-12 gap-8">
           <label class="fs-20" for="name">Name:</label>
@@ -42,7 +42,7 @@
         <ng-container *ngIf="!isMobile">
           <div class="pl-12">
             <mm-button [class]="'w-100p h-56 br-4 gap-20'"
-                       position="after"
+                       position="RIGHT"
                        [disabled]="editProfileForm.invalid"
                        icon="cloud_done"
                        iconClass="fs-20 w-20 h-20"
@@ -74,8 +74,8 @@
           <ng-container *ngIf="previewUrl; else profilePicIcon">
 
             <img
-              style="object-fit: contain"
-              class="h-100p br-32 w-100p" [src]="previewUrl" alt="Profile Preview" width="100">
+                style="object-fit: contain"
+                class="h-100p br-32 w-100p" [src]="previewUrl" alt="Profile Preview" width="100">
           </ng-container>
         </div>
         <input #fileInput
@@ -83,7 +83,7 @@
                hidden (change)="onFileSelected($event)">
         <div class="mt-16">
           <mm-button [class]="'w-200 br-4 gap-20 h-40 '"
-                     position="after"
+                     position="RIGHT"
                      icon="cloud_upload"
                      iconClass="fs-20 w-20 h-20"
                      type='button'
@@ -94,7 +94,7 @@
     <div class="flex-column mt-20 gap-20 mb-20 pr-8" *ngIf="isMobile">
       <div class="pl-12">
         <mm-button [class]="'w-100p h-60 br-4 gap-20'"
-                   position="after"
+                   position="RIGHT"
                    [disabled]="editProfileForm.invalid"
                    icon="cloud_upload"
                    iconClass="fs-20 w-20 h-20"

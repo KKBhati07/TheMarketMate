@@ -1,0 +1,16 @@
+import { Pipe, PipeTransform } from '@angular/core';
+import { TitleCasePipe } from '@angular/common';
+
+@Pipe({
+	standalone: true,
+	name: 'formatText'
+})
+export class FormatTextPipe implements PipeTransform {
+	private titleCasePipe = new TitleCasePipe();
+
+	transform(value: string): string {
+		if (!value) return '';
+		const formatted = value.replaceAll(/_/g, ' ');
+		return this.titleCasePipe.transform(formatted);
+	}
+}
