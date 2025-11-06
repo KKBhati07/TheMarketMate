@@ -1,9 +1,8 @@
 
 .profile-details-container {
   height: 80vh;
-  position: relative;
-  right: 0;
   background-color: var(--header-color);
+  overflow: hidden;
 
   .pill-container {
     top: 0;
@@ -12,7 +11,7 @@
   }
 
   .expand-icon-container {
-    top: 12px;
+    top: 8px;
     left: 0;
 
     div {

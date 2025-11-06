@@ -3,13 +3,13 @@
     :'0.5px solid var(--border-color)'}"
     class=" position-relative w-100p br-32
    profile-details-container justify-content-center
-  gap-12 p-20 flex-column align-i-center br-2">
+  gap-12 flex-column align-i-center br-2">
   <div class="position-absolute pill-container">
     <mm-bottomsheet-pill *ngIf="isBottomSheet"></mm-bottomsheet-pill>
   </div>
   <div *ngIf="!isBottomSheet"
        (click)="expandComponent.emit(!isExpanded)"
-       [ngClass]="isExpanded? 'ml-8': 'justify-content-center'"
+       [ngClass]="isExpanded? 'ml-8': 'ml-4'"
        class="expand-icon-container cursor-pointer flex-row
        w-100p position-absolute">
     <mm-back-fw-icon
@@ -21,7 +21,7 @@
     </mm-back-fw-icon>
 
   </div>
-  <ng-container *ngIf="isExpanded || isBottomSheet">
+  <ng-container *ngIf=" isExpanded || isBottomSheet">
     <div
         [ngStyle]="{'height': isBottomSheet ? '100%'
     :'80vh'}"

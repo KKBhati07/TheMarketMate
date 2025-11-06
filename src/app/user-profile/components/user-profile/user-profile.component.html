@@ -3,23 +3,20 @@
      class="mt-100 main-container flex-row align-i-center w-100p">
   <div
       [ngStyle]="{
-    width:expandProfileDetails ? '75%':'calc(100% - 70px)',
+    width:expandProfileDetails ? '75%':'calc(100% - 40px)',
   }"
       class="left-section ml-12 br-32 h-100p"></div>
   <div
       [ngStyle]="{
-    width:expandProfileDetails ? '25%':'70px',
+    width:expandProfileDetails ? '25%':'40px',
   }"
-      *ngIf="!isMobile" class="right-section pr-12 flex-row
-   align-i-center">
-    <div class="">
+      *ngIf="!isMobile" class="right-section pl-4 pr-4">
 
       <mm-profile-detail
           [isExpanded]="expandProfileDetails"
           (expandComponent)="onExpandProfileDetails($event)"
           [userDetails]="userDetails">
       </mm-profile-detail>
-    </div>
   </div>
   <ng-container *ngIf="isMobile">
     <div class="profile-details-bar-container w-100p pl-8 pr-8
