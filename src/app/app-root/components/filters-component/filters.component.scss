@@ -1,0 +1,12 @@
+.filters-container {
+  background-color: var(--header-color);
+
+  .expand-icon-container {
+    right: 4px;
+    top: 8px;
+
+    .mat-icon {
+      color: var(--header-color);
+    }
+  }
+}

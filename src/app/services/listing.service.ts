@@ -4,6 +4,7 @@ import { AppUrls } from '../app.urls';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { ApiHttpResponse } from '../app-util/api-response.util';
+import { ListingResponse } from '../models/listing.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -11,7 +12,11 @@ import { ApiHttpResponse } from '../app-util/api-response.util';
 export class ListingService {
 	constructor(private apiService: ApiService) { }
 
-	createListing(data:FormData): Observable<ApiHttpResponse<ApiResponse<any>>>{
-		return this.apiService.post(AppUrls.API.V1.LISTING.CREATE,data)
+	createListing(data: FormData): Observable<ApiHttpResponse<ApiResponse<any>>> {
+		return this.apiService.post(AppUrls.API.V1.LISTING.CREATE, data)
+	}
+
+	fetchAll(queryParams: Record<string, any>, page?: number): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+		return this.apiService.get(AppUrls.API.V1.LISTING.FETCH, page ? { ...queryParams, page } : queryParams)
 	}
 }

@@ -2,7 +2,7 @@
   overflow-x: hidden;
 
   .header {
-    z-index: 1;
+    z-index: 3;
     transition: height 0.5s ease;
     background-color: var(--header-color);
     border: 0.5px solid var(--border-color);

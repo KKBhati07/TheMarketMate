@@ -1,5 +1,12 @@
 import { Common } from './common.model';
 
+
+export interface Location {
+	city: City;
+	state: State;
+	country: Country;
+}
+
 export interface Country extends Common {
 }
 

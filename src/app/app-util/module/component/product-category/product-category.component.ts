@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { CONSTANTS } from "../../../../app.constants";
 import { Category } from '../../../../models/category.model';
+import { getIconName } from '../../../common.util';
 
 @Component({
 	selector: 'mm-product-category',
@@ -15,7 +16,7 @@ export class ProductCategoryComponent implements OnInit {
 		this.category = category;
 		const categoryName = category.name;
 		this.isActive = category.active;
-		this.setIcon(categoryName);
+		this.iconName = getIconName(category.name);
 		if (categoryName === CONSTANTS.CATEGORY.MOBILE) this.title = 'MOBILE'
 		else this.title = categoryName.toUpperCase();
 		this.loadComponent = true;
@@ -32,34 +33,5 @@ export class ProductCategoryComponent implements OnInit {
 	}
 
 	ngOnInit() {
-	}
-
-	setIcon(categoryName: string) {
-		switch (categoryName) {
-			case CONSTANTS.CATEGORY.CAR:
-				this.iconName = CONSTANTS.CATEGORY_ICON.CAR;
-				break;
-			case CONSTANTS.CATEGORY.BIKE:
-				this.iconName = CONSTANTS.CATEGORY_ICON.BIKE;
-				break;
-			case CONSTANTS.CATEGORY.MOBILE:
-				this.iconName = CONSTANTS.CATEGORY_ICON.MOBILE;
-				break;
-			case CONSTANTS.CATEGORY.ELECTRONIC:
-				this.iconName = CONSTANTS.CATEGORY_ICON.ELECTRONIC;
-				break;
-			case CONSTANTS.CATEGORY.FURNITURE:
-				this.iconName = CONSTANTS.CATEGORY_ICON.FURNITURE;
-				break;
-			case CONSTANTS.CATEGORY.PROPERTY:
-				this.iconName = CONSTANTS.CATEGORY_ICON.PROPERTY;
-				break;
-			case CONSTANTS.CATEGORY.OTHER:
-				this.iconName = CONSTANTS.CATEGORY_ICON.OTHER;
-				break;
-			default:
-				this.iconName = CONSTANTS.CATEGORY_ICON.OTHER;
-				break;
-		}
 	}
 }

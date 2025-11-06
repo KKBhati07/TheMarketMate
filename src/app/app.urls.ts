@@ -50,6 +50,7 @@ export const AppUrls = {
 			},
 			LISTING: {
 				CREATE: 'v1/listing/create',
+				FETCH: 'v1/listing/fetch_all',
 			},
 			LOCATION: {
 				GET_COUNTRIES: 'v1/location/get_countries',

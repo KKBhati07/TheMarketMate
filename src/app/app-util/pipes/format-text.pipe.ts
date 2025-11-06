@@ -8,7 +8,7 @@ import { TitleCasePipe } from '@angular/common';
 export class FormatTextPipe implements PipeTransform {
 	private titleCasePipe = new TitleCasePipe();
 
-	transform(value: string): string {
+	transform(value: string | undefined): string {
 		if (!value) return '';
 		const formatted = value.replaceAll(/_/g, ' ');
 		return this.titleCasePipe.transform(formatted);

@@ -43,6 +43,7 @@
           <div class="pl-12">
             <mm-button [class]="'w-100p h-56 br-4 gap-20'"
                        position="RIGHT"
+                       [showIcon]="true"
                        [disabled]="editProfileForm.invalid"
                        icon="cloud_done"
                        iconClass="fs-20 w-20 h-20"
@@ -83,8 +84,9 @@
                hidden (change)="onFileSelected($event)">
         <div class="mt-16">
           <mm-button [class]="'w-200 br-4 gap-20 h-40 '"
+                     [showIcon]="true"
                      position="RIGHT"
-                     icon="cloud_upload"
+                     icon="cloud_done"
                      iconClass="fs-20 w-20 h-20"
                      type='button'
                      text="Select Pic" (click)="fileInput.click()"></mm-button>
@@ -95,6 +97,7 @@
       <div class="pl-12">
         <mm-button [class]="'w-100p h-60 br-4 gap-20'"
                    position="RIGHT"
+                   [showIcon]="true"
                    [disabled]="editProfileForm.invalid"
                    icon="cloud_upload"
                    iconClass="fs-20 w-20 h-20"
