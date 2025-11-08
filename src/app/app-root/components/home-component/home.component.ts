@@ -44,12 +44,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 
-	getListings(queryParams: Record<string, any>, page?: number) {
+	getListings(queryParams: Record<string, any>, page?: number, append: boolean = false) {
 		this.listingService.fetchAll(queryParams, page)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
-						this.listings.push(...(res.body?.data.items ?? []))
+						if (append) {
+							this.listings.push(...(res.body?.data.items ?? []))
+						} else {
+							this.listings = res.body?.data.items ?? []
+						}
 						this.cdr.markForCheck();
 					}
 				})

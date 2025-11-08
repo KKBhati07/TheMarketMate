@@ -3,11 +3,13 @@ import { Listing } from '../../models/listing.model';
 import { getIconName } from '../../app-util/common.util';
 import { Router } from '@angular/router';
 import { AppUrls } from '../../app.urls';
+import { fadeSlideIn } from '../../app-util/animations/fade-slide-in.animation';
 
 @Component({
 	selector: 'mm-listing-card',
 	templateUrl: 'app-listing-card.component.html',
 	styleUrls: ['app-listing-card.component.scss'],
+	animations: [fadeSlideIn],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListingCardComponent implements OnInit {
