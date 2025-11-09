@@ -6,14 +6,39 @@
     width: isMobile ? '100%' :
      (expandProfileDetails ? '75%' : 'calc(100% - 40px)')
   }"
-      [ngClass]="isMobile?'justify-content-center':'flex-row pl-12 pt-4'"
-      class="left-section h-100p flex-row br-20 gap-12">
+      [ngClass]="isMobile ? 'justify-content-center' : 'flex-row pl-12 pt-4'"
+      class="left-section h-100p flex-column br-20 gap-12"
+  >
+    <mat-tab-group
+        [(selectedIndex)]="selectedTabIndex"
+        class="pill-tabs w-100p h-100p"
+        (selectedIndexChange)="onTabChange($event)"
+    >
+      <mat-tab
+          labelClass="br-32"
+          [label]="selfUser?'My Posts':'Posts'">
+        <div
+            style="flex-wrap: wrap"
+            class="flex-row flex-wrap gap-12 pt-12">
+          <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
+            <mm-listing-card [listing]="listing"></mm-listing-card>
+          </ng-container>
+        </div>
+      </mat-tab>
 
-    <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
-      <mm-listing-card
-          [listing]="listing"
-      ></mm-listing-card>
-    </ng-container>
+      <mat-tab
+          *ngIf="selfUser"
+          labelClass="br-32"
+          label="Favorites">
+        <div
+            style="flex-wrap: wrap"
+            class="flex-row flex-wrap gap-12 pt-12">
+          <ng-container *ngFor="let listing of favoriteListings; trackBy: trackByListingId">
+            <mm-listing-card [listing]="listing"></mm-listing-card>
+          </ng-container>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
   <div
       [ngStyle]="{

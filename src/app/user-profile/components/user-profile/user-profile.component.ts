@@ -9,6 +9,7 @@ import { ProfileDetailsComponent } from '../profile-details/profile-details.comp
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ListingService } from '../../../services/listing.service';
 import { Listing } from '../../../models/listing.model';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
 	selector: "mm-user-profile",
@@ -18,18 +19,22 @@ import { Listing } from '../../../models/listing.model';
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
 	renderComponent = false;
-	expandProfileDetails = true;
+	expandProfileDetails = false;
 	isMobile = false;
 	userDetails: ProfileDetails | null = null;
 	destroy$ = new Subject();
 	userUuid: string = '';
 	userListings: Listing[] = [];
+	favoriteListings: Listing[] = [];
+	selfUser = false;
+	selectedTabIndex = 0;
 
 	constructor(
 			private router: Router,
 			private deviceDetector: DeviceDetectorService,
 			private cdr: ChangeDetectorRef,
 			private userService: UserService,
+			private authService: AuthService,
 			private activatedRoute: ActivatedRoute,
 			private bottomSheet: MatBottomSheet,
 			private listingService: ListingService,
@@ -38,9 +43,26 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.userUuid = this.activatedRoute.snapshot.params['uuid'];
+		this.selfUser =
+				this.authService.UserDetails?.uuid.toLowerCase()
+				=== this.userUuid.toLowerCase();
+		this.setTabFronQueryParams();
 		this.setIsMobile();
 		this.getUserDetails();
-		this.getListingsByUser(this.userUuid);
+	}
+
+	onTabChange(index: number) {
+		this.selectedTabIndex = index;
+		if (index === 0) {
+			this.updateQueryParams({ posts: true })
+			return !this.userListings.length &&
+					this.getListingsByUser(this.userUuid);
+		}
+		if (index === 1) {
+			this.updateQueryParams({ favorites: true })
+			return !this.favoriteListings.length &&
+					this.getFavoriteListingsByUser(this.userUuid);
+		}
 	}
 
 	setIsMobile() {
@@ -48,6 +70,34 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 			this.isMobile = isMobile;
 			this.cdr.markForCheck();
 		})
+	}
+
+	setTabFronQueryParams() {
+		const qp = this.activatedRoute.snapshot.queryParams;
+		if (qp['posts'] == undefined && qp['favorites'] == undefined) {
+			this.updateQueryParams({ posts: true })
+			return this.getListingsByUser(this.userUuid);
+		}
+		if (qp['favorites']) {
+			if (this.selfUser) {
+				this.selectedTabIndex = 1;
+				return this.getFavoriteListingsByUser(this.userUuid);
+			} else {
+				this.updateQueryParams({ posts: true })
+				return this.getListingsByUser(this.userUuid);
+			}
+
+		}
+		if (qp['posts']) {
+			return this.getListingsByUser(this.userUuid);
+		}
+	}
+
+	updateQueryParams(queryParams: Record<string, boolean>) {
+		this.router.navigate(this.activatedRoute.snapshot.url.map(uri => uri.path), {
+			queryParams,
+			replaceUrl: true
+		}).then(r => null);
 	}
 
 	onExpandProfileDetails(expand: boolean) {
@@ -79,10 +129,26 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 						} else {
 							this.userListings = res.body?.data.items ?? []
 						}
+						this.renderComponent = true;
 						this.cdr.markForCheck();
 					}
 				})
+	}
 
+	getFavoriteListingsByUser(uuid: string, page?: number, append: boolean = false) {
+		this.listingService.getFavoriteByUser(uuid, page)
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					if (res.isSuccessful()) {
+						if (append) {
+							this.favoriteListings.push(...(res.body?.data.items ?? []))
+						} else {
+							this.favoriteListings = res.body?.data.items ?? []
+						}
+						this.renderComponent = true;
+						this.cdr.markForCheck();
+					}
+				})
 	}
 
 
@@ -92,7 +158,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
 
 	getUserDetails() {
-
 		this.userService.getDetails(this.userUuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
@@ -100,6 +165,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 						this.userDetails = res.body?.data?.user_details;
 						if (this.userDetails) this.userDetails.self = res.body?.data?.self
 						this.renderComponent = true;
+						this.expandProfileDetails = true;
 						this.cdr.markForCheck();
 					} else {
 						this.router.navigate([AppUrls.FOUROFOUR]).then(r => null);

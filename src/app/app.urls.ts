@@ -52,6 +52,7 @@ export const AppUrls = {
 				CREATE: 'v1/listing/create',
 				GET_ALL: 'v1/listing/get_all',
 				GET_BY_USER: 'v1/listing/get_by_user',
+				GET_FAVORITES: 'v1/listing/get_favorites',
 			},
 			LOCATION: {
 				GET_COUNTRIES: 'v1/location/get_countries',

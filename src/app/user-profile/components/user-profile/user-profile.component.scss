@@ -54,3 +54,30 @@
     }
   }
 }
+
+:host ::ng-deep .pill-tabs .mat-mdc-tab-header {
+  background-color: var(--header-color);
+  border-radius: 32px;
+}
+
+:host ::ng-deep .pill-tabs .mat-mdc-tab {
+  border-radius: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+:host ::ng-deep .pill-tabs .mat-mdc-tab.mdc-tab--active {
+  background-color: var(--primary-color);
+}
+
+:host ::ng-deep .pill-tabs .mat-mdc-tab.mdc-tab--active * {
+  color: white !important;
+}
+
+:host ::ng-deep .pill-tabs .mdc-tab-indicator {
+  display: none !important;
+}
+
+:host ::ng-deep .pill-tabs .mat-mdc-tab:not(.mdc-tab--active):hover {
+  background-color: white;
+}
+

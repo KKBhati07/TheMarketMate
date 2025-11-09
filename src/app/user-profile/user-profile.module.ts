@@ -10,6 +10,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MyUserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 import { AppSharedModule } from '../shared/app-shared.module';
 import { AppListingCardModule } from '../app-listing-card/app-listing-card.module';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @NgModule({
 	declarations: [
@@ -23,7 +24,10 @@ import { AppListingCardModule } from '../app-listing-card/app-listing-card.modul
 		AppUtilModule,
 		ReactiveFormsModule,
 		MatDialogModule,
-		AppSharedModule, AppListingCardModule
+		AppSharedModule,
+		AppListingCardModule,
+		MatTabGroup,
+		MatTab
 	]
 })
 export class UserProfileModule {

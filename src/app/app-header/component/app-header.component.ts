@@ -102,7 +102,8 @@ export class AppHeaderComponent implements OnInit {
 		const uuid = this.authService.UserDetails?.uuid;
 		if (!uuid) return;
 		this.router.navigate(
-				[AppUrls.USER.USER_PROFILE(uuid)]
+				[AppUrls.USER.USER_PROFILE(uuid)],
+				{queryParams: {posts:true}}
 		).then(r => {
 			this.closeHeader();
 		});
