@@ -3,20 +3,29 @@
      class="mt-100 main-container flex-row align-i-center w-100p">
   <div
       [ngStyle]="{
-    width:expandProfileDetails ? '75%':'calc(100% - 40px)',
+    width: isMobile ? '100%' :
+     (expandProfileDetails ? '75%' : 'calc(100% - 40px)')
   }"
-      class="left-section ml-12 br-32 h-100p"></div>
+      [ngClass]="isMobile?'justify-content-center':'flex-row pl-12 pt-4'"
+      class="left-section h-100p flex-row br-20 gap-12">
+
+    <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
+      <mm-listing-card
+          [listing]="listing"
+      ></mm-listing-card>
+    </ng-container>
+  </div>
   <div
       [ngStyle]="{
     width:expandProfileDetails ? '25%':'40px',
   }"
       *ngIf="!isMobile" class="right-section pl-4 pr-4">
 
-      <mm-profile-detail
-          [isExpanded]="expandProfileDetails"
-          (expandComponent)="onExpandProfileDetails($event)"
-          [userDetails]="userDetails">
-      </mm-profile-detail>
+    <mm-profile-detail
+        [isExpanded]="expandProfileDetails"
+        (expandComponent)="onExpandProfileDetails($event)"
+        [userDetails]="userDetails">
+    </mm-profile-detail>
   </div>
   <ng-container *ngIf="isMobile">
     <div class="profile-details-bar-container w-100p pl-8 pr-8

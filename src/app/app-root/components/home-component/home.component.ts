@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 	getListings(queryParams: Record<string, any>, page?: number, append: boolean = false) {
-		this.listingService.fetchAll(queryParams, page)
+		this.listingService.getAll(queryParams, page)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {

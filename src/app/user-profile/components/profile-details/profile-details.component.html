@@ -1,6 +1,7 @@
 <div
     [ngStyle]="{'border': isBottomSheet ? 'none'
     :'0.5px solid var(--border-color)'}"
+    [ngClass]="isExpanded || isBottomSheet? 'p-20':''"
     class=" position-relative w-100p br-32
    profile-details-container justify-content-center
   gap-12 flex-column align-i-center br-2">

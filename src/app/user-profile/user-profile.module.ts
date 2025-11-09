@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MyUserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 import { AppSharedModule } from '../shared/app-shared.module';
+import { AppListingCardModule } from '../app-listing-card/app-listing-card.module';
 
 @NgModule({
 	declarations: [
@@ -22,7 +23,7 @@ import { AppSharedModule } from '../shared/app-shared.module';
 		AppUtilModule,
 		ReactiveFormsModule,
 		MatDialogModule,
-		AppSharedModule
+		AppSharedModule, AppListingCardModule
 	]
 })
 export class UserProfileModule {

@@ -10,13 +10,17 @@ import { ListingResponse } from '../models/listing.model';
 	providedIn: 'root',
 })
 export class ListingService {
-	constructor(private apiService: ApiService) { }
+	constructor(private apiService: ApiService) {}
 
 	createListing(data: FormData): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.post(AppUrls.API.V1.LISTING.CREATE, data)
 	}
 
-	fetchAll(queryParams: Record<string, any>, page?: number): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
-		return this.apiService.get(AppUrls.API.V1.LISTING.FETCH, page ? { ...queryParams, page } : queryParams)
+	getAll(queryParams: Record<string, any>, page?: number): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+		return this.apiService.get(AppUrls.API.V1.LISTING.GET_ALL, page ? { ...queryParams, page } : queryParams)
+	}
+
+	getByUser(uuid: string, page: number = 0): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+		return this.apiService.get(AppUrls.API.V1.LISTING.GET_BY_USER, { user: uuid, page })
 	}
 }

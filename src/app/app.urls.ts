@@ -50,12 +50,17 @@ export const AppUrls = {
 			},
 			LISTING: {
 				CREATE: 'v1/listing/create',
-				FETCH: 'v1/listing/fetch_all',
+				GET_ALL: 'v1/listing/get_all',
+				GET_BY_USER: 'v1/listing/get_by_user',
 			},
 			LOCATION: {
 				GET_COUNTRIES: 'v1/location/get_countries',
 				GET_STATES: 'v1/location/get_states',
 				GET_CITIES: 'v1/location/get_cities',
+			},
+
+			FAVORITE: {
+				SET_UNSET: 'v1/favorite/set_unset'
 			}
 		}
 	}

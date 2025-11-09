@@ -7,6 +7,8 @@ import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ListingService } from '../../../services/listing.service';
+import { Listing } from '../../../models/listing.model';
 
 @Component({
 	selector: "mm-user-profile",
@@ -16,10 +18,12 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
 	renderComponent = false;
-	expandProfileDetails = false;
+	expandProfileDetails = true;
 	isMobile = false;
 	userDetails: ProfileDetails | null = null;
 	destroy$ = new Subject();
+	userUuid: string = '';
+	userListings: Listing[] = [];
 
 	constructor(
 			private router: Router,
@@ -27,13 +31,16 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 			private cdr: ChangeDetectorRef,
 			private userService: UserService,
 			private activatedRoute: ActivatedRoute,
-			private bottomSheet: MatBottomSheet
+			private bottomSheet: MatBottomSheet,
+			private listingService: ListingService,
 	) {
 	}
 
 	ngOnInit() {
+		this.userUuid = this.activatedRoute.snapshot.params['uuid'];
 		this.setIsMobile();
 		this.getUserDetails();
+		this.getListingsByUser(this.userUuid);
 	}
 
 	setIsMobile() {
@@ -62,9 +69,31 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	getListingsByUser(uuid: string, page?: number, append: boolean = false) {
+		this.listingService.getByUser(uuid, page)
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					if (res.isSuccessful()) {
+						if (append) {
+							this.userListings.push(...(res.body?.data.items ?? []))
+						} else {
+							this.userListings = res.body?.data.items ?? []
+						}
+						this.cdr.markForCheck();
+					}
+				})
+
+	}
+
+
+	trackByListingId(index: number, item: Listing) {
+		return item.id;
+	}
+
+
 	getUserDetails() {
-		const uuid = this.activatedRoute.snapshot.params['uuid'];
-		this.userService.getDetails(uuid)
+
+		this.userService.getDetails(this.userUuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {

@@ -1,7 +1,9 @@
 <div @fadeSlideIn class="listing-card-container
 cursor-pointer br-16 w-288 h-312">
   <div class="image-container position-relative w-100p h-136">
-    <div class="favorite-icon position-absolute">
+    <div
+        (click)="onFavoriteIconClick()"
+        class="favorite-icon position-absolute">
       <mat-icon
           [class.favorite]="listing?.is_favorite"
           class="fs-28 w-28 h-28"
