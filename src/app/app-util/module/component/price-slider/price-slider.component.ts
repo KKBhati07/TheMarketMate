@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { PriceRange } from '../../../../models/common.model';
 
-
 @Component({
 	selector: 'mm-price-slider',
 	templateUrl: './price-slider.component.html',
@@ -19,7 +18,6 @@ import { PriceRange } from '../../../../models/common.model';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PriceSliderComponent implements OnInit {
-
 	@Input() minValue: number = 0;
 	@Input() maxValue: number = 100;
 	@Input() step: number = 1;

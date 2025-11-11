@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Listing } from '../../models/listing.model';
 import { getIconName } from '../../app-util/common.util';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AppUrls } from '../../app.urls';
 import { fadeSlideIn } from '../../app-util/animations/fade-slide-in.animation';
 import { FavoriteService } from '../../services/favorite.service';
@@ -20,7 +20,9 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	constructor(private cdr: ChangeDetectorRef,
 							private favoriteService: FavoriteService,
 							private authService: AuthService,
-							private router: Router,) {
+							private router: Router,
+							private route: ActivatedRoute,
+							) {
 	}
 
 	@Input('listing') set setListing(listing: Listing) {
@@ -38,11 +40,17 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	}
 
 	onCategoryIconClick() {
-		this.router.navigate(
-				[AppUrls.HOME],
-				{
-					queryParams: { category_id: this.listing?.category.id }
-				}).then(r => null);
+		if (this.router.url.startsWith(`/${AppUrls.HOME}`)) {
+			this.router.navigate([], {
+				relativeTo: this.route,
+				queryParams: { category_id: this.listing?.category.id },
+				queryParamsHandling: 'merge',
+			}).then(r => null)
+		} else {
+			this.router.navigate([AppUrls.HOME], {
+				queryParams: { category_id: this.listing?.category.id },
+			}).then(r => null)
+		}
 	}
 
 	onFavoriteIconClick() {

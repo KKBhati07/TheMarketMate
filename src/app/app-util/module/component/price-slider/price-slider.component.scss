@@ -1,4 +1,14 @@
 .price-range-container {
+  &:hover{
+    border-color: var(--hover-color);
+  }
+
+  .title-container{
+    p{
+      background-color: var(--items-bg);
+    }
+  }
+  border: 1px solid rgba(0, 0, 0, 0.3);
   .inner-container {
     .price-values-container{
       top: -8px;

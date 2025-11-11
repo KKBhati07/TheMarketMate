@@ -7,7 +7,7 @@ import {
 	OnInit,
 	ViewChild
 } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { BehaviorSubject, filter } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { User } from "../../models/user.model";
@@ -46,12 +46,14 @@ export class AppHeaderComponent implements OnInit {
 	renderExpandedContent = false;
 	@ViewChild('header') header!: ElementRef;
 
-	constructor(private router: Router,
-							private authService: AuthService,
-							private cdr: ChangeDetectorRef,
-							private deviceDetector: DeviceDetectorService,
-							private categoryService: CategoryService,
-							private dialog: MatDialog
+	constructor(
+			private router: Router,
+			private route: ActivatedRoute,
+			private authService: AuthService,
+			private cdr: ChangeDetectorRef,
+			private deviceDetector: DeviceDetectorService,
+			private categoryService: CategoryService,
+			private dialog: MatDialog
 	) {
 	}
 
@@ -103,7 +105,7 @@ export class AppHeaderComponent implements OnInit {
 		if (!uuid) return;
 		this.router.navigate(
 				[AppUrls.USER.USER_PROFILE(uuid)],
-				{queryParams: {posts:true}}
+				{ queryParams: { posts: true } }
 		).then(r => {
 			this.closeHeader();
 		});
@@ -178,10 +180,23 @@ export class AppHeaderComponent implements OnInit {
 
 	onCategoryOrHomeClick(category: Category | null = null) {
 		const queryParams = category ?
-				{ queryParams: { category_id: category.id } } : {};
-		this.router.navigate([AppUrls.HOME], queryParams).then(r => {
-			this.closeHeader();
-		});
+				{ category_id: category.id } : {};
+
+		if (category && this.router.url.startsWith(`/${AppUrls.HOME}`)) {
+			this.router.navigate([], {
+				relativeTo: this.route,
+				queryParams,
+				queryParamsHandling: 'merge',
+			}).then(r => {
+				this.closeHeader();
+			});
+		} else {
+			this.router.navigate([AppUrls.HOME], {
+				queryParams,
+			}).then(r => {
+				this.closeHeader();
+			});
+		}
 	}
 
 	onHeaderMenuClick() {
