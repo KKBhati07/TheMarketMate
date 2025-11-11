@@ -1,4 +1,6 @@
-<div class="filters-container position-relative br-20 h-100p">
+<div
+    [ngClass]="isExpanded?'p-12':''"
+    class="filters-container flex-column w-100p align-i-center position-relative br-20 h-100p">
   <div class="expand-icon-container position-absolute"
        (click)="toggleFilters()">
     <mm-back-fw-icon
@@ -9,3 +11,14 @@
     >
     </mm-back-fw-icon>
   </div>
+  <ng-container *ngIf="isExpanded">
+    <mm-price-slider
+        class="w-100p"
+        [minValue]="1000"
+        [maxValue]="500000"
+        [step]="1000"
+        (onRangeChange)="onPriceRangeChange.emit($event)"
+    >
+    </mm-price-slider>
+  </ng-container>
+</div>

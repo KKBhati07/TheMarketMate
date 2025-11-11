@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	OnInit,
+	Output,
+} from '@angular/core';
+import { PriceRange } from '../../../models/common.model';
 
 @Component({
 	selector: 'mm-filters-component',
@@ -11,6 +18,8 @@ export class FiltersComponent implements OnInit {
 	isExpanded = true;
 	@Output() expand: EventEmitter<boolean>
 			= new EventEmitter<boolean>();
+	@Output() onPriceRangeChange: EventEmitter<PriceRange>
+			= new EventEmitter<PriceRange>();
 
 	constructor() {}
 

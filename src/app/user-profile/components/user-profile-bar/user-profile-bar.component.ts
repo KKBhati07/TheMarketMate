@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, OnInit
 	styleUrls: ['user-profile-bar.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MyUserProfileBarComponent implements OnInit {
+export class UserProfileBarComponent implements OnInit {
 
 	@Input() userProfileUrl: string | null = null;
 	@Input() userName: string | null = null;

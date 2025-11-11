@@ -3,6 +3,8 @@ import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Listing } from '../../../models/listing.model';
+import { DeviceDetectorService } from '../../../app-util/services/device-detector.service';
+import { PriceRange } from '../../../models/common.model';
 
 @Component({
 	selector: 'mm-home',
@@ -15,17 +17,29 @@ export class HomeComponent implements OnInit, OnDestroy {
 	destroy$: Subject<void> = new Subject<void>();
 	listings: Listing[] = [];
 	isExpanded = true;
+	isMobile = false;
 
 	constructor(
 			private listingService: ListingService,
 			private router: Router,
 			private route: ActivatedRoute,
-			private cdr: ChangeDetectorRef
+			private cdr: ChangeDetectorRef,
+			private deviceDetectorService: DeviceDetectorService
 	) {
 	}
 
 	ngOnInit() {
+		this.setIsMobile();
 		this.subscribeToRoute();
+	}
+
+	setIsMobile() {
+		this.deviceDetectorService.isMobile()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(isMobile => {
+					this.isMobile = isMobile;
+					this.cdr.markForCheck();
+				});
 	}
 
 	subscribeToRoute() {
@@ -41,6 +55,25 @@ export class HomeComponent implements OnInit, OnDestroy {
 					});
 					this.getListings(queryParams);
 				});
+	}
+
+
+	updateQueryParams(queryParams: Record<string, any>) {
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams: queryParams,
+			queryParamsHandling: 'merge',
+			replaceUrl: true
+		}).then(r => null);
+	}
+
+	onPriceRangeChange(priceRange: PriceRange) {
+		this.updateQueryParams(
+				{
+					min_price: priceRange.min,
+					max_price: priceRange.max
+				}
+		);
 	}
 
 
@@ -67,7 +100,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 	toggleFilters(expand: boolean) {
 		this.isExpanded = expand;
 	}
-
 
 	ngOnDestroy() {
 		this.destroy$.next();

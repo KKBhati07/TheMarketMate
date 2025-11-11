@@ -7,7 +7,7 @@ import { ProfileDetailsComponent } from "./components/profile-details/profile-de
 import { UserProfileEditComponent } from "./components/user-profile-edit/user-profile-edit.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
-import { MyUserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
+import { UserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 import { AppSharedModule } from '../shared/app-shared.module';
 import { AppListingCardModule } from '../app-listing-card/app-listing-card.module';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
@@ -17,7 +17,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 		UserProfileComponent,
 		ProfileDetailsComponent,
 		UserProfileEditComponent,
-		MyUserProfileBarComponent
+		UserProfileBarComponent
 	],
 	imports: [CommonModule,
 		MatIconModule,

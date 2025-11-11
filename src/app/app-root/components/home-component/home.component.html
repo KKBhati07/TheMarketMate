@@ -1,10 +1,11 @@
 <div class="home-container flex-row pl-12 pt-4 br-20 mt-100 gap-12">
 
-  <div class="left-section pb-12 h-100p"
+  <div *ngIf="!isMobile" class="left-section pb-12 h-100p"
        [class.collapsed]="!isExpanded">
 
     <mm-filters-component
         (expand)="toggleFilters($event)"
+        (onPriceRangeChange)="onPriceRangeChange($event)"
     >
     </mm-filters-component>
   </div>

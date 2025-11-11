@@ -8,7 +8,7 @@
     border: 1px solid;
   }
 
-  .left-section{
+  .left-section {
     flex-wrap: wrap;
     overflow: auto;
   }
@@ -75,6 +75,10 @@
 
 :host ::ng-deep .pill-tabs .mdc-tab-indicator {
   display: none !important;
+}
+
+:host ::ng-deep .pill-tabs .mat-mdc-tab:not(.mdc-tab--active):hover {
+  background-color: white;
 }
 
 :host ::ng-deep .pill-tabs .mat-mdc-tab:not(.mdc-tab--active):hover {

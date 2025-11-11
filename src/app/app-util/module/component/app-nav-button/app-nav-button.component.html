@@ -13,16 +13,16 @@
   <div
       [ngClass]="!showIcon || iconPosition !== 'LEFT'?'justify-content-center':''"
       class="flex-row align-i-center gap-{{isMobile? '':gap}} ">
-    <div  *ngIf="showIcon && iconPosition === 'LEFT'" [ngClass]="iconContainerClass"
+    <div *ngIf="showIcon && iconPosition === 'LEFT'" [ngClass]="iconContainerClass"
          class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}}
             align-i-center justify-content-center icon-container
              border-circle">
-      <mat-icon class="cursor-pointer" [ngClass]="iconClass"
+      <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass"
                 [fontIcon]="icon"></mat-icon>
     </div>
     <p *ngIf="!isMobile " [ngClass]="textClass"> {{ text }}</p>
     <mat-icon *ngIf="showIcon && iconPosition === 'RIGHT'"
-              class="cursor-pointer" [ngClass]="iconClass"
+              class="icon-right cursor-pointer" [ngClass]="iconClass"
               [fontIcon]="icon"></mat-icon>
   </div>
 

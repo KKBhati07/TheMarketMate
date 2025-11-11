@@ -1,12 +1,14 @@
 import { NgModule } from "@angular/core";
 import { AppButtonComponent } from "./component/app-button/app-button.component";
 import { CommonModule } from "@angular/common";
-import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { MatIconModule } from "@angular/material/icon";
 import { BottomSheetPillComponent } from "./component/bottomsheet-pill/bottomsheet-pill.component";
 import { ProductCategoryComponent } from "./component/product-category/product-category.component";
 import { AppNavButtonComponent } from "./component/app-nav-button/app-nav-button.component";
 import { BackForwardIconComponent } from './component/back-forward-icon/back-forward-icon.component';
 import { CloseBtnComponent } from './component/close-btn/close-btn.component';
+import { PriceSliderComponent } from './component/price-slider/price-slider.component';
+import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
 
 @NgModule({
 	declarations: [
@@ -15,7 +17,8 @@ import { CloseBtnComponent } from './component/close-btn/close-btn.component';
 		AppNavButtonComponent,
 		ProductCategoryComponent,
 		BackForwardIconComponent,
-		CloseBtnComponent
+		CloseBtnComponent,
+		PriceSliderComponent
 	],
 	exports: [
 		AppButtonComponent,
@@ -23,8 +26,15 @@ import { CloseBtnComponent } from './component/close-btn/close-btn.component';
 		ProductCategoryComponent,
 		AppNavButtonComponent,
 		BackForwardIconComponent,
-		CloseBtnComponent
+		CloseBtnComponent,
+		PriceSliderComponent
 	],
-	imports: [CommonModule, MatIconModule]
+	imports: [
+		CommonModule,
+		MatIconModule,
+		MatSlider,
+		MatSliderRangeThumb
+	]
 })
-export class AppUtilModule {}
+export class AppUtilModule {
+}

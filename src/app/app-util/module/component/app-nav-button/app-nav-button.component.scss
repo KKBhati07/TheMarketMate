@@ -1,4 +1,5 @@
 .nav-item-container {
+  border: 1px solid transparent;
   background-color: var(--header-color);
 
   &.in-header-bg {
@@ -51,15 +52,31 @@
 
   &.inactive {
     &:hover {
-      border-color: var(--hover-color);
+      border: 1px solid var(--hover-color);
+
+      &.in-header-bg {
+        background: var(--header-color);
+      }
+
+      &.sell-item-btn {
+        background: var(--header-color);
+      }
 
       div {
+        .icon-container {
+          background-color: var(--hover-color);
+        }
+
         p {
           color: var(--hover-color)
         }
 
-        mat-icon {
-          color: var(--hover-color)
+        .icon-left {
+          color: var(--header-color);
+        }
+
+        .icon-right {
+          color: var(--hover-color);
         }
       }
     }

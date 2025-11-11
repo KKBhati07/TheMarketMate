@@ -18,19 +18,23 @@
   }
 
   .right-container {
-    .delete-icon {
-      color: red;
+    .delete-icon-container {
+      &:hover {
+        background-color: red;
+
+        .delete-icon {
+          color: white;
+        }
+      }
+
+      .delete-icon {
+        color: red;
+      }
     }
 
     .restore-icon {
       color: #868686;
 
-      &:hover {
-        color: var(--hover-color);
-      }
-    }
-
-    .edit-icon {
       &:hover {
         color: var(--hover-color);
       }
@@ -122,4 +126,13 @@
 
 .icons-container {
   background: white;
+
+  &:hover {
+    background: var(--hover-color);
+
+    mat-icon {
+      color: var(--header-color);
+    }
+
+  }
 }

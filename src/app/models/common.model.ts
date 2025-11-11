@@ -8,3 +8,8 @@ export interface ProductImage {
 	previewUrl: string;
 	isCover: boolean
 }
+
+export interface PriceRange {
+	min: number;
+	max: number;
+}

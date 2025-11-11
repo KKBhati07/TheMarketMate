@@ -25,7 +25,9 @@
                   [fontIcon]="'edit'"></mat-icon>
       </div>
 
-      <div class="icons-container h-40 w-40 flex-row
+      <div
+          [ngClass]="user.deleted?'':'delete-icon-container'"
+          class="icons-container h-40 w-40 flex-row
        justify-content-center align-i-center
         border-circle ">
         <mat-icon
