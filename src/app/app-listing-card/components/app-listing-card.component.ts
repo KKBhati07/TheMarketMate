@@ -7,6 +7,8 @@ import { fadeSlideIn } from '../../app-util/animations/fade-slide-in.animation';
 import { FavoriteService } from '../../services/favorite.service';
 import { AuthService } from '../../services/auth.service';
 import { Subject, takeUntil } from 'rxjs';
+import { LocationType } from '../../models/location.model';
+import { FilterService } from '../../services/filter.service';
 
 @Component({
 	selector: 'mm-listing-card',
@@ -21,8 +23,9 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 							private favoriteService: FavoriteService,
 							private authService: AuthService,
 							private router: Router,
+							private filterService: FilterService,
 							private route: ActivatedRoute,
-							) {
+	) {
 	}
 
 	@Input('listing') set setListing(listing: Listing) {
@@ -40,17 +43,11 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	}
 
 	onCategoryIconClick() {
-		if (this.router.url.startsWith(`/${AppUrls.HOME}`)) {
-			this.router.navigate([], {
-				relativeTo: this.route,
-				queryParams: { category_id: this.listing?.category.id },
-				queryParamsHandling: 'merge',
-			}).then(r => null)
-		} else {
-			this.router.navigate([AppUrls.HOME], {
-				queryParams: { category_id: this.listing?.category.id },
-			}).then(r => null)
+		if(this.listing?.category.id){
+			this.filterService.updateFilter({ category_id: this.listing?.category.id });
 		}
+		this.router.navigate([AppUrls.HOME])
+				.then(r => null)
 	}
 
 	onFavoriteIconClick() {
@@ -59,19 +56,37 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 					{ queryParams: { redirect: this.router.url } }).then(r => null)
 			return;
 		}
-		this.favoriteService.setUnsetFavorite(this.listing?.id ?? 0 )
+		this.favoriteService.setUnsetFavorite(this.listing?.id ?? 0)
 				.pipe(takeUntil(this.destroy$))
-				.subscribe(res=>{
-					if(res.isSuccessful()){
+				.subscribe(res => {
+					if (res.isSuccessful()) {
 						// TODO :: Notify user
-						if(this.listing){
+						if (this.listing) {
 							this.listing.is_favorite =
 									res.body?.data?.is_favorite ?? false;
 							this.cdr.markForCheck();
 						}
 					}
-		})
+				})
 
+	}
+
+	onLocationClick(type: LocationType, id: number | undefined) {
+		if(!id){
+			return;
+			// TODO :: Notification service!!
+		}
+		switch (type) {
+			case 'CITY':
+				this.filterService.updateFilter({ city_id: id });
+				break;
+			case 'STATE':
+				this.filterService.updateFilter({ state_id: id });
+				break;
+			case 'COUNTRY':
+				this.filterService.updateFilter({ country_id: id });
+				break;
+		}
 	}
 
 	ngOnDestroy() {

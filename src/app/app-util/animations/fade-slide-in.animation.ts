@@ -2,9 +2,9 @@ import { animate, AnimationTriggerMetadata, style, transition, trigger } from '@
 
 export const fadeSlideIn: AnimationTriggerMetadata = trigger('fadeSlideIn', [
 	transition(':enter', [
-		style({ opacity: 0, transform: 'translateY(-10px)' }),
+		style({ opacity: 0, transform: 'translateY(-20px)' }),
 		animate(
-				'400ms ease-out',
+				'450ms ease-out',
 				style({ opacity: 1, transform: 'translateY(0)' })
 		),
 	]),

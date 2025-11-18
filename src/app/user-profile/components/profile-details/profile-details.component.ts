@@ -78,16 +78,16 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 		if (this.userDetails) {
 			const dialogRef =
 					this.dialog.open(UserProfileEditComponent, {
-				backdropClass: 'profile-edit-from-backdrop',
-				panelClass: this.isMobile ?
-						'profile-edit-from-container-mobile'
-						: 'profile-edit-from-container',
-				hasBackdrop: true,
-				data: {
-					userDetails: this.userDetails,
-					isMobile: this.isMobile
-				}
-			});
+						backdropClass: 'profile-edit-from-backdrop',
+						panelClass: this.isMobile ?
+								'profile-edit-from-container-mobile'
+								: 'profile-edit-from-container',
+						hasBackdrop: true,
+						data: {
+							userDetails: this.userDetails,
+							isMobile: this.isMobile
+						}
+					});
 			dialogRef.afterClosed().subscribe((data: FormData | null) => {
 				if (data) {
 					this.userService.updateUser(data)

@@ -12,12 +12,12 @@ import { City, Country, State } from '../models/location.model';
 export class LocationApiService {
 	constructor(private apiService: ApiService) { }
 
-	getCountries():Observable<ApiHttpResponse<ApiResponse<Country[]>>> {
+	getCountries(): Observable<ApiHttpResponse<ApiResponse<Country[]>>> {
 		return this.apiService.get(AppUrls.API.V1.LOCATION.GET_COUNTRIES);
 	}
 
-	getStates(countryCode: string): Observable<ApiHttpResponse<ApiResponse<State[]>>> {
-		return this.apiService.get(AppUrls.API.V1.LOCATION.GET_STATES, { country_id: countryCode });
+	getStates(countryId: string): Observable<ApiHttpResponse<ApiResponse<State[]>>> {
+		return this.apiService.get(AppUrls.API.V1.LOCATION.GET_STATES, { country_id: countryId });
 	}
 
 	getCities(stateCode: string): Observable<ApiHttpResponse<ApiResponse<City[]>>> {

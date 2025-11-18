@@ -2,10 +2,6 @@
   background-color: var(--header-color);
   overflow: hidden;
 
-  &:hover {
-    transform: translateY(-4px);
-  }
-
   .image-container {
     border-bottom: 1px solid #f1f1f1;
 
@@ -39,6 +35,7 @@
 
         &:hover {
           border: 1px solid var(--hover-color);
+
           mat-icon {
             color: var(--hover-color);
           }
@@ -64,8 +61,15 @@
   .location-details-container {
     background: #f9f9f9;
 
-    p {
-      color: #777;
+    .location-item {
+      p, span {
+        color: #777;
+
+        &:hover {
+          text-decoration: underline;
+          color: var(--hover-color);
+        }
+      }
     }
 
     mat-icon {

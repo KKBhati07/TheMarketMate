@@ -16,3 +16,5 @@ export interface State extends Common {
 export interface City extends Common {
 }
 
+export type LocationType = 'CITY' | 'STATE' | 'COUNTRY';
+

@@ -18,8 +18,6 @@ export class FiltersComponent implements OnInit {
 	isExpanded = true;
 	@Output() expand: EventEmitter<boolean>
 			= new EventEmitter<boolean>();
-	@Output() onPriceRangeChange: EventEmitter<PriceRange>
-			= new EventEmitter<PriceRange>();
 
 	constructor() {}
 

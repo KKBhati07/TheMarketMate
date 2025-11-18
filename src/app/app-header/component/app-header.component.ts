@@ -22,6 +22,7 @@ import {
 	PublishEditListingFormComponent
 } from '../../shared/components/publish-listing-form/publish-edit-listing-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FilterService } from '../../services/filter.service';
 
 @Component({
 	selector: 'mm-app-header',
@@ -53,6 +54,7 @@ export class AppHeaderComponent implements OnInit {
 			private cdr: ChangeDetectorRef,
 			private deviceDetector: DeviceDetectorService,
 			private categoryService: CategoryService,
+			private filterService: FilterService,
 			private dialog: MatDialog
 	) {
 	}
@@ -179,24 +181,12 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onCategoryOrHomeClick(category: Category | null = null) {
-		const queryParams = category ?
-				{ category_id: category.id } : {};
+		category && this.filterService.updateFilter({ category_id: category.id })
 
-		if (category && this.router.url.startsWith(`/${AppUrls.HOME}`)) {
-			this.router.navigate([], {
-				relativeTo: this.route,
-				queryParams,
-				queryParamsHandling: 'merge',
-			}).then(r => {
-				this.closeHeader();
-			});
-		} else {
-			this.router.navigate([AppUrls.HOME], {
-				queryParams,
-			}).then(r => {
-				this.closeHeader();
-			});
-		}
+		this.router.navigate([AppUrls.HOME])
+				.then(r => {
+					this.closeHeader();
+				});
 	}
 
 	onHeaderMenuClick() {

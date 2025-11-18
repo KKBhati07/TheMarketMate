@@ -9,6 +9,11 @@ import { BackForwardIconComponent } from './component/back-forward-icon/back-for
 import { CloseBtnComponent } from './component/close-btn/close-btn.component';
 import { PriceSliderComponent } from './component/price-slider/price-slider.component';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
+import { LocationSelectorComponent } from './component/location-selector/location-selector.component';
+import { AutocompleteSelectComponent } from './component/app-autocomplete-select/app-autocomplete-select.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormatTextPipe } from '../pipes/format-text.pipe';
+import { HeadingComponent } from './component/product-category/app-heading/heading.component';
 
 @NgModule({
 	declarations: [
@@ -18,7 +23,10 @@ import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
 		ProductCategoryComponent,
 		BackForwardIconComponent,
 		CloseBtnComponent,
-		PriceSliderComponent
+		PriceSliderComponent,
+		LocationSelectorComponent,
+		HeadingComponent,
+		AutocompleteSelectComponent
 	],
 	exports: [
 		AppButtonComponent,
@@ -27,13 +35,18 @@ import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
 		AppNavButtonComponent,
 		BackForwardIconComponent,
 		CloseBtnComponent,
-		PriceSliderComponent
+		PriceSliderComponent,
+		LocationSelectorComponent,
+		HeadingComponent,
+		AutocompleteSelectComponent
 	],
 	imports: [
 		CommonModule,
 		MatIconModule,
 		MatSlider,
-		MatSliderRangeThumb
+		MatSliderRangeThumb,
+		ReactiveFormsModule,
+		FormatTextPipe
 	]
 })
 export class AppUtilModule {

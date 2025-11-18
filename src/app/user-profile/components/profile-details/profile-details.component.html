@@ -1,6 +1,10 @@
 <div
-    [ngStyle]="{'border': isBottomSheet ? 'none'
-    :'0.5px solid var(--border-color)'}"
+    [ngStyle]="{
+    'border': isBottomSheet || !isExpanded ? 'none'
+    :'0.5px solid var(--border-color)',
+    'background-color':isExpanded ? 'var(--header-color)':'transparent'
+
+    }"
     [ngClass]="isExpanded || isBottomSheet? 'p-20':''"
     class=" position-relative w-100p br-32
    profile-details-container justify-content-center

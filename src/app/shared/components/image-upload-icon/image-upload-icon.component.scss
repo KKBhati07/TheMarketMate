@@ -1,6 +1,12 @@
 .upload-btn {
   border: 1px dashed #ccc;
 
+  &:hover {
+    mat-icon {
+      color: var(--hover-color);
+    }
+  }
+
   mat-icon {
     color: #343434;
   }

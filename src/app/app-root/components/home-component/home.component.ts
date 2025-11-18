@@ -5,12 +5,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { Listing } from '../../../models/listing.model';
 import { DeviceDetectorService } from '../../../app-util/services/device-detector.service';
 import { PriceRange } from '../../../models/common.model';
+import { FilterService } from '../../../services/filter.service';
 
 @Component({
 	selector: 'mm-home',
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
@@ -24,13 +25,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 			private router: Router,
 			private route: ActivatedRoute,
 			private cdr: ChangeDetectorRef,
-			private deviceDetectorService: DeviceDetectorService
+			private deviceDetectorService: DeviceDetectorService,
+			private filterService: FilterService
 	) {
 	}
 
 	ngOnInit() {
 		this.setIsMobile();
 		this.subscribeToRoute();
+		this.getFilters();
 	}
 
 	setIsMobile() {
@@ -40,6 +43,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 					this.isMobile = isMobile;
 					this.cdr.markForCheck();
 				});
+	}
+
+	getFilters() {
+		this.filterService.getFilters()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(f => {
+					this.updateQueryParams(f);
+				})
 	}
 
 	subscribeToRoute() {
@@ -65,15 +76,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 			queryParamsHandling: 'merge',
 			replaceUrl: true
 		}).then(r => null);
-	}
-
-	onPriceRangeChange(priceRange: PriceRange) {
-		this.updateQueryParams(
-				{
-					min_price: priceRange.min,
-					max_price: priceRange.max
-				}
-		);
 	}
 
 

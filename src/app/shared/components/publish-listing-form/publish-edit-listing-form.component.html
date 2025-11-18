@@ -39,15 +39,12 @@
       </div>
 
       <div>
-        <select
-            class="form-input border-none pl-12 fs-16  pr-12
-            display-block br-32 h-54 position-relative"
-            formControlName="categoryId">
-          <option value="" disabled [ngValue]="null">Category</option>
-          <option *ngFor="let category of categories" [value]="category.id">
-            {{ category.name | formatText }}
-          </option>
-        </select>
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="categoryId"
+            [data]="categories"
+            placeholder="Category"
+        ></mm-autocomplete-select>
       </div>
 
       <div
@@ -56,41 +53,24 @@
           :'flex-row gap-4'"
       >
 
-        <div class="flex-1">
-          <select
-              class="form-input border-none pl-12 fs-16 pr-12
-              display-block br-32 h-54 position-relative"
-              formControlName="countryId">
-            <option [ngValue]="null" disabled>Country</option>
-            <option *ngFor="let c of countries" [value]="c.id">
-              {{ c.name }}
-            </option>
-          </select>
-        </div>
-
-        <div class="flex-1">
-          <select
-              class="form-input border-none pl-12 fs-16 pr-12
-               display-block br-32 h-54 position-relative"
-              formControlName="stateId">
-            <option value="" disabled [ngValue]="null">State</option>
-            <option *ngFor="let state of states" [value]="state.id">
-              {{ state.name }}
-            </option>
-          </select>
-        </div>
-
-        <div class="flex-1">
-          <select
-              class="form-input border-none pl-12 fs-16 pr-12
-               display-block br-32 h-54 position-relative"
-              formControlName="cityId">
-            <option value="" disabled [ngValue]="null">City</option>
-            <option *ngFor="let city of cities" [value]="city.id">
-              {{ city.name }}
-            </option>
-          </select>
-        </div>
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="countryId"
+            [data]="countries"
+            placeholder="Country"
+        ></mm-autocomplete-select>
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="stateId"
+            [data]="states"
+            placeholder="State"
+        ></mm-autocomplete-select>
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="cityId"
+            [data]="cities"
+            placeholder="City"
+        ></mm-autocomplete-select>
 
       </div>
 

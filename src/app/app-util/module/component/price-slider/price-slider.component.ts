@@ -10,6 +10,7 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { PriceRange } from '../../../../models/common.model';
+import { FilterService } from '../../../../services/filter.service';
 
 @Component({
 	selector: 'mm-price-slider',
@@ -24,10 +25,11 @@ export class PriceSliderComponent implements OnInit {
 	priceRange: PriceRange = { min: 0, max: 0 };
 	@ViewChild('startInput', { static: false }) startInputRef!: ElementRef<HTMLInputElement>;
 	@ViewChild('endInput', { static: false }) endInputRef!: ElementRef<HTMLInputElement>;
-	@Output() onRangeChange: EventEmitter<PriceRange>
-			= new EventEmitter<PriceRange>();
 
-	constructor(private cdr: ChangeDetectorRef) {
+	constructor(
+			private filterService: FilterService,
+			private cdr: ChangeDetectorRef
+	) {
 	}
 
 	ngOnInit() {
@@ -45,6 +47,9 @@ export class PriceSliderComponent implements OnInit {
 	onSliderChange() {
 		const min = Number(this.startInputRef.nativeElement.value);
 		const max = Number(this.endInputRef.nativeElement.value);
-		this.onRangeChange.emit({ min, max })
+		this.filterService.updateFilter({
+			min_price: min,
+			max_price: max
+		})
 	}
 }

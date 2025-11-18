@@ -24,11 +24,11 @@
         width: 100%;
 
         &:hover {
-          border: 1px solid var(--primary-color);
+          border: 1px solid var(--hover-color);
         }
 
         &:focus {
-          border: 1px solid var(--primary-color);
+          border: 1px solid var(--hover-color);
         }
       }
 
