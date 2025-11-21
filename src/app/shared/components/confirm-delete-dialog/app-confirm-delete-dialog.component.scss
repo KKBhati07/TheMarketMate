@@ -1,7 +1,7 @@
 .delete-dialog-container {
   position: relative;
   z-index: 3;
-  background-color: var(--header-color);
+  background: var(--header-color);
 
   .dialog-title {
     background-color: var(--items-bg);

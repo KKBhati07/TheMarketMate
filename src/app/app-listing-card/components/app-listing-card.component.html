@@ -1,5 +1,5 @@
 <div @fadeSlideIn class="listing-card-container
-cursor-pointer br-16 w-288 h-312">
+cursor-pointer br-24 w-288 h-312">
   <div class="image-container position-relative w-100p h-136">
     <div
         (click)="onFavoriteIconClick()"
@@ -12,7 +12,9 @@ cursor-pointer br-16 w-288 h-312">
       </mat-icon>
     </div>
     <ng-container *ngIf="!renderBrokenImage; else renderBrokenIcon">
-      <img (error)="renderBrokenImage = true" class=" w-100p h-136 listing-image" [src]="listing?.cover_image_url"/>
+      <img (error)="renderBrokenImage = true"
+           class=" w-100p h-136 listing-image"
+           [src]="listing?.cover_image_url"/>
     </ng-container>
   </div>
 

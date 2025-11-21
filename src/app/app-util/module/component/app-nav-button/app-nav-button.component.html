@@ -1,17 +1,16 @@
 <div
     [ngClass]="{
   'item-selected': active,
-  'justify-content-center': !showIcon || iconPosition !== 'LEFT',
+  'justify-content-center': !showIcon,
   'inactive': !active,
   'in-header-bg': headerNav,
   'bg': !headerNav,
-  'sell-item-btn': isSellItemBtn,
   'log-out-btn': isLogoutBtn
   }"
     class="nav-item-container cursor-pointer flex-row
    gap-20 align-i-center {{class}} {{onMobileWidth}}">
   <div
-      [ngClass]="!showIcon || iconPosition !== 'LEFT'?'justify-content-center':''"
+      [ngClass]="!showIcon?'justify-content-center':''"
       class="flex-row align-i-center gap-{{isMobile? '':gap}} ">
     <div *ngIf="showIcon && iconPosition === 'LEFT'" [ngClass]="iconContainerClass"
          class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}}
@@ -21,9 +20,14 @@
                 [fontIcon]="icon"></mat-icon>
     </div>
     <p *ngIf="!isMobile " [ngClass]="textClass"> {{ text }}</p>
-    <mat-icon *ngIf="showIcon && iconPosition === 'RIGHT'"
-              class="icon-right cursor-pointer" [ngClass]="iconClass"
-              [fontIcon]="icon"></mat-icon>
+
+    <div *ngIf="showIcon && iconPosition === 'RIGHT'" [ngClass]="iconContainerClass"
+         class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}}
+            align-i-center justify-content-center icon-container
+             border-circle">
+      <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass"
+                [fontIcon]="icon"></mat-icon>
+    </div>
   </div>
 
 </div>

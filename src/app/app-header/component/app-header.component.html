@@ -2,9 +2,8 @@
   <div *ngIf="showHeader"
        [ngClass]="{
        'h-52':!expandedCategories && !expandedCategories,
-       'h-200':!expandedCategories && expandProfile,
-       'h-300':!expandProfile && expandedCategories && !isMobile,
-       'height-90':!expandProfile && expandedCategories && isMobile
+       'h-300':expandedCategories && !isMobile,
+       'height-90':expandedCategories && isMobile
        }"
        #header
        class="header position-absolute pr-12 br-32 pl-16">
@@ -84,11 +83,8 @@
       </div>
     </div>
     <div
-        [ngClass]="expandProfile || expandedCategories ? 'h-90p':'h-0'"
+        [ngClass]="expandedCategories ? 'h-90p':'h-0'"
         class="expanded-container">
-      <ng-container *ngIf="expandProfile">
-        <ng-container *ngTemplateOutlet="expandedProfileTemplate"></ng-container>
-      </ng-container>
       <ng-container *ngIf="expandedCategories">
         <div
             [ngClass]="isMobile?'mt-20':'pl-20 pr-20'"
@@ -104,37 +100,6 @@
 
 </div>
 
-<ng-template #expandedProfileTemplate>
-  <div class=" expanded-profile-container mt-20 w-100p h-100p flex-row-reverse">
-    <div class="h-100p gap-10 name-logout-container flex-column pr-20 ">
-      <mm-nav-button
-          (click)="onUsernameClick()"
-          class="pl-4 pr-12 h-40 br-20"
-          iconContainerClass="h-32 w-32"
-          iconClass="h-20 w-20 fs-20"
-          textClass="fw-6"
-          [text]=" user?.name?.toUpperCase() ?? 'USER'"
-          gap="5"
-          [headerNav]="true"
-          [showIcon]="true"
-          icon="arrow_outward"
-      ></mm-nav-button>
-      <mm-nav-button
-          (click)="onLogOutClick()"
-          class="pl-4 pr-4 h-40 w-120 br-20"
-          iconContainerClass="h-32 w-32"
-          iconClass="h-20 w-20 fs-20"
-          textClass="fw-6"
-          text="Log Out"
-          gap="5"
-          [headerNav]="true"
-          [isLogoutBtn]="true"
-          [showIcon]="true"
-          icon="arrow_back"
-      ></mm-nav-button>
-    </div>
-  </div>
-</ng-template>
 <ng-template #expandedCategoryTemplate>
   <ng-container *ngFor="let category of categories">
     <mm-product-category
@@ -181,19 +146,16 @@
 
 <ng-template #sellItemTemplate>
   <div class="pr-12">
-    <mm-nav-button
+    <mm-sell-item-button
         (click)="onSellItemClick()"
         class="pl-4 pr-4 h-40 w-128 br-20"
         textClass="fw-6"
         text="Sell Item"
-        iconPosition="RIGHT"
         icon="arrow_outward"
         iconClass="h-20 w-20 fs-20"
         gap="5"
         [showIcon]="true"
-        [isSellItemBtn]="true"
-        [headerNav]="true"
-    ></mm-nav-button>
+    ></mm-sell-item-button>
   </div>
 </ng-template>
 <ng-container *ngIf="showHeaderMenu">
@@ -203,4 +165,13 @@
       (onItemClick)="onMenuItemClick($event)"
   >
   </mm-header-menu>
+</ng-container>
+
+<ng-container *ngIf="showUserMenu">
+  <mm-header-user-menu
+      [userName]="user?.name ?? 'User'"
+      [profileImgUrl]="user?.profile_url"
+      (closeMenu)="showUserMenu = false"
+  >
+  </mm-header-user-menu>
 </ng-container>

@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @import './lib/styles';
 @import './lib/var.global';
+
 @include mat.core();
 
 :root {
@@ -26,7 +27,7 @@
 }
 
 body {
-  background-color: var(--app-background-color);
+  background: var(--app-background-color);
   overflow-x: hidden;
 }
 

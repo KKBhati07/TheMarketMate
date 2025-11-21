@@ -17,8 +17,9 @@
 
   <div *ngIf="isDropdownOpen"
        [@dropdownAnimation]="isDropdownOpen ? 'open' : 'close'"
-       class="dropdown position-absolute br-16 p-4 flex-column
-        gap-4 br-16 mt-4">
+       class="dropdown position-absolute br-24 pl-4
+        pr-4 pt-8 pb-8 flex-column
+        gap-4 mt-4">
     <div
         *ngFor="let item of filteredData"
         (mousedown)="selectItem(item)"

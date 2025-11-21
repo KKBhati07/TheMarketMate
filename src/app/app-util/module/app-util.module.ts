@@ -14,6 +14,7 @@ import { AutocompleteSelectComponent } from './component/app-autocomplete-select
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormatTextPipe } from '../pipes/format-text.pipe';
 import { HeadingComponent } from './component/product-category/app-heading/heading.component';
+import { SellItemButtonComponent } from './component/app-sell-item-button/app-sell-item-btn.component';
 
 @NgModule({
 	declarations: [
@@ -26,7 +27,8 @@ import { HeadingComponent } from './component/product-category/app-heading/headi
 		PriceSliderComponent,
 		LocationSelectorComponent,
 		HeadingComponent,
-		AutocompleteSelectComponent
+		AutocompleteSelectComponent,
+		SellItemButtonComponent
 	],
 	exports: [
 		AppButtonComponent,
@@ -38,7 +40,8 @@ import { HeadingComponent } from './component/product-category/app-heading/headi
 		PriceSliderComponent,
 		LocationSelectorComponent,
 		HeadingComponent,
-		AutocompleteSelectComponent
+		AutocompleteSelectComponent,
+		SellItemButtonComponent
 	],
 	imports: [
 		CommonModule,

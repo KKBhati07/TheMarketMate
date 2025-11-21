@@ -1,5 +1,5 @@
 .listing-card-container {
-  background-color: var(--header-color);
+  background: var(--header-color);
   overflow: hidden;
 
   .image-container {
@@ -31,7 +31,7 @@
 
       .category-icon-container {
         border: 1px solid transparent;
-        background-color: var(--header-color);
+        background: var(--header-color);
 
         &:hover {
           border: 1px solid var(--hover-color);

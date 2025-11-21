@@ -38,11 +38,11 @@ export class AppHeaderComponent implements OnInit {
 	isAdmin = false;
 	showHeader = true;
 	showHeaderMenu = false;
+	showUserMenu = true;
 
 	isAuthenticated$ = new BehaviorSubject<boolean>(false);
 	user: User | null = null;
 	renderIcon = false;
-	expandProfile = false;
 	expandedCategories = false;
 	renderExpandedContent = false;
 	@ViewChild('header') header!: ElementRef;
@@ -78,9 +78,8 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	closeExpandedHeader(): void {
-		if (this.expandedCategories || this.expandProfile) {
+		if (this.expandedCategories) {
 			this.expandedCategories = false;
-			this.expandProfile = false;
 		}
 	}
 
@@ -99,17 +98,6 @@ export class AppHeaderComponent implements OnInit {
 			this.showHeader = !(event.url.includes(AppUrls.AUTH.LOGIN)
 					|| event.url.includes(AppUrls.AUTH.SIGNUP));
 			this.cdr.markForCheck();
-		});
-	}
-
-	onUsernameClick() {
-		const uuid = this.authService.UserDetails?.uuid;
-		if (!uuid) return;
-		this.router.navigate(
-				[AppUrls.USER.USER_PROFILE(uuid)],
-				{ queryParams: { posts: true } }
-		).then(r => {
-			this.closeHeader();
 		});
 	}
 
@@ -161,24 +149,11 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	closeHeader() {
-		this.expandProfile = false;
 		this.expandedCategories = false;
 		this.renderExpandedContent = false
 		this.cdr.markForCheck();
 	}
 
-	onLogOutClick() {
-		this.authService.logoutUser().subscribe(res => {
-			if (res.isSuccessful()) {
-				this.router.navigate([AppUrls.ROOT]).then(r => {
-					window.location.reload();
-				});
-			} else {
-				//TODO:: Notification Service for failed logout!
-
-			}
-		})
-	}
 
 	onCategoryOrHomeClick(category: Category | null = null) {
 		category && this.filterService.updateFilter({ category_id: category.id })
@@ -226,14 +201,8 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onProfileClick() {
-		if (this.expandProfile) {
-			this.expandProfile = !this.expandProfile;
-			this.renderExpandedContent = false;
-		} else {
-			this.expandedCategories = false;
-			this.expandProfile = !this.expandProfile;
-		}
-
+		this.closeHeader()
+		this.showUserMenu = !this.showUserMenu;
 		this.cdr.markForCheck();
 	}
 
@@ -246,7 +215,6 @@ export class AppHeaderComponent implements OnInit {
 		if (this.expandedCategories) {
 			this.expandedCategories = !this.expandedCategories;
 		} else {
-			this.expandProfile = false;
 			this.expandedCategories = true;
 			this.getCategories();
 		}

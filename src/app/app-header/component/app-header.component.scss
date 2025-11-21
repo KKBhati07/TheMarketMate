@@ -4,7 +4,7 @@
   .header {
     z-index: 3;
     transition: height 0.5s ease;
-    background-color: var(--header-color);
+    background: var(--header-color);
     border: 0.5px solid var(--border-color);
     width: calc(100% - 40px);
     top: 20px;
