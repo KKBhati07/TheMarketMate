@@ -38,7 +38,7 @@ export class AppHeaderComponent implements OnInit {
 	isAdmin = false;
 	showHeader = true;
 	showHeaderMenu = false;
-	showUserMenu = true;
+	showUserMenu = false;
 
 	isAuthenticated$ = new BehaviorSubject<boolean>(false);
 	user: User | null = null;
