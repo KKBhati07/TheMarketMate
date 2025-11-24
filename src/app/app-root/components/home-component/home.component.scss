@@ -16,6 +16,10 @@
     flex-wrap: wrap;
     overflow: auto;
     transition: width 0.4s ease-in-out;
+
+    &.mobile {
+      width: 100vw;
+    }
   }
 
   .left-section.collapsed + .right-section {

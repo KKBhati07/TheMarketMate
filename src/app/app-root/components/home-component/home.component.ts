@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	listings: Listing[] = [];
 	isExpanded = true;
 	isMobile = false;
+	render = false;
 
 	constructor(
 			private listingService: ListingService,
@@ -41,6 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(isMobile => {
 					this.isMobile = isMobile;
+					this.render = true;
 					this.cdr.markForCheck();
 				});
 	}

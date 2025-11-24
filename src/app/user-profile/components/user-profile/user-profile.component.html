@@ -10,6 +10,7 @@
       class="left-section h-100p flex-column br-20 gap-12"
   >
     <mat-tab-group
+        [ngClass]="isMobile?'pl-4 pr-4':''"
         [(selectedIndex)]="selectedTabIndex"
         class="pill-tabs w-100p h-100p"
         (selectedIndexChange)="onTabChange($event)"
@@ -18,8 +19,9 @@
           labelClass="br-32"
           [label]="selfUser?'My Posts':'Posts'">
         <div
+            [ngClass]="isMobile?'justify-content-center':''"
             style="flex-wrap: wrap"
-            class="flex-row flex-wrap gap-12 pt-12">
+            class="flex-row h-100p flex-wrap gap-12 pt-12">
           <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
             <mm-listing-card [listing]="listing"></mm-listing-card>
           </ng-container>
@@ -31,11 +33,15 @@
           labelClass="br-32"
           label="Favorites">
         <div
+            [ngClass]="isMobile?'justify-content-center':''"
             style="flex-wrap: wrap"
-            class="flex-row flex-wrap gap-12 pt-12">
-          <ng-container *ngFor="let listing of favoriteListings; trackBy: trackByListingId">
-            <mm-listing-card [listing]="listing"></mm-listing-card>
+            class="flex-row gap-12 pt-12">
+          <ng-container *ngIf="favoriteListings?.length; else noFavoriteFoundTemplate">
+            <ng-container *ngFor="let listing of favoriteListings; trackBy: trackByListingId">
+              <mm-listing-card [listing]="listing"></mm-listing-card>
+            </ng-container>
           </ng-container>
+
         </div>
       </mat-tab>
     </mat-tab-group>
@@ -65,4 +71,19 @@
     </div>
   </ng-container>
 </div>
+
+<ng-template #noFavoriteFoundTemplate>
+  <div class=" mt-20 w-100p outer-container h-100p
+  flex-row justify-content-center align-i-center">
+
+    <div class="no-favorite-icon-container  align-i-center gap-12 flex-column">
+      <mat-icon
+          class=" no-favorite-icon h-52 w-52 fs-52"
+          fontIcon='heart_broken'
+      >
+      </mat-icon>
+      <span class="fs-40">No Favorites Found!!</span>
+    </div>
+  </div>
+</ng-template>
 
