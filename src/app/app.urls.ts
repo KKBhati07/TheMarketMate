@@ -10,8 +10,8 @@ export const AppUrls = {
 	},
 	ADMIN: {
 		LANDING: 'admin',
-		USERS: 'admin/users',
-		LISTINGS: 'admin/listings',
+		USERS: 'users',
+		LISTINGS: 'listings',
 	},
 	FOUROFOUR: 'fourofour',
 
@@ -35,7 +35,7 @@ export const AppUrls = {
 			},
 			ADMIN: {
 				USERS: {
-					GET_ALL: 'v1/admin/users/fetch_all',
+					GET_ALL: 'v1/admin/users/get_all',
 					USER_DETAILS: (uuid: string) => (`v1/admin/users/${ uuid }/get_details`),
 					UPDATE: 'v1/admin/users/update_user',
 					DELETE: (uuid: string) => (`v1/admin/users/delete_user/${ uuid }`),

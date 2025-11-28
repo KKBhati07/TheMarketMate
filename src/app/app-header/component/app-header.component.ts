@@ -7,7 +7,7 @@ import {
 	OnInit,
 	ViewChild
 } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { User } from "../../models/user.model";
@@ -46,6 +46,8 @@ export class AppHeaderComponent implements OnInit {
 	expandedCategories = false;
 	renderExpandedContent = false;
 	@ViewChild('header') header!: ElementRef;
+
+	protected readonly AppUrls = AppUrls;
 
 	constructor(
 			private router: Router,
@@ -125,24 +127,24 @@ export class AppHeaderComponent implements OnInit {
 
 	onMenuItemClick(type: NavOption | null) {
 		switch (type) {
-			case 'LOGIN':
-				this.onNavigationClick(type);
-				break;
-			case 'SIGNUP':
-				this.onNavigationClick(type);
-				break;
+			// case 'LOGIN':
+			// 	this.onNavigationClick(type);
+			// 	break;
+			// case 'SIGNUP':
+			// 	this.onNavigationClick(type);
+			// 	break;
 			case 'SELL_ITEM':
 				this.onSellItemClick();
 				break;
 			case 'CATEGORIES':
 				this.onCategoriesClick();
 				break;
-			case 'HOME':
-				this.onCategoryOrHomeClick();
-				break;
-			case 'ADMIN':
-				this.onAdminClick();
-				break;
+			// case 'HOME':
+			// 	// this.onCategoryOrHomeClick();
+			// 	break;
+			// case 'ADMIN':
+			// 	this.onAdminClick();
+			// 	break;
 		}
 		this.showHeaderMenu = false;
 		this.cdr.markForCheck();
@@ -155,7 +157,7 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 
-	onCategoryOrHomeClick(category: Category | null = null) {
+	onCategorySelect(category: Category | null = null) {
 		category && this.filterService.updateFilter({ category_id: category.id })
 
 		this.router.navigate([AppUrls.HOME])
@@ -190,6 +192,10 @@ export class AppHeaderComponent implements OnInit {
 		this.cdr.detectChanges();
 	}
 
+	get loginQueryParams(): Params {
+		return { redirect: this.router.url }
+	}
+
 	onNavigationClick(redirectTo: Redirect) {
 		if (!redirectTo) return;
 		if (redirectTo === 'LOGIN') {
@@ -207,7 +213,6 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onAdminClick() {
-		this.router.navigate([AppUrls.ADMIN.LANDING]).then(r => null)
 		this.closeHeader();
 	}
 

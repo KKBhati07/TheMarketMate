@@ -19,6 +19,19 @@ import { FilterService } from '../../services/filter.service';
 })
 export class ListingCardComponent implements OnInit, OnDestroy {
 
+	@Input('listing') set setListing(listing: Listing) {
+		this.listing = listing;
+		this.iconName = getIconName(listing?.category.name);
+		this.cdr.markForCheck();
+	}
+	@Input() showFavoriteIcon: boolean = true;
+	@Input() isSelectionMode: boolean = false;
+
+	listing: Listing | undefined;
+	renderBrokenImage = false;
+	iconName: string = '';
+	destroy$: Subject<void> = new Subject();
+
 	constructor(private cdr: ChangeDetectorRef,
 							private favoriteService: FavoriteService,
 							private authService: AuthService,
@@ -27,17 +40,6 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 							private route: ActivatedRoute,
 	) {
 	}
-
-	@Input('listing') set setListing(listing: Listing) {
-		this.listing = listing;
-		this.iconName = getIconName(listing?.category.name);
-		this.cdr.markForCheck();
-	}
-
-	listing: Listing | undefined;
-	renderBrokenImage = false;
-	iconName: string = '';
-	destroy$: Subject<void> = new Subject();
 
 	ngOnInit() {
 	}

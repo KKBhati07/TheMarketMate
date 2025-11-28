@@ -195,6 +195,8 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 					.subscribe(res => {
 						if (res.isSuccessful()) {
 							this.createListingForm.reset();
+							this.productImages = [];
+							this.closeDialog();
 							this.cdr.markForCheck();
 							// TODO :: Attach notifications!
 						}

@@ -1,6 +1,6 @@
 <ng-container *ngIf="type">
   <button
-      class=" border-none flex-row
+      class="btn-container border-none flex-row
        justify-content-center align-i-center
      br-36 {{disabled?'disable':'enable cursor-pointer'}} "
 
@@ -14,7 +14,7 @@
               [ngClass]="iconClass"
               [fontIcon]="icon"
     ></mat-icon>
-    <p>
+    <p [ngClass]="textClass" *ngIf="text?.length">
       {{ text }}
     </p>
     <mat-icon *ngIf=" showIcon && position === 'RIGHT'"

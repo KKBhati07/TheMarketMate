@@ -23,7 +23,9 @@
             style="flex-wrap: wrap"
             class="flex-row h-100p flex-wrap gap-12 pt-12">
           <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
-            <mm-listing-card [listing]="listing"></mm-listing-card>
+            <mm-listing-card
+                [showFavoriteIcon]="false"
+                [listing]="listing"></mm-listing-card>
           </ng-container>
         </div>
       </mat-tab>

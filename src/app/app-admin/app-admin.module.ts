@@ -8,6 +8,8 @@ import { MatIcon } from "@angular/material/icon";
 import { AppLoaderModule } from "../app-loader/app-loader.module";
 import { AdminUserListComponent } from "./components/user-list/user-list.component";
 import { AppUtilModule } from "../app-util/module/app-util.module";
+import { AppListingCardModule } from '../app-listing-card/app-listing-card.module';
+import { adminRoutes } from './app-admin.routes';
 
 @NgModule({
 	declarations: [
@@ -19,10 +21,11 @@ import { AppUtilModule } from "../app-util/module/app-util.module";
 	imports: [
 		CommonModule,
 		RouterOutlet,
-		// RouterModule.forChild([]),
+		RouterModule.forChild(adminRoutes),
 		MatIcon,
 		AppLoaderModule,
 		AppUtilModule,
+		AppListingCardModule,
 	]
 })
 export class AppAdminModule {

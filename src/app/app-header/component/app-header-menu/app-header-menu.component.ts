@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {NavOption} from '../../../models/nav-options.model';
 import { fadeInOut } from '../../../app-util/animations/fade-in-out.animation';
+import { AppUrls } from '../../../app.urls';
 
 @Component({
   selector: 'mm-header-menu',
@@ -12,6 +13,8 @@ import { fadeInOut } from '../../../app-util/animations/fade-in-out.animation';
 export class AppHeaderMenuComponent {
   @Input() isAuthenticated: boolean = false;
   @Input() isAdmin: boolean = false;
+
+  protected readonly AppUrls = AppUrls;
 
   @Output() onItemClick: EventEmitter<NavOption | null>
       = new EventEmitter<NavOption | null>();

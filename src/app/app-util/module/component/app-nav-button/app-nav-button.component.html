@@ -1,33 +1,72 @@
-<div
-    [ngClass]="{
-  'item-selected': active,
-  'justify-content-center': !showIcon,
-  'inactive': !active,
-  'in-header-bg': headerNav,
-  'bg': !headerNav,
-  'log-out-btn': isLogoutBtn
-  }"
-    class="nav-item-container cursor-pointer flex-row
-   gap-20 align-i-center {{class}} {{onMobileWidth}}">
-  <div
-      [ngClass]="!showIcon?'justify-content-center':''"
-      class="flex-row align-i-center gap-{{isMobile? '':gap}} ">
-    <div *ngIf="showIcon && iconPosition === 'LEFT'" [ngClass]="iconContainerClass"
-         class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}}
-            align-i-center justify-content-center icon-container
-             border-circle">
-      <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass"
-                [fontIcon]="icon"></mat-icon>
-    </div>
-    <p *ngIf="!isMobile " [ngClass]="textClass"> {{ text }}</p>
+<ng-container *ngIf="routerLink; else nonLinkTpl">
+  <a
+      [routerLink]="routerLink"
+      [queryParams]="queryParams"
+      [fragment]="fragment"
+      [attr.target]="target"
+      #rla="routerLinkActive"
+      routerLinkActive
+      [routerLinkActiveOptions]="{ exact: exact }">
 
-    <div *ngIf="showIcon && iconPosition === 'RIGHT'" [ngClass]="iconContainerClass"
-         class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}}
-            align-i-center justify-content-center icon-container
-             border-circle">
-      <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass"
-                [fontIcon]="icon"></mat-icon>
+
+    <div
+        [ngClass]="{
+			'item-selected': indicateActiveBtn && rla.isActive,
+			'justify-content-center': !this.showIcon,
+			'inactive': !indicateActiveBtn || !rla.isActive,
+			'in-header-bg': this.headerNav,
+			'bg': !this.headerNav,
+			'log-out-btn': this.isLogoutBtn
+		}"
+        class="nav-item-container cursor-pointer flex-row gap-20 align-i-center {{class}} {{onMobileWidth}}">
+      <div
+          [ngClass]="!showIcon ? 'justify-content-center' : ''"
+          class="flex-row align-i-center gap-{{isMobile? '':gap}}">
+
+        <div *ngIf="showIcon && iconPosition === 'LEFT'" [ngClass]="iconContainerClass"
+             class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}} align-i-center justify-content-center icon-container border-circle">
+          <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass" [fontIcon]="icon"></mat-icon>
+        </div>
+
+        <p *ngIf="!isMobile " [ngClass]="textClass"> {{ text }}</p>
+
+        <div *ngIf="showIcon && iconPosition === 'RIGHT'" [ngClass]="iconContainerClass"
+             class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}} align-i-center justify-content-center icon-container border-circle">
+          <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass" [fontIcon]="icon"></mat-icon>
+        </div>
+      </div>
+    </div>
+  </a>
+</ng-container>
+
+
+<ng-template #nonLinkTpl>
+  <div
+      [ngClass]="{
+			'item-selected': this.active,
+			'justify-content-center': !this.showIcon,
+			'inactive': !this.active,
+			'in-header-bg': this.headerNav,
+			'bg': !this.headerNav,
+			'log-out-btn': this.isLogoutBtn
+		}"
+      class="nav-item-container cursor-pointer flex-row gap-20 align-i-center {{class}} {{onMobileWidth}}">
+
+    <div
+        [ngClass]="!showIcon ? 'justify-content-center' : ''"
+        class="flex-row align-i-center gap-{{isMobile? '':gap}}">
+
+      <div *ngIf="showIcon && iconPosition === 'LEFT'" [ngClass]="iconContainerClass"
+           class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}} align-i-center justify-content-center icon-container border-circle">
+        <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass" [fontIcon]="icon"></mat-icon>
+      </div>
+
+      <p *ngIf="!isMobile " [ngClass]="textClass"> {{ text }}</p>
+
+      <div *ngIf="showIcon && iconPosition === 'RIGHT'" [ngClass]="iconContainerClass"
+           class="flex-row {{headerNav ? 'in-header-ic-bg':'ic-bg'}} align-i-center justify-content-center icon-container border-circle">
+        <mat-icon class="icon-left cursor-pointer" [ngClass]="iconClass" [fontIcon]="icon"></mat-icon>
+      </div>
     </div>
   </div>
-
-</div>
+</ng-template>

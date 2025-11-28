@@ -32,13 +32,8 @@ export const routes: Routes = [
 	},
 	{
 		path: AppUrls.ADMIN.LANDING,
-		component: AdminLandingComponent,
-		canActivate: [AdminGuard],
-		children: [
-			{ path: '', redirectTo: AppUrls.ADMIN.USERS, pathMatch: 'full' },
-			{ path: 'users', component: AdminUsersComponent },
-			{ path: 'listings', component: AdminListingComponent }
-		]
+		loadChildren: () =>
+				import('./app-admin/app-admin.module').then(m => m.AppAdminModule),
 	},
 	{ path: AppUrls.FOUROFOUR, component: FourOFourComponent },
 	{ path: '**', redirectTo: AppUrls.FOUROFOUR, pathMatch: "full" }

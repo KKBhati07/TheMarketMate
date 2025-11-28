@@ -13,3 +13,5 @@ export interface PriceRange {
 	min: number;
 	max: number;
 }
+
+export type RouteTarget = '_self' | '_blank' | '_parent' | '_top';

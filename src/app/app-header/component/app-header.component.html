@@ -41,6 +41,7 @@
             <ng-container *ngIf="isAdmin">
               <mm-nav-button
                   (click)="onAdminClick()"
+                  [routerLink]="[AppUrls.ADMIN.LANDING]"
                   class="pl-4 pr-12 h-40 br-20"
                   iconContainerClass="h-32 w-32"
                   iconClass="h-20 w-20 fs-20"
@@ -65,7 +66,8 @@
                 icon="category"
             ></mm-nav-button>
             <mm-nav-button
-                (click)="onCategoryOrHomeClick()"
+                (click)="closeHeader()"
+                [routerLink]="AppUrls.HOME"
                 class="pl-4 pr-12 h-40 br-20"
                 iconContainerClass="h-32 w-32"
                 iconClass="h-20 w-20 fs-20"
@@ -103,7 +105,7 @@
 <ng-template #expandedCategoryTemplate>
   <ng-container *ngFor="let category of categories">
     <mm-product-category
-        (onCategoryClickEmitter)="onCategoryOrHomeClick($event)"
+        (onCategoryClickEmitter)="onCategorySelect($event)"
         [isMobile]="isMobile"
         [category]="category"></mm-product-category>
   </ng-container>
@@ -111,7 +113,7 @@
 
 <ng-template #loginSignupTemplate>
   <mm-nav-button
-      (click)="onNavigationClick('SIGNUP')"
+      [routerLink]="AppUrls.AUTH.SIGNUP"
       class="pl-4 pr-4 h-40 w-128 br-20"
       textClass="fw-6"
       text="Open Account"
@@ -119,7 +121,8 @@
       [headerNav]="true"
   ></mm-nav-button>
   <mm-nav-button
-      (click)="onNavigationClick('LOGIN')"
+      [routerLink]="AppUrls.AUTH.LOGIN"
+      [queryParams]="loginQueryParams"
       class="pl-4 pr-4 h-40 w-100 br-20"
       iconContainerClass="h-32 w-32"
       iconClass="h-20 w-20 fs-20"

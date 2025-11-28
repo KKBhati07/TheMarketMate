@@ -42,14 +42,14 @@
       </ng-container>
     </div>
     <div class="username-container cursor-default flex-row align-i-center
-     br-32 h-36 p-28">
+     br-32 pt-12 pb-12 pr-16 pl-16">
       <p class="fs-32 fw-6">{{ userDetails?.name || 'USER' }}</p>
     </div>
     <div class="flex-column p-28 br-32 cursor-default
     email-contact-container gap-8">
 
       <p class="fs-16 p-16 br-32">{{ userDetails?.email || 'Email' }}</p>
-      <p *ngIf="userDetails?.contact_no"
+      <p *ngIf="userDetails?.contact_no; else addContactBtnTemplate"
          class="fs-16 p-16 br-32">
         Contact: {{ userDetails?.contact_no }}
       </p>
@@ -67,4 +67,19 @@
 <ng-template #renderProfileIcon>
   <mat-icon class="profile-icon fs-60 w-60 h-60"
             [fontIcon]="'person'"></mat-icon>
+</ng-template>
+
+<ng-template #addContactBtnTemplate>
+  <div class="w-100p p-12 align-i-center flex-row justify-content-space-b br-32">
+    <p>Contact</p>
+    <mm-button
+        (click)="onEditProfileClick()"
+        [disabled]="false"
+        [showIcon]="true"
+        icon="add"
+        iconClass="fs-24 w-24 h-24"
+        type='button'
+        class="fs-28 w-28 h-28"
+    ></mm-button>
+  </div>
 </ng-template>

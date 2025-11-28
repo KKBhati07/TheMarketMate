@@ -16,32 +16,31 @@ export class AdminLandingComponent implements OnInit, OnDestroy {
 	isUsersSelected = true;
 	destroy$ = new Subject();
 
+	protected readonly AppUrls = AppUrls;
+
 	constructor(private router: Router,
 							private deviceDetectorService: DeviceDetectorService,
 							private cdr: ChangeDetectorRef
 	) {
 	}
-
-
+	// TODO :: Complete multiselect delete functionality!!
 	ngOnInit() {
-		this.navigateToUserList();
 		this.setIsMobile();
 		this.subscribeToRoute();
 	}
 
 	subscribeToRoute() {
-		this.router.events.subscribe(event => {
+		this.router.events
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(event => {
 			if (event instanceof NavigationStart && event.url === '/' + AppUrls.ADMIN.LANDING) {
-				this.router.navigate([AppUrls.ADMIN.USERS]).then(r => null);
+				this.router.navigate([AppUrls.ADMIN.LANDING,AppUrls.ADMIN.USERS]).then(r => null);
 				this.isUsersSelected = true;
 				this.cdr.markForCheck();
 			}
 		});
 	}
 
-	navigateToUserList() {
-		this.router.navigate([AppUrls.ADMIN.USERS]).then(r => null);
-	}
 
 	setIsMobile() {
 		this.deviceDetectorService.isMobile()
@@ -52,15 +51,16 @@ export class AdminLandingComponent implements OnInit, OnDestroy {
 				});
 	}
 
+	//Deprecated Method, will remove in future
 	onNavItemClick(navToUser: boolean) {
 		if (navToUser) {
-			this.router.navigate([AppUrls.ADMIN.USERS]).then(r => null);
+			this.router.navigate([AppUrls.ADMIN.LANDING,AppUrls.ADMIN.USERS]).then(r => null);
 			this.isUsersSelected = true;
 			this.cdr.markForCheck();
 			return
 		}
 		this.isUsersSelected = false;
-		this.router.navigate([AppUrls.ADMIN.LISTINGS]).then(r => null);
+		this.router.navigate([AppUrls.ADMIN.LANDING,AppUrls.ADMIN.LISTINGS]).then(r => null);
 		this.cdr.markForCheck();
 	}
 

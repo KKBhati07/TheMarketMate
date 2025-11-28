@@ -26,7 +26,8 @@
     ></mm-sell-item-button>
     <ng-container *ngIf="!isAuthenticated">
       <mm-nav-button
-          (click)="onItemClick.emit('SIGNUP')"
+          (click)="onItemClick.emit()"
+          [routerLink]="AppUrls.AUTH.SIGNUP"
           class="pl-4 pr-4 h-40 br-20"
           iconContainerClass="h-32 w-32"
           iconClass="h-20 w-20 fs-20"
@@ -38,7 +39,8 @@
           [headerNav]="true"
       ></mm-nav-button>
       <mm-nav-button
-          (click)="onItemClick.emit('LOGIN')"
+          (click)="onItemClick.emit()"
+          [routerLink]="AppUrls.AUTH.LOGIN"
           class="pl-4 pr-4 h-40 br-20"
           iconContainerClass="h-32 w-32"
           iconClass="h-20 w-20 fs-20"
@@ -53,7 +55,8 @@
     </ng-container>
     <ng-container *ngIf="isAdmin">
       <mm-nav-button
-          (click)="onItemClick.emit('ADMIN')"
+          (click)="onItemClick.emit()"
+          [routerLink]="AppUrls.ADMIN.LANDING"
           class="pl-4 h-40 br-20"
           iconContainerClass="h-32 w-32"
           iconClass="h-20 w-20 fs-20"
@@ -78,7 +81,8 @@
         icon="category"
     ></mm-nav-button>
     <mm-nav-button
-        (click)="onItemClick.emit('HOME')"
+        (click)="onItemClick.emit()"
+        [routerLink]="AppUrls.HOME"
         class="pl-4 pr-4 h-40 br-20"
         iconContainerClass="h-32 w-32"
         iconClass="h-20 w-20 fs-20"

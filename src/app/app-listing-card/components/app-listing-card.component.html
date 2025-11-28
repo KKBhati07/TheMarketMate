@@ -1,16 +1,19 @@
 <div @fadeSlideIn class="listing-card-container
 cursor-pointer br-24 w-288 h-312">
   <div class="image-container position-relative w-100p h-136">
-    <div
-        (click)="onFavoriteIconClick()"
-        class="favorite-icon position-absolute">
-      <mat-icon
-          [class.favorite]="listing?.is_favorite"
-          class="fs-28 w-28 h-28"
-          [fontIcon]="listing?.is_favorite?'favorite':'favorite_border'"
-      >
-      </mat-icon>
-    </div>
+    <ng-container *ngIf="showFavoriteIcon">
+      <div
+          (click)="onFavoriteIconClick()"
+          class="favorite-icon position-absolute">
+        <mat-icon
+            [class.favorite]="listing?.is_favorite"
+            class="fs-28 w-28 h-28"
+            [fontIcon]="listing?.is_favorite?'favorite':'favorite_border'"
+        >
+        </mat-icon>
+      </div>
+    </ng-container>
+
     <ng-container *ngIf="!renderBrokenImage; else renderBrokenIcon">
       <img (error)="renderBrokenImage = true"
            class=" w-100p h-136 listing-image"

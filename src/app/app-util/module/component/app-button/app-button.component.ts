@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { IconPosition } from '../../../../models/button-options.model';
 
+type Button = 'submit' | 'reset' | 'button';
+
 @Component({
 	selector: "mm-button",
 	templateUrl: "./app-button.component.html",
@@ -10,9 +12,10 @@ import { IconPosition } from '../../../../models/button-options.model';
 
 })
 export class AppButtonComponent implements OnInit {
-	@Input() type = ''
+	@Input() type: Button | '' = ''
 	@Input() disabled: boolean = false
 	@Input() text = ''
+	@Input() textClass = ''
 	@Input() icon = ''
 	@Input() showIcon: boolean = false
 	@Input() position : IconPosition = 'LEFT'

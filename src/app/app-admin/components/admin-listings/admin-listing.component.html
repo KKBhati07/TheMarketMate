@@ -1,0 +1,46 @@
+
+<div class=" p-4 main-container w-100p">
+  <div class="menu-bar flex-row-reverse w-100p p-4 h-44 br-32" >
+
+    <mm-button (click)="toggleSelectButton()" *ngIf="!isSelectionMode"
+        class="w-80 h-100p"
+        text = "SELECT"
+               type="button"
+    >
+    </mm-button>
+
+    <ng-container *ngIf="isSelectionMode" >
+      <div class="flex-row gap-8">
+
+        <mm-button
+            class="w-80 h-100p"
+            text = "DELETE"
+            textClass="fw-6"
+            type="button"
+        >
+        </mm-button>
+        <mm-button
+            (click)="toggleSelectButton()"
+            class="w-40 h-100p"
+            [showIcon]="true"
+            iconClass = " w-20 h-20 fs-20"
+            icon="close_small"
+            type="button"
+        >
+        </mm-button>
+      </div>
+    </ng-container>
+
+  </div>
+  <div class="listings-container mt-8 gap-12 flex-row" >
+    <ng-container *ngFor="let listing of listings" >
+      <mm-listing-card
+          [isSelectionMode] ="isSelectionMode"
+          [showFavoriteIcon] = "false"
+          [listing]="listing"
+      >
+      </mm-listing-card>
+    </ng-container>
+  </div>
+</div>
+
