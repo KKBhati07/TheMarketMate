@@ -8,6 +8,10 @@
   color: var(--text-color-disable);
 }
 
+.warning {
+  background-color: var(--warning-color) !important;
+}
+
 .icon-enable {
   color: var(--text-color-enable);
 }

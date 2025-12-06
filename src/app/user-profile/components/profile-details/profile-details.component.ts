@@ -8,14 +8,14 @@ import {
 	OnInit,
 	Output
 } from "@angular/core";
-import { ProfileDetails } from "../../../models/user.model";
+import { ProfileDetails } from "../../../shared/models/user.model";
 import { MatDialog } from "@angular/material/dialog";
 import { UserProfileEditComponent } from "../user-profile-edit/user-profile-edit.component";
 import { Subject, takeUntil } from "rxjs";
-import { UserService } from "../../../services/user.service";
-import { AuthService } from "../../../services/auth.service";
+import { UserService } from "../../../shared/services/user.service";
+import { AuthService } from "../../../shared/services/auth.service";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { ProfileDetailsBottomSheetData } from '../../../models/bottomsheet.model';
+import { ProfileDetailsBottomSheetData } from '../../../shared/types/common.type';
 import { ImageViewerComponent } from '../../../shared/components/image-viewer/image-viewer.component';
 
 @Component({

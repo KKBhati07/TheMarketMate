@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AppUrls } from '../../../app.urls';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { fadeInOut } from '../../../app-util/animations/fade-in-out.animation';
 

@@ -11,7 +11,7 @@
       <img (click)="onLogoClick()"
            [src]="CONSTANTS.LOGO.TRANSPARENT"
            class="w-132 cursor-pointer h-132" alt="app_logo">
-      <div class="right-section flex-row-reverse align-i-center w-100p h-100p"
+      <div class="right-section gap-8 flex-row-reverse align-i-center w-100p h-100p"
       >
 
 
@@ -42,7 +42,7 @@
               <mm-nav-button
                   (click)="onAdminClick()"
                   [routerLink]="[AppUrls.ADMIN.LANDING]"
-                  class="pl-4 pr-12 h-40 br-20"
+                  [class]="'pl-4 pr-12 h-40 br-20'"
                   iconContainerClass="h-32 w-32"
                   iconClass="h-20 w-20 fs-20"
                   textClass="fw-6"
@@ -55,7 +55,7 @@
             </ng-container>
             <mm-nav-button
                 (click)="onCategoriesClick()"
-                class="pl-4 pr-12 h-40 br-20"
+                [class]="'pl-4 pr-12 h-40 br-20'"
                 iconContainerClass="h-32 w-32"
                 iconClass="h-20 w-20 fs-20"
                 textClass="fw-6"
@@ -68,7 +68,7 @@
             <mm-nav-button
                 (click)="closeHeader()"
                 [routerLink]="AppUrls.HOME"
-                class="pl-4 pr-12 h-40 br-20"
+                [class]="'pl-4 pr-12 h-40 br-20'"
                 iconContainerClass="h-32 w-32"
                 iconClass="h-20 w-20 fs-20"
                 textClass="fw-6"
@@ -114,7 +114,7 @@
 <ng-template #loginSignupTemplate>
   <mm-nav-button
       [routerLink]="AppUrls.AUTH.SIGNUP"
-      class="pl-4 pr-4 h-40 w-128 br-20"
+      [class]="'pl-4 pr-4 h-40 w-128 br-20'"
       textClass="fw-6"
       text="Open Account"
       gap="5"
@@ -123,7 +123,7 @@
   <mm-nav-button
       [routerLink]="AppUrls.AUTH.LOGIN"
       [queryParams]="loginQueryParams"
-      class="pl-4 pr-4 h-40 w-100 br-20"
+      [class]="'pl-4 pr-4 h-40 w-100 br-20'"
       iconContainerClass="h-32 w-32"
       iconClass="h-20 w-20 fs-20"
       textClass="fw-6"

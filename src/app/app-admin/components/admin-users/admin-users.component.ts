@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { User } from "../../../models/user.model";
-import { UserService } from "../../../services/user.service";
+import { User } from "../../../shared/models/user.model";
 import { DeviceDetectorService } from "../../../app-util/services/device-detector.service";
 import { Subject, takeUntil } from "rxjs";
+import { AdminService } from '../../../shared/services/admin.service';
 
 @Component({
 	selector: 'mm-admin-users',
@@ -16,7 +16,7 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 	isLoading = true;
 	destroy$ = new Subject();
 
-	constructor(private userService: UserService,
+	constructor(private adminService: AdminService,
 							private cdr: ChangeDetectorRef,
 							private deviceDetectorService: DeviceDetectorService
 	) {
@@ -29,7 +29,7 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 
 
 	getAllUsers() {
-		this.userService.getAllUsers()
+		this.adminService.getAllUsers()
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
@@ -54,7 +54,7 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 		this.destroy$.complete();
 	}
 
-	onDeleteOrRestroreUser(event: { action: string; uuid: string }) {
+	onDeleteOrRestoreUser(event: { action: string; uuid: string }) {
 		switch (event.action) {
 			case 'DELETE':
 				this.deleteUser(event.uuid);
@@ -65,7 +65,7 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 	}
 
 	deleteUser(uuid: string) {
-		this.userService.deleteUserByAdmin(uuid)
+		this.adminService.deleteUser(uuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
@@ -81,7 +81,7 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 	}
 
 	restoreUser(uuid: string) {
-		this.userService.restoreUser(uuid)
+		this.adminService.restoreUser(uuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {

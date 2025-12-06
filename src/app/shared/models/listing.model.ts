@@ -13,6 +13,7 @@ export interface Listing {
 	title: string;
 	description: string;
 	price: number;
+	is_deleted: boolean;
 	category: Category;
 	cover_image_url: string;
 	posted_at: string;

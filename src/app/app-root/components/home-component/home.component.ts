@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { ListingService } from '../../../services/listing.service';
+import { ListingService } from '../../../shared/services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Listing } from '../../../models/listing.model';
+import { Listing } from '../../../shared/models/listing.model';
 import { DeviceDetectorService } from '../../../app-util/services/device-detector.service';
-import { PriceRange } from '../../../models/common.model';
-import { FilterService } from '../../../services/filter.service';
+import { FilterService } from '../../../shared/services/filter.service';
 
 @Component({
 	selector: 'mm-home',

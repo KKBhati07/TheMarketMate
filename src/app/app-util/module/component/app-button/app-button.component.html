@@ -6,6 +6,7 @@
 
       [type]="type"
       [ngClass]="class"
+      [class.warning]="isWarningBtn && !disabled"
       [disabled]="disabled"
       [ngStyle]="style"
   >

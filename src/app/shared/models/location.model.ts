@@ -1,4 +1,4 @@
-import { Common } from './common.model';
+import { Common } from '../types/common.type';
 
 
 export interface Location {

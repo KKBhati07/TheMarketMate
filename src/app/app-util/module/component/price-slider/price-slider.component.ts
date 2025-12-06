@@ -9,8 +9,8 @@ import {
 	OnInit,
 	ViewChild,
 } from '@angular/core';
-import { PriceRange } from '../../../../models/common.model';
-import { FilterService } from '../../../../services/filter.service';
+import { PriceRange } from '../../../../shared/types/common.type';
+import { FilterService } from '../../../../shared/services/filter.service';
 
 @Component({
 	selector: 'mm-price-slider',

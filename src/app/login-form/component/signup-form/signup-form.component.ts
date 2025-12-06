@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, O
 import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PasswordValidator } from "./validator";
-import { ErrorText, Signup } from "../../../models/login-signup.model";
-import { AuthService } from "../../../services/auth.service";
+import { ErrorText, Signup } from "../../../shared/models/login-signup.model";
+import { AuthService } from "../../../shared/services/auth.service";
 import { AppUrls } from "../../../app.urls";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
 import { Subject, takeUntil } from "rxjs";

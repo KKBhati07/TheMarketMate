@@ -1,21 +1,19 @@
 :root {
-  //--font-family: "Sofadi One", sans-serif;
   --font-family: "Mulish", sans-serif;
   --hover-color: #04C1A2;
   --item-color: rgb(82, 82, 82);
-  --background-color: #6c3535;
-  --app-background-color: #e5e5e5;
+  --app-background-color: #000000;
   --border-color: #BDBDBD;
   --button-color: rgb(68, 115, 177);
   --success-notify-color: rgb(0, 88, 81);
   --error-notify-color: rgb(187, 40, 33);
   --primary-color: rgb(0, 0, 0);
-  --primary-color-bg: linear-gradient(#00b4db, #0083b0);
   --icon-color: #373737;
-  --header-color: #ffffff;
+  --header-color: #363636;
   --items-bg: #f2f2f2;
   --button-color-disable: #f1f2f2;
-  --text-color-disable: #adadae
+  --text-color-disable: #adadae;
+  --warning-color: #c92a2a;
 
 
   //--app-background-color: linear-gradient(
@@ -34,7 +32,6 @@
   //);
 
 
-
   //--header-color: linear-gradient(
   //                145deg,
   //                #F3F5ED 0%,
@@ -43,4 +40,22 @@
   //                #edf3e1 75%,
   //                #EFEFE7 100%
   //);
+}
+
+:root.light-theme {
+  --font-family: "Mulish", sans-serif;
+  --hover-color: #04C1A2;
+  --item-color: rgb(82, 82, 82);
+  --app-background-color: #e5e5e5;
+  --border-color: #BDBDBD;
+  --button-color: rgb(68, 115, 177);
+  --success-notify-color: rgb(0, 88, 81);
+  --error-notify-color: rgb(187, 40, 33);
+  --primary-color: rgb(0, 0, 0);
+  --icon-color: #373737;
+  --header-color: #ffffff;
+  --items-bg: #f2f2f2;
+  --button-color-disable: #f1f2f2;
+  --text-color-disable: #adadae;
+  --warning-color: #c92a2a;
 }

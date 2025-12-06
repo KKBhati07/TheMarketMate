@@ -45,7 +45,7 @@ export const AppUrls = {
 					GET_ALL: 'v1/admin/listings/get_all',
 					GET_DETAILS: (listingId: string) => (`v1/admin/listings/${ listingId }/get_details`),
 					UPDATE: 'v1/admin/listings/update_item',
-					DELETE: 'v1/admin/listings/delete_item',
+					DELETE: 'v1/admin/listings/delete',
 				}
 			},
 			LISTING: {

@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { IconPosition } from '../../../../models/button-options.model';
-import { Params } from '@angular/router';
-import { RouteTarget } from '../../../../models/common.model';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy } from "@angular/core";
+import { IconPosition } from '../../../../shared/types/common.type';
+import { NavigationEnd, Params, Router } from '@angular/router';
+import { RouteTarget } from '../../../../shared/types/common.type';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -10,7 +11,15 @@ import { RouteTarget } from '../../../../models/common.model';
 	styleUrls: ['./app-nav-button.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppNavButtonComponent {
+export class AppNavButtonComponent implements OnDestroy {
+
+	@Input('otherActiveRoutes') set otherActiveRoute(activeRoutes: string[]) {
+		if (!activeRoutes?.length) return;
+		this.otherActiveRoutes = activeRoutes;
+		this.checkForActiveRoutes();
+		this.subscribeForRouteChange();
+	}
+
 	@Input() isMobile = false;
 	@Input() headerNav = false;
 	@Input() iconPosition: IconPosition = 'LEFT';
@@ -26,12 +35,41 @@ export class AppNavButtonComponent {
 	@Input() active = false;
 	@Input() textClass = '';
 	@Input() onMobileWidth = '';
-
 	@Input() routerLink?: any[] | string;
+
 	@Input() queryParams?: Params | null;
 	@Input() fragment?: string;
 	@Input() target?: RouteTarget;
 	@Input() exact: boolean = true;
 
+	destroy$: Subject<void> = new Subject();
+	otherActiveRoutes: string[] = [];
+	isActiveRoute = false;
 
+	constructor(
+			private router: Router,
+			private cdr: ChangeDetectorRef,
+	) {
+	}
+
+	subscribeForRouteChange() {
+		this.router.events.pipe(
+				takeUntil(this.destroy$),
+				filter(event => event instanceof NavigationEnd)
+		).subscribe(() => {
+			this.checkForActiveRoutes();
+		});
+	}
+
+	checkForActiveRoutes() {
+		const url = this.router.url;
+		this.isActiveRoute =
+				this.otherActiveRoutes.some(r => url.includes(r));
+		this.cdr.markForCheck();
+	}
+
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

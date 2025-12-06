@@ -9,20 +9,20 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter } from "rxjs";
-import { AuthService } from "../../services/auth.service";
-import { User } from "../../models/user.model";
-import { Redirect } from "../../models/login-signup.model";
+import { AuthService } from "../../shared/services/auth.service";
+import { User } from "../../shared/models/user.model";
+import { Redirect } from "../../shared/models/login-signup.model";
 import { AppUrls } from "../../app.urls";
 import { CONSTANTS } from "../../app.constants";
 import { DeviceDetectorService } from "../../app-util/services/device-detector.service";
-import { CategoryService } from "../../services/category.service";
-import { Category } from '../../models/category.model';
-import { NavOption } from '../../models/nav-options.model';
+import { CategoryService } from "../../shared/services/category.service";
+import { Category } from '../../shared/models/category.model';
+import { NavOption } from '../../shared/types/common.type';
 import {
 	PublishEditListingFormComponent
 } from '../../shared/components/publish-listing-form/publish-edit-listing-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FilterService } from '../../services/filter.service';
+import { FilterService } from '../../shared/services/filter.service';
 
 @Component({
 	selector: 'mm-app-header',
@@ -127,24 +127,12 @@ export class AppHeaderComponent implements OnInit {
 
 	onMenuItemClick(type: NavOption | null) {
 		switch (type) {
-			// case 'LOGIN':
-			// 	this.onNavigationClick(type);
-			// 	break;
-			// case 'SIGNUP':
-			// 	this.onNavigationClick(type);
-			// 	break;
 			case 'SELL_ITEM':
 				this.onSellItemClick();
 				break;
 			case 'CATEGORIES':
 				this.onCategoriesClick();
 				break;
-			// case 'HOME':
-			// 	// this.onCategoryOrHomeClick();
-			// 	break;
-			// case 'ADMIN':
-			// 	this.onAdminClick();
-			// 	break;
 		}
 		this.showHeaderMenu = false;
 		this.cdr.markForCheck();

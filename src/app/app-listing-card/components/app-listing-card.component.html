@@ -1,85 +1,102 @@
-<div @fadeSlideIn class="listing-card-container
-cursor-pointer br-24 w-288 h-312">
-  <div class="image-container position-relative w-100p h-136">
-    <ng-container *ngIf="showFavoriteIcon">
-      <div
-          (click)="onFavoriteIconClick()"
-          class="favorite-icon position-absolute">
-        <mat-icon
-            [class.favorite]="listing?.is_favorite"
-            class="fs-28 w-28 h-28"
-            [fontIcon]="listing?.is_favorite?'favorite':'favorite_border'"
-        >
-        </mat-icon>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="!renderBrokenImage; else renderBrokenIcon">
-      <img (error)="renderBrokenImage = true"
-           class=" w-100p h-136 listing-image"
-           [src]="listing?.cover_image_url"/>
-    </ng-container>
-  </div>
-
-  <div class="detail-container pt-20 flex-column gap-16 pl-16 pr-16 h-144">
-    <div class="title-container p-4 br-20 align-i-center flex-row gap-12">
-      <div
-          (click)="onCategoryIconClick()"
-          class="category-icon-container flex-row justify-content-center
-           align-i-center border-circle w-28 h-28">
-        <mat-icon
-            class="fs-20 w-20 h-20"
-            [fontIcon]="iconName"
-            [matTooltip]="listing?.category?.name | formatText"
-            matTooltipShowDelay="500"
-            matTooltipPosition="below"
-        >
-        </mat-icon>
-      </div>
-
-      <p class="fs-16 fw-6">{{ listing?.title | uppercase }}</p>
-    </div>
-    <div class="price-container flex-row align-i-center flex-row gap-4">
-      <p class="fs-20 fw-7">{{ listing?.price | currency:'INR':'symbol' }}</p>
-
-    </div>
-    <p class="item-desc fs-12">{{ listing?.description }}</p>
-  </div>
-
-  <div class="location-details-container align-i-center
-   h-32 flex-row gap-8 pl-12">
+<div @fadeSlideIn
+     (click)="onItemClick()"
+     class="listing-card-outer-container
+ position-relative br-24 w-288 h-312">
+  <div *ngIf="isSelected"
+       class="selection-indicator w-24 h-24
+       flex-row justify-content-center align-i-center
+       border-circle position-absolute">
     <mat-icon
-        class="w-12 h-12 fs-12"
-        fontIcon="pin_drop"
-    >
-    </mat-icon>
-    <div>
+        fontIcon="check_small"
+        class="w-16 h-16 fs-16"
+    ></mat-icon>
+  </div>
+  <div
+      [ngStyle]="{'filter': isSelected || isDeleted ? 'brightness(80%)'
+    :'brightness(100%)'}"
+      class="listing-card-container
+cursor-pointer br-24 w-288 h-312">
+    <div class="image-container position-relative w-100p h-136">
+      <ng-container *ngIf="showFavoriteIcon">
+        <div
+            (click)="onFavoriteIconClick()"
+            class="favorite-icon position-absolute">
+          <mat-icon
+              [class.favorite]="listing?.is_favorite"
+              class="fs-28 w-28 h-28"
+              [fontIcon]="listing?.is_favorite?'favorite':'favorite_border'"
+          >
+          </mat-icon>
+        </div>
+      </ng-container>
 
-    </div>
-    <div class="location-item flex-row align-i-center">
-      <p
-          (click)="onLocationClick('CITY',listing?.location?.city?.id)"
-          class="fs-12">
-        {{ listing?.location?.city?.name ?? 'City' }}
-      </p>
-      <span class="fs-12">,</span>
+      <ng-container *ngIf="!renderBrokenImage; else renderBrokenIcon">
+        <img (error)="renderBrokenImage = true"
+             class=" w-100p h-136 listing-image"
+             [src]="listing?.cover_image_url"/>
+      </ng-container>
     </div>
 
-    <div class="location-item flex-row align-i-center">
-      <p
-          (click)="onLocationClick('STATE',listing?.location?.state?.id)"
-          class="fs-12">
-        {{ listing?.location?.state?.name ?? 'State' }}
-      </p>
-      <span class="fs-12">,</span>
+    <div class="detail-container pt-20 flex-column gap-16 pl-16 pr-16 h-144">
+      <div class="title-container p-4 br-20 align-i-center flex-row gap-12">
+        <div
+            (click)="onCategoryIconClick()"
+            class="category-icon-container flex-row justify-content-center
+           align-i-center border-circle w-28 h-28">
+          <mat-icon
+              class="fs-20 w-20 h-20"
+              [fontIcon]="iconName"
+              [matTooltip]="listing?.category?.name | formatText"
+              matTooltipShowDelay="500"
+              matTooltipPosition="below"
+          >
+          </mat-icon>
+        </div>
+
+        <p class="fs-16 fw-6">{{ listing?.title | uppercase }}</p>
+      </div>
+      <div class="price-container flex-row align-i-center flex-row gap-4">
+        <p class="fs-20 fw-7">{{ listing?.price | currency:'INR':'symbol' }}</p>
+
+      </div>
+      <p class="item-desc fs-12">{{ listing?.description }}</p>
     </div>
 
-    <div class="location-item flex-row align-i-center">
-      <p
-          (click)="onLocationClick('COUNTRY',listing?.location?.country?.id)"
-          class="fs-12">
-        {{ listing?.location?.country?.name ?? 'Country' }}
-      </p>
+    <div class="location-details-container align-i-center
+   h-32 flex-row gap-8 pl-12">
+      <mat-icon
+          class="w-12 h-12 fs-12"
+          fontIcon="pin_drop"
+      >
+      </mat-icon>
+      <div>
+
+      </div>
+      <div class="location-item flex-row align-i-center">
+        <p
+            (click)="onLocationClick('CITY',listing?.location?.city?.id)"
+            class="fs-12">
+          {{ listing?.location?.city?.name ?? 'City' }}
+        </p>
+        <span class="fs-12">,</span>
+      </div>
+
+      <div class="location-item flex-row align-i-center">
+        <p
+            (click)="onLocationClick('STATE',listing?.location?.state?.id)"
+            class="fs-12">
+          {{ listing?.location?.state?.name ?? 'State' }}
+        </p>
+        <span class="fs-12">,</span>
+      </div>
+
+      <div class="location-item flex-row align-i-center">
+        <p
+            (click)="onLocationClick('COUNTRY',listing?.location?.country?.id)"
+            class="fs-12">
+          {{ listing?.location?.country?.name ?? 'Country' }}
+        </p>
+      </div>
     </div>
   </div>
 </div>

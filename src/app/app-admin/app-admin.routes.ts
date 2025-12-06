@@ -4,16 +4,21 @@ import { AdminGuard } from '../app-util/guards/admin.guard';
 import { AppUrls } from '../app.urls';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 import { AdminListingComponent } from './components/admin-listings/admin-listing.component';
+import { AdminListingGuard } from '../app-util/guards/admin-listing.guard';
 
 export const adminRoutes: Routes = [
 	{
 		path: '',
 		component: AdminLandingComponent,
-		canActivate: [AdminGuard],
+		canMatch: [AdminGuard],
 		children: [
 			{ path: '', redirectTo: AppUrls.ADMIN.USERS, pathMatch: 'full' },
 			{ path: AppUrls.ADMIN.USERS, component: AdminUsersComponent },
-			{ path: AppUrls.ADMIN.LISTINGS, component: AdminListingComponent }
+			{
+				path: AppUrls.ADMIN.LISTINGS,
+				canActivate: [AdminListingGuard],
+				component: AdminListingComponent
+			}
 		]
 	}
 ];

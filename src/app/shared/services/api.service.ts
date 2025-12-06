@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { ApiHttpResponse, apiResponse } from '../app-util/api-response.util';
+import { ApiHttpResponse, apiResponse } from '../../app-util/api-response.util';
 
 @Injectable({
 	providedIn: 'root',
@@ -27,7 +27,7 @@ export class ApiService {
 			: Observable<ApiHttpResponse<T>> {
 		const headers = this.getAuthHeaders();
 
-		let url = `${this.baseUrl}${endpoint}`;
+		let url = `${ this.baseUrl }${ endpoint }`;
 		if (queryParams && Object.keys(queryParams).length > 0) {
 			const queryString = new URLSearchParams(
 					Object.entries(queryParams)
@@ -35,7 +35,7 @@ export class ApiService {
 							.map(([key, value]) => [key, String(value)])
 			).toString();
 
-			url += `?${queryString}`;
+			url += `?${ queryString }`;
 		}
 
 		return apiResponse(
@@ -72,10 +72,25 @@ export class ApiService {
 		);
 	}
 
-	delete<T>(endpoint: string): Observable<ApiHttpResponse<T>> {
-		const headers = this.getAuthHeaders();
+	delete<T>(endpoint: string, body?: any): Observable<ApiHttpResponse<T>> {
+		const headers: HttpHeaders = this.getAuthHeaders();
+
+		const options: {
+			headers: HttpHeaders;
+			observe: 'response';
+			withCredentials: boolean;
+			body?: any;
+		} = {
+			headers,
+			observe: 'response',
+			withCredentials: true
+		};
+
+		if (body) {
+			options.body = body;
+		}
 		return apiResponse(
-				this.http.delete<T>(`${ this.baseUrl }${ endpoint }`, { headers, observe: 'response', withCredentials: true })
+				this.http.delete<T>(`${ this.baseUrl }${ endpoint }`, options)
 		);
 	}
 }

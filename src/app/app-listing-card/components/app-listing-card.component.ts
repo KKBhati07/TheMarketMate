@@ -1,14 +1,23 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Listing } from '../../models/listing.model';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output
+} from '@angular/core';
+import { Listing } from '../../shared/models/listing.model';
 import { getIconName } from '../../app-util/common.util';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppUrls } from '../../app.urls';
 import { fadeSlideIn } from '../../app-util/animations/fade-slide-in.animation';
-import { FavoriteService } from '../../services/favorite.service';
-import { AuthService } from '../../services/auth.service';
+import { FavoriteService } from '../../shared/services/favorite.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { Subject, takeUntil } from 'rxjs';
-import { LocationType } from '../../models/location.model';
-import { FilterService } from '../../services/filter.service';
+import { LocationType } from '../../shared/models/location.model';
+import { FilterService } from '../../shared/services/filter.service';
 
 @Component({
 	selector: 'mm-listing-card',
@@ -22,10 +31,16 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	@Input('listing') set setListing(listing: Listing) {
 		this.listing = listing;
 		this.iconName = getIconName(listing?.category.name);
+		this.isDeleted = listing.is_deleted ?? false;
 		this.cdr.markForCheck();
 	}
+
 	@Input() showFavoriteIcon: boolean = true;
 	@Input() isSelectionMode: boolean = false;
+	isDeleted: boolean = true;
+	@Output() onSelect: EventEmitter<{ isSelected: boolean, id: number | undefined }>
+			= new EventEmitter<{ isSelected: boolean, id: number | undefined }>();
+	isSelected: boolean = false;
 
 	listing: Listing | undefined;
 	renderBrokenImage = false;
@@ -44,8 +59,16 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 	}
 
+	onItemClick() {
+		if (this.isSelectionMode) {
+			this.isSelected = !this.isSelected;
+			this.onSelect.emit({ isSelected: this.isSelected, id: this.listing?.id });
+			this.cdr.markForCheck();
+		}
+	}
+
 	onCategoryIconClick() {
-		if(this.listing?.category.id){
+		if (this.listing?.category.id) {
 			this.filterService.updateFilter({ category_id: this.listing?.category.id });
 		}
 		this.router.navigate([AppUrls.HOME])
@@ -74,7 +97,7 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	}
 
 	onLocationClick(type: LocationType, id: number | undefined) {
-		if(!id){
+		if (!id) {
 			return;
 			// TODO :: Notification service!!
 		}

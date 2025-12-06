@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { City, Country, State } from '../../../models/location.model';
-import { LocationApiService } from '../../../services/location.service';
-import { CategoryService } from '../../../services/category.service';
+import { City, Country, State } from '../../models/location.model';
+import { LocationApiService } from '../../services/location.service';
+import { CategoryService } from '../../services/category.service';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { CONSTANTS } from '../../../app.constants';
-import { ProductImage } from '../../../models/common.model';
-import { ListingService } from '../../../services/listing.service';
+import { ProductImage } from '../../types/common.type';
+import { ListingService } from '../../services/listing.service';
 
 @Component({
 	selector: 'mm-publish-listing-form',

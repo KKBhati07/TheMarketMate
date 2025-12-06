@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from "./services/auth.service";
+import { AuthService } from "./shared/services/auth.service";
 import { AppHeaderModule } from "./app-header/app-header.module";
 import { FormsContainerModule } from "./forms-container/forms-container.module";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";

@@ -34,5 +34,11 @@ export const CONSTANTS = {
 		IMAGES: {
 			MAX_LIMIT: 6
 		}
+	},
+
+	THEME: {
+		KEY: 'app-theme',
+		DARK: 'dark',
+		LIGHT: 'light',
 	}
 }

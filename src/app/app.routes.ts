@@ -5,11 +5,7 @@ import { LoginSignupGuard } from "./app-util/guards/login-signup.guard";
 import { AppRootComponent } from "./app-root/components/app-root.component";
 import { HomeComponent } from "./app-root/components/home-component/home.component";
 import { UserProfileComponent } from "./user-profile/components/user-profile/user-profile.component";
-import { AdminLandingComponent } from "./app-admin/components/admin-landing/admin-landing.component";
-import { AdminUsersComponent } from "./app-admin/components/admin-users/admin-users.component";
-import { AdminListingComponent } from "./app-admin/components/admin-listings/admin-listing.component";
 import { FourOFourComponent } from "./shared/components/four-o-four/four-o-four.component";
-import { AdminGuard } from './app-util/guards/admin.guard';
 
 export const routes: Routes = [
 	{ path: AppUrls.ROOT, component: AppRootComponent },

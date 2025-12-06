@@ -28,7 +28,7 @@
       <mm-nav-button
           (click)="onItemClick.emit()"
           [routerLink]="AppUrls.AUTH.SIGNUP"
-          class="pl-4 pr-4 h-40 br-20"
+          [class]="'pl-4 pr-4 h-40 br-20'"
           iconContainerClass="h-32 w-32"
           iconClass="h-20 w-20 fs-20"
           textClass="fw-6"
@@ -41,7 +41,7 @@
       <mm-nav-button
           (click)="onItemClick.emit()"
           [routerLink]="AppUrls.AUTH.LOGIN"
-          class="pl-4 pr-4 h-40 br-20"
+          [class]="'pl-4 pr-4 h-40 br-20'"
           iconContainerClass="h-32 w-32"
           iconClass="h-20 w-20 fs-20"
           textClass="fw-6"
@@ -57,7 +57,7 @@
       <mm-nav-button
           (click)="onItemClick.emit()"
           [routerLink]="AppUrls.ADMIN.LANDING"
-          class="pl-4 h-40 br-20"
+          [class]="'pl-4 h-40 br-20'"
           iconContainerClass="h-32 w-32"
           iconClass="h-20 w-20 fs-20"
           textClass="fw-6"
@@ -70,7 +70,7 @@
     </ng-container>
     <mm-nav-button
         (click)="onItemClick.emit('CATEGORIES')"
-        class="pl-4 pr-4 h-40 br-20"
+        [class]="'pl-4 pr-4 h-40 br-20'"
         iconContainerClass="h-32 w-32"
         iconClass="h-20 w-20 fs-20"
         textClass="fw-6"
@@ -83,7 +83,7 @@
     <mm-nav-button
         (click)="onItemClick.emit()"
         [routerLink]="AppUrls.HOME"
-        class="pl-4 pr-4 h-40 br-20"
+        [class]="'pl-4 pr-4 h-40 br-20'"
         iconContainerClass="h-32 w-32"
         iconClass="h-20 w-20 fs-20"
         textClass="fw-6"

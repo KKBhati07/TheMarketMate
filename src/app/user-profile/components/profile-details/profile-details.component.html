@@ -5,8 +5,13 @@
     'background-color':isExpanded || isBottomSheet ? 'var(--header-color)':'transparent'
 
     }"
-    [ngClass]="isExpanded || isBottomSheet? 'p-20':''"
-    class=" position-relative w-100p br-32
+    [ngClass]="{
+    'p-20':isExpanded || isBottomSheet,
+    'bottom-sheet-br':isBottomSheet,
+    'br-32':!isBottomSheet,
+
+    }"
+    class=" position-relative w-100p
    profile-details-container justify-content-center
   gap-12 flex-column align-i-center br-2">
   <div class="position-absolute pill-container">

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { City, Country, State } from '../../../../models/location.model';
+import { City, Country, State } from '../../../../shared/models/location.model';
 import { Subject, takeUntil } from 'rxjs';
-import { LocationApiService } from '../../../../services/location.service';
+import { LocationApiService } from '../../../../shared/services/location.service';
 import { fadeSlideIn } from '../../../animations/fade-slide-in.animation';
-import { FilterService } from '../../../../services/filter.service';
+import { FilterService } from '../../../../shared/services/filter.service';
 
 @Component({
 	selector: 'mm-location-selector',

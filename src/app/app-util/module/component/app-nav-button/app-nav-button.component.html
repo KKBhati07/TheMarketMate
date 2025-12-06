@@ -11,7 +11,7 @@
 
     <div
         [ngClass]="{
-			'item-selected': indicateActiveBtn && rla.isActive,
+			'item-selected': indicateActiveBtn && (rla.isActive || isActiveRoute),
 			'justify-content-center': !this.showIcon,
 			'inactive': !indicateActiveBtn || !rla.isActive,
 			'in-header-bg': this.headerNav,

@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Type } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DeviceDetectorService } from "../../../app-util/services/device-detector.service";
-import { UserService } from "../../../services/user.service";
-import { ProfileDetails } from "../../../models/user.model";
+import { UserService } from "../../../shared/services/user.service";
+import { ProfileDetails } from "../../../shared/models/user.model";
 import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ListingService } from '../../../services/listing.service';
-import { Listing } from '../../../models/listing.model';
-import { AuthService } from '../../../services/auth.service';
+import { ListingService } from '../../../shared/services/listing.service';
+import { Listing } from '../../../shared/models/listing.model';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
 	selector: "mm-user-profile",

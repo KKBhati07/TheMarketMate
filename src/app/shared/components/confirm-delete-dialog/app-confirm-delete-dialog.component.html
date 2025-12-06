@@ -9,7 +9,7 @@
   <mat-dialog-actions class="flex-row gap-20" align="end">
     <mm-nav-button
         (click)="onCancel()"
-        class="pl-4 pr-4 h-40 w-100 br-20"
+        [class]="'pl-4 pr-4 h-40 w-100 br-20'"
         iconContainerClass="h-32 w-32"
         iconClass="h-20 w-20 fs-20"
         textClass="fw-6"
@@ -21,7 +21,7 @@
     ></mm-nav-button>
     <mm-nav-button
         (click)="onConfirm()"
-        class="pl-4 pr-4 h-40 w-100 br-20"
+        [class]="'pl-4 pr-4 h-40 w-100 br-20'"
         iconContainerClass="h-32 w-32"
         iconClass="h-20 w-20 fs-20"
         textClass="fw-6"

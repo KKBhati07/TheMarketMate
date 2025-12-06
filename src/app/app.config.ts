@@ -6,8 +6,10 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from "@angular/common/http";
 
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
-import { appInitializerFactory } from "./app-util/app-initializer.factory";
-import { AuthService } from "./services/auth.service";
+import { authInitializerFactory } from "./app-util/initializers/auth-initializer.factory";
+import { AuthService } from "./shared/services/auth.service";
+import { themeInitializerFactory } from './app-util/initializers/theme-initializer.factory';
+import { ThemeService } from './app-util/services/app-theme.service';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -19,8 +21,16 @@ export const appConfig: ApplicationConfig = {
 		provideHttpClient(withFetch()),
 		provideAnimationsAsync(),
 		{
-			provide: APP_INITIALIZER, useFactory: appInitializerFactory,
-			multi: true, deps: [AuthService]
+			provide: APP_INITIALIZER,
+			useFactory: authInitializerFactory,
+			multi: true,
+			deps: [AuthService]
+		},
+		{
+			provide: APP_INITIALIZER,
+			useFactory: themeInitializerFactory,
+			deps: [ThemeService],
+			multi: true
 		}
 	]
 };

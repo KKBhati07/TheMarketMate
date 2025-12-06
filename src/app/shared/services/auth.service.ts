@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject, tap } from "rxjs";
 import { ApiService } from "./api.service";
-import { AppUrls } from "../app.urls";
+import { AppUrls } from "../../app.urls";
 import { Login, Signup } from "../models/login-signup.model";
-import { ApiHttpResponse } from "../app-util/api-response.util";
+import { ApiHttpResponse } from "../../app-util/api-response.util";
 import { ApiResponse } from "../models/api-response.model";
 import { CookieService } from "ngx-cookie-service";
 import { User } from "../models/user.model";
@@ -85,6 +85,4 @@ export class AuthService {
 	get IsAdmin(): boolean {
 		return this.isAdmin;
 	}
-
-
 }

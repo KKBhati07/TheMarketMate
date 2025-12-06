@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { CONSTANTS } from "../../../../app.constants";
-import { Category } from '../../../../models/category.model';
+import { Category } from '../../../../shared/models/category.model';
 import { getIconName } from '../../../common.util';
 
 @Component({

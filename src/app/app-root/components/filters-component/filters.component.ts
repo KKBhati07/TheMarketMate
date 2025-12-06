@@ -5,7 +5,6 @@ import {
 	OnInit,
 	Output,
 } from '@angular/core';
-import { PriceRange } from '../../../models/common.model';
 
 @Component({
 	selector: 'mm-filters-component',

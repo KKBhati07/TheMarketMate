@@ -1,42 +1,76 @@
-
 <div class=" p-4 main-container w-100p">
-  <div class="menu-bar flex-row-reverse w-100p p-4 h-44 br-32" >
+  <div class="menu-bar flex-row justify-content-space-b w-100p p-4 h-44 br-32">
 
-    <mm-button (click)="toggleSelectButton()" *ngIf="!isSelectionMode"
-        class="w-80 h-100p"
-        text = "SELECT"
-               type="button"
-    >
-    </mm-button>
+    <div class="left-section flex-row gap-12 h-100p">
+      <mm-nav-button
+          [routerLink]="[]"
+          [queryParams]="{'posts':'all'}"
+          text="All Posts"
+          textClass="fw-6"
+          [class]=" 'br-32 pl-8 pr-8 h-100p'"
+          [headerNav]="true"
+          [indicateActiveBtn]="true"
+      >
 
-    <ng-container *ngIf="isSelectionMode" >
-      <div class="flex-row gap-8">
+      </mm-nav-button>
+      <mm-nav-button
+          (click)="isSelectionMode = false"
+          [routerLink]="[]"
+          [queryParams]="{'posts':'deleted'}"
+          text="Deleted Posts"
+          textClass="fw-6"
+          [class]="'br-32 pl-8 pr-8 h-100p'"
+          [headerNav]="true"
+          [indicateActiveBtn]="true"
+      >
 
-        <mm-button
-            class="w-80 h-100p"
-            text = "DELETE"
-            textClass="fw-6"
-            type="button"
-        >
-        </mm-button>
-        <mm-button
-            (click)="toggleSelectButton()"
-            class="w-40 h-100p"
-            [showIcon]="true"
-            iconClass = " w-20 h-20 fs-20"
-            icon="close_small"
-            type="button"
-        >
-        </mm-button>
-      </div>
-    </ng-container>
+      </mm-nav-button>
 
+    </div>
+    <div class="right-section h-100p">
+      <mm-button (click)="toggleSelectButton()"
+                 *ngIf="!isSelectionMode"
+                 [disabled]="isDeletedListingPage"
+                 type="button"
+                 class="w-80 h-100p"
+                 text="SELECT"
+                 textClass="fw-7"
+      >
+      </mm-button>
+
+      <ng-container *ngIf="isSelectionMode">
+        <div class="flex-row h-100p gap-8">
+
+          <mm-button
+              [disabled]="!selectedListings.length"
+              (click)="onDeleteClick()"
+              [isWarningBtn]="true"
+              class="w-80 h-100p"
+              text="DELETE"
+              textClass="fw-7"
+              type="button"
+          >
+          </mm-button>
+          <mm-button
+              (click)="toggleSelectButton()"
+              class="w-36 h-100p"
+              [showIcon]="true"
+              iconClass=" w-20 h-20 fs-20"
+              icon="close_small"
+              type="button"
+          >
+          </mm-button>
+        </div>
+      </ng-container>
+
+    </div>
   </div>
-  <div class="listings-container mt-8 gap-12 flex-row" >
-    <ng-container *ngFor="let listing of listings" >
+  <div class="listings-container mt-8 gap-12 flex-row">
+    <ng-container *ngFor="let listing of listings">
       <mm-listing-card
-          [isSelectionMode] ="isSelectionMode"
-          [showFavoriteIcon] = "false"
+          (onSelect)="onListingSelect($event)"
+          [isSelectionMode]="isSelectionMode"
+          [showFavoriteIcon]="false"
           [listing]="listing"
       >
       </mm-listing-card>

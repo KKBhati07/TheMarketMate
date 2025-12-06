@@ -1,6 +1,6 @@
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "../../shared/services/auth.service";
 
-export function appInitializerFactory(authService: AuthService): () => Promise<void> {
+export function authInitializerFactory(authService: AuthService): () => Promise<void> {
 	return () => {
 		return new Promise((resolve, reject) => {
 			authService.loadUserDetails().subscribe({

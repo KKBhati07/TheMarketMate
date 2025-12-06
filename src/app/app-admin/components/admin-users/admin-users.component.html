@@ -7,7 +7,7 @@
     <div *ngFor="let user of users">
       <mm-admin-user-list
           [user]="user"
-          (deleteOrRestoreUser)="onDeleteOrRestroreUser($event)"
+          (deleteOrRestoreUser)="onDeleteOrRestoreUser($event)"
           (getUpdatedList)="getAllUsers()"
           [isMobile]="isMobile"></mm-admin-user-list>
     </div>

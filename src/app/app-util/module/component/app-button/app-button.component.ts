@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
-import { IconPosition } from '../../../../models/button-options.model';
+import { IconPosition } from '../../../../shared/types/common.type';
 
 type Button = 'submit' | 'reset' | 'button';
 
@@ -12,17 +12,18 @@ type Button = 'submit' | 'reset' | 'button';
 
 })
 export class AppButtonComponent implements OnInit {
-	@Input() type: Button | '' = ''
-	@Input() disabled: boolean = false
-	@Input() text = ''
-	@Input() textClass = ''
-	@Input() icon = ''
-	@Input() showIcon: boolean = false
-	@Input() position : IconPosition = 'LEFT'
-	@Input() background = ''
-	@Input() class = ''
-	@Input() style = {}
-	@Input() iconClass = ''
+	@Input() type: Button | '' = '';
+	@Input() disabled: boolean = false;
+	@Input() text = '';
+	@Input() textClass = '';
+	@Input() icon = '';
+	@Input() showIcon: boolean = false;
+	@Input() isWarningBtn: boolean = false;
+	@Input() position: IconPosition = 'LEFT';
+	@Input() background = '';
+	@Input() class = '';
+	@Input() style = {};
+	@Input() iconClass = '';
 
 	ngOnInit() {
 	}

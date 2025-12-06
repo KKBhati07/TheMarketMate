@@ -11,18 +11,20 @@ import { MatDialog } from '@angular/material/dialog';
 import {
 	AppConfirmDeleteDialogComponent
 } from '../../../shared/components/confirm-delete-dialog/app-confirm-delete-dialog.component';
-import { User } from '../../../models/user.model';
+import { User } from '../../../shared/models/user.model';
 import { Subject, takeUntil } from "rxjs";
 import {
 	UserProfileEditComponent
 } from "../../../user-profile/components/user-profile-edit/user-profile-edit.component";
-import { UserService } from "../../../services/user.service";
+import { AdminService } from '../../../shared/services/admin.service';
+import { fadeSlideIn } from '../../../app-util/animations/fade-slide-in.animation';
 
 @Component({
 	selector: 'mm-admin-user-list',
 	templateUrl: './user-list.component.html',
 	styleUrls: ['./user-list.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	animations: [fadeSlideIn],
 })
 export class AdminUserListComponent implements OnDestroy {
 	@Input() user: User | null = null;
@@ -37,7 +39,7 @@ export class AdminUserListComponent implements OnDestroy {
 	constructor(
 			private dialog: MatDialog,
 			private cdr: ChangeDetectorRef,
-			private userService: UserService
+			private adminService: AdminService,
 	) {
 	}
 
@@ -67,19 +69,19 @@ export class AdminUserListComponent implements OnDestroy {
 		if (this.user) {
 			const dialogRef =
 					this.dialog.open(UserProfileEditComponent, {
-				backdropClass: 'profile-edit-from-backdrop',
-				panelClass: this.isMobile ?
-						'profile-edit-from-container-mobile'
-						: 'profile-edit-from-container',
-				hasBackdrop: true,
-				data: {
-					userDetails: this.user,
-					isMobile: this.isMobile
-				}
-			});
+						backdropClass: 'profile-edit-from-backdrop',
+						panelClass: this.isMobile ?
+								'profile-edit-from-container-mobile'
+								: 'profile-edit-from-container',
+						hasBackdrop: true,
+						data: {
+							userDetails: this.user,
+							isMobile: this.isMobile
+						}
+					});
 			dialogRef.afterClosed().subscribe((data: FormData | null) => {
 				if (data) {
-					this.userService.updateUserByAdmin(data)
+					this.adminService.updateUser(data)
 							.pipe(takeUntil(this.destroy$))
 							.subscribe(res => {
 								if (res.isSuccessful()) {
