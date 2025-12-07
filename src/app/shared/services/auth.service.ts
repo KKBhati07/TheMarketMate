@@ -31,8 +31,6 @@ export class AuthService {
 						this.isAuthenticated = res.body?.data?.authenticated || false;
 						this.userDetails = res.body?.data?.auth_details;
 						this.isAdmin = res.body?.data?.auth_details?.admin;
-					} else {
-						this.cookieService.delete('sessionid');
 					}
 				})
 		);
@@ -43,26 +41,11 @@ export class AuthService {
 	}
 
 	loginUser(body: Login): Observable<ApiHttpResponse<ApiResponse<any>>> {
-		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGIN, body).pipe(
-				tap((res: ApiHttpResponse<ApiResponse<any>>) => {
-					if (res.isSuccessful()) {
-						if (res.body?.data?.authenticated) {
-							this.cookieService.set('sessionid', res.body.data?.sessionId, undefined, '/');
-							this.userDetails = res.body?.data?.auth_details;
-							this.isAuthenticated = true;
-						}
-					}
-				}))
+		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGIN, body)
 	}
 
 	logoutUser(): Observable<ApiHttpResponse<ApiResponse<any>>> {
-		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGOUT, {}).pipe(
-				tap((res: ApiHttpResponse<ApiResponse<any>>) => {
-					if (res.isSuccessful()) {
-						this.cookieService.delete('sessionid');
-
-					}
-				}))
+		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGOUT, {})
 	}
 
 	setUpdatedUser(user: User) {

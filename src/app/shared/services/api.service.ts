@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CookieService } from 'ngx-cookie-service';
 import { ApiHttpResponse, apiResponse } from '../../app-util/api-response.util';
 
 @Injectable({
@@ -11,16 +10,11 @@ import { ApiHttpResponse, apiResponse } from '../../app-util/api-response.util';
 export class ApiService {
 	protected baseUrl = environment.apiUrl;
 
-	constructor(private http: HttpClient, private cookieService: CookieService) {
+	constructor(private http: HttpClient) {
 	}
 
 	private getAuthHeaders(): HttpHeaders {
-		let headers = new HttpHeaders();
-		const cookie = this.cookieService.get('sessionid')?.trim();
-		if (cookie) {
-			headers = headers.set('sessionid', cookie);
-		}
-		return headers;
+		return new HttpHeaders();
 	}
 
 	get<T>(endpoint: string, queryParams?: Record<string, any>)
@@ -39,14 +33,21 @@ export class ApiService {
 		}
 
 		return apiResponse(
-				this.http.get<T>(url, { headers, observe: 'response' })
+				this.http.get<T>(url, { headers, observe: 'response', withCredentials:true })
 		);
 	}
 
 	post<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
 		const headers = this.getAuthHeaders();
 		return apiResponse(
-				this.http.post<T>(`${ this.baseUrl }${ endpoint }`, body, { headers, observe: 'response' })
+				this.http.post<T>(`${ this.baseUrl }${ endpoint }`,
+						body,
+						{
+							headers,
+							observe: 'response',
+							withCredentials: true
+						}
+				)
 		);
 	}
 
