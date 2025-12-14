@@ -103,29 +103,30 @@ export class UserProfileEditComponent implements OnInit {
 		if (this.editProfileForm.invalid && !this.userDetails) return;
 		const formValues = this.editProfileForm.value;
 		if (!this.areValuesChanged(formValues)) {
-			console.warn('NO CHANGES DETECTED !!');
 			return;
 		}
-		const updatedPayload: UpdateUserPayload = {
-			uuid: this.userDetails?.uuid ?? '',
-			name: formValues.name,
-			email: formValues.email,
-		};
+		const updatedPayload = this.getUpdatedPayload(formValues);
+		this.closeDialog(updatedPayload);
 
+	}
 
-		const formData = new FormData();
-		formData.append("uuid", this.userDetails?.uuid ?? "");
-		formData.append("name", formValues.name);
-		formData.append("email", formValues.email);
+	private getUpdatedPayload(formValues: any) {
+		const updatedPayload: UpdateUserPayload = { uuid: this.userDetails?.uuid ?? '' }
+
+		if (formValues.name !== this.userDetails?.name) {
+			updatedPayload.name = formValues.name;
+		}
+		if (formValues.email !== this.userDetails?.email) {
+			updatedPayload.email = formValues.email;
+		}
 		if (formValues.contactNo !== this.userDetails?.contact_no) {
-			formData.append("contactNo", formValues.contactNo);
+			updatedPayload.contact_no = formValues.contactNo;
 		}
 		if (this.selectedFile) {
-			formData.append("profileImage", this.selectedFile);
+			updatedPayload.profileImage = this.selectedFile;
 		}
-		this.closeDialog(formData);
-		this.closeDialog(formData);
 
+		return updatedPayload;
 	}
 
 	areValuesChanged(formValues: any) {
@@ -135,7 +136,7 @@ export class UserProfileEditComponent implements OnInit {
 				this.selectedFile;
 	}
 
-	closeDialog(data: FormData | null = null) {
-		this.dialogRef.close(data);
+	closeDialog(updatedPayload: UpdateUserPayload | null = null) {
+		this.dialogRef.close(updatedPayload);
 	}
 }

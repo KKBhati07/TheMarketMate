@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { ApiResponse } from "../models/api-response.model";
 import { ApiHttpResponse } from "../../app-util/api-response.util";
 import { AppUrls } from "../../app.urls";
+import { UpdateUserPayload } from '../models/user.model';
 
 @Injectable({
 	providedIn: "root",
@@ -17,8 +18,12 @@ export class UserService {
 		return this.apiService.get(AppUrls.API.V1.USER.USER_DETAILS(uuid))
 	}
 
-	updateUser(data: FormData): Observable<ApiHttpResponse<ApiResponse<any>>> {
+	updateUser(data: UpdateUserPayload): Observable<ApiHttpResponse<ApiResponse<any>>> {
 		return this.apiService.put(AppUrls.API.V1.USER.UPDATE_USER, data)
+	}
+
+	uploadImageFallback(data: FormData): Observable<ApiHttpResponse<void>> {
+		return this.apiService.patch(AppUrls.API.V1.USER.UPLOAD_IMAGE_FALLBACK, data)
 	}
 
 }

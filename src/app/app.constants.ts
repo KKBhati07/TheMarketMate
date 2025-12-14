@@ -36,6 +36,10 @@ export const CONSTANTS = {
 		}
 	},
 
+	CONTENT_TYPE: {
+		DEFAULT: 'application/octet-stream'
+	},
+
 	THEME: {
 		KEY: 'app-theme',
 		DARK: 'dark',

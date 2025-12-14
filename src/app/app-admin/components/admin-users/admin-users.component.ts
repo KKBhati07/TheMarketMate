@@ -65,13 +65,18 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 	}
 
 	deleteUser(uuid: string) {
+		this.isLoading = true;
 		this.adminService.deleteUser(uuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
+						this.users = this.users.map(user =>
+								user.uuid === uuid
+										? { ...user, deleted: true }
+										: user
+						);
 						this.isLoading = true;
 						this.cdr.markForCheck();
-						this.getAllUsers();
 						console.log(`User with id ${ uuid } deleted!`);
 						// TODO :: implement notifications
 					} else {
@@ -81,13 +86,18 @@ export class AdminUsersComponent implements OnInit, OnDestroy {
 	}
 
 	restoreUser(uuid: string) {
+		this.isLoading = true;
 		this.adminService.restoreUser(uuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
-						this.isLoading = true;
+						this.users = this.users.map(user =>
+								user.uuid === uuid
+										? { ...user, deleted: false }
+										: user
+						);
+						this.isLoading = false;
 						this.cdr.markForCheck();
-						this.getAllUsers();
 						console.log(`User with id ${ uuid } restored!`);
 						// TODO :: implement notifications
 					} else {

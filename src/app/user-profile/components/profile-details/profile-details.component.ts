@@ -8,15 +8,19 @@ import {
 	OnInit,
 	Output
 } from "@angular/core";
-import { ProfileDetails } from "../../../shared/models/user.model";
+import { ProfileDetails, UpdateUserPayload, User } from "../../../shared/models/user.model";
 import { MatDialog } from "@angular/material/dialog";
 import { UserProfileEditComponent } from "../user-profile-edit/user-profile-edit.component";
-import { Subject, takeUntil } from "rxjs";
+import { catchError, map, of, Subject, switchMap, takeUntil, tap, throwError, timer } from "rxjs";
 import { UserService } from "../../../shared/services/user.service";
 import { AuthService } from "../../../shared/services/auth.service";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { ProfileDetailsBottomSheetData } from '../../../shared/types/common.type';
 import { ImageViewerComponent } from '../../../shared/components/image-viewer/image-viewer.component';
+import { StorageService } from '../../../shared/services/storage.service';
+import { CONSTANTS } from '../../../app.constants';
+import { HttpResponse } from '@angular/common/http';
+import { ApiResponse } from '../../../shared/models/api-response.model';
 
 @Component({
 	selector: 'mm-profile-detail',
@@ -37,6 +41,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 	constructor(private cdr: ChangeDetectorRef,
 							private userService: UserService,
 							private authService: AuthService,
+							private storageService: StorageService,
 							@Inject(MAT_BOTTOM_SHEET_DATA)
 							public data: ProfileDetailsBottomSheetData,
 							private bsr: MatBottomSheetRef,
@@ -74,7 +79,6 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 		if (this.isBottomSheet) {
 			this.bsr?.dismiss();
 		}
-
 		if (this.userDetails) {
 			const dialogRef =
 					this.dialog.open(UserProfileEditComponent, {
@@ -88,35 +92,147 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							isMobile: this.isMobile
 						}
 					});
-			dialogRef.afterClosed().subscribe((data: FormData | null) => {
-				if (data) {
-					this.userService.updateUser(data)
-							.pipe(takeUntil(this.destroy$))
-							.subscribe(res => {
-								if (res.isSuccessful()) {
-									this.userDetails = res.body?.data?.user_details ?? this.userDetails;
-									if (this.userDetails) {
-										this.userDetails.self = res.body?.data?.self
-										this.authService.setUpdatedUser({
-											name: this.userDetails.name,
-											email: this.userDetails.email,
-											uuid: this.userDetails.uuid,
-											profile_url: this.userDetails.profile_url,
-											contact_no: this.userDetails.contact_no,
-											is_admin: res.body?.data?.is_admin,
-											admin: res.body?.data?.admin,
-											deleted: res.body?.data?.deleted,
-										})
-									}
-									this.cdr.markForCheck();
-									console.log("Profile updated successfully!");
-								} else {
-									console.error("Error updating profile:", res.statusText);
-								}
-							});
+
+			dialogRef.afterClosed().subscribe((updatedPayload: UpdateUserPayload | null) => {
+				if (!updatedPayload) return;
+				const { profile_url, profileImage, ...remainingPayload } = updatedPayload
+				let objectKey: string;
+
+				if (Object.keys(remainingPayload).length > 1) {
+					this.userService.updateUser(remainingPayload)
+							.pipe(takeUntil(this.destroy$)).subscribe(res => {
+						if (res.isSuccessful()) {
+							// TODO update user state !!
+						} else {
+							// TODO Show error to the user!!
+						}
+					});
 				}
+
+				if (!profileImage) return;
+
+				this.storageService.getPresignPutUrl({
+					files: [{ file_name: profileImage.name, content_type: profileImage.type || CONSTANTS.CONTENT_TYPE.DEFAULT }],
+					directory: 'PROFILE'
+				}).pipe(
+						takeUntil(this.destroy$),
+						switchMap(res => {
+							if (!res.isSuccessful()) return throwError(() => new Error('Presign API failed'));
+							const data = res.body?.data!;
+							const presigns = data.presigns ?? [];
+							if (!presigns.length) return throwError(() => new Error('No presign entries returned'));
+							const presigned = presigns[0];
+							objectKey = presigned.object_key;
+
+							return this.storageService.uploadFileToS3(presigned.url, profileImage, presigned.headers)
+									.pipe(
+											map(() => ({ success: true, objectKey }))
+									);
+						}),
+
+						catchError(err => {
+							console.warn('Presign upload failed after retries, will verify existence then fallback if needed:', err);
+							return this.storageService.checkObjectExists(objectKey).pipe(
+									switchMap(existsResp => {
+										const exists = existsResp?.body?.data.exists ?? false;
+										if (exists) {
+											return of({ success: true, objectKey });
+										}
+
+										const fd = new FormData();
+										fd.append('uuid', updatedPayload.uuid);
+										fd.append('file', profileImage);
+
+										return this.userService.uploadImageFallback(fd).pipe(
+												switchMap((fbResp: any) => {
+													if (!fbResp.isSuccessful()) {
+														return throwError(() => new Error('Fallback upload failed'));
+													}
+													return of({ success: true, objectKey: null, fallbackUpdatedServer: true });
+												})
+										);
+									}),
+									catchError(innerErr => {
+										console.warn('Exists check failed or errored; attempting fallback upload anyway', innerErr);
+										const fd = new FormData();
+										fd.append('uuid', updatedPayload.uuid);
+										fd.append('file', profileImage);
+										return this.userService.uploadImageFallback(fd).pipe(
+												switchMap((fbResp: any) => {
+													if (!fbResp.isSuccessful()) {
+														return throwError(() => new Error('Fallback upload failed'));
+													}
+													return of({ success: true, objectKey: null, fallbackUpdatedServer: true });
+												})
+										);
+									})
+							);
+						}),
+						switchMap((result: { success: boolean; objectKey?: string | null; fallbackUpdatedServer?: boolean }) => {
+							if (!result || !result.success) return of(null);
+
+							if (result.fallbackUpdatedServer) {
+								return this.userService.getDetails(updatedPayload.uuid).pipe(
+										tap((res) => {
+											this.setUpdatedUserState(res);
+										}),
+										map(() => ({ updatedByFallback: true }))
+								);
+							}
+
+							const payload: UpdateUserPayload = {
+								uuid: (updatedPayload as any).uuid,
+								profile_url: result.objectKey!
+							};
+							return this.userService.updateUser(payload).pipe(
+									tap(res => {
+										if (res.isSuccessful()) {
+											this.setUpdatedUserState(res);
+											this.cdr.markForCheck();
+											console.log("Profile updated successfully!");
+										} else {
+											console.error("Error updating profile:", res.statusText);
+										}
+									}),
+									map(resp => ({ updatedByFallback: false, resp }))
+							);
+						}),
+
+						catchError(finalErr => {
+							console.error('All upload attempts failed:', finalErr);
+							// TODO: Show user notification with a Retry button
+							return of(null);
+						})
+				).subscribe(finalResult => {
+					if (!finalResult) {
+						// TODO Sohw user error or retry option!!
+						return;
+					}
+
+					if (finalResult.updatedByFallback) {
+						// TODO Notfy user!!
+					}
+				});
 			});
 		}
+	}
+
+	setUpdatedUserState(res: HttpResponse<ApiResponse<any>>) {
+		this.userDetails = res.body?.data?.user_details ?? this.userDetails;
+		if (this.userDetails) {
+			this.userDetails.self = res.body?.data?.self
+			this.authService.setUpdatedUser({
+				name: this.userDetails.name,
+				email: this.userDetails.email,
+				uuid: this.userDetails.uuid,
+				profile_url: this.userDetails.profile_url,
+				contact_no: this.userDetails.contact_no,
+				is_admin: res.body?.data?.is_admin,
+				admin: res.body?.data?.admin,
+				deleted: res.body?.data?.deleted,
+			})
+		}
+		this.cdr.markForCheck();
 	}
 
 	ngOnDestroy() {

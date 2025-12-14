@@ -21,8 +21,9 @@ export interface ProfileDetails {
 
 export interface UpdateUserPayload {
 	uuid: string;
-	name: string;
-	email: string;
-	contactNo?: string;
-	profileImage?: File;
+	name?: string;
+	email?: string;
+	contact_no?: string;
+	profileImage?: File | null;
+	profile_url?: string;
 }

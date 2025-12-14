@@ -51,7 +51,6 @@ export class AppHeaderComponent implements OnInit {
 
 	constructor(
 			private router: Router,
-			private route: ActivatedRoute,
 			private authService: AuthService,
 			private cdr: ChangeDetectorRef,
 			private deviceDetector: DeviceDetectorService,
@@ -88,6 +87,7 @@ export class AppHeaderComponent implements OnInit {
 	checkForUserUpdate() {
 		this.authService.getUpdatedUser().subscribe(user => {
 			this.user = user;
+			this.renderIcon = false;
 			this.isAdmin = this.user.admin;
 			this.cdr.markForCheck();
 		})

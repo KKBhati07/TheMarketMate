@@ -4,10 +4,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { City, Country, State } from '../../models/location.model';
 import { LocationApiService } from '../../services/location.service';
 import { CategoryService } from '../../services/category.service';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { CONSTANTS } from '../../../app.constants';
 import { ProductImage } from '../../types/common.type';
 import { ListingService } from '../../services/listing.service';
+import { StorageService } from '../../services/storage.service';
+import { FilePayload } from '../../models/storage.model';
+import { PayloadImage } from '../../models/listing.model';
 
 @Component({
 	selector: 'mm-publish-listing-form',
@@ -31,6 +34,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 			private fb: FormBuilder,
 			private locationApiService: LocationApiService,
 			private listingService: ListingService,
+			private storageService: StorageService,
 			private categoryService: CategoryService,
 			private cdr: ChangeDetectorRef,
 			private dialogRef: MatDialogRef<PublishEditListingFormComponent>,
@@ -176,32 +180,69 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 
 	onSubmit() {
 		if (this.createListingForm.valid) {
-			const formValue = this.createListingForm.value;
-			const formData = new FormData();
-			formData.append('title', formValue.title);
-			formData.append('description', formValue.description || '');
-			formData.append('price', formValue.price);
-			formData.append('categoryId', formValue.categoryId);
-			formData.append('countryId', formValue.countryId);
-			formData.append('stateId', formValue.stateId);
-			formData.append('cityId', formValue.cityId);
-			this.productImages.forEach((img, index) => {
-				formData.append(`images[${ index }].image`, img.image);
-				formData.append(`images[${ index }].cover`, String(img.isCover));
-			});
+			if (this.productImages.length) {
+				const filePayload: FilePayload[] =
+						this.productImages.map(i => ({
+							file_name: i.image.name,
+							content_type: i.image.type,
+						} as FilePayload))
+				this.storageService.getPresignPutUrl({
+					files: filePayload,
+					directory: 'LISTINGS'
+				}).pipe(
+						takeUntil(this.destroy$),
+						switchMap(res => {
+							if (!res.isSuccessful()) return throwError(() => new Error("Failed to get presigns"));
+							const data = res.body?.data!;
+							if (data.failures.length) {
+								// TODO :: Notify user some images failed!!
+							}
 
-			this.listingService.createListing(formData)
-					.pipe(takeUntil(this.destroy$))
-					.subscribe(res => {
-						if (res.isSuccessful()) {
-							this.createListingForm.reset();
-							this.productImages = [];
-							this.closeDialog();
-							this.cdr.markForCheck();
-							// TODO :: Attach notifications!
-						}
-					})
+							const uploadTasks$ = data.presigns.map((p, idx) => {
+								const file = this.productImages[idx].image;
+								return this.storageService.uploadFileToS3(p.url, file, p.headers).pipe(
+										map(() => ({
+											object_key: p.object_key,
+											is_cover: this.productImages[idx].isCover
+										}))
+								);
+							});
+							return forkJoin(uploadTasks$);
+						}),
+						catchError(e => {
+							// TODO Throw error notification!!
+							return of(null)
+						})
+				).subscribe(res => {
+					if (!res) return
+					return this.createListing(this.createListingForm.value, res);
+				})
+			} else {
+				this.createListing(this.createListingForm.value)
+			}
 		}
+	}
+
+	createListing(formValue: any, images: PayloadImage[] = []) {
+		this.listingService.createListing({
+			title: formValue.title,
+			description: formValue.description,
+			category_id: formValue.categoryId,
+			country_id: formValue.countryId,
+			state_id: formValue.stateId,
+			city_id: formValue.cityId,
+			price: formValue.price,
+			images
+		}).pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					if (res.isSuccessful()) {
+						this.createListingForm.reset();
+						this.productImages = [];
+						this.closeDialog();
+						this.cdr.markForCheck();
+						// TODO :: Attach notifications!
+					}
+				})
 	}
 
 
