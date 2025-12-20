@@ -1,27 +1,190 @@
-# Marketmate
+# MarketMate Workspace
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.0.
+This repository is an **Nx Angular workspace** that hosts multiple frontend applications and shared libraries for the **MarketMate platform**.
 
-## Development server
+The workspace is designed to support **multiple apps**, **shared UI/logic**, and **independent development**, while keeping a single, well-structured codebase.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## 🧭 Workspace Overview
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The workspace contains:
 
-## Build
+* **Public application** – customer-facing marketplace UI
+* **Admin portal** – internal application for managing the platform
+* **Shared library** – reusable UI components, services, styles, and utilities
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+All projects are managed using **Nx**, enabling scalable architecture, clear boundaries, and efficient builds.
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 📁 Repository Structure
 
-## Running end-to-end tests
+```
+.
+├── apps/
+│   ├── marketmate/           # Public application
+│   └── mm-admin-portal/      # Admin portal
+│   └── mm-shared/            # Shared Angular library
+│
+├── nx.json
+├── package.json
+├── tsconfig.base.json
+└── README.md                 # (this file)
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## 🧱 Applications
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### 🟢 MarketMate – Public App
+
+* Customer-facing marketplace UI
+* Browsing listings, user flows, profiles
+* Runs independently
+
+📍 Location:
+
+```
+apps/marketmate
+```
+
+📄 Documentation:
+
+```
+apps/marketmate/README.md
+```
+
+---
+
+### 🔐 MarketMate – Admin Portal
+
+* Internal/admin-only application
+* Listing management, moderation, dashboards
+* Restricted access
+
+📍 Location:
+
+```
+apps/mm-admin-portal
+```
+
+📄 Documentation:
+
+```
+apps/mm-admin-portal/README.md
+```
+
+---
+
+## 📦 Shared Libraries
+
+### mm-shared
+
+A reusable Angular library shared across all applications.
+
+Includes:
+
+* UI components
+* Forms and validators
+* Services and guards
+* Animations and utilities
+* Global styles and Angular Material configuration
+
+📍 Location:
+
+```
+apps/mm-shared
+```
+
+📄 Documentation:
+
+```
+libs/mm-shared/README.md
+```
+
+---
+
+## 🎨 Styling & Theming
+
+* Global SCSS styles and Angular Material setup live in `mm-shared`
+* Applications consume global styles via build configuration
+* Apps define only app-specific overrides
+
+> `mat.core()` and Material theme configuration must exist **only once** in the shared library.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+* Node.js (LTS recommended)
+* npm
+* Nx CLI (optional but helpful)
+
+---
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+---
+
+### Run applications
+
+```bash
+nx serve marketmate
+nx serve mm-admin-portal
+```
+
+Default ports:
+
+* Public app: `http://localhost:4200`
+* Admin portal: `http://localhost:4201`
+
+---
+
+## 🐳 Docker (Development)
+
+The workspace supports Docker-based development:
+
+* Bind mounts for live reload
+* Isolated `node_modules` volumes per app
+* Multiple apps can run in parallel
+
+Refer to individual app READMEs for Docker-specific instructions.
+
+---
+
+## 🏗 Builds
+
+Build individual projects:
+
+```bash
+nx build marketmate
+nx build mm-admin-portal
+nx build mm-shared
+```
+
+Build outputs are generated in the `dist/` directory.
+
+---
+
+## 🧠 Development Principles
+
+* Keep applications independent
+* Move reusable logic to shared libraries
+* Avoid cross-app imports
+* Follow Nx project boundaries
+* Prefer shared styles and components over duplication
+
+---
+
+## 📌 Notes
+
+* This workspace is structured for scalability
+* Additional apps or libraries can be added easily
+* Nx tooling enables dependency graphs, affected builds, and caching

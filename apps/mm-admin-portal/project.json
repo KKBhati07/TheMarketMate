@@ -1,0 +1,114 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "mm-admin-portal",
+  "projectType": "application",
+  "tags": [
+    "type:app"
+  ],
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/mm-admin-portal/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "options": {
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "apps/mm-shared/src/styles"
+          ]
+        },
+        "outputPath": "dist/mm-admin-portal",
+        "index": "apps/mm-admin-portal/src/index.html",
+        "browser": "apps/mm-admin-portal/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "apps/mm-admin-portal/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/mm-admin-portal/public"
+          }
+        ],
+        "styles": [
+          "apps/mm-shared/src/styles/styles.scss",
+          "apps/mm-admin-portal/src/styles.scss"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kB",
+              "maximumError": "1MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kB",
+              "maximumError": "4kB"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{options.outputPath}"
+      ]
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "mm-admin-portal:build:production"
+        },
+        "development": {
+          "buildTarget": "mm-admin-portal:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "apps/mm-shared/src/styles"
+          ]
+        },
+        "polyfills": [
+          "zone.js",
+          "zone.js/testing"
+        ],
+        "tsConfig": "apps/mm-admin-portal/tsconfig.spec.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/mm-admin-portal/public"
+          }
+        ],
+        "styles": [
+          "apps/mm-shared/src/styles/styles.scss",
+          "apps/mm-admin-portal/src/styles.scss"
+        ],
+        "scripts": []
+      }
+    }
+  }
+}

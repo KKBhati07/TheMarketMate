@@ -1,0 +1,97 @@
+<div (click)="onItemClick.emit()"
+     class="header-menu-outer-container
+     position-absolute
+     flex-row justify-content-center p-8
+     w-100p h-100p">
+  <div
+      [ngClass]="{
+      'h-264':!isAuthenticated,
+      'h-212':isAuthenticated && isAdmin,
+      'h-160':isAuthenticated && !isAdmin
+      }"
+      [@fadeInOut]
+      class="header-menu-container
+       br-32 flex-column gap-12
+       w-100p mt-72 p-8">
+
+<!--    <mm-sell-item-button-->
+<!--        (click)="onItemClick.emit('SELL_ITEM')"-->
+<!--        class="pl-4 pr-4 h-40 br-20"-->
+<!--        textClass="fw-6"-->
+<!--        text="Sell Item"-->
+<!--        icon="arrow_outward"-->
+<!--        iconClass="h-20 w-20 fs-20"-->
+<!--        [showIcon]="true"-->
+<!--        gap="5"-->
+<!--    ></mm-sell-item-button>-->
+    <ng-container *ngIf="!isAuthenticated">
+      <mm-nav-button
+          (click)="onItemClick.emit()"
+          [routerLink]="AppUrls.AUTH.SIGNUP"
+          [class]="'pl-4 pr-4 h-40 br-20'"
+          iconContainerClass="h-32 w-32"
+          iconClass="h-20 w-20 fs-20"
+          textClass="fw-6"
+          text="Open Account"
+          gap="5"
+          icon="person_add"
+          [showIcon]="true"
+          [headerNav]="true"
+      ></mm-nav-button>
+      <mm-nav-button
+          (click)="onItemClick.emit()"
+          [routerLink]="AppUrls.AUTH.LOGIN"
+          [class]="'pl-4 pr-4 h-40 br-20'"
+          iconContainerClass="h-32 w-32"
+          iconClass="h-20 w-20 fs-20"
+          textClass="fw-6"
+          text="Login"
+          gap="5"
+          [showIcon]="true"
+          [headerNav]="true"
+          icon="login"
+      ></mm-nav-button>
+
+    </ng-container>
+    <ng-container *ngIf="isAdmin">
+      <mm-nav-button
+          (click)="onItemClick.emit()"
+          [routerLink]="AppUrls.ADMIN.LANDING"
+          [class]="'pl-4 h-40 br-20'"
+          iconContainerClass="h-32 w-32"
+          iconClass="h-20 w-20 fs-20"
+          textClass="fw-6"
+          [text]="'Admin'"
+          gap="5"
+          [headerNav]="true"
+          [showIcon]="true"
+          icon="shield_person"
+      ></mm-nav-button>
+    </ng-container>
+    <mm-nav-button
+        (click)="onItemClick.emit('CATEGORIES')"
+        [class]="'pl-4 pr-4 h-40 br-20'"
+        iconContainerClass="h-32 w-32"
+        iconClass="h-20 w-20 fs-20"
+        textClass="fw-6"
+        text="Categories"
+        gap="5"
+        [headerNav]="true"
+        [showIcon]="true"
+        icon="category"
+    ></mm-nav-button>
+    <mm-nav-button
+        (click)="onItemClick.emit()"
+        [routerLink]="AppUrls.HOME"
+        [class]="'pl-4 pr-4 h-40 br-20'"
+        iconContainerClass="h-32 w-32"
+        iconClass="h-20 w-20 fs-20"
+        textClass="fw-6"
+        text="Home"
+        gap="5"
+        [headerNav]="true"
+        [showIcon]="true"
+        icon="home"
+    ></mm-nav-button>
+  </div>
+</div>

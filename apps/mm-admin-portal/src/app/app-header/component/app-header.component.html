@@ -1,0 +1,180 @@
+<div class="header-container w-100p">
+  <div *ngIf="showHeader"
+       [ngClass]="{
+       'h-52':!expandedCategories && !expandedCategories,
+       'h-300':expandedCategories && !isMobile,
+       'height-90':expandedCategories && isMobile
+       }"
+       #header
+       class="header position-absolute pr-12 br-32 pl-16">
+    <div class="upper-container h-52 flex-row align-i-center justify-content-space-b">
+      <img (click)="onLogoClick()"
+           [src]="CONSTANTS.LOGO.TRANSPARENT"
+           class="w-132 cursor-pointer h-132" alt="app_logo">
+      <div class="right-section gap-8 flex-row-reverse align-i-center w-100p h-100p"
+      >
+
+
+        <ng-container *ngIf="!isLoading">
+          <ng-container *ngIf="(isAuthenticated$ | async) && isMobile">
+            <div (click)="onProfileClick()"
+                 [ngClass]="!renderIcon?'styles_ri':''"
+                 class=" profile-pic-container p-4 cursor-pointer border-circle align-i-center
+                  justify-content-center flex-row w-36 h-36">
+              <img (error)="renderIcon = true" class="profile-pic w-36 h-36"
+                   *ngIf="!renderIcon; else renderIconTemplate"
+                   [src]="user?.profile_url">
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!isMobile; else menuIconTemplate ">
+            <ng-container *ngIf="isAuthenticated$ | async; else loginSignupTemplate">
+              <div (click)="onProfileClick()"
+                   [ngClass]="!renderIcon?'styles_ri':''"
+                   class=" profile-pic-container p-4 cursor-pointer border-circle align-i-center
+                  justify-content-center flex-row w-36 h-36">
+                <img (error)="renderIcon = true" class="profile-pic"
+                     *ngIf="!renderIcon; else renderIconTemplate"
+                     [src]="user?.profile_url">
+              </div>
+<!--              <ng-container *ngTemplateOutlet="sellItemTemplate"></ng-container>-->
+            </ng-container>
+            <ng-container *ngIf="isAdmin">
+              <mm-nav-button
+                  (click)="onAdminClick()"
+                  [routerLink]="[AppUrls.ADMIN.LANDING]"
+                  [class]="'pl-4 pr-12 h-40 br-20'"
+                  iconContainerClass="h-32 w-32"
+                  iconClass="h-20 w-20 fs-20"
+                  textClass="fw-6"
+                  [text]="'Admin'"
+                  gap="5"
+                  [headerNav]="true"
+                  [showIcon]="true"
+                  icon="shield_person"
+              ></mm-nav-button>
+            </ng-container>
+<!--            <mm-nav-button-->
+<!--                (click)="onCategoriesClick()"-->
+<!--                [class]="'pl-4 pr-12 h-40 br-20'"-->
+<!--                iconContainerClass="h-32 w-32"-->
+<!--                iconClass="h-20 w-20 fs-20"-->
+<!--                textClass="fw-6"-->
+<!--                text="Categories"-->
+<!--                gap="5"-->
+<!--                [headerNav]="true"-->
+<!--                [showIcon]="true"-->
+<!--                icon="category"-->
+<!--            ></mm-nav-button>-->
+            <mm-nav-button
+                (click)="closeHeader()"
+                [routerLink]="AppUrls.HOME"
+                [class]="'pl-4 pr-12 h-40 br-20'"
+                iconContainerClass="h-32 w-32"
+                iconClass="h-20 w-20 fs-20"
+                textClass="fw-6"
+                text="Home"
+                gap="5"
+                [headerNav]="true"
+                [showIcon]="true"
+                icon="home"
+            ></mm-nav-button>
+          </ng-container>
+        </ng-container>
+
+
+      </div>
+    </div>
+<!--    <div-->
+<!--        [ngClass]="expandedCategories ? 'h-90p':'h-0'"-->
+<!--        class="expanded-container">-->
+<!--      <ng-container *ngIf="expandedCategories">-->
+<!--        <div-->
+<!--            [ngClass]="isMobile?'mt-20':'pl-20 pr-20'"-->
+<!--            class="flex-row align-i-center h-100p gap-16-->
+<!--            expanded-cat-container justify-content-space-b">-->
+<!--          <ng-container *ngTemplateOutlet="expandedCategoryTemplate"></ng-container>-->
+<!--        </div>-->
+<!--      </ng-container>-->
+
+<!--    </div>-->
+
+  </div>
+
+</div>
+
+<!--<ng-template #expandedCategoryTemplate>-->
+<!--  <ng-container *ngFor="let category of categories">-->
+<!--    <mm-product-category-->
+<!--        (onCategoryClickEmitter)="onCategorySelect($event)"-->
+<!--        [isMobile]="isMobile"-->
+<!--        [category]="category"></mm-product-category>-->
+<!--  </ng-container>-->
+<!--</ng-template>-->
+
+<ng-template #loginSignupTemplate>
+  <mm-nav-button
+      [routerLink]="AppUrls.AUTH.SIGNUP"
+      [class]="'pl-4 pr-4 h-40 w-128 br-20'"
+      textClass="fw-6"
+      text="Open Account"
+      gap="5"
+      [headerNav]="true"
+  ></mm-nav-button>
+  <mm-nav-button
+      [routerLink]="AppUrls.AUTH.LOGIN"
+      [queryParams]="loginQueryParams"
+      [class]="'pl-4 pr-4 h-40 w-100 br-20'"
+      iconContainerClass="h-32 w-32"
+      iconClass="h-20 w-20 fs-20"
+      textClass="fw-6"
+      text="Login"
+      gap="5"
+      [showIcon]="true"
+      [headerNav]="true"
+      icon="login"
+  ></mm-nav-button>
+<!--  <ng-container *ngTemplateOutlet="sellItemTemplate"></ng-container>-->
+</ng-template>
+
+<ng-template #renderIconTemplate>
+  <mat-icon class=" profile-pic-icon ls-option-icon cursor-pointer fs-28 h-28 w-28"
+            [fontIcon]="'person'"></mat-icon>
+</ng-template>
+
+<ng-template #menuIconTemplate>
+  <mat-icon (click)="onHeaderMenuClick()"
+            class=" profile-pic-icon ls-option-icon cursor-pointer fs-28 h-28 w-28"
+            [fontIcon]="'menu'"></mat-icon>
+</ng-template>
+
+<!--<ng-template #sellItemTemplate>-->
+<!--  <div class="pr-12">-->
+<!--    <mm-sell-item-button-->
+<!--        (click)="onSellItemClick()"-->
+<!--        class="pl-4 pr-4 h-40 w-128 br-20"-->
+<!--        textClass="fw-6"-->
+<!--        text="Sell Item"-->
+<!--        icon="arrow_outward"-->
+<!--        iconClass="h-20 w-20 fs-20"-->
+<!--        gap="5"-->
+<!--        [showIcon]="true"-->
+<!--    ></mm-sell-item-button>-->
+<!--  </div>-->
+<!--</ng-template>-->
+<ng-container *ngIf="showHeaderMenu">
+  <mm-header-menu
+      [isAdmin]="isAdmin"
+      [isAuthenticated]="(isAuthenticated$ | async) ?? false"
+      (onItemClick)="onMenuItemClick($event)"
+  >
+  </mm-header-menu>
+</ng-container>
+
+<ng-container *ngIf="showUserMenu">
+  <mm-header-user-menu
+      [userName]="user?.name ?? 'User'"
+      [profileImgUrl]="user?.profile_url"
+      (closeMenu)="showUserMenu = false"
+  >
+  </mm-header-user-menu>
+</ng-container>
