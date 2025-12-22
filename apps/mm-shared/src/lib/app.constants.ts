@@ -33,4 +33,8 @@ export const CONSTANTS = {
 		OTHER: 'dynamic_feed',
 		PROPERTY: 'home'
 	},
+	APP_CONTEXT: {
+		ADMIN: 'ADMIN',
+		PUBLIC: 'PUBLIC',
+	}
 }

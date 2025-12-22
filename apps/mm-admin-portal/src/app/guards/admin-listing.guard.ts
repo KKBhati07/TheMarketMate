@@ -20,8 +20,8 @@ export class AdminListingGuard implements CanActivate {
 
 		if (!posts) {
 			return this.router.createUrlTree(
-					[AppUrls.ADMIN.LANDING,
-						AppUrls.ADMIN.LISTINGS
+					[AppUrls.ROOT,
+						AppUrls.LISTINGS
 					], {
 						relativeTo: this.route,
 						queryParams: { posts: 'all' },

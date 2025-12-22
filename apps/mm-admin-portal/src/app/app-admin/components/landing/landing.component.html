@@ -4,7 +4,7 @@
   <div class="left-container" [ngClass]="isMobile?'w-100p' +
    ' flex-row gap-12 justify-content-center' :'w-20p'">
     <mm-nav-button
-        [routerLink]="[AppUrls.ADMIN.USERS]"
+        [routerLink]="[AppUrls.USERS]"
         [indicateActiveBtn]="true"
         text="USERS"
         icon="group"
@@ -17,7 +17,7 @@
     >
     </mm-nav-button>
     <mm-nav-button
-        [routerLink]="[AppUrls.ADMIN.LISTINGS]"
+        [routerLink]="[AppUrls.LISTINGS]"
         [queryParams]="{'posts':'all'}"
         [otherActiveRoutes]="['admin/listings?posts=deleted']"
         [indicateActiveBtn]="true"

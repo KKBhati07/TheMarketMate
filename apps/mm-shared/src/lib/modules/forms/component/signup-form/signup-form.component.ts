@@ -21,7 +21,6 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 	showPassword = false;
 	signUpForm: FormGroup;
 	step = 1;
-	formData: Signup | undefined;
 	errorText: ErrorText = {}
 	isBottomSheet = false;
 	destroy$ = new Subject();

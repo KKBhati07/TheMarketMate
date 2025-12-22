@@ -50,7 +50,7 @@
       ></mm-button>
     </form>
 
-    <div class="signup-text-container pl-10">
+    <div *ngIf="!iSAdminPortal" class="signup-text-container pl-10">
       <p class="signup-text">
         Not a user?
         <span (click)="navigateToLoginForm()" class="cursor-pointer">

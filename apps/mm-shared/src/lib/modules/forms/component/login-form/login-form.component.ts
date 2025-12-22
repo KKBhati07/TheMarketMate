@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from "../../../../services/auth.service";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
 import { AppUrls } from "../../../../common.urls";
 import { Subject, takeUntil } from "rxjs";
+import { CONSTANTS } from '../../../../app.constants';
+import { AppContext } from '../../../../types/common.type';
 
 @Component({
 	selector: 'mm-login-form',
@@ -13,6 +15,7 @@ import { Subject, takeUntil } from "rxjs";
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginFormComponent implements OnInit, OnDestroy {
+	@Input() iSAdminPortal = false;
 	renderComponent = false;
 	formHeading = 'Welcome to MM!'
 	showPassword = false;
@@ -37,6 +40,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
+		this.formHeading = this.iSAdminPortal ? 'Admin Login!' : this.formHeading;
 		this.checkForBottomSheet()
 		this.renderComponent = true;
 		this.cdr.markForCheck();
@@ -93,7 +97,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 			return;
 		}
 		const { email, password } = this.loginForm.value;
-		this.authService.loginUser({ email, password })
+		this.authService.loginUser({ email, password },
+				(this.iSAdminPortal ? CONSTANTS.APP_CONTEXT.ADMIN : CONSTANTS.APP_CONTEXT.PUBLIC) as AppContext)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {

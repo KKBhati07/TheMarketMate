@@ -7,6 +7,7 @@ import { ApiHttpResponse } from "../utils/api-response.util";
 import { ApiResponse } from "../models/api-response.model";
 import { CookieService } from "ngx-cookie-service";
 import { User } from "../models/user.model";
+import { AppContext } from '../types/common.type';
 
 
 @Injectable()
@@ -38,8 +39,8 @@ export class AuthService {
 		return this.apiService.post(AppUrls.API.V1.USER.CREATE, body)
 	}
 
-	loginUser(body: Login): Observable<ApiHttpResponse<ApiResponse<any>>> {
-		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGIN, body)
+	loginUser(body: Login, appContext: AppContext): Observable<ApiHttpResponse<ApiResponse<any>>> {
+		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGIN, body, { 'X-App-Context': appContext })
 	}
 
 	logoutUser(): Observable<ApiHttpResponse<ApiResponse<any>>> {

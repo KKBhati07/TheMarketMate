@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Type, ChangeDetectorRef, Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DeviceDetectorService } from "../../../../services/device-detector.service";
-import { MatBottomSheet, MatBottomSheetRef } from "@angular/material/bottom-sheet";
+import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { LoginFormComponent } from "../login-form/login-form.component";
 import { SignupFormComponent } from "../signup-form/signup-form.component";
 import { Subject, takeUntil } from "rxjs";
@@ -15,6 +15,7 @@ import { AppUrls } from "../../../../common.urls";
 })
 export class FormContainerComponent implements OnInit, OnDestroy {
 	isLoginForm = true;
+	isAdMInPortal = false;
 	slideFrom = false;
 	isMobile = true;
 	destroy$: Subject<boolean> = new Subject<boolean>();
@@ -25,17 +26,17 @@ export class FormContainerComponent implements OnInit, OnDestroy {
 			private router: Router,
 			private deviceDetector: DeviceDetectorService,
 			private bottomSheet: MatBottomSheet,
-			private bsr: MatBottomSheetRef
 	) {
 	}
 
 	ngOnInit() {
-		this.setFormType();
+		this.setDataFromSnapshot();
 		this.setISMobile();
 	}
 
-	private setFormType() {
+	private setDataFromSnapshot() {
 		this.isLoginForm = this.route.snapshot.data['type'] === 'login';
+		this.isAdMInPortal = this.route.snapshot.data['portal'] === 'admin';
 	}
 
 	private setISMobile() {

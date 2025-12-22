@@ -6,7 +6,9 @@
     <div class="form-container position-absolute"
          [ngClass]="slideFrom ? 'slide' : ''">
       <ng-container *ngIf="isLoginForm">
-        <mm-login-form></mm-login-form>
+        <mm-login-form
+            [iSAdminPortal]="isAdMInPortal"
+        ></mm-login-form>
       </ng-container>
       <ng-container *ngIf="!isLoginForm">
         <mm-signup-form></mm-signup-form>

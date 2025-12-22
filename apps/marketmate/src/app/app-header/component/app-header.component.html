@@ -41,7 +41,6 @@
             <ng-container *ngIf="isAdmin">
               <mm-nav-button
                   (click)="onAdminClick()"
-                  [routerLink]="[AppUrls.ADMIN.LANDING]"
                   [class]="'pl-4 pr-12 h-40 br-20'"
                   iconContainerClass="h-32 w-32"
                   iconClass="h-20 w-20 fs-20"
@@ -113,7 +112,7 @@
 
 <ng-template #loginSignupTemplate>
   <mm-nav-button
-      [routerLink]="AppUrls.AUTH.SIGNUP"
+      [routerLink]="SharedUrls.AUTH.SIGNUP"
       [class]="'pl-4 pr-4 h-40 w-128 br-20'"
       textClass="fw-6"
       text="Open Account"
@@ -121,7 +120,7 @@
       [headerNav]="true"
   ></mm-nav-button>
   <mm-nav-button
-      [routerLink]="AppUrls.AUTH.LOGIN"
+      [routerLink]="SharedUrls.AUTH.LOGIN"
       [queryParams]="loginQueryParams"
       [class]="'pl-4 pr-4 h-40 w-100 br-20'"
       iconContainerClass="h-32 w-32"

@@ -7,9 +7,7 @@ import { ListingComponent } from "./components/listings/listing.component";
 import { MatIcon } from "@angular/material/icon";
 import { SharedModule } from "mm-shared";
 import { AdminUserListComponent } from "./components/user-list/user-list.component";
-// import { AppUtilModule } from "../app-util/module/app-util.module";
 import { AppListingCardModule } from 'mm-shared';
-// import { adminRoutes } from '../app-admin.routes';
 
 @NgModule({
 	declarations: [
@@ -21,10 +19,8 @@ import { AppListingCardModule } from 'mm-shared';
 	imports: [
 		CommonModule,
 		RouterOutlet,
-		// RouterModule.forChild(adminRoutes),
 		MatIcon,
 		SharedModule,
-		// AppUtilModule,
 		AppListingCardModule,
 	]
 })

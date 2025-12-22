@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { NavOption } from 'mm-shared';
 import { fadeInOut } from 'mm-shared';
+import { AppUrls as SharedUrls } from 'mm-shared';
 import { AppUrls } from '../../../utils/app.urls';
 
 @Component({
@@ -13,8 +14,10 @@ import { AppUrls } from '../../../utils/app.urls';
 export class AppHeaderMenuComponent {
 	@Input() isAuthenticated: boolean = false;
 	@Input() isAdmin: boolean = false;
+	@Input() userName: string = 'USER';
 
 	protected readonly AppUrls = AppUrls;
+	protected readonly SharedUrls = SharedUrls;
 
 	@Output() onItemClick: EventEmitter<NavOption | null>
 			= new EventEmitter<NavOption | null>();

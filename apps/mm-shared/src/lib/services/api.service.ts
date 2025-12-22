@@ -40,8 +40,14 @@ export class ApiService {
 		);
 	}
 
-	post<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
-		const headers = this.getAuthHeaders();
+	post<T>(endpoint: string, body: any, extraHeaders?:Record<string, string>): Observable<ApiHttpResponse<T>> {
+		let headers = this.getAuthHeaders();
+		if (extraHeaders) {
+			Object.entries(extraHeaders).forEach(([key, value]) => {
+				headers = headers.set(key, value);
+			});
+		}
+
 		return apiResponse(
 				this.http.post<T>(`${ this.baseUrl }${ endpoint }`,
 						body,

@@ -3,23 +3,37 @@ import { LandingComponent } from '../app-admin/components/landing/landing.compon
 import { UsersComponent } from '../app-admin/components/users/users.component';
 import { ListingComponent } from '../app-admin/components/listings/listing.component';
 import { AdminGuard } from '../guards/admin.guard';
+import {
+	AppUrls as SharedUrls,
+	FormContainerComponent,
+	FourOFourComponent,
+	LoginSignupGuard
+} from 'mm-shared';
 import { AppUrls } from './app.urls';
 import { AdminListingGuard } from '../guards/admin-listing.guard';
 
 export const routes: Routes = [
-
 	{
-		path: 'admin',
+		path: AppUrls.ROOT,
 		component: LandingComponent,
-		canMatch: [AdminGuard],
+		canActivate: [AdminGuard], //canMatch works well with LazyLoading
 		children: [
-			{ path: '', redirectTo: AppUrls.ADMIN.USERS, pathMatch: 'full' },
-			{ path: AppUrls.ADMIN.USERS, component: UsersComponent },
+			{ path: AppUrls.ROOT, redirectTo: AppUrls.USERS, pathMatch: 'full' },
+			{ path: AppUrls.USERS, component: UsersComponent },
 			{
-				path: AppUrls.ADMIN.LISTINGS,
-				canActivate: [AdminListingGuard],
-				component: ListingComponent
+				path: AppUrls.LISTINGS,
+				component: ListingComponent,
+				canActivate: [AdminListingGuard]
 			}
 		]
-	}
+	},
+	{
+		path: SharedUrls.AUTH.LOGIN,
+		component: FormContainerComponent,
+		data: { type: 'login', portal: 'admin' },
+		canActivate: [LoginSignupGuard]
+	},
+
+	{ path: SharedUrls.FOUROFOUR, component: FourOFourComponent },
+	{ path: '**', redirectTo: SharedUrls.FOUROFOUR }
 ];

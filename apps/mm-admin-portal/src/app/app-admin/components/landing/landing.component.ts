@@ -23,6 +23,7 @@ export class LandingComponent implements OnInit, OnDestroy {
 							private cdr: ChangeDetectorRef
 	) {
 	}
+
 	// TODO :: Complete multiselect delete functionality!!
 	ngOnInit() {
 		this.setIsMobile();
@@ -33,12 +34,12 @@ export class LandingComponent implements OnInit, OnDestroy {
 		this.router.events
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(event => {
-			if (event instanceof NavigationStart && event.url === '/' + AppUrls.ADMIN.LANDING) {
-				this.router.navigate([AppUrls.ADMIN.LANDING,AppUrls.ADMIN.USERS]).then(r => null);
-				this.isUsersSelected = true;
-				this.cdr.markForCheck();
-			}
-		});
+					if (event instanceof NavigationStart && event.url === '/' + AppUrls.ROOT) {
+						this.router.navigate([AppUrls.ROOT, AppUrls.USERS]).then(r => null);
+						this.isUsersSelected = true;
+						this.cdr.markForCheck();
+					}
+				});
 	}
 
 
@@ -54,13 +55,13 @@ export class LandingComponent implements OnInit, OnDestroy {
 	//Deprecated Method, will remove in future
 	onNavItemClick(navToUser: boolean) {
 		if (navToUser) {
-			this.router.navigate([AppUrls.ADMIN.LANDING,AppUrls.ADMIN.USERS]).then(r => null);
+			this.router.navigate([AppUrls.ROOT, AppUrls.USERS]).then(r => null);
 			this.isUsersSelected = true;
 			this.cdr.markForCheck();
 			return
 		}
 		this.isUsersSelected = false;
-		this.router.navigate([AppUrls.ADMIN.LANDING,AppUrls.ADMIN.LISTINGS]).then(r => null);
+		this.router.navigate([AppUrls.ROOT, AppUrls.LISTINGS]).then(r => null);
 		this.cdr.markForCheck();
 	}
 

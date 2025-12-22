@@ -13,6 +13,7 @@ import { AuthService } from "mm-shared";
 import { User } from "mm-shared";
 import { Redirect } from "mm-shared";
 import { AppUrls } from "../../app.urls";
+import { AppUrls as SharedUrls } from "mm-shared";
 import { CONSTANTS } from "../../app.constants";
 import { DeviceDetectorService } from "mm-shared";
 import { CategoryService } from "../../services/category.service";
@@ -22,7 +23,8 @@ import {
 	PublishEditListingFormComponent
 } from '../../app-util/module/component/publish-listing-form/publish-edit-listing-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FilterService } from '../../../../../mm-shared/src/lib/services/filter.service';
+import { FilterService } from 'mm-shared';
+import { environment } from '../../../environments/environment';
 
 @Component({
 	selector: 'mm-app-header',
@@ -32,15 +34,14 @@ import { FilterService } from '../../../../../mm-shared/src/lib/services/filter.
 })
 export class AppHeaderComponent implements OnInit {
 	categories: Category[] = []
-	protected readonly CONSTANTS = CONSTANTS;
 	isMobile = false;
 	isLoading = true;
 	isAdmin = false;
 	showHeader = true;
 	showHeaderMenu = false;
 	showUserMenu = false;
-
 	isAuthenticated$ = new BehaviorSubject<boolean>(false);
+
 	user: User | null = null;
 	renderIcon = false;
 	expandedCategories = false;
@@ -48,6 +49,8 @@ export class AppHeaderComponent implements OnInit {
 	@ViewChild('header') header!: ElementRef;
 
 	protected readonly AppUrls = AppUrls;
+	protected readonly SharedUrls = SharedUrls;
+	protected readonly CONSTANTS = CONSTANTS;
 
 	constructor(
 			private router: Router,
@@ -133,6 +136,9 @@ export class AppHeaderComponent implements OnInit {
 			case 'CATEGORIES':
 				this.onCategoriesClick();
 				break;
+			case 'ADMIN':
+				this.onAdminClick();
+				break;
 		}
 		this.showHeaderMenu = false;
 		this.cdr.markForCheck();
@@ -201,6 +207,7 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onAdminClick() {
+		window.open(environment.adminUrl, '_blank', 'noopener');
 		this.closeHeader();
 	}
 

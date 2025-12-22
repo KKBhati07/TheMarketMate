@@ -1,21 +1,9 @@
 export const AppUrls = {
 	ROOT: '',
-	HOME: 'home',
-	AUTH: {
-		LOGIN: 'auth/user_login',
-		SIGNUP: 'auth/user_signup',
-	},
-	USER: {
-		USER_PROFILE: (uuid: string | null = null) => (`user/${ uuid ? uuid : ':uuid' }`)
-	},
+	USERS: 'users',
+	LISTINGS: 'listings',
 
 	FOUROFOUR: 'fourofour',
-
-	ADMIN: {
-		LANDING: 'admin',
-		USERS: 'users',
-		LISTINGS: 'listings',
-	},
 
 	API: {
 		V1: {
