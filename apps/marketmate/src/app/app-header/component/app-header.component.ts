@@ -7,7 +7,7 @@ import {
 	OnInit,
 	ViewChild
 } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, Params, Router } from "@angular/router";
+import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter } from "rxjs";
 import { AuthService } from "mm-shared";
 import { User } from "mm-shared";

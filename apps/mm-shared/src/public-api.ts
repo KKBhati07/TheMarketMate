@@ -70,3 +70,6 @@ export * from './lib/animations/dropdown.animation';
 export * from './lib/animations/fade-in-out.animation';
 export * from './lib/animations/fade-slide-in.animation';
 
+// Notification service
+export * from './lib/notification';
+

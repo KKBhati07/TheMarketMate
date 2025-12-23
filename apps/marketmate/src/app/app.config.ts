@@ -6,7 +6,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from "@angular/common/http";
 
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
-import { authInitializerFactory } from "mm-shared";
+import { authInitializerFactory, NotificationModule } from "mm-shared";
 import { AuthService } from "mm-shared";
 import { themeInitializerFactory } from 'mm-shared';
 import { ThemeService } from 'mm-shared';
@@ -26,7 +26,8 @@ export const appConfig: ApplicationConfig = {
 		importProvidersFrom(
 				SharedModule.forRoot({
 					apiUrl: environment.apiUrl
-				})
+				}),
+				NotificationModule
 		),
 		{
 			provide: APP_INITIALIZER,

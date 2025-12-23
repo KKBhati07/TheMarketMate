@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @import 'lib/styles';
 @import 'lib/var.global';
+
 @include mat.core();
 
 :root {
@@ -24,6 +25,16 @@
           divider-height:0,
   ));
 }
+
+// for notification service
+.mm-notification-panel {
+  pointer-events: none;
+}
+
+.mm-notification-panel mm-notification-container {
+  pointer-events: auto;
+}
+
 
 body {
   background: var(--app-background-color);
