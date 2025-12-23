@@ -13,7 +13,7 @@ export function apiResponse<T>(response$: Observable<HttpResponse<T>>): Observab
 			}) as ApiHttpResponse<T>),
 			catchError((error: HttpErrorResponse) => {
 				const errorResponse: ApiHttpResponse<T> = {
-					body: null as any,
+					body: error.error ?? null,
 					headers: error.headers,
 					status: error.status || 500,
 					statusText: error.statusText || "Unknown Error",

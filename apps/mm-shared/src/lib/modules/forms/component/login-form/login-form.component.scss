@@ -64,6 +64,14 @@
       }
     }
 
+    .error-text-container {
+      border: 1px solid red;
+
+      p {
+        color: red
+      }
+    }
+
     .submit-btn {
       color: white;
       background-color: var(--primary-color);

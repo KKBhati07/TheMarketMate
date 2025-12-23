@@ -24,7 +24,6 @@ export class LandingComponent implements OnInit, OnDestroy {
 	) {
 	}
 
-	// TODO :: Complete multiselect delete functionality!!
 	ngOnInit() {
 		this.setIsMobile();
 		this.subscribeToRoute();

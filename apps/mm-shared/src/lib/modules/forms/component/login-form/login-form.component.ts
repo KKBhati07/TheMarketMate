@@ -23,6 +23,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 	invalidEmailText = '';
 	isBottomSheet = false
 	destroy$: Subject<boolean> = new Subject<boolean>();
+	isFourOOne = false;
+	errorText: string = '';
 
 	constructor(
 			private fb: FormBuilder,
@@ -41,10 +43,24 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.formHeading = this.iSAdminPortal ? 'Admin Login!' : this.formHeading;
+		this.loginForm.valueChanges
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(() => {
+					this.resetLoginError();
+				});
 		this.checkForBottomSheet()
 		this.renderComponent = true;
 		this.cdr.markForCheck();
 	}
+
+	resetLoginError(): void {
+		if (!this.errorText && !this.isFourOOne) return;
+
+		this.errorText = '';
+		this.isFourOOne = false;
+		this.cdr.markForCheck();
+	}
+
 
 	private checkForBottomSheet() {
 		if (this.data?.openInBottomSheet) {
@@ -106,12 +122,17 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 						this.router.navigateByUrl(redirectUrl || AppUrls.ROOT).then(r => {
 							window.location.reload();
 						});
+					} else {
+						console.warn('respose', res)
+						if (res.status === 401) {
+							this.isFourOOne = true;
+							this.errorText = 'Invalid creds! Try again.';
+						} else {
+							this.errorText = 'Login failed! Try again';
+						}
+						this.cdr.markForCheck();
 					}
-					// TODO::Notification Service
-
 				})
-
-
 	}
 
 	private handleFormValidationError() {

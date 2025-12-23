@@ -16,7 +16,7 @@
     <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
       <p class="form-heading cursor-default">{{ formHeading }}</p>
       <input id="loginEmail"
-             [ngStyle]="{'border-color':getEmailValidation()?'red':''}"
+             [ngStyle]="{'border-color':getEmailValidation() || isFourOOne?'red':''}"
              class="pass-input-container fs-12 display-block h-60 position-relative br-32 pl-12 mt-30"
              formControlName="email" type="email"
              placeholder="Enter your email"/>
@@ -26,7 +26,7 @@
       </div>
 
       <div class="pass-input-container display-block h-60 position-relative br-32 pl-12 mt-30"
-           [ngStyle]="{'border-color':getPassValidation() ? 'red':''}">
+           [ngStyle]="{'border-color':getPassValidation() || isFourOOne ? 'red':''}">
         <input class="fs-12 pass-input border-none br-32" id="loginPassword" formControlName="password"
                type="{{showPassword?'text':'password'}}"
                placeholder="Enter your password"/>
@@ -40,6 +40,14 @@
       <div class="invalid-text-container h-28 mt-12 p-12">
         <p *ngIf="getPassValidation()" class="invalid-text fs-12">* Password is required!</p>
       </div>
+
+      <ng-container *ngIf="errorText.length">
+        <div class="error-text-container flex-row justify-content-center
+        align-i-center h-60 w-100p br-32 pl-12 mt-16 mb-16">
+          <p>{{ errorText }}</p>
+        </div>
+      </ng-container>
+
 
       <mm-button
           [type]="'submit'"

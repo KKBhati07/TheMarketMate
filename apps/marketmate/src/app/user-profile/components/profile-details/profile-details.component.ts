@@ -8,7 +8,7 @@ import {
 	OnInit,
 	Output
 } from "@angular/core";
-import { ProfileDetails, UpdateUserPayload, User } from "mm-shared";
+import { NotificationService, ProfileDetails, UpdateUserPayload, User } from "mm-shared";
 import { MatDialog } from "@angular/material/dialog";
 import { UserProfileEditComponent } from "mm-shared";
 import { catchError, map, of, Subject, switchMap, takeUntil, tap, throwError, timer } from "rxjs";
@@ -45,6 +45,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							@Inject(MAT_BOTTOM_SHEET_DATA)
 							public data: ProfileDetailsBottomSheetData,
 							private bsr: MatBottomSheetRef,
+							private notificationService: NotificationService,
 							private dialog: MatDialog) {
 	}
 
@@ -102,9 +103,18 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 					this.userService.updateUser(remainingPayload)
 							.pipe(takeUntil(this.destroy$)).subscribe(res => {
 						if (res.isSuccessful()) {
-							// TODO update user state !!
+							this.setUpdatedUserState(res)
+							if (!profileImage) {
+								this.notificationService.success({
+									message: 'User profile updated',
+								});
+							}
 						} else {
-							// TODO Show error to the user!!
+							if (!profileImage) {
+								this.notificationService.error({
+									message: 'Error updating user',
+								});
+							}
 						}
 					});
 				}
@@ -200,17 +210,25 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 						catchError(finalErr => {
 							console.error('All upload attempts failed:', finalErr);
-							// TODO: Show user notification with a Retry button
+							// TODO: Show user notification with a Retry button (In update pipeline)
+							this.notificationService.success({
+								message: `Error updating profile`,
+							});
+
 							return of(null);
 						})
 				).subscribe(finalResult => {
 					if (!finalResult) {
-						// TODO Sohw user error or retry option!!
+						this.notificationService.error({
+							message: 'Error updating profile',
+						});
 						return;
 					}
 
 					if (finalResult.updatedByFallback) {
-						// TODO Notfy user!!
+						this.notificationService.success({
+							message: 'User profile updated',
+						});
 					}
 				});
 			});

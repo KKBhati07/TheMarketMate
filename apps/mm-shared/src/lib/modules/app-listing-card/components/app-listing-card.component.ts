@@ -18,6 +18,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationType } from '../../../models/location.model';
 import { FilterService } from '../../../services/filter.service';
+import { NotificationService } from '../../../notification';
 
 @Component({
 	selector: 'mm-listing-card',
@@ -52,6 +53,7 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 							private authService: AuthService,
 							private router: Router,
 							private filterService: FilterService,
+							private notificationService: NotificationService,
 	) {
 	}
 
@@ -84,10 +86,21 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
-						// TODO :: Notify user
 						if (this.listing) {
 							this.listing.is_favorite =
 									res.body?.data?.is_favorite ?? false;
+
+							if (this.listing.is_favorite) {
+								this.notificationService.success({
+									message: `Added to favorites`,
+								});
+
+							} else {
+								this.notificationService.success({
+									message: `Removed form Favorites`,
+								});
+
+							}
 							this.cdr.markForCheck();
 						}
 					}

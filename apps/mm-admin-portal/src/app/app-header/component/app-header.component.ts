@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter } from "rxjs";
-import { AuthService } from "mm-shared";
+import { AuthService, NotificationService } from "mm-shared";
 import { User } from "mm-shared";
 import { AppUrls as SharedUrls } from "mm-shared";
 import { AppUrls } from "../../utils/app.urls";
@@ -47,6 +47,7 @@ export class AppHeaderComponent implements OnInit {
 			private authService: AuthService,
 			private cdr: ChangeDetectorRef,
 			private deviceDetector: DeviceDetectorService,
+			private notificationService: NotificationService,
 	) {
 	}
 
@@ -137,7 +138,9 @@ export class AppHeaderComponent implements OnInit {
 					window.location.reload();
 				});
 			} else {
-				//TODO:: Notification Service for failed logout!
+				this.notificationService.error({
+					message: `Logout attempt failed`,
+				});
 			}
 		})
 	}

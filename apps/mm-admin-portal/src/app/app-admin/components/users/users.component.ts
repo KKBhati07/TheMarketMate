@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { User } from "mm-shared";
+import { NotificationService, User } from "mm-shared";
 import { DeviceDetectorService } from "mm-shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
@@ -18,7 +18,8 @@ export class UsersComponent implements OnInit, OnDestroy {
 
 	constructor(private adminService: AdminService,
 							private cdr: ChangeDetectorRef,
-							private deviceDetectorService: DeviceDetectorService
+							private deviceDetectorService: DeviceDetectorService,
+							private notificationService: NotificationService,
 	) {
 	}
 
@@ -78,9 +79,14 @@ export class UsersComponent implements OnInit, OnDestroy {
 						this.isLoading = true;
 						this.cdr.markForCheck();
 						console.log(`User with id ${ uuid } deleted!`);
-						// TODO :: implement notifications
+						this.notificationService.success({
+							message: `User deleted`,
+						});
+
 					} else {
-						console.warn('Unable to delete user')
+						this.notificationService.error({
+							message: `User delete failed`,
+						});
 					}
 				})
 	}
@@ -98,10 +104,13 @@ export class UsersComponent implements OnInit, OnDestroy {
 						);
 						this.isLoading = false;
 						this.cdr.markForCheck();
-						console.log(`User with id ${ uuid } restored!`);
-						// TODO :: implement notifications
+						this.notificationService.success({
+							message: `User restored`,
+						});
 					} else {
-						console.warn('Unable to restore user')
+						this.notificationService.error({
+							message: `User restore failed`,
+						});
 					}
 				})
 	}

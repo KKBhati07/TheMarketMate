@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AppUrls } from '../../../app.urls';
-import { AuthService } from 'mm-shared';
+import { AuthService, NotificationService } from 'mm-shared';
 import { Router } from '@angular/router';
 import { fadeInOut } from 'mm-shared';
 
@@ -20,10 +20,12 @@ export class HeaderUserMenuComponent implements OnInit {
 	constructor(
 			private authService: AuthService,
 			private router: Router,
+			private notificationService: NotificationService,
 	) {
 	}
 
-	ngOnInit() {}
+	ngOnInit() {
+	}
 
 
 	onUserIconClick() {
@@ -44,7 +46,9 @@ export class HeaderUserMenuComponent implements OnInit {
 					window.location.reload();
 				});
 			} else {
-				//TODO:: Notification Service for failed logout!
+				this.notificationService.error({
+					message: `Logout attempt failed`,
+				});
 			}
 		})
 	}

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { Listing } from 'mm-shared';
+import { Listing, NotificationService } from 'mm-shared';
 import { map, Subject, takeUntil } from 'rxjs';
 import { AdminService } from '../../../services/admin.service';
 import { AppUrls } from '../../../utils/app.urls';
@@ -27,6 +27,7 @@ export class ListingComponent implements OnInit, OnDestroy {
 			private adminService: AdminService,
 			private cdr: ChangeDetectorRef,
 			private route: ActivatedRoute,
+			private notificationService: NotificationService,
 	) {
 	}
 
@@ -77,8 +78,14 @@ export class ListingComponent implements OnInit, OnDestroy {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
+						this.notificationService.success({
+							message: `Listings deleted`,
+						});
+
 					} else {
-						// TODO :: Show notifications !!
+						this.notificationService.success({
+							message: `Listing deletion failed!`,
+						});
 					}
 					this.cdr.markForCheck();
 				})

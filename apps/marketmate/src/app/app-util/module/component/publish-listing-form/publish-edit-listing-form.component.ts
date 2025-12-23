@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { City, Country, State } from 'mm-shared';
+import { City, Country, NotificationService, State } from 'mm-shared';
 import { LocationApiService } from '../../../../services/location.service';
 import { CategoryService } from '../../../../services/category.service';
 import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
@@ -36,6 +36,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 			private listingService: ListingService,
 			private storageService: StorageService,
 			private categoryService: CategoryService,
+			private notificationService: NotificationService,
 			private cdr: ChangeDetectorRef,
 			private dialogRef: MatDialogRef<PublishEditListingFormComponent>,
 			@Inject(MAT_DIALOG_DATA) public data: { isMobile: boolean }
@@ -195,7 +196,9 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 							if (!res.isSuccessful()) return throwError(() => new Error("Failed to get presigns"));
 							const data = res.body?.data!;
 							if (data.failures.length) {
-								// TODO :: Notify user some images failed!!
+								this.notificationService.error({
+									message: `Some images failed to upload!`,
+								});
 							}
 
 							const uploadTasks$ = data.presigns.map((p, idx) => {
@@ -210,7 +213,10 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 							return forkJoin(uploadTasks$);
 						}),
 						catchError(e => {
-							// TODO Throw error notification!!
+							this.notificationService.error({
+								message: `Error while listing your item`,
+							});
+
 							return of(null)
 						})
 				).subscribe(res => {
@@ -240,7 +246,14 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 						this.productImages = [];
 						this.closeDialog();
 						this.cdr.markForCheck();
-						// TODO :: Attach notifications!
+						this.notificationService.success({
+							message: `Item listed!`,
+						});
+					} else {
+						this.notificationService.error({
+							message: `Item listing failed!`,
+						});
+
 					}
 				})
 	}

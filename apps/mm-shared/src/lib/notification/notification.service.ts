@@ -17,24 +17,23 @@ export class NotificationService implements NotificationServiceContract {
 	}
 
 	success(payload: Omit<NotificationPayload, 'type'>): void {
-		console.warn('Notification event type is deprecated', payload);
-		this.emit({ ...payload, type: 'success' });
+		this.emit({ ...payload, type: 'success', title: payload.title ?? 'Success' });
 	}
 
 	error(payload: Omit<NotificationPayload, 'type'>): void {
-		this.emit({ ...payload, type: 'error' });
+		this.emit({ ...payload, type: 'error', title: payload.title ?? 'Error' });
 	}
 
 	warning(payload: Omit<NotificationPayload, 'type'>): void {
-		this.emit({ ...payload, type: 'warning' });
+		this.emit({ ...payload, type: 'warning', title: payload.title ?? 'Warning' });
 	}
 
 	info(payload: Omit<NotificationPayload, 'type'>): void {
-		this.emit({ ...payload, type: 'info' });
+		this.emit({ ...payload, type: 'info', title: payload.title ?? 'Info' });
 	}
 
 	loading(payload: Omit<NotificationPayload, 'type'>): void {
-		this.emit({ ...payload, type: 'loading' });
+		this.emit({ ...payload, type: 'loading', title: payload.title ?? 'Loading' });
 	}
 
 	dismiss(id: string): void {
