@@ -1,6 +1,7 @@
 const envDev = {
 	production: false,
-	apiUrl: 'http://localhost:8080/api/',
+	// apiUrl: 'http://localhost:8080/api/',
+	apiUrl: 'https://api.marketmate.local:8080/api/',
 };
 
 const envProd = {

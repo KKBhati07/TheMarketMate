@@ -1,5 +1,5 @@
 export const environment = {
 	production: true,
 	apiUrl: 'https://.api.marketmate.com/',
-	adminUrl: 'https://admin.marketmate.com',
+	adminAppUrl: 'https://admin.marketmate.com',
 };

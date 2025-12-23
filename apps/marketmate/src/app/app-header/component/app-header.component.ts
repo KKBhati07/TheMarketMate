@@ -207,7 +207,7 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onAdminClick() {
-		window.open(environment.adminUrl, '_blank', 'noopener');
+		window.open(environment.adminAppUrl, '_blank', 'noopener');
 		this.closeHeader();
 	}
 

@@ -41,6 +41,13 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Local SSL certs
+MM/certs/
+**/*.pem
+**/*.key
+**/*.p12
+
+
 
 
 .nx/cache
