@@ -1,0 +1,51 @@
+<div (click)="onItemClick.emit()"
+     class="header-menu-outer-container
+     position-absolute
+     flex-row justify-content-center p-8
+     w-100p h-100p">
+  <div
+      [ngClass]="{
+      'h-264':!isAuthenticated,
+      'h-212':isAuthenticated && isAdmin,
+      'h-160':isAuthenticated && !isAdmin
+      }"
+      [@fadeInOut]
+      class="header-menu-container
+       br-32 flex-column gap-12
+       w-100p mt-72 p-8">
+    <ng-container *ngIf="!isAuthenticated; else userTemplate">
+      <mm-nav-button
+          (click)="onItemClick.emit()"
+          [routerLink]="SharedUrls.AUTH.LOGIN"
+          [class]="'pl-4 pr-4 h-40 br-20'"
+          iconContainerClass="h-32 w-32"
+          iconClass="h-20 w-20 fs-20"
+          textClass="fw-6"
+          text="Login"
+          gap="5"
+          [showIcon]="true"
+          [headerNav]="true"
+          icon="login"
+      ></mm-nav-button>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #userTemplate>
+  <div style="border: 1px solid var(--border-color)"
+       class="flex-row justify-content-center align-i-center br-32 pl-4 pr-4 h-40 br-20">
+    <p class="fw-7">{{ userName }}</p>
+  </div>
+  <mm-nav-button
+      (click)="onItemClick.emit('LOGOUT')"
+      [class]="'pl-4 pr-4 h-40 br-20'"
+      iconContainerClass="h-32 w-32"
+      iconClass="h-20 w-20 fs-20"
+      textClass="fw-6"
+      text="Logout"
+      gap="5"
+      [showIcon]="true"
+      [headerNav]="true"
+      icon="logout"
+  ></mm-nav-button>
+</ng-template>

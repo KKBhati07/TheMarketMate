@@ -1,0 +1,107 @@
+.login-signup-form-container-i {
+  top: 0;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-top-left-radius: 20px;
+  background: var(--header-color);
+  transition: all 0.5s linear;
+
+  .close-icon-container {
+    top: 20px;
+    right: 20px;
+    background-color: #bbbbbb;
+
+    .close-icon {
+      color: var(--primary-color);
+      font-weight: 550;
+    }
+  }
+
+  .login-signup-form {
+    width: 100%;
+    margin-top: 20vh;
+
+    .form-heading {
+      font-size: 2rem;
+      text-align: center;
+      color: var(--primary-color);
+      font-weight: 800;
+    }
+
+    .invalid-text-container {
+      width: 100%;
+
+      .invalid-text {
+        color: red;
+      }
+    }
+
+    .pass-input-container {
+      border: none;
+      background-color: var(--items-bg);
+      outline: none;
+      width: 100%;
+
+      &:hover {
+        border: 1px solid var(--hover-color);
+      }
+
+      &:focus {
+        border: 1px solid var(--hover-color);
+      }
+
+      .pass-input {
+        width: 80%;
+        outline: none;
+        height: 100%;
+        background-color: var(--items-bg);
+      }
+
+      .visibility-icon {
+        top: 20px;
+        right: 10px;
+        font-size: 20px;
+        color: var(--primary-color);
+      }
+    }
+
+    .error-text-container {
+      border: 1px solid red;
+
+      p {
+        color: red
+      }
+    }
+
+    .submit-btn {
+      color: white;
+      background-color: var(--primary-color);
+      font-weight: 700;
+      width: 100%;
+
+      &.submit-btn-disabled {
+        background-color: var(--button-color-disable) !important;
+        color: var(--text-color-disable) !important;
+      }
+    }
+  }
+
+  .signup-text-container {
+    .signup-text {
+      color: #b21010;
+
+      span {
+        color: var(--primary-color);
+        text-decoration: underline;
+
+        &:hover {
+          color: var(--hover-color);
+
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 969px) {
+
+}

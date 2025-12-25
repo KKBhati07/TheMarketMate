@@ -1,0 +1,7 @@
+<div class="notification-container flex-column gap-12">
+  <mm-notification-toast
+      *ngFor="let notification of notifications; trackBy: trackById"
+      [notification]="notification"
+      (dismiss)="dismiss(notification.id!)"
+  />
+</div>

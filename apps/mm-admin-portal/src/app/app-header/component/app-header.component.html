@@ -1,0 +1,96 @@
+<div class="header-container w-100p">
+  <div *ngIf="showHeader"
+       #header
+       class="header h-52 position-absolute pr-12 br-32 pl-16">
+    <div class="upper-container h-52 flex-row align-i-center justify-content-space-b">
+      <img (click)="onLogoClick()"
+           [src]="CONSTANTS.LOGO.TRANSPARENT"
+           class="w-132 cursor-pointer h-132" alt="app_logo">
+      <div class="right-section gap-8 flex-row-reverse align-i-center w-100p h-100p"
+      >
+
+
+        <ng-container *ngIf="!isLoading">
+          <ng-container *ngIf="(isAuthenticated$ | async) && isMobile">
+            <div
+                [ngClass]="!renderIcon?'styles_ri':''"
+                class=" profile-pic-container p-4 border-circle align-i-center
+                  justify-content-center flex-row w-36 h-36">
+              <img (error)="renderIcon = true" class="profile-pic w-36 h-36"
+                   *ngIf="!renderIcon; else renderIconTemplate"
+                   [src]="user?.profile_url">
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!isMobile; else menuIconTemplate ">
+            <ng-container *ngIf="isAuthenticated$ | async; else loginTemplate">
+              <div style="border:1px solid var(--border-color);"
+                   class="flex-row gap-12 align-i-center br-32 pt-4 pb-4 pr-4 pl-8">
+
+                <p style="color: var(--border-color)" class="fw-7 cursor-default">{{ user?.name ?? 'USER' }}</p>
+
+                <div
+                    [ngClass]="!renderIcon?'styles_ri':''"
+                    class=" profile-pic-container p-4 border-circle align-i-center
+                  justify-content-center flex-row w-36 h-36">
+                  <img (error)="renderIcon = true" class="profile-pic"
+                       *ngIf="!renderIcon; else renderIconTemplate"
+                       [src]="user?.profile_url">
+                </div>
+
+              </div>
+
+              <mm-nav-button
+                  (click)="onLogOutClick()"
+                  [class]="'pl-4 pr-8 h-40 br-20'"
+                  iconContainerClass="h-32 w-32"
+                  iconClass="h-20 w-20 fs-20"
+                  textClass="fw-6"
+                  text="Logout"
+                  gap="5"
+                  [showIcon]="true"
+                  [headerNav]="true"
+                  icon="logout"
+              ></mm-nav-button>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loginTemplate>
+  <mm-nav-button
+      [routerLink]="[AppUrls.ROOT,SharedUrls.AUTH.LOGIN].join('/')"
+      [queryParams]="loginQueryParams"
+      [class]="'pl-4 pr-8 h-40 br-20'"
+      iconContainerClass="h-32 w-32"
+      iconClass="h-20 w-20 fs-20"
+      textClass="fw-6"
+      text="Login"
+      gap="5"
+      [showIcon]="true"
+      [headerNav]="true"
+      icon="login"
+  ></mm-nav-button>
+</ng-template>
+
+<ng-template #renderIconTemplate>
+  <mat-icon class=" profile-pic-icon ls-option-icon fs-28 h-28 w-28"
+            [fontIcon]="'person'"></mat-icon>
+</ng-template>
+
+<ng-template #menuIconTemplate>
+  <mat-icon (click)="onHeaderMenuClick()"
+            class=" profile-pic-icon ls-option-icon cursor-pointer fs-28 h-28 w-28"
+            [fontIcon]="'menu'"></mat-icon>
+</ng-template>
+<ng-container *ngIf="showHeaderMenu">
+  <mm-header-menu
+      [isAdmin]="isAdmin"
+      [userName]="user?.name ?? 'USER'"
+      [isAuthenticated]="(isAuthenticated$ | async) ?? false"
+      (onItemClick)="onMenuItemClick($event)"
+  >
+  </mm-header-menu>
+</ng-container>
