@@ -1,0 +1,63 @@
+<div class="image-viewer-container w-100p h-100p flex-row
+justify-content-center align-i-center">
+  <div class="close-btn-container position-absolute">
+    <mm-close-btn
+        (click)="onCloseClick()"
+        containerClass="w-40 h-40"
+        iconClass="w-28 h-28 fs-28"
+    >
+    </mm-close-btn>
+  </div>
+
+
+  <div
+      *ngIf="currentIndex > 0"
+      class="back-fw-icon-container cursor-pointer position-absolute left">
+    <mm-back-fw-icon
+        [isForwardIcon]="false"
+        (click)="prev()"
+        containerClass=""
+        iconClass="w-36 h-36 fs-36"
+        iconColor="white">
+    </mm-back-fw-icon>
+  </div>
+
+    <div
+        class="image-container br-32 m-32 justify-content-center align-i-center flex-row"
+    >
+
+      <img
+          *ngIf="!renderFallback; else fallbackTemplate"
+          (error)="renderFallback = true"
+          [src]="currentImage"
+          alt="image"
+          class="image-display br-12"
+      />
+
+    </div>
+
+
+
+
+  <div
+      *ngIf="currentIndex < images.length - 1"
+      class="back-fw-icon-container position-absolute cursor-pointer right">
+    <mm-back-fw-icon
+        [isForwardIcon]="true"
+        (click)="next()"
+        containerClass=""
+        iconClass="w-36 h-36 fs-36"
+        iconColor="white">
+    </mm-back-fw-icon>
+  </div>
+
+</div>
+
+<ng-template #fallbackTemplate>
+  <mat-icon
+      class="fs-56 w-56 h-56 broken-img-icon"
+      fontIcon="broken_image"
+  >
+
+  </mat-icon>
+</ng-template>

@@ -1,0 +1,132 @@
+
+.profile-details-container {
+  height: 80vh;
+  overflow: hidden;
+
+  .pill-container {
+    top: 0;
+    width: 100%;
+    left: 0
+  }
+
+  .expand-icon-container {
+    top: 8px;
+    left: 0;
+
+    div {
+      background-color: var(--border-color);
+    }
+
+    mat-icon {
+      color: white;
+    }
+  }
+
+  &.hide-comp {
+  }
+
+  &:hover {
+  }
+
+  .profile-pic-container {
+    border: 1px solid var(--primary-color);
+
+    .profile-pic {
+      overflow: hidden;
+      object-fit: contain;
+    }
+
+    .profile-icon {
+      color: var(--primary-color);
+    }
+  }
+
+  .username-container {
+    background-color: var(--items-bg);
+  }
+
+  .email-contact-container {
+    background-color: var(--items-bg);
+
+    p {
+      background: var(--header-color);
+      color: #484848;
+    }
+
+    div {
+      background: var(--header-color);
+    }
+  }
+
+  p {
+    color: var(--primary-color);
+    text-align: center;
+  }
+}
+
+::ng-deep .profile-edit-from-backdrop.cdk-overlay-backdrop {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+  z-index: 2;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+}
+
+::ng-deep .cdk-overlay-container {
+  .profile-edit-from-container {
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    height: 80vh;
+    border-radius: 10px;
+    width: 60vw;
+    max-width: 600px;
+    left: 50%;
+    right: calc(50% - 150px);
+    top: 50%;
+    position: fixed !important;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+  }
+}
+
+::ng-deep .cdk-overlay-container {
+  .profile-edit-from-container-mobile {
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    height: 80vh;
+    border-radius: 10px;
+    width: 80vw;
+    left: 50%;
+    right: calc(50% - 150px);
+    top: 50%;
+    position: fixed !important;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+  }
+
+  ::ng-deep .mat-mdc-dialog-surface {
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+}
+
+::ng-deep .full-screen-dialog .mat-mdc-dialog-surface {
+  background: transparent;
+  box-shadow: none;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.bottom-sheet-br {
+  border-radius: 32px 32px 0 0;
+}

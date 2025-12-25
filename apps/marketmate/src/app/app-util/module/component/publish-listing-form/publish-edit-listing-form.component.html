@@ -1,0 +1,119 @@
+<div
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave()"
+    (drop)="onDrop($event)"
+    [class.dragover]="isDragOver"
+    class="publish-listing-from-container br-36 flex-column
+     w-100p">
+  <form
+      class="mt-20 publish-listing-form w-100p"
+      [formGroup]="createListingForm"
+      (ngSubmit)="onSubmit()">
+    <div
+        class="inner-container pl-12 pr-12 gap-12 flex-column h-100p w-100p">
+      <div>
+        <input
+            class="form-input border-none pl-12 pr-12 fs-16 display-block
+              br-32 h-54 position-relative"
+            formControlName="title"
+            type="text"
+            placeholder="Title">
+      </div>
+
+      <div>
+          <textarea
+              class="form-input border-none pl-12  pt-8 pb-8
+               fs-16 display-block pr-12
+               br-28 h-100 position-relative"
+              formControlName="description"
+              style="resize: none;"
+              placeholder="Description"></textarea>
+      </div>
+      <div>
+        <input
+            class="form-input border-none pl-12 fs-16 pr-12
+            display-block br-32 h-54 position-relative"
+            formControlName="price"
+            type="number"
+            placeholder="Price">
+      </div>
+
+      <div>
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="categoryId"
+            [data]="categories"
+            placeholder="Category"
+        ></mm-autocomplete-select>
+      </div>
+
+      <div
+          [ngClass]="isMobile?
+          'flex-column gap-12'
+          :'flex-row gap-4'"
+      >
+
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="countryId"
+            [data]="countries"
+            placeholder="Country"
+        ></mm-autocomplete-select>
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="stateId"
+            [data]="states"
+            placeholder="State"
+        ></mm-autocomplete-select>
+        <mm-autocomplete-select
+            class="flex-1"
+            formControlName="cityId"
+            [data]="cities"
+            placeholder="City"
+        ></mm-autocomplete-select>
+
+      </div>
+
+      <div class=" images-container p-8 flex-row form-input gap-8 br-16 mt-4">
+        <mm-image-preview
+            *ngFor="let image of productImages; let i = index"
+            [imageUrl]="image.previewUrl"
+            iconClass="w-32 h-32 fs-32"
+            imgClass="w-100 h-100 br-16"
+            (removeImage)="removeImage(i)"
+        ></mm-image-preview>
+
+        <mm-image-upload-icon
+            *ngIf="productImages.length <
+            CONSTANTS.LISTING.IMAGES.MAX_LIMIT"
+            class="w-100 h-100 br-16"
+            iconClass="w-28 h-28 fs-28"
+            (onImageSelect)="handleImageFiles($event)"
+        >
+        </mm-image-upload-icon>
+      </div>
+
+
+      <div class="">
+        <mm-button [class]="'w-100p h-56 br-4 gap-20'"
+                   position="RIGHT"
+                   [disabled]="createListingForm.invalid"
+                   icon="cloud_done"
+                   iconClass="fs-20 w-20 h-20"
+                   type='submit'
+                   text="Publish"
+        ></mm-button>
+      </div>
+
+      <div class="">
+
+        <mm-button [class]="'w-100p h-56 br-4 gap-20'"
+                   iconClass="fs-20 w-20 h-20"
+                   type='button'
+                   text="Close"
+                   (click)="closeDialog()"
+        ></mm-button>
+      </div>
+    </div>
+  </form>
+</div>

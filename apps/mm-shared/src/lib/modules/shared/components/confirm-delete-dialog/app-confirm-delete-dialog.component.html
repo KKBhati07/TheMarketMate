@@ -1,0 +1,37 @@
+<div class="delete-dialog-container br-36 p-20">
+
+  <p
+      class="fw-7 fs-28 br-32 p-8 dialog-title"
+      mat-dialog-title>Delete</p>
+  <mat-dialog-content>
+    <p>Delete User <strong>{{ data.name }}</strong>?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions class="flex-row gap-20" align="end">
+    <mm-nav-button
+        (click)="onCancel()"
+        [class]="'pl-4 pr-4 h-40 w-100 br-20'"
+        iconContainerClass="h-32 w-32"
+        iconClass="h-20 w-20 fs-20"
+        textClass="fw-6"
+        text="Back"
+        gap="5"
+        [headerNav]="true"
+        [showIcon]="true"
+        icon="arrow_back"
+    ></mm-nav-button>
+    <mm-nav-button
+        (click)="onConfirm()"
+        [class]="'pl-4 pr-4 h-40 w-100 br-20'"
+        iconContainerClass="h-32 w-32"
+        iconClass="h-20 w-20 fs-20"
+        textClass="fw-6"
+        text="Yes"
+        gap="5"
+        [headerNav]="true"
+        [showIcon]="true"
+        icon="delete_forever"
+    ></mm-nav-button>
+  </mat-dialog-actions>
+
+
+</div>

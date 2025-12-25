@@ -1,0 +1,18 @@
+<div class="login-signup-form-container position-absolute"
+     [ngClass]="isMobile? '':'slide-in'"
+>
+  <div class="left-section"></div>
+  <ng-container *ngIf="!isMobile">
+    <div class="form-container position-absolute"
+         [ngClass]="slideFrom ? 'slide' : ''">
+      <ng-container *ngIf="isLoginForm">
+        <mm-login-form
+            [iSAdminPortal]="isAdMInPortal"
+        ></mm-login-form>
+      </ng-container>
+      <ng-container *ngIf="!isLoginForm">
+        <mm-signup-form></mm-signup-form>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

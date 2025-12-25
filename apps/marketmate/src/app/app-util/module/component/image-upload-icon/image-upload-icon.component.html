@@ -1,0 +1,21 @@
+<div
+    role="button"
+    tabindex="0"
+    (click)="imageUpload.click()"
+    [ngClass]="class"
+    class=" upload-btn flex-row justify-content-center
+               align-i-center cursor-pointer"
+>
+  <mat-icon
+      [ngClass]="iconClass"
+      fontIcon="add_a_photo"
+  ></mat-icon>
+</div>
+<input
+    #imageUpload
+    type="file"
+    accept="image/*"
+    (change)="imageSelectClick($event)"
+    hidden
+    multiple
+/>

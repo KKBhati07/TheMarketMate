@@ -1,0 +1,33 @@
+<div class="user-menu-nav-container w-100p cursor-pointer flex-row
+   gap-8 align-i-center cursor-pointer {{class}}">
+
+  <div
+      style="flex: 1"
+      [ngClass]="textContainerClass"
+      class="text-container br-20 flex-row justify-content-center align-i-center">
+    <p [ngClass]="textClass"> {{ text }}</p>
+  </div>
+  <div
+      class="flex-row justify-content-center align-i-center gap-{{gap}} ">
+    <div *ngIf="showIcon" [ngClass]="iconImgContainerClass"
+         class="flex-row
+            image-icon-container
+            align-i-center justify-content-center icon-container
+             border-circle">
+      <ng-container
+          *ngIf="imageUrl && !renderFallbackIcon; else fallbackIconTemplate">
+
+        <img class="border-circle"
+             (error)="renderFallbackIcon = true"
+             [class]="imageClass" [src]="imageUrl"/>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #fallbackIconTemplate>
+  <mat-icon class="icon-left cursor-pointer"
+            [ngClass]="iconClass"
+            [fontIcon]="icon"></mat-icon>
+</ng-template>

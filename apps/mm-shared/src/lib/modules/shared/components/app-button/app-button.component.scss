@@ -1,0 +1,25 @@
+.enable {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.disable {
+  background-color: var(--button-color-disable);
+  color: var(--text-color-disable);
+}
+
+.warning {
+  background-color: var(--warning-color) !important;
+}
+
+.icon-enable {
+  color: var(--text-color-enable);
+}
+
+.icon-disable {
+  color: var(--text-color-disable);
+}
+
+.enable:hover {
+  background-color: var(--hover-color);
+}

@@ -1,0 +1,12 @@
+<div
+    [ngStyle]="{'backgroundColor':backgroundColor}"
+    class="container border-circle cursor-pointer flex-row {{containerClass}}
+    justify-content-center align-i-center">
+  <mat-icon
+      [ngStyle]="{'color':iconColor}"
+      [class]="iconClass"
+      [fontIcon]="isForwardIcon?
+              'arrow_forward_ios'
+              :'arrow_back_ios_new'"
+  ></mat-icon>
+</div>

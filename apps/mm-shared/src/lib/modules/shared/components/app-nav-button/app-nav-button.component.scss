@@ -1,0 +1,80 @@
+.nav-item-container {
+  border: 1px solid transparent;
+  transition: all 0.4s ease;
+
+  &.in-header-bg {
+    background: var(--items-bg);
+  }
+
+  &.bg {
+    background: #fdfdfd;
+  }
+
+  &.log-out-btn {
+    background: #ff5a5a;
+  }
+
+  .icon-container {
+
+    &.in-header-ic-bg {
+      background: var(--header-color);
+    }
+
+    &.ic-bg {
+      background: #e0e0e0;
+    }
+  }
+
+
+  mat-icon {
+    color: var(--primary-color);
+  }
+
+  p {
+    color: var(--primary-color);
+  }
+
+  &.item-selected {
+    background-color: var(--primary-color);
+
+    mat-icon {
+      color: var(--header-color) !important;
+    }
+
+    p {
+      color: var(--header-color) !important;
+    }
+  }
+
+  &.inactive {
+    &:hover {
+      border: 1px solid var(--hover-color);
+
+      &.in-header-bg {
+        background: var(--header-color);
+      }
+
+      &.sell-item-btn {
+        background: var(--header-color);
+      }
+
+      div {
+        .icon-container {
+          background-color: var(--hover-color);
+        }
+
+        p {
+          color: var(--hover-color)
+        }
+
+        .icon-left {
+          color: var(--header-color);
+        }
+
+        .icon-right {
+          color: var(--hover-color);
+        }
+      }
+    }
+  }
+}

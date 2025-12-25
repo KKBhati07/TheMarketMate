@@ -1,0 +1,39 @@
+.category-container {
+  transition: all 0.3s ease;
+  background: var(--items-bg);
+  border: 1px solid transparent;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    border: 1px solid var(--hover-color);
+    background: var(--header-color);
+    transform: translateY(-4px) scale(1.03);
+
+    .icon-wrapper {
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+
+      .category-icon {
+        color: var(--hover-color);
+      }
+    }
+
+    .category-title {
+      color: var(--hover-color);
+    }
+  }
+
+  .icon-wrapper {
+    background: var(--header-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+
+    .category-icon {
+      color: var(--primary-color);
+    }
+  }
+
+  .category-title {
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+  }
+}

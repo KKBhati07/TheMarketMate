@@ -1,0 +1,42 @@
+<div [ngClass]="isMobile?'flex-column':'flex-row'"
+     class="admin-container mt-100 pl-20 pr-20">
+
+  <div class="left-container" [ngClass]="isMobile?'w-100p' +
+   ' flex-row gap-12 justify-content-center' :'w-20p'">
+    <mm-nav-button
+        [routerLink]="[AppUrls.USERS]"
+        [indicateActiveBtn]="true"
+        text="USERS"
+        icon="group"
+        iconClass="fs-32 h-32 w-32"
+        [class]="'h-60 br-36 pl-4 pr-8'"
+        iconContainerClass="h-52 w-52"
+        [gap]="isMobile ? '8' : '12'"
+        [showIcon]="true"
+        textClass="fw-7"
+    >
+    </mm-nav-button>
+    <mm-nav-button
+        [routerLink]="[AppUrls.LISTINGS]"
+        [queryParams]="{'posts':'all'}"
+        [otherActiveRoutes]="['admin/listings?posts=deleted']"
+        [indicateActiveBtn]="true"
+        text="LISTINGS"
+        icon="group"
+        iconClass="fs-32 h-32 w-32"
+        class="h-60 br-36 pl-4 pr-8"
+        iconContainerClass="h-52 w-52"
+        [gap]="isMobile ? '8' : '12'"
+        [showIcon]="true"
+        textClass="fw-7"
+    >
+    </mm-nav-button>
+
+  </div>
+  <div class="right-container w-100p">
+
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
+

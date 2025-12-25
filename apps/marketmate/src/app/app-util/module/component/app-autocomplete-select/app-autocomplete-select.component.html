@@ -1,0 +1,44 @@
+<div
+    [ngClass]="disabled?'disabled':'cursor-pointer'"
+    class="autocomplete-select-container h-54
+    position-relative br-32 w-100p">
+
+  <input
+      [ngClass]="disabled?'disabled':'cursor-pointer'"
+      [formControl]="searchControl"
+      [placeholder]="placeholder"
+      class="form-input border-none pl-12 fs-16 pr-12
+      display-block h-100p w-100p br-32 position-relative"
+      type="text"
+      (focus)="isDropdownOpen = true"
+      (blur)="handleBlur()"
+      [readonly]="disabled"
+  />
+
+  <div *ngIf="isDropdownOpen"
+       [@dropdownAnimation]="isDropdownOpen ? 'open' : 'close'"
+       class="dropdown position-absolute br-24 pl-4
+        pr-4 pt-8 pb-8 flex-column
+        gap-4 mt-4">
+    <div
+        *ngFor="let item of filteredData"
+        (mousedown)="selectItem(item)"
+        class="dropdown-option cursor-pointer br-12 p-8 fs-16"
+        [class.selected]="item[valueKey] === selectedValue"
+    >
+      {{ item[labelKey] | formatText }}
+    </div>
+    <div *ngIf="filteredData.length === 0"
+         class="p-8 text-gray-500 fs-14">
+      No results found
+    </div>
+  </div>
+
+  <div class="arrow-key-container position-absolute">
+    <mat-icon
+        class="fs-12 h-12 w-12 arrow-icon"
+        [class.rotated]="isDropdownOpen"
+        fontIcon="keyboard_arrow_down"
+    ></mat-icon>
+  </div>
+</div>

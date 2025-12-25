@@ -1,0 +1,90 @@
+<div
+    [ngStyle]="{
+    'border': isBottomSheet || !isExpanded ? 'none'
+    :'0.5px solid var(--border-color)',
+    'background-color':isExpanded || isBottomSheet ? 'var(--header-color)':'transparent'
+
+    }"
+    [ngClass]="{
+    'p-20':isExpanded || isBottomSheet,
+    'bottom-sheet-br':isBottomSheet,
+    'br-32':!isBottomSheet,
+
+    }"
+    class=" position-relative w-100p
+   profile-details-container justify-content-center
+  gap-12 flex-column align-i-center br-2">
+  <div class="position-absolute pill-container">
+    <mm-bottomsheet-pill *ngIf="isBottomSheet"></mm-bottomsheet-pill>
+  </div>
+  <div *ngIf="!isBottomSheet"
+       (click)="expandComponent.emit(!isExpanded)"
+       [ngClass]="isExpanded? 'ml-8': 'ml-4'"
+       class="expand-icon-container cursor-pointer flex-row
+       w-100p position-absolute">
+    <mm-back-fw-icon
+        [isForwardIcon]="isExpanded"
+        backgroundColor="var(--border-color)"
+        iconClass="fs-12 w-12 h-12"
+        containerClass="w-20 h-20"
+    >
+    </mm-back-fw-icon>
+
+  </div>
+  <ng-container *ngIf=" isExpanded || isBottomSheet">
+    <div
+        [ngStyle]="{'height': isBottomSheet ? '100%'
+    :'80vh'}"
+        (click)="userDetails?.profile_url && !renderIcon ? onProfilePicClick():null"
+        class="profile-pic-container p-4 flex-row
+         w-100 h-100 border-circle cursor-pointer
+      align-i-center justify-content-center">
+      <ng-container *ngIf="userDetails?.profile_url && !renderIcon;
+       else renderProfileIcon">
+        <img (error)="renderIcon=true"
+             class="profile-pic border-circle w-100p h-100p"
+             [src]="userDetails?.profile_url">
+      </ng-container>
+    </div>
+    <div class="username-container cursor-default flex-row align-i-center
+     br-32 pt-12 pb-12 pr-16 pl-16">
+      <p class="fs-32 fw-6">{{ userDetails?.name || 'USER' }}</p>
+    </div>
+    <div class="flex-column p-28 br-32 cursor-default
+    email-contact-container gap-8">
+
+      <p class="fs-16 p-16 br-32">{{ userDetails?.email || 'Email' }}</p>
+      <p *ngIf="userDetails?.contact_no; else addContactBtnTemplate"
+         class="fs-16 p-16 br-32">
+        Contact: {{ userDetails?.contact_no }}
+      </p>
+    </div>
+    <mm-button *ngIf="userDetails?.self"
+               (click)="onEditProfileClick()"
+               class="w-100p h-56" [type]="'button'"
+               [class]="'w-100p h-34'" [text]="'EDIT PROFILE'">
+
+    </mm-button>
+  </ng-container>
+
+</div>
+
+<ng-template #renderProfileIcon>
+  <mat-icon class="profile-icon fs-60 w-60 h-60"
+            [fontIcon]="'person'"></mat-icon>
+</ng-template>
+
+<ng-template #addContactBtnTemplate>
+  <div class="w-100p p-12 align-i-center flex-row justify-content-space-b br-32">
+    <p>Contact</p>
+    <mm-button
+        (click)="onEditProfileClick()"
+        [disabled]="false"
+        [showIcon]="true"
+        icon="add"
+        iconClass="fs-24 w-24 h-24"
+        type='button'
+        class="fs-28 w-28 h-28"
+    ></mm-button>
+  </div>
+</ng-template>

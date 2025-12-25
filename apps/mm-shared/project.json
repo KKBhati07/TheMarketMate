@@ -1,0 +1,40 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "mm-shared",
+  "tags": [
+    "type:lib"
+  ],
+  "projectType": "library",
+  "sourceRoot": "apps/mm-shared/src",
+  "prefix": "lib",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "project": "apps/mm-shared/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "apps/mm-shared/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "apps/mm-shared/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{workspaceRoot}/dist/mm-shared"
+      ]
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "tsConfig": "apps/mm-shared/tsconfig.spec.json",
+        "polyfills": [
+          "zone.js",
+          "zone.js/testing"
+        ]
+      }
+    }
+  }
+}

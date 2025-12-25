@@ -1,0 +1,24 @@
+<div
+    (click)="onCategoryClickEmitter.emit(category)"
+    *ngIf="loadComponent"
+    class="category-container br-36 p-12 cursor-pointer
+         border-circle flex-column align-i-center
+          justify-content-center gap-12"
+    [ngClass]="isMobile ? 'h-100 w-100' : 'h-140 w-140'"
+>
+  <div
+      [ngClass]="isMobile ? 'w-40 h-40' : 'h-64 w-64'"
+      class="icon-wrapper border-circle
+         flex-row align-i-center justify-content-center">
+    <mat-icon
+        [fontIcon]="iconName"
+        [ngClass]="!isMobile ? 'fs-32 w-32 h-32' : 'fs-24 w-24 h-24'"
+        class="category-icon"
+    ></mat-icon>
+  </div>
+
+
+  <p
+      [ngClass]="isMobile?'fs-12':'fs-16'"
+      class="category-title fw-6">{{ title }}</p>
+</div>

@@ -1,0 +1,34 @@
+<div class="toast flex-row position-relative justify-content-space-b gap-12 br-20 p-16"
+     [@toastAnimation]
+     [ngStyle]="{'border-color':iconColor}">
+
+  <div class="close-btn-container position-absolute">
+    <mm-close-btn
+        (click)="dismiss.emit()"
+        containerClass="w-16 h-16"
+        iconClass="h-12 w-12 fs-12"
+        backgroundColor="black"
+        iconColor="white"
+    >
+    </mm-close-btn>
+  </div>
+
+  <div class="content flex-column gap-12">
+    <div class=" flex-row gap-8 align-i-centre heading-container">
+      <mat-icon
+          class="w-20 h-20 fs-20"
+          [ngStyle]="{'color':iconColor}"
+          [fontIcon]="icon"
+      ></mat-icon>
+      <strong *ngIf="notification.title">
+        {{ notification.title }}
+      </strong>
+    </div>
+    <p>{{ notification.message }}</p>
+  </div>
+  <div
+      *ngIf="notification.duration && notification.duration > 0"
+      class="progress"
+      [style.animation-duration.ms]="notification.duration">
+  </div>
+</div>

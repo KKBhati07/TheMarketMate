@@ -1,0 +1,28 @@
+.home-container {
+  height: calc(100vh - 100px);
+
+  .left-section {
+    width: 25vw;
+    transition: width 0.4s ease-in-out;
+
+    &.collapsed {
+      width: 28px;
+      transition: width 0.4s ease-in-out;
+    }
+  }
+
+  .right-section {
+    width: 75vw;
+    flex-wrap: wrap;
+    overflow: auto;
+    transition: width 0.4s ease-in-out;
+
+    &.mobile {
+      width: 100vw;
+    }
+  }
+
+  .left-section.collapsed + .right-section {
+    width: calc(100vw - 40px);
+  }
+}

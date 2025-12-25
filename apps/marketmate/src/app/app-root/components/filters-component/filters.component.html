@@ -1,0 +1,31 @@
+<div
+    [ngClass]="isExpanded?'p-8':''"
+    class="filters-container flex-column w-100p align-i-center
+     position-relative br-20 h-100p gap-20">
+  <div class="expand-icon-container position-absolute"
+       (click)="toggleFilters()">
+    <mm-back-fw-icon
+        [isForwardIcon]="!isExpanded"
+        backgroundColor="var(--border-color)"
+        iconClass="fs-12 w-12 h-12"
+        containerClass="w-20 h-20"
+    >
+    </mm-back-fw-icon>
+  </div>
+  <ng-container *ngIf="isExpanded">
+    <div class="price-range-filter mt-24 w-100p">
+      <mm-price-slider
+          class="w-100p"
+          [minValue]="1000"
+          [maxValue]="500000"
+          [step]="1000"
+      >
+      </mm-price-slider>
+    </div>
+
+    <div class="w-100p">
+      <mm-location-selector class="w-100p">
+      </mm-location-selector>
+    </div>
+  </ng-container>
+</div>

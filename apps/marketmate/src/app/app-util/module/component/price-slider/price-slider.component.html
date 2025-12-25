@@ -1,0 +1,43 @@
+<div class="price-range-container br-28 pl-4 pr-4 pb-12 pt-8 gap-16 w-100p flex-column">
+  <div class="title-container flex-row justify-content-center">
+    <mm-heading
+        text="Price Range"
+        class="pt-8 pb-8 pl-20 pr-20"
+        textClass="fs-12 fw-7"
+    >
+    </mm-heading>
+  </div>
+
+  <div class="inner-container flex-column w-100p position-relative">
+    <div class="price-values-container position-absolute w-100p flex-row justify-content-space-b">
+      <span class="min-value fs-16 fw-7">{{ priceRange.min | currency:'INR':'symbol':'1.0-0' }}</span>
+      <span class="max-value fs-16 fw-7">{{ priceRange.max | currency:'INR':'symbol':'1.0-0' }}</span>
+    </div>
+
+    <mat-slider
+        (change)="onSliderChange()"
+        [min]="minValue"
+        [max]="maxValue"
+        [step]="step"
+        (input)="onSliderInput()"
+    >
+      <input
+
+          [value]="minValue"
+          matSliderStartThumb
+          #startInput
+      >
+      <input
+          [value]="maxValue"
+          matSliderEndThumb
+          #endInput
+      >
+    </mat-slider>
+
+    <div class="min-max-text-container position-absolute
+     pl-8 pr-8 w-100p flex-row justify-content-space-b">
+      <span class="min-value fs-12">Minimum</span>
+      <span class="max-value fs-12">Maximum</span>
+    </div>
+  </div>
+</div>

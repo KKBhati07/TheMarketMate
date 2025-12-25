@@ -1,0 +1,50 @@
+.profile-edit-from-container {
+  background: var(--header-color);
+  flex-grow: 1;
+  overflow: scroll;
+
+  &.dragover {
+    border: 2px dashed #007bff;
+    background-color: #eef5ff;
+  }
+
+  .profile-edit-form {
+    flex-grow: 1;
+
+    .inner-container {
+      flex-grow: 1;
+
+      .left-container {
+        label {
+          color: #707070;
+        }
+
+        .form-input {
+          background-color: var(--items-bg);
+          outline: none;
+          width: 100%;
+
+          &:hover {
+            border: 1px solid var(--primary-color);
+          }
+
+          &:focus {
+            border: 1px solid var(--primary-color);
+          }
+        }
+      }
+
+      .right-container {
+        .pic-container {
+          background: var(--items-bg);
+          width: 100%;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.profile-pic-icon {
+  color: var(--primary-color);
+}

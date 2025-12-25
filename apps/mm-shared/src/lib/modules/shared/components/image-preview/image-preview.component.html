@@ -1,0 +1,40 @@
+<div
+    class=" image w-100 h-100  relative
+             br-16 overflow-hidden position-relative"
+>
+  <img
+      *ngIf="!renderTemplate; else renderBrokenIcon"
+      [src]="imageUrl"
+      (error)="renderTemplate = true"
+      [ngClass]="imgClass"
+      alt="Preview"
+      class="w-100 h-100 br-16"
+  />
+  <div *ngIf="showRemoveIcon"
+       class="remove-btn w-24 h-24 fs-24
+      flex-row justify-content-center align-i-center
+       position-absolute border-circle"
+       (click)="removeImage.emit()"
+  >
+    <mat-icon
+        fontIcon="close_small"
+        class="w-20 h-20 fs-20 cursor-pointer"
+    >
+    </mat-icon>
+  </div>
+</div>
+
+<ng-template #renderBrokenIcon>
+  <div
+      class="broken-icon-container
+      flex-row justify-content-center
+       align-i-center"
+      [ngClass]="imgClass"
+  >
+    <mat-icon
+        fontIcon="broken_image"
+        [ngClass]="iconClass"
+    >
+    </mat-icon>
+  </div>
+</ng-template>

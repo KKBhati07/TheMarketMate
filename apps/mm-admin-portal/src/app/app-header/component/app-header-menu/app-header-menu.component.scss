@@ -1,0 +1,11 @@
+.header-menu-outer-container {
+  background: rgba(0, 0, 0, 0.57);
+  backdrop-filter: blur(10px);
+  z-index: 9;
+  top: 0;
+  left: 0;
+
+  .header-menu-container {
+    background: var(--header-color);
+  }
+}

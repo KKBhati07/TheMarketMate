@@ -1,0 +1,168 @@
+.header-container {
+  overflow-x: hidden;
+
+  .header {
+    z-index: 3;
+    transition: height 0.5s ease;
+    background: var(--header-color);
+    border: 0.5px solid var(--border-color);
+    width: calc(100% - 40px);
+    top: 20px;
+    left: 20px;
+
+    &.height-90 {
+      height: 90%;
+    }
+
+    .upper-container {
+      .right-section {
+        .profile-pic-container {
+          overflow: hidden;
+          backdrop-filter: blur(10px);
+          background: #0083B06E;
+
+          .profile-pic {
+            overflow: hidden;
+            object-fit: cover;
+          }
+
+          &.styles {
+            border: 1px solid red;
+          }
+
+          .profile-pic-icon {
+            color: white;
+          }
+        }
+
+        .ls-option-container {
+
+          .ls-option-icon {
+            color: var(--icon-color);
+          }
+
+        }
+
+        .categories-hover {
+          &:hover {
+            width: 140px;
+          }
+        }
+      }
+    }
+
+    .expanded-container {
+      overflow: hidden;
+      transition: height 500ms ease;
+
+      &.h-90p {
+        height: 90%;
+      }
+
+      .expanded-profile-container {
+        flex-direction: row-reverse;
+
+        .name-logout-container {
+          align-items: end;
+
+          p {
+            text-align: end;
+            color: var(--primary-color);
+          }
+        }
+      }
+
+      .expanded-cat-container {
+        flex-wrap: wrap;
+        overflow: scroll;
+      }
+    }
+  }
+
+  .glass-icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+
+    .profile-pic-icon {
+      color: var(--primary-color);
+    }
+  }
+
+
+  @media screen and (max-width: 969px) {
+    .header {
+      left: 10px;
+      width: calc(100% - 20px);
+    }
+  }
+}
+
+::ng-deep .publish-listing-from-backdrop.cdk-overlay-backdrop {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+  z-index: 2;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+}
+
+::ng-deep .cdk-overlay-container {
+  .publish-listing-from-container {
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    height: 80vh;
+    border-radius: 10px;
+    width: 60vw;
+    max-width: 600px;
+    left: 50%;
+    right: calc(50% - 150px);
+    top: 50%;
+    position: fixed !important;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+  }
+}
+
+::ng-deep .cdk-overlay-container {
+  .publish-listing-from-container-mobile {
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    height: 80vh;
+    border-radius: 10px;
+    width: 80vw;
+    left: 50%;
+    right: calc(50% - 150px);
+    top: 50%;
+    position: fixed !important;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+  }
+
+  ::ng-deep .mat-mdc-dialog-surface {
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+}
+
+::ng-deep .full-screen-dialog .mat-mdc-dialog-surface {
+  background: transparent;
+  box-shadow: none;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+

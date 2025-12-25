@@ -1,0 +1,24 @@
+<div
+    [ngClass]="isMobile?'':'p-12'"
+    class="home-container flex-row pt-4 br-20 mt-100 gap-12">
+
+  <div *ngIf="!isMobile" class="left-section pb-12 h-100p"
+       [class.collapsed]="!isExpanded">
+
+    <mm-filters-component
+        (expand)="toggleFilters($event)"
+    >
+    </mm-filters-component>
+  </div>
+
+  <div
+      [ngClass]="isMobile?'justify-content-center':'pl-12'"
+      [class.mobile]="isMobile"
+      class="right-section pt-4 flex-row br-20 gap-12">
+
+    <ng-container *ngFor="let listing of listings; trackBy: trackByListingId">
+      <mm-listing-card [listing]="listing"></mm-listing-card>
+    </ng-container>
+  </div>
+
+</div>

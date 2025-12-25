@@ -1,0 +1,24 @@
+.delete-dialog-container {
+  position: relative;
+  z-index: 3;
+  background: var(--header-color);
+
+  .dialog-title {
+    background-color: var(--items-bg);
+    text-align: center;
+    color: var(--primary-color);
+  }
+
+  .cancel-icon {
+    color: var(--border-color);
+
+    &:hover {
+      color: var(--hover-color);
+    }
+  }
+
+  .delete-icon {
+    color: red;
+  }
+
+}

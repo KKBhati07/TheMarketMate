@@ -1,0 +1,61 @@
+:root {
+  --font-family: "Mulish", sans-serif;
+  --hover-color: #04C1A2;
+  --item-color: rgb(82, 82, 82);
+  --app-background-color: #000000;
+  --border-color: #BDBDBD;
+  --button-color: rgb(68, 115, 177);
+  --success-notify-color: rgb(0, 88, 81);
+  --error-notify-color: rgb(187, 40, 33);
+  --primary-color: rgb(0, 0, 0);
+  --icon-color: #373737;
+  --header-color: #363636;
+  --items-bg: #f2f2f2;
+  --button-color-disable: #f1f2f2;
+  --text-color-disable: #adadae;
+  --warning-color: #c92a2a;
+
+
+  //--app-background-color: linear-gradient(
+  //                135deg,
+  //                #6A7887 0%,
+  //                #7296A1 25%,
+  //                #92A6AE 60%,
+  //                #6D7B8C 100%
+  //);
+  //--header-color: linear-gradient(
+  //                145deg,
+  //                #FDFBF6 0%,
+  //                #FAF7F0 30%,
+  //                #F7F3EB 65%,
+  //                #F5F0E8 100%
+  //);
+
+
+  //--header-color: linear-gradient(
+  //                145deg,
+  //                #F3F5ED 0%,
+  //                #F5F7EE 25%,
+  //                #F6F7F0 50%,
+  //                #edf3e1 75%,
+  //                #EFEFE7 100%
+  //);
+}
+
+:root.light-theme {
+  --font-family: "Mulish", sans-serif;
+  --hover-color: #04C1A2;
+  --item-color: rgb(82, 82, 82);
+  --app-background-color: #e5e5e5;
+  --border-color: #BDBDBD;
+  --button-color: rgb(68, 115, 177);
+  --success-notify-color: rgb(0, 88, 81);
+  --error-notify-color: rgb(187, 40, 33);
+  --primary-color: rgb(0, 0, 0);
+  --icon-color: #373737;
+  --header-color: #ffffff;
+  --items-bg: #f2f2f2;
+  --button-color-disable: #f1f2f2;
+  --text-color-disable: #adadae;
+  --warning-color: #c92a2a;
+}

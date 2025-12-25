@@ -1,0 +1,11 @@
+<div class="sell-item-container justify-content-center cursor-pointer flex-row
+   gap-20 align-i-center {{class}} {{onMobileWidth}}">
+  <div
+      class="flex-row justify-content-center align-i-center gap-{{gap}} ">
+    <p [ngClass]="textClass"> {{ text }}</p>
+    <mat-icon *ngIf="showIcon"
+              class="icon-right cursor-pointer"
+              [ngClass]="iconClass"
+              [fontIcon]="icon"></mat-icon>
+  </div>
+</div>

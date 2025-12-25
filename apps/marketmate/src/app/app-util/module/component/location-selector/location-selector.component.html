@@ -1,0 +1,42 @@
+<div
+    class="location-selector-component flex-column gap-12
+ p-8 br-28 w-100p">
+
+  <div class="justify-content-center flex-row">
+    <mm-heading
+        text="Location"
+        class="pt-8 pb-8 pl-20 pr-20"
+        textClass="fs-12 fw-7"
+    >
+    </mm-heading>
+
+  </div>
+
+  <mm-autocomplete-select
+      class="flex-1"
+      (valueSelected)="onCountrySelected($event)"
+      [data]="countries"
+      placeholder="Country"
+  ></mm-autocomplete-select>
+  <ng-container
+      *ngIf="states.length">
+    <mm-autocomplete-select
+        [@fadeSlideIn]="states.length ? 'open':'close'"
+        class="flex-1"
+        (valueSelected)="onStateSelected($event)"
+        [data]="states"
+        placeholder="State"
+    ></mm-autocomplete-select>
+  </ng-container>
+
+  <ng-container
+      *ngIf="cities.length">
+    <mm-autocomplete-select
+        [@fadeSlideIn]="cities.length ? 'open':'close'"
+        class="flex-1"
+        (valueSelected)="onCitySelected($event)"
+        [data]="cities"
+        placeholder="City "
+    ></mm-autocomplete-select>
+  </ng-container>
+</div>
