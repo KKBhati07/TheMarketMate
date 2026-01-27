@@ -3,6 +3,7 @@ const envDev = {
 	// apiUrl: 'http://localhost:8080/api/',
 	apiUrl: 'https://api.marketmate.local:8080/api/',
 	adminAppUrl: 'https://admin.marketmate.local:4300/',
+	chatServerUrl: 'https://chat.marketmate.local:4300/',
 };
 
 const envProd = {

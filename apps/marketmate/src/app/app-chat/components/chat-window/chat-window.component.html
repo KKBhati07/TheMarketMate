@@ -1,0 +1,13 @@
+<header class="chat-header">
+  <button class="back" (click)="back.emit()">←</button>
+  <span class="title">Chat</span>
+</header>
+
+<div class="messages" #scrollArea>
+  <app-message-bubble
+      *ngFor="let msg of messages"
+      [message]="msg">
+  </app-message-bubble>
+</div>
+
+<app-chat-input (send)="sendMessage($event)"></app-chat-input>

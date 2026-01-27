@@ -1,0 +1,17 @@
+<div class="conversation-list">
+  <div
+      class="conversation"
+      *ngFor="let convo of conversations"
+      (click)="select(convo.id)">
+    <div class="avatar"></div>
+
+    <div class="meta">
+      <div class="name">{{ convo.name }}</div>
+      <div class="last-message">{{ convo.lastMessage?.content }}</div>
+    </div>
+
+    <span class="badge" *ngIf="convo.unreadCount">
+      {{ convo.unreadCount }}
+    </span>
+  </div>
+</div>

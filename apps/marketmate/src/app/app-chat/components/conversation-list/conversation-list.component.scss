@@ -1,0 +1,43 @@
+.conversation-list {
+  overflow-y: auto;
+}
+
+.conversation {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.conversation:hover {
+  background: #f1f1f1;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ccc;
+}
+
+.meta {
+  flex: 1;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.last-message {
+  font-size: 13px;
+  color: #777;
+}
+
+.badge {
+  background: #4f46e5;
+  color: white;
+  font-size: 12px;
+  border-radius: 12px;
+  padding: 2px 8px;
+}

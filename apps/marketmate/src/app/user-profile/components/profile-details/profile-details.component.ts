@@ -21,6 +21,8 @@ import { StorageService } from 'mm-shared';
 import { CONSTANTS } from '../../../app.constants';
 import { HttpResponse } from '@angular/common/http';
 import { ApiResponse } from 'mm-shared';
+import { Router } from '@angular/router';
+import { AppUrls } from '../../../app.urls';
 
 @Component({
 	selector: 'mm-profile-detail',
@@ -42,6 +44,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							private userService: UserService,
 							private authService: AuthService,
 							private storageService: StorageService,
+							private router: Router,
 							@Inject(MAT_BOTTOM_SHEET_DATA)
 							public data: ProfileDetailsBottomSheetData,
 							private bsr: MatBottomSheetRef,
@@ -252,6 +255,14 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 		}
 		this.cdr.markForCheck();
 	}
+
+
+	openChat() {
+		this.router.navigate([AppUrls.CHAT], {
+			queryParams: { user: this.userDetails?.uuid }
+		}).then(res=>null);
+	}
+
 
 	ngOnDestroy() {
 		this.destroy$.next(null);

@@ -7,6 +7,7 @@ import { UserProfileModule } from "./user-profile/user-profile.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { AppRootModule } from './app-root/app-root.module';
 import { NotificationModule } from 'mm-shared';
+import { ChatModule } from './app-chat/chat.module';
 
 @Component({
 	selector: 'app-root',
@@ -18,7 +19,8 @@ import { NotificationModule } from 'mm-shared';
 		UserProfileModule,
 		MatDialogModule,
 		AppRootModule,
-		NotificationModule
+		NotificationModule,
+		ChatModule
 	],
 	providers: [
 		{ provide: MAT_BOTTOM_SHEET_DATA, useValue: {} },

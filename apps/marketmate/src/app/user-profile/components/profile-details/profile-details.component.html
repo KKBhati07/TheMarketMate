@@ -54,10 +54,23 @@
     email-contact-container gap-8">
 
       <p class="fs-16 p-16 br-32">{{ userDetails?.email || 'Email' }}</p>
-      <p *ngIf="userDetails?.contact_no; else addContactBtnTemplate"
-         class="fs-16 p-16 br-32">
-        Contact: {{ userDetails?.contact_no }}
-      </p>
+      <ng-container *ngIf="userDetails?.self">
+        <p *ngIf="userDetails?.contact_no; else addContactBtnTemplate"
+           class="fs-16 p-16 br-32">
+          Contact: {{ userDetails?.contact_no }}
+        </p>
+      </ng-container>
+
+      <ng-container *ngIf="!userDetails?.self">
+        <mm-button
+                   (click)="openChat()"
+                   class="w-100p h-56" [type]="'button'"
+                   [class]="'w-100p h-34'" [text]="'Chat with user'">
+
+        </mm-button>
+      </ng-container>
+
+
     </div>
     <mm-button *ngIf="userDetails?.self"
                (click)="onEditProfileClick()"

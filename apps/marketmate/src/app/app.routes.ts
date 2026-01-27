@@ -27,6 +27,12 @@ export const routes: Routes = [
 		path: AppUrls.USER.USER_PROFILE(),
 		component: UserProfileComponent
 	},
+	{
+		path: AppUrls.CHAT,
+		// canMatch:
+		loadChildren: () =>
+				import('./app-chat/chat.module').then(m => m.ChatModule)
+	},
 	{ path: AppUrls.FOUROFOUR, component: FourOFourComponent },
 	{ path: '**', redirectTo: AppUrls.FOUROFOUR, pathMatch: "full" }
 

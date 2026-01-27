@@ -9,6 +9,8 @@ export const AppUrls = {
 		USER_PROFILE: (uuid: string | null = null) => (`user/${ uuid ? uuid : ':uuid' }`)
 	},
 
+	CHAT: 'chat',
+
 	FOUROFOUR: 'fourofour',
 
 	API: {

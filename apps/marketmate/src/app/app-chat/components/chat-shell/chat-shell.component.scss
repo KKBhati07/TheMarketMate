@@ -1,0 +1,31 @@
+.chat-shell {
+  display: flex;
+  height: 100vh;
+  background: #f9fafb;
+}
+
+/* LEFT PANE */
+.sidebar {
+  width: 320px;
+  border-right: 1px solid #e5e7eb;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+/* RIGHT PANE */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f3f4f6;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+}

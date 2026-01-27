@@ -1,0 +1,26 @@
+<div class="chat-shell">
+
+  <!-- LEFT: Conversation List -->
+  <aside class="sidebar">
+    <app-conversation-list
+        (selectConversation)="onSelectConversation($event)">
+    </app-conversation-list>
+  </aside>
+
+  <!-- RIGHT: Chat Area -->
+  <main class="chat-area">
+    <ng-container *ngIf="activeConversation; else empty">
+      <app-chat-window
+          [conversationId]="activeConversation ?? ''">
+      </app-chat-window>
+    </ng-container>
+
+    <ng-template #empty>
+      <div class="empty-state">
+        <h3>Select a conversation</h3>
+        <p>Start chatting with buyers or sellers</p>
+      </div>
+    </ng-template>
+  </main>
+
+</div>
