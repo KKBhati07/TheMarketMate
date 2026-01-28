@@ -73,3 +73,5 @@ export * from './lib/animations/fade-slide-in.animation';
 // Notification service
 export * from './lib/notification';
 
+// Error Handlers
+export * from './lib/handlers/global-error.handler';
