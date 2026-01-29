@@ -30,6 +30,7 @@ export * from './lib/modules/app-listing-card/components/app-listing-card.compon
 // Services
 export * from './lib/services/api.service';
 export * from './lib/services/auth.service';
+export * from './lib/services/logging.service';
 export * from './lib/services/storage.service';
 export * from './lib/services/app-theme.service';
 export * from './lib/services/device-detector.service';
@@ -60,6 +61,7 @@ export * from './lib/pipes/format-text.pipe';
 //Utils
 export * from './lib/utils/api-response.util';
 export * from './lib/utils/common.util';
+export * from './lib/utils/bootstrap-logger.util';
 
 //Urls & Constants
 export * from './lib/common.urls';

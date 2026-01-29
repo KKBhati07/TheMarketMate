@@ -10,6 +10,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ListingService } from '../../../services/listing.service';
 import { Listing } from 'mm-shared';
 import { AuthService } from 'mm-shared';
+import { LoggingService, NotificationService } from 'mm-shared';
 
 @Component({
 	selector: "mm-user-profile",
@@ -38,6 +39,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 			private activatedRoute: ActivatedRoute,
 			private bottomSheet: MatBottomSheet,
 			private listingService: ListingService,
+			private notificationService: NotificationService,
+			private logger: LoggingService,
 	) {
 	}
 
@@ -131,6 +134,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 						}
 						this.renderComponent = true;
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load user listings', { uuid, page, status: res.status, statusText: res.statusText });
+						this.notificationService.error({
+							message: 'Failed to load posts. Please try again.',
+						});
 					}
 				})
 	}
@@ -147,6 +155,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 						}
 						this.renderComponent = true;
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load favorite listings', { uuid, page, status: res.status, statusText: res.statusText });
+						this.notificationService.error({
+							message: 'Failed to load favorites. Please try again.',
+						});
 					}
 				})
 	}

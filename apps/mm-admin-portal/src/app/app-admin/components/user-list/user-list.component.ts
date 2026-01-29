@@ -12,6 +12,8 @@ import {
 	AppConfirmDeleteDialogComponent
 } from 'mm-shared';
 import { User } from 'mm-shared';
+import { LoggingService } from 'mm-shared';
+import { NotificationService } from 'mm-shared';
 import { Subject, takeUntil } from "rxjs";
 import {
 	UserProfileEditComponent
@@ -40,6 +42,8 @@ export class AdminUserListComponent implements OnDestroy {
 			private dialog: MatDialog,
 			private cdr: ChangeDetectorRef,
 			private adminService: AdminService,
+			private logger: LoggingService,
+			private notificationService: NotificationService,
 	) {
 	}
 
@@ -87,9 +91,11 @@ export class AdminUserListComponent implements OnDestroy {
 								if (res.isSuccessful()) {
 									this.getUpdatedList.emit(true);
 									this.cdr.markForCheck();
-									console.log("Profile updated successfully!");
 								} else {
-									console.error("Error updating profile:", res.statusText);
+									this.logger.error('Error updating profile', res.statusText, { uuid: this.user?.uuid });
+									this.notificationService.error({
+										message: 'Error updating profile',
+									});
 								}
 							});
 				}

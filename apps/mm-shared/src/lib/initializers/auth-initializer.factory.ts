@@ -1,4 +1,5 @@
 import { AuthService } from "../services/auth.service";
+import { bootstrapLogger } from '../utils/bootstrap-logger.util';
 
 export function authInitializerFactory(authService: AuthService): () => Promise<void> {
 	return () => {
@@ -6,7 +7,7 @@ export function authInitializerFactory(authService: AuthService): () => Promise<
 			authService.loadUserDetails().subscribe({
 				next: () => resolve(),
 				error: (error) => {
-					console.error('Error loading user details on app startup:', error);
+					bootstrapLogger.error('Error loading user details on app startup', error);
 					resolve();
 				}
 			});

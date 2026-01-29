@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { NotificationService, User } from "mm-shared";
+import { LoggingService, NotificationService, User } from "mm-shared";
 import { DeviceDetectorService } from "mm-shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
@@ -20,6 +20,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 							private cdr: ChangeDetectorRef,
 							private deviceDetectorService: DeviceDetectorService,
 							private notificationService: NotificationService,
+							private logger: LoggingService,
 	) {
 	}
 
@@ -37,6 +38,13 @@ export class UsersComponent implements OnInit, OnDestroy {
 						this.users = res.body?.data?.items ?? [];
 						this.isLoading = false;
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load users', { status: res.status, statusText: res.statusText });
+						this.isLoading = false;
+						this.cdr.markForCheck();
+						this.notificationService.error({
+							message: 'Failed to load users. Please refresh and try again.',
+						});
 					}
 				});
 	}
@@ -78,12 +86,12 @@ export class UsersComponent implements OnInit, OnDestroy {
 						);
 						this.isLoading = true;
 						this.cdr.markForCheck();
-						console.log(`User with id ${ uuid } deleted!`);
 						this.notificationService.success({
 							message: `User deleted`,
 						});
 
 					} else {
+						this.logger.warn('User delete failed', { uuid, status: res.status, statusText: res.statusText });
 						this.notificationService.error({
 							message: `User delete failed`,
 						});
@@ -108,6 +116,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 							message: `User restored`,
 						});
 					} else {
+						this.logger.warn('User restore failed', { uuid, status: res.status, statusText: res.statusText });
 						this.notificationService.error({
 							message: `User restore failed`,
 						});

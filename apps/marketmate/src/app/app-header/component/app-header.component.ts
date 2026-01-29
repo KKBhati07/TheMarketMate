@@ -19,6 +19,7 @@ import { DeviceDetectorService } from "mm-shared";
 import { CategoryService } from "../../services/category.service";
 import { Category } from 'mm-shared';
 import { NavOption } from 'mm-shared';
+import { LoggingService, NotificationService } from 'mm-shared';
 import {
 	PublishEditListingFormComponent
 } from '../../app-util/module/component/publish-listing-form/publish-edit-listing-form.component';
@@ -59,6 +60,8 @@ export class AppHeaderComponent implements OnInit {
 			private deviceDetector: DeviceDetectorService,
 			private categoryService: CategoryService,
 			private filterService: FilterService,
+			private notificationService: NotificationService,
+			private logger: LoggingService,
 			private dialog: MatDialog
 	) {
 	}
@@ -171,6 +174,11 @@ export class AppHeaderComponent implements OnInit {
 			if (res.isSuccessful()) {
 				this.categories = res.body?.data?.categories ?? [];
 				this.cdr.markForCheck();
+			} else {
+				this.logger.warn('Failed to load categories', { status: res.status, statusText: res.statusText });
+				this.notificationService.error({
+					message: 'Failed to load categories. Please try again.',
+				});
 			}
 		})
 	}

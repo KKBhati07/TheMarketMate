@@ -1,5 +1,6 @@
 import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
 import { NotificationService } from '../notification';
+import { LoggingService } from '../services/logging.service';
 
 /**
  * Global error handler
@@ -12,11 +13,12 @@ import { NotificationService } from '../notification';
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
 	private readonly notificationService = inject(NotificationService);
+	private readonly logger = inject(LoggingService);
 
 	handleError(error: unknown): void {
 
 		if (isDevMode()) {
-			console.error('Unhandled application error:', error);
+			this.logger.error('Unhandled application error', error);
 		}
 
 		this.notificationService.error({

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit }
 import { UpdateUserPayload, User } from "../../../../models/user.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { NotificationService } from "../../../../notification";
 
 @Component({
 	selector: "mm-user-profile-edit",
@@ -20,6 +21,7 @@ export class UserProfileEditComponent implements OnInit {
 	constructor(
 			private cdr: ChangeDetectorRef,
 			private fb: FormBuilder,
+			private notificationService: NotificationService,
 			private dialogRef: MatDialogRef<UserProfileEditComponent>,
 			@Inject(MAT_DIALOG_DATA) public data: { userDetails: User, isMobile: boolean }
 	) {
@@ -86,7 +88,9 @@ export class UserProfileEditComponent implements OnInit {
 		}
 		if (file) {
 			if (!file.type.startsWith('image/')) {
-				console.warn("Please select a valid image file.");
+				this.notificationService.error({
+					message: 'Please select a valid image file.',
+				});
 				return;
 			}
 			this.selectedFile = file;

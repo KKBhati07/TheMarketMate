@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { City, Country, NotificationService, State } from 'mm-shared';
+import { City, Country, LoggingService, NotificationService, State } from 'mm-shared';
 import { LocationApiService } from '../../../../services/location.service';
 import { CategoryService } from '../../../../services/category.service';
 import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
@@ -37,6 +37,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 			private storageService: StorageService,
 			private categoryService: CategoryService,
 			private notificationService: NotificationService,
+			private logger: LoggingService,
 			private cdr: ChangeDetectorRef,
 			private dialogRef: MatDialogRef<PublishEditListingFormComponent>,
 			@Inject(MAT_DIALOG_DATA) public data: { isMobile: boolean }
@@ -56,7 +57,6 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 		this.createListingForm.get('countryId')?.valueChanges
 				.pipe(debounceTime(800))
 				.subscribe(countryId => {
-					console.warn('Called !!s')
 					if (countryId) {
 						this.states = [];
 						this.cities = [];
@@ -213,6 +213,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 							return forkJoin(uploadTasks$);
 						}),
 						catchError(e => {
+							this.logger.error('Listing publish failed (presign/upload)', e);
 							this.notificationService.error({
 								message: `Error while listing your item`,
 							});

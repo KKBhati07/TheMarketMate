@@ -4,6 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { LocationApiService } from '../../../../services/location.service';
 import { fadeSlideIn } from 'mm-shared';
 import { FilterService } from 'mm-shared';
+import { LoggingService, NotificationService } from 'mm-shared';
 
 @Component({
 	selector: 'mm-location-selector',
@@ -21,7 +22,9 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 	constructor(
 			private locationService: LocationApiService,
 			private cdr: ChangeDetectorRef,
-			private filterService: FilterService
+			private filterService: FilterService,
+			private notificationService: NotificationService,
+			private logger: LoggingService,
 	) {
 	}
 
@@ -36,6 +39,9 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 					if (res.isSuccessful()) {
 						this.countries = res.body?.data ?? []
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load countries', { status: res.status, statusText: res.statusText });
+						this.notificationService.error({ message: 'Failed to load locations. Please try again.' });
 					}
 				})
 	}
@@ -48,6 +54,8 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 						this.states = res.body?.data ?? []
 					} else {
 						this.states = []
+						this.logger.warn('Failed to load states', { countryId, status: res.status, statusText: res.statusText });
+						this.notificationService.error({ message: 'Failed to load states. Please try again.' });
 					}
 					this.cities = [];
 					this.cdr.markForCheck();
@@ -62,6 +70,8 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 						this.cities = res.body?.data ?? []
 					} else {
 						this.cities = [];
+						this.logger.warn('Failed to load cities', { stateId, status: res.status, statusText: res.statusText });
+						this.notificationService.error({ message: 'Failed to load cities. Please try again.' });
 					}
 					this.cdr.markForCheck();
 				})

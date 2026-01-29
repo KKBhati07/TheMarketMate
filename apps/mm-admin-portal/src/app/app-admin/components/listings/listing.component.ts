@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { Listing, NotificationService } from 'mm-shared';
+import { Listing, LoggingService, NotificationService } from 'mm-shared';
 import { map, Subject, takeUntil } from 'rxjs';
 import { AdminService } from '../../../services/admin.service';
 import { AppUrls } from '../../../utils/app.urls';
@@ -28,6 +28,7 @@ export class ListingComponent implements OnInit, OnDestroy {
 			private cdr: ChangeDetectorRef,
 			private route: ActivatedRoute,
 			private notificationService: NotificationService,
+			private logger: LoggingService,
 	) {
 	}
 
@@ -58,6 +59,15 @@ export class ListingComponent implements OnInit, OnDestroy {
 							if (res.isSuccessful()) {
 								this.listings = res.body?.data.items ?? [];
 								this.cdr.markForCheck();
+							} else {
+								this.logger.warn('Failed to load listings (admin)', {
+									deleted,
+									status: res.status,
+									statusText: res.statusText,
+								});
+								this.notificationService.error({
+									message: 'Failed to load listings. Please try again.',
+								});
 							}
 						}
 				)
@@ -83,7 +93,8 @@ export class ListingComponent implements OnInit, OnDestroy {
 						});
 
 					} else {
-						this.notificationService.success({
+						this.logger.warn('Listing deletion failed', { ids: this.selectedListings, status: res.status, statusText: res.statusText });
+						this.notificationService.error({
 							message: `Listing deletion failed!`,
 						});
 					}

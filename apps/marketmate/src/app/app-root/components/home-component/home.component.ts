@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Listing } from 'mm-shared';
 import { DeviceDetectorService } from 'mm-shared';
 import { FilterService } from 'mm-shared';
+import { LoggingService, NotificationService } from 'mm-shared';
 
 @Component({
 	selector: 'mm-home',
@@ -26,7 +27,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 			private route: ActivatedRoute,
 			private cdr: ChangeDetectorRef,
 			private deviceDetectorService: DeviceDetectorService,
-			private filterService: FilterService
+			private filterService: FilterService,
+			private notificationService: NotificationService,
+			private logger: LoggingService
 	) {
 	}
 
@@ -91,6 +94,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 							this.listings = res.body?.data.items ?? []
 						}
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load listings', {
+							status: res.status,
+							statusText: res.statusText,
+							queryParams,
+							page,
+						});
+						this.notificationService.error({
+							message: 'Failed to load listings. Please try again.',
+						});
 					}
 				})
 

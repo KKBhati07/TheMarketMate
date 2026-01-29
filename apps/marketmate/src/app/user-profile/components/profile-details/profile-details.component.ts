@@ -9,6 +9,7 @@ import {
 	Output
 } from "@angular/core";
 import { NotificationService, ProfileDetails, UpdateUserPayload, User } from "mm-shared";
+import { LoggingService } from "mm-shared";
 import { MatDialog } from "@angular/material/dialog";
 import { UserProfileEditComponent } from "mm-shared";
 import { catchError, map, of, Subject, switchMap, takeUntil, tap, throwError, timer } from "rxjs";
@@ -46,6 +47,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							public data: ProfileDetailsBottomSheetData,
 							private bsr: MatBottomSheetRef,
 							private notificationService: NotificationService,
+							private logger: LoggingService,
 							private dialog: MatDialog) {
 	}
 
@@ -141,7 +143,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 						}),
 
 						catchError(err => {
-							console.warn('Presign upload failed after retries, will verify existence then fallback if needed:', err);
+							this.logger.warn('Presign upload failed after retries, verify existence then fallback if needed', { err });
 							return this.storageService.checkObjectExists(objectKey).pipe(
 									switchMap(existsResp => {
 										const exists = existsResp?.body?.data.exists ?? false;
@@ -163,7 +165,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 										);
 									}),
 									catchError(innerErr => {
-										console.warn('Exists check failed or errored; attempting fallback upload anyway', innerErr);
+										this.logger.warn('Exists check failed; attempting fallback upload anyway', { innerErr });
 										const fd = new FormData();
 										fd.append('uuid', updatedPayload.uuid);
 										fd.append('file', profileImage);
@@ -199,9 +201,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 										if (res.isSuccessful()) {
 											this.setUpdatedUserState(res);
 											this.cdr.markForCheck();
-											console.log("Profile updated successfully!");
 										} else {
-											console.error("Error updating profile:", res.statusText);
+											this.logger.error('Error updating profile', res.statusText, { uuid: updatedPayload.uuid });
 										}
 									}),
 									map(resp => ({ updatedByFallback: false, resp }))
@@ -209,9 +210,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 						}),
 
 						catchError(finalErr => {
-							console.error('All upload attempts failed:', finalErr);
+							this.logger.error('All upload attempts failed', finalErr, { uuid: updatedPayload.uuid });
 							// TODO: Show user notification with a Retry button (In update pipeline)
-							this.notificationService.success({
+							this.notificationService.error({
 								message: `Error updating profile`,
 							});
 
