@@ -4,6 +4,12 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { NotificationService } from "../../../../notification";
 
+/**
+ * User profile edit dialog component.
+ * 
+ * Provides a form for editing user profile information including name, email,
+ * contact number, and profile image. Supports drag-and-drop image upload.
+ */
 @Component({
 	selector: "mm-user-profile-edit",
 	templateUrl: "./user-profile-edit.component.html",
@@ -32,6 +38,9 @@ export class UserProfileEditComponent implements OnInit {
 		this.getAndSetUserDetails();
 	}
 
+	/**
+	 * Initializes the reactive form with validation rules.
+	 */
 	initForm() {
 		this.editProfileForm = this.fb.group({
 			name: ["", Validators.required],
@@ -41,12 +50,20 @@ export class UserProfileEditComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * Loads user details from dialog data and populates the form.
+	 */
 	getAndSetUserDetails() {
 		this.userDetails = this.data.userDetails;
 		this.setUserDetails(this.userDetails);
 		this.isMobile = this.data.isMobile;
 	}
 
+	/**
+	 * Sets user details and populates the form fields.
+	 * 
+	 * @param user - The user object to populate the form with
+	 */
 	setUserDetails(user: User | null) {
 		this.userDetails = user;
 		if (user) {
@@ -62,15 +79,28 @@ export class UserProfileEditComponent implements OnInit {
 
 	isDragOver = false
 
+	/**
+	 * Handles drag over event for file drop zone.
+	 * 
+	 * @param event - The drag event
+	 */
 	onDragOver(event: DragEvent) {
 		event.preventDefault();
 		this.isDragOver = true;
 	}
 
+	/**
+	 * Handles drag leave event for file drop zone.
+	 */
 	onDragLeave() {
 		this.isDragOver = false;
 	}
 
+	/**
+	 * Handles file drop event.
+	 * 
+	 * @param event - The drop event
+	 */
 	onDrop(event: DragEvent) {
 		event.preventDefault();
 		this.isDragOver = false;
@@ -81,7 +111,13 @@ export class UserProfileEditComponent implements OnInit {
 		}
 	}
 
-
+	/**
+	 * Handles file selection from input or drag-and-drop.
+	 * Validates file type and generates preview.
+	 * 
+	 * @param event - File input change event (optional)
+	 * @param file - File object (optional, for drag-and-drop)
+	 */
 	onFileSelected(event: any, file: any = null) {
 		if (!file) {
 			file = event.target.files[0];
@@ -103,6 +139,10 @@ export class UserProfileEditComponent implements OnInit {
 		}
 	}
 
+	/**
+	 * Handles form submission.
+	 * Validates form, checks for changes, and closes dialog with updated payload.
+	 */
 	async onSubmit() {
 		if (this.editProfileForm.invalid && !this.userDetails) return;
 		const formValues = this.editProfileForm.value;
@@ -114,6 +154,12 @@ export class UserProfileEditComponent implements OnInit {
 
 	}
 
+	/**
+	 * Builds the update payload with only changed fields.
+	 * 
+	 * @param formValues - Current form values
+	 * @returns Update payload containing only changed fields
+	 */
 	private getUpdatedPayload(formValues: any) {
 		const updatedPayload: UpdateUserPayload = { uuid: this.userDetails?.uuid ?? '' }
 
@@ -133,6 +179,12 @@ export class UserProfileEditComponent implements OnInit {
 		return updatedPayload;
 	}
 
+	/**
+	 * Checks if any form values have changed from the original user data.
+	 * 
+	 * @param formValues - Current form values
+	 * @returns True if any values have changed, false otherwise
+	 */
 	areValuesChanged(formValues: any) {
 		return formValues.name !== this.userDetails?.name ||
 				formValues.email !== this.userDetails?.email ||
@@ -140,6 +192,11 @@ export class UserProfileEditComponent implements OnInit {
 				this.selectedFile;
 	}
 
+	/**
+	 * Closes the dialog and returns the update payload.
+	 * 
+	 * @param updatedPayload - The payload with updated user data, or null if cancelled
+	 */
 	closeDialog(updatedPayload: UpdateUserPayload | null = null) {
 		this.dialogRef.close(updatedPayload);
 	}

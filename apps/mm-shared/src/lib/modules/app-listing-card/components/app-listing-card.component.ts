@@ -20,6 +20,12 @@ import { LocationType } from '../../../models/location.model';
 import { FilterService } from '../../../services/filter.service';
 import { NotificationService } from '../../../notification';
 
+/**
+ * Listing card component for displaying marketplace listings.
+ * 
+ * Displays listing information including images, title, price, location, and category.
+ * Supports favorite functionality, selection mode, and category/location filtering.
+ */
 @Component({
 	selector: 'mm-listing-card',
 	templateUrl: 'app-listing-card.component.html',
@@ -29,6 +35,12 @@ import { NotificationService } from '../../../notification';
 })
 export class ListingCardComponent implements OnInit, OnDestroy {
 
+	/**
+	 * Sets the listing data and updates internal state.
+	 * Automatically determines icon name and deleted status.
+	 * 
+	 * @param listing - The listing object to display
+	 */
 	@Input('listing') set setListing(listing: Listing) {
 		this.listing = listing;
 		this.iconName = getIconName(listing?.category.name);
@@ -36,11 +48,18 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 		this.cdr.markForCheck();
 	}
 
+	/** Whether to show the favorite icon */
 	@Input() showFavoriteIcon: boolean = true;
+	
+	/** Whether the card is in selection mode (for bulk operations) */
 	@Input() isSelectionMode: boolean = false;
+	
 	isDeleted: boolean = true;
+	
+	/** Event emitted when the card is selected/deselected in selection mode */
 	@Output() onSelect: EventEmitter<{ isSelected: boolean, id: number | undefined }>
 			= new EventEmitter<{ isSelected: boolean, id: number | undefined }>();
+	
 	isSelected: boolean = false;
 
 	listing: Listing | undefined;
@@ -60,6 +79,10 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 	}
 
+	/**
+	 * Handles card click event.
+	 * In selection mode, toggles selection state. Otherwise navigates to listing details.
+	 */
 	onItemClick() {
 		if (this.isSelectionMode) {
 			this.isSelected = !this.isSelected;
@@ -68,6 +91,10 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Handles category icon click.
+	 * Updates filter service with category ID and navigates to home page.
+	 */
 	onCategoryIconClick() {
 		if (this.listing?.category.id) {
 			this.filterService.updateFilter({ category_id: this.listing?.category.id });
@@ -76,6 +103,11 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 				.then(r => null)
 	}
 
+	/**
+	 * Handles favorite icon click.
+	 * If user is not authenticated, redirects to login.
+	 * Otherwise toggles favorite status and shows notification.
+	 */
 	onFavoriteIconClick() {
 		if (!this.authService.Authenticated) {
 			this.router.navigate(AppUrls.AUTH.LOGIN.split('/'),
@@ -108,6 +140,13 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 
 	}
 
+	/**
+	 * Handles location click (city, state, or country).
+	 * Updates filter service with the selected location and navigates to home.
+	 * 
+	 * @param type - The type of location (CITY, STATE, or COUNTRY)
+	 * @param id - The location ID
+	 */
 	onLocationClick(type: LocationType, id: number | undefined) {
 		if (!id) {
 			return;

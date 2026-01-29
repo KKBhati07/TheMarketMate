@@ -10,7 +10,12 @@ import { SharedModule } from '../shared/mm-shared.module';
 
 // import { AppUtilModule } from "../app-util/module/app-util.module";
 
-
+/**
+ * Forms module providing authentication form components.
+ * 
+ * Exports LoginFormComponent and SignupFormComponent for use in authentication flows.
+ * Includes FormContainerComponent for managing form display (page vs bottom sheet).
+ */
 @NgModule({
 	declarations: [
 		FormContainerComponent,

@@ -1,5 +1,14 @@
 import { CONSTANTS } from '../app.constants';
 
+/**
+ * Gets the Material icon name for a given category.
+ * 
+ * Maps category names to their corresponding Material icon names.
+ * Returns 'other' icon for unknown categories.
+ * 
+ * @param categoryName - The name of the category
+ * @returns The Material icon name for the category
+ */
 export function getIconName(categoryName: string): string {
 	switch (categoryName) {
 		case CONSTANTS.CATEGORY.CAR:
