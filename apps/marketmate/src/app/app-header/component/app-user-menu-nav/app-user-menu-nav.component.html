@@ -19,7 +19,8 @@
 
         <img class="border-circle"
              (error)="renderFallbackIcon = true"
-             [class]="imageClass" [src]="imageUrl"/>
+             [class]="imageClass" [src]="imageUrl"
+             loading="lazy"/>
       </ng-container>
 
     </div>

@@ -9,7 +9,8 @@
            image-icon-container h-40 w-40">
         <img (error)="renderIcon = true" class="border-circle h-40 w-40"
              *ngIf="user.profile_url && !renderIcon;
-              else renderIconTemplate" [src]="user.profile_url"/>
+              else renderIconTemplate" [src]="user.profile_url"
+             loading="lazy"/>
       </div>
       <div class="cursor-default">
         <p class="name-text fs-20 fw-6">{{ user.name || 'User' }}</p>

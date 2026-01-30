@@ -18,7 +18,8 @@
                   justify-content-center flex-row w-36 h-36">
               <img (error)="renderIcon = true" class="profile-pic w-36 h-36"
                    *ngIf="!renderIcon; else renderIconTemplate"
-                   [src]="user?.profile_url">
+                   [src]="user?.profile_url"
+                   loading="lazy">
             </div>
           </ng-container>
           <ng-container *ngIf="!isMobile; else menuIconTemplate ">

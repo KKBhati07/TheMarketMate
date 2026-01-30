@@ -33,7 +33,8 @@ cursor-pointer br-24 w-288 h-312">
       <ng-container *ngIf="!renderBrokenImage; else renderBrokenIcon">
         <img (error)="renderBrokenImage = true"
              class=" w-100p h-136 listing-image"
-             [src]="listing?.cover_image_url"/>
+             [src]="listing?.cover_image_url"
+             loading="lazy"/>
       </ng-container>
     </div>
 

@@ -8,7 +8,8 @@ align-i-center gap-8 flex-row h-44 br-32 w-100p">
      else renderProfileIcon">
       <img (error)="renderIcon=true"
            class="profile-pic border-circle w-100p h-100p"
-           [src]="userProfileUrl">
+           [src]="userProfileUrl"
+           loading="lazy">
     </ng-container>
   </div>
 

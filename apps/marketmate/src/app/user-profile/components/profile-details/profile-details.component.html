@@ -43,7 +43,8 @@
        else renderProfileIcon">
         <img (error)="renderIcon=true"
              class="profile-pic border-circle w-100p h-100p"
-             [src]="userDetails?.profile_url">
+             [src]="userDetails?.profile_url"
+             loading="lazy">
       </ng-container>
     </div>
     <div class="username-container cursor-default flex-row align-i-center
