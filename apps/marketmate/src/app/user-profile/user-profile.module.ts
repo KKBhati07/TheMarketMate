@@ -9,6 +9,8 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { UserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { AppListingCardModule, SharedModule } from 'mm-shared';
+import { RouterModule } from '@angular/router';
+import { userProfileRoutes } from './user-profile.routes';
 
 @NgModule({
 	declarations: [
@@ -23,7 +25,9 @@ import { AppListingCardModule, SharedModule } from 'mm-shared';
 		MatDialogModule,
 		AppListingCardModule,
 		MatTabGroup,
-		MatTab, SharedModule, AppListingCardModule
+		MatTab,
+		SharedModule,
+		RouterModule.forChild(userProfileRoutes)
 	]
 })
 export class UserProfileModule {

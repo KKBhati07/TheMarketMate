@@ -71,7 +71,7 @@ export class FormContainerComponent implements OnInit, OnDestroy {
 
 		}).afterDismissed().pipe(takeUntil(this.destroy$)).subscribe(action => {
 			if (action === 'redirect_to_signup') {
-				this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r => null);
+				this.router.navigate([AppUrls.AUTH.BASE,AppUrls.AUTH.SIGNUP]).then(r => null);
 			} else if (!action) {
 				this.router.navigate([AppUrls.ROOT]).then(r => null);
 			}

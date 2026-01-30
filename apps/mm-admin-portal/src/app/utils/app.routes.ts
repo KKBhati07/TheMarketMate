@@ -5,9 +5,7 @@ import { ListingComponent } from '../app-admin/components/listings/listing.compo
 import { AdminGuard } from '../guards/admin.guard';
 import {
 	AppUrls as SharedUrls,
-	FormContainerComponent,
 	FourOFourComponent,
-	LoginSignupGuard
 } from 'mm-shared';
 import { AppUrls } from './app.urls';
 import { AdminListingGuard } from '../guards/admin-listing.guard';
@@ -28,12 +26,9 @@ export const routes: Routes = [
 		]
 	},
 	{
-		path: SharedUrls.AUTH.LOGIN,
-		component: FormContainerComponent,
-		data: { type: 'login', portal: 'admin' },
-		canActivate: [LoginSignupGuard]
+		path: SharedUrls.AUTH.BASE,
+		loadChildren: () => import('../app-auth/auth.module').then(m => m.AuthModule)
 	},
-
 	{ path: SharedUrls.FOUROFOUR, component: FourOFourComponent },
 	{ path: '**', redirectTo: SharedUrls.FOUROFOUR }
 ];

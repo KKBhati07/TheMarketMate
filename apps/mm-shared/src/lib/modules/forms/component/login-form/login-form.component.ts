@@ -77,7 +77,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 		if (this.isBottomSheet) {
 			this.bsr?.dismiss('redirect_to_signup');
 		} else {
-			this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r => null);
+			this.router.navigate([AppUrls.AUTH.BASE,AppUrls.AUTH.SIGNUP]).then(r => null);
 		}
 	}
 

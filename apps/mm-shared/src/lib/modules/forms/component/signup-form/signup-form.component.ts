@@ -157,7 +157,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 								if (data) {
 									if (data.created) {
 										// Notification Service
-										this.router.navigate(AppUrls.AUTH.LOGIN.split('/')).then(r => null);
+										this.router.navigate([AppUrls.AUTH.BASE,AppUrls.AUTH.LOGIN]).then(r => null);
 									} else if (!data.created && data.already_exists) {
 										//Notifiy user
 									} else {

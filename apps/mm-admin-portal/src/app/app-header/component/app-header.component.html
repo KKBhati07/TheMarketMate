@@ -61,7 +61,7 @@
 
 <ng-template #loginTemplate>
   <mm-nav-button
-      [routerLink]="[AppUrls.ROOT,SharedUrls.AUTH.LOGIN].join('/')"
+      [routerLink]="[SharedUrls.AUTH.BASE,SharedUrls.AUTH.LOGIN]"
       [queryParams]="loginQueryParams"
       [class]="'pl-4 pr-8 h-40 br-20'"
       iconContainerClass="h-32 w-32"

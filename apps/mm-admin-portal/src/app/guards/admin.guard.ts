@@ -42,7 +42,7 @@ export class AdminGuard implements CanActivate {
 	 */
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): UrlTree | boolean {
 		if (!this.authService.Authenticated) {
-			return this.router.createUrlTree([SharedUrls.AUTH.LOGIN])
+			return this.router.createUrlTree([SharedUrls.AUTH.BASE,SharedUrls.AUTH.LOGIN])
 		}
 		return true;
 	}

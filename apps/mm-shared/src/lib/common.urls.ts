@@ -2,8 +2,9 @@ export const AppUrls = {
 	ROOT: '',
 	HOME: 'home',
 	AUTH: {
-		LOGIN: 'auth/user_login',
-		SIGNUP: 'auth/user_signup',
+		BASE: 'auth',
+		LOGIN: 'user_login',
+		SIGNUP: 'user_signup',
 	},
 	FOUROFOUR: 'fourofour',
 

@@ -112,7 +112,7 @@
 
 <ng-template #loginSignupTemplate>
   <mm-nav-button
-      [routerLink]="SharedUrls.AUTH.SIGNUP"
+      [routerLink]="[SharedUrls.AUTH.BASE,SharedUrls.AUTH.SIGNUP]"
       [class]="'pl-4 pr-4 h-40 w-128 br-20'"
       textClass="fw-6"
       text="Open Account"
@@ -120,7 +120,7 @@
       [headerNav]="true"
   ></mm-nav-button>
   <mm-nav-button
-      [routerLink]="SharedUrls.AUTH.LOGIN"
+      [routerLink]="[SharedUrls.AUTH.BASE,SharedUrls.AUTH.LOGIN]"
       [queryParams]="loginQueryParams"
       [class]="'pl-4 pr-4 h-40 w-100 br-20'"
       iconContainerClass="h-32 w-32"

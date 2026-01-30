@@ -110,7 +110,7 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	 */
 	onFavoriteIconClick() {
 		if (!this.authService.Authenticated) {
-			this.router.navigate(AppUrls.AUTH.LOGIN.split('/'),
+			this.router.navigate([AppUrls.AUTH.BASE,AppUrls.AUTH.LOGIN],
 					{ queryParams: { redirect: this.router.url } }).then(r => null)
 			return;
 		}

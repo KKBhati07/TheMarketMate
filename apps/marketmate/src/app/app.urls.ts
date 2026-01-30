@@ -1,12 +1,9 @@
 export const AppUrls = {
 	ROOT: '',
 	HOME: 'home',
-	AUTH: {
-		LOGIN: 'auth/user_login',
-		SIGNUP: 'auth/user_signup',
-	},
 	USER: {
-		USER_PROFILE: (uuid: string | null = null) => (`user/${ uuid ? uuid : ':uuid' }`)
+		BASE: 'user',
+		USER_PROFILE: (uuid: string | null = null) => (`${ uuid ? uuid : ':uuid' }`)
 	},
 
 	FOUROFOUR: 'fourofour',

@@ -8,8 +8,6 @@ import { SignupFormComponent } from "./component/signup-form/signup-form.compone
 import { FormContainerComponent } from './component/form-container/form-container.component';
 import { SharedModule } from '../shared/mm-shared.module';
 
-// import { AppUtilModule } from "../app-util/module/app-util.module";
-
 /**
  * Forms module providing authentication form components.
  * 
@@ -28,7 +26,6 @@ import { SharedModule } from '../shared/mm-shared.module';
 		CommonModule,
 		MatIconModule,
 		SharedModule,
-		// AppUtilModule,
 	],
 	exports: [LoginFormComponent, SignupFormComponent],
 })

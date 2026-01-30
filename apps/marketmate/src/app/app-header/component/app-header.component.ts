@@ -103,8 +103,8 @@ export class AppHeaderComponent implements OnInit {
 		this.router.events.pipe(
 				filter(event => event instanceof NavigationEnd)
 		).subscribe((event: NavigationEnd) => {
-			this.showHeader = !(event.url.includes(AppUrls.AUTH.LOGIN)
-					|| event.url.includes(AppUrls.AUTH.SIGNUP));
+			this.showHeader = !(event.url.includes(SharedUrls.AUTH.LOGIN)
+					|| event.url.includes(SharedUrls.AUTH.SIGNUP));
 			this.cdr.markForCheck();
 		});
 	}
@@ -201,10 +201,10 @@ export class AppHeaderComponent implements OnInit {
 	onNavigationClick(redirectTo: Redirect) {
 		if (!redirectTo) return;
 		if (redirectTo === 'LOGIN') {
-			this.router.navigate(AppUrls.AUTH.LOGIN.split('/'),
+			this.router.navigate([SharedUrls.AUTH.BASE,SharedUrls.AUTH.LOGIN],
 					{ queryParams: { redirect: this.router.url } }).then(r => null)
 		} else if (redirectTo === 'SIGNUP') {
-			this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r => null)
+			this.router.navigate([SharedUrls.AUTH.BASE,SharedUrls.AUTH.SIGNUP]).then(r => null)
 		}
 	}
 
