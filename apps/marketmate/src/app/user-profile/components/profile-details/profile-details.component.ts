@@ -23,10 +23,10 @@ import { AuthService } from "mm-shared";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { ProfileDetailsBottomSheetData } from '../../../types/common.type';
 import { ImageViewerComponent } from 'mm-shared';
-import { StorageService } from 'mm-shared';
+import { StorageService, Directory } from 'mm-shared';
 import { CONSTANTS } from '../../../app.constants';
 import { HttpResponse } from '@angular/common/http';
-import { ApiResponse } from 'mm-shared';
+import { ApiHttpResponse, ApiResponse } from 'mm-shared';
 
 @Component({
 	selector: 'mm-profile-detail',
@@ -131,12 +131,13 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 				this.storageService.getPresignPutUrl({
 					files: [{ file_name: profileImage.name, content_type: profileImage.type || CONSTANTS.CONTENT_TYPE.DEFAULT }],
-					directory: 'PROFILE'
+					directory: Directory.PROFILE
 				}).pipe(
 						takeUntil(this.destroy$),
 						switchMap(res => {
 							if (!res.isSuccessful()) return throwError(() => new Error('Presign API failed'));
-							const data = res.body?.data!;
+							const data = res.body?.data;
+							if (!data) return throwError(() => new Error('No data in presign response'));
 							const presigns = data.presigns ?? [];
 							if (!presigns.length) return throwError(() => new Error('No presign entries returned'));
 							const presigned = presigns[0];
@@ -162,7 +163,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 										fd.append('file', profileImage);
 
 										return this.userService.uploadImageFallback(fd).pipe(
-												switchMap((fbResp: any) => {
+												switchMap((fbResp: ApiHttpResponse<void>) => {
 													if (!fbResp.isSuccessful()) {
 														return throwError(() => new Error('Fallback upload failed'));
 													}
@@ -176,7 +177,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 										fd.append('uuid', updatedPayload.uuid);
 										fd.append('file', profileImage);
 										return this.userService.uploadImageFallback(fd).pipe(
-												switchMap((fbResp: any) => {
+												switchMap((fbResp: ApiHttpResponse<void>) => {
 													if (!fbResp.isSuccessful()) {
 														return throwError(() => new Error('Fallback upload failed'));
 													}
@@ -198,9 +199,10 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 								);
 							}
 
+							if (!result.objectKey) return of(null);
 							const payload: UpdateUserPayload = {
-								uuid: (updatedPayload as any).uuid,
-								profile_url: result.objectKey!
+								uuid: updatedPayload.uuid,
+								profile_url: result.objectKey
 							};
 							return this.userService.updateUser(payload).pipe(
 									tap(res => {

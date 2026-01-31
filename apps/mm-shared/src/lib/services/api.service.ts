@@ -16,10 +16,10 @@ export class ApiService {
 	protected baseUrl: string;
 
 	constructor(
-			private http: HttpClient,
-			@Inject(SHARED_LIB_CONFIG) config: SharedLibConfig
+			private readonly http: HttpClient,
+			@Inject(SHARED_LIB_CONFIG) private readonly config: SharedLibConfig
 	) {
-		this.baseUrl = config.apiUrl;
+		this.baseUrl = this.config.apiUrl;
 	}
 
 
@@ -27,7 +27,7 @@ export class ApiService {
 		return new HttpHeaders();
 	}
 
-	get<T>(endpoint: string, queryParams?: Record<string, any>)
+	get<T>(endpoint: string, queryParams?: Record<string, string | number | boolean>)
 			: Observable<ApiHttpResponse<T>> {
 		const headers = this.getAuthHeaders();
 

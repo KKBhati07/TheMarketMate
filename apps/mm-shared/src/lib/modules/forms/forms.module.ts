@@ -8,12 +8,6 @@ import { SignupFormComponent } from "./component/signup-form/signup-form.compone
 import { FormContainerComponent } from './component/form-container/form-container.component';
 import { SharedModule } from '../shared/mm-shared.module';
 
-/**
- * Forms module providing authentication form components.
- * 
- * Exports LoginFormComponent and SignupFormComponent for use in authentication flows.
- * Includes FormContainerComponent for managing form display (page vs bottom sheet).
- */
 @NgModule({
 	declarations: [
 		FormContainerComponent,

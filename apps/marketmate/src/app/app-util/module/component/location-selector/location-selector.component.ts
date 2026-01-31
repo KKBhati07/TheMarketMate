@@ -46,7 +46,7 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 				})
 	}
 
-	getStates(countryId: string) {
+	getStates(countryId: number) {
 		this.locationService.getStates(countryId)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
@@ -62,7 +62,7 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 				})
 	}
 
-	getCities(stateId: string) {
+	getCities(stateId: number) {
 		this.locationService.getCities(stateId)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
@@ -77,12 +77,12 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 				})
 	}
 
-	onCountrySelected(countryId: string) {
+	onCountrySelected(countryId: number) {
 		this.getStates(countryId);
 		this.filterService.updateFilter({ country_id: countryId })
 	}
 
-	onStateSelected(stateId: string) {
+	onStateSelected(stateId: number) {
 		this.getCities(stateId);
 		this.filterService.updateFilter({ state_id: stateId })
 	}

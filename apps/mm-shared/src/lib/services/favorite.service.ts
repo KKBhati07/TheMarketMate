@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class FavoriteService {
-	constructor(private apiService: ApiService) {
+	constructor(private readonly apiService: ApiService) {
 	}
 
 	setUnsetFavorite(listingId: number): Observable<ApiHttpResponse<ApiResponse<{ is_favorite: boolean }>>> {

@@ -5,12 +5,6 @@ import { CommonModule, CurrencyPipe, NgIf, UpperCasePipe } from '@angular/common
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormatTextPipe } from '../../pipes/format-text.pipe';
 
-/**
- * Module providing the listing card component for displaying marketplace listings.
- * 
- * Exports ListingCardComponent which displays listing information including
- * images, title, price, location, and category with favorite functionality.
- */
 @NgModule({
 	declarations: [ListingCardComponent],
 	imports: [

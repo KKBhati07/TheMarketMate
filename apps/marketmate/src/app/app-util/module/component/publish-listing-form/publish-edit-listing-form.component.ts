@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { City, Country, LoggingService, NotificationService, State } from 'mm-shared';
+import { Category, City, Country, LoggingService, NotificationService, State } from 'mm-shared';
 import { LocationApiService } from '../../../../services/location.service';
 import { CategoryService } from '../../../../services/category.service';
 import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { CONSTANTS } from '../../../../app.constants';
 import { ProductImage } from '../../../../types/common.type';
 import { ListingService } from '../../../../services/listing.service';
-import { StorageService } from 'mm-shared';
+import { StorageService, Directory } from 'mm-shared';
 import { FilePayload } from 'mm-shared';
 import { PayloadImage } from '../../../../models/listing.model';
 
@@ -22,7 +22,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	createListingForm!: FormGroup;
 	isMobile = false;
 	isDragOver = false;
-	categories: any[] = [];
+	categories: Category[] = [];
 	countries: Country[] = [];
 	states: State[] = [];
 	cities: City[] = [];
@@ -109,7 +109,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 				})
 	}
 
-	getStates(countryId: string) {
+	getStates(countryId: number) {
 		this.locationApiService.getStates(countryId)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(r => {
@@ -120,7 +120,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 				});
 	}
 
-	getCities(stateCode: string) {
+	getCities(stateCode: number) {
 		this.locationApiService.getCities(stateCode).subscribe(r => {
 			if (r.isSuccessful()) {
 				this.cities = r.body?.data ?? [];
@@ -189,12 +189,13 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 						} as FilePayload))
 				this.storageService.getPresignPutUrl({
 					files: filePayload,
-					directory: 'LISTINGS'
+					directory: Directory.LISTINGS
 				}).pipe(
 						takeUntil(this.destroy$),
 						switchMap(res => {
 							if (!res.isSuccessful()) return throwError(() => new Error("Failed to get presigns"));
-							const data = res.body?.data!;
+							const data = res.body?.data;
+							if (!data) return throwError(() => new Error("No data in presign response"));
 							if (data.failures.length) {
 								this.notificationService.error({
 									message: `Some images failed to upload!`,
@@ -230,7 +231,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	createListing(formValue: any, images: PayloadImage[] = []) {
+	createListing(formValue: { title: string; description: string; price: number; categoryId: number; countryId: number; stateId: number; cityId: number }, images: PayloadImage[] = []) {
 		this.listingService.createListing({
 			title: formValue.title,
 			description: formValue.description,

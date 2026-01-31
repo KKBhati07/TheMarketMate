@@ -17,8 +17,10 @@ import { Injectable } from "@angular/core";
 	providedIn: 'root'
 })
 export class LoginSignupGuard implements CanActivate {
-	constructor(private authService: AuthService,
-							private router: Router) {
+	constructor(
+			private readonly authService: AuthService,
+			private readonly router: Router
+	) {
 	}
 
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {

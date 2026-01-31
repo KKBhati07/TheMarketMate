@@ -25,32 +25,33 @@ import { dropdownAnimation } from 'mm-shared';
 		multi: true
 	}]
 })
-export class AutocompleteSelectComponent implements OnInit, ControlValueAccessor {
-	@Input('data') set setData(data: any[]) {
+export class AutocompleteSelectComponent<
+		T = Record<string, unknown>,
+		V extends keyof T = keyof T
+> implements OnInit, ControlValueAccessor {
+	@Input('data') set setData(data: T[]) {
 		if (data?.length) {
 			this.data = data;
 			this.filteredData = [...data];
 		}
 	}
 
-	data: any[] = [];
+	data: T[] = [];
 
 	@Input() placeholder = 'Select';
-	@Input() labelKey = 'name';
-	@Input() valueKey = 'id';
+	@Input() labelKey: keyof T = 'name' as keyof T;
+	@Input() valueKey!: V;
 	@Input() disabled = false;
-	@Output() valueSelected = new EventEmitter<any>();
+	@Output() valueSelected = new EventEmitter<T[V]>();
+	selectedValue: T[V] | null = null;
 
 
 	searchControl = new FormControl('');
-	filteredData: any[] = [];
-	selectedValue: any = null;
+	filteredData: T[] = [];
 	isDropdownOpen = false;
 
-	private onChange: any = () => {
-	};
-	private onTouched: any = () => {
-	};
+	private onChange: (value: T[keyof T] | null) => void = () => {};
+	private onTouched: () => void = () => {};
 
 	constructor(
 			private cdr: ChangeDetectorRef,
@@ -64,20 +65,20 @@ export class AutocompleteSelectComponent implements OnInit, ControlValueAccessor
 				.subscribe(value => {
 					const term = (value || '').toLowerCase();
 					this.filteredData = this.data.filter(item =>
-							(item[this.labelKey] ?? '')
+							String(item[this.labelKey] ?? '')
 									.toLowerCase().includes((value ?? '').toLowerCase())
 					);
 					this.cdr.markForCheck();
 				});
 	}
 
-	writeValue(value: any): void {
+	writeValue(value: T[V] | null): void {
 		this.selectedValue = value;
 		const selectedItem = this.data.find(d => d[this.valueKey] === value);
 		if (selectedItem) {
 			this.searchControl.setValue(
 					this.formatText.transform(
-							selectedItem[this.labelKey])
+							String(selectedItem[this.labelKey]))
 					, { emitEvent: false });
 		} else {
 			this.searchControl.setValue('', { emitEvent: false });
@@ -98,14 +99,19 @@ export class AutocompleteSelectComponent implements OnInit, ControlValueAccessor
 		else this.searchControl.enable({ emitEvent: false });
 	}
 
-	selectItem(item: any) {
+	selectItem(item: T) {
 		this.selectedValue = item[this.valueKey];
 		this.searchControl.setValue(this.formatText.transform(
-				item[this.labelKey]), { emitEvent: false });
+				String(item[this.labelKey])), { emitEvent: false });
 		this.onChange(this.selectedValue);
 		this.valueSelected.emit(this.selectedValue);
 		this.isDropdownOpen = false;
 	}
+
+	toString(value: unknown) {
+		return String(value ?? '');
+	}
+
 
 	toggleDropdown() {
 		if (this.disabled) return;

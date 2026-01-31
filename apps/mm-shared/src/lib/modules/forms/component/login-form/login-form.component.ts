@@ -53,7 +53,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 		this.cdr.markForCheck();
 	}
 
-	resetLoginError(): void {
+	resetLoginError() {
 		if (!this.errorText && !this.isFourOOne) return;
 
 		this.errorText = '';
@@ -114,7 +114,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 		}
 		const { email, password } = this.loginForm.value;
 		this.authService.loginUser({ email, password },
-				(this.iSAdminPortal ? CONSTANTS.APP_CONTEXT.ADMIN : CONSTANTS.APP_CONTEXT.PUBLIC) as AppContext)
+				this.iSAdminPortal ? AppContext.ADMIN : AppContext.PUBLIC)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {

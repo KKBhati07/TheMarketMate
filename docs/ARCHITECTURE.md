@@ -1,61 +1,47 @@
-# MarketMate Frontend Architecture Documentation (C4 Model)
-
-This document provides detailed architecture diagrams for the MarketMate frontend applications using the C4 model (Component and Code levels).
+# MarketMate Frontend Architecture
 
 > **Note**: For system-level architecture (System Context and Container diagrams), see `mm-infra/docs/ARCHITECTURE.md`.
 
 ---
 
-## Table of Contents
+## High-Level Structure
 
-1. [Component Diagram (Level 3)](#component-diagram-level-3)
-2. [Code Diagram (Level 4)](#code-diagram-level-4)
-3. [Technology Stack](#technology-stack)
-4. [Data Flow Examples](#data-flow-examples)
-5. [State Management](#state-management)
-6. [Shared Library Architecture](#shared-library-architecture)
-
----
-
-## Component Diagram (Level 3)
-
-### Overview
-The Component diagram shows the major components within the MarketMate frontend workspace.
+The MarketMate frontend is an Nx monorepo containing two Angular applications sharing a common library:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                  MarketMate Frontend Workspace                    │
-│                                                                   │
+│                  MarketMate Frontend Workspace                  │
+│                                                                 │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │              MarketMate Public App                        │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
-│  │  │   App Root   │  │   Home      │  │   Header    │   │   │
-│  │  │  Component   │  │  Component  │  │  Component  │   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
-│  │  │   User       │  │   Chat       │  │   Filters    │   │   │
-│  │  │   Profile    │  │   Module     │  │  Component   │   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │
+│  │              MarketMate Public App                       │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
+│  │  │   App Root   │  │   Home      │  │   Header    │      │   │
+│  │  │  Component   │  │  Component  │  │  Component  │      │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
+│  │  │   User       │  │   Chat       │  │   Filters    │    │   │
+│  │  │   Profile    │  │   Module     │  │  Component   │    │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  └──────────────────────────────────────────────────────────┘   │
-│                              │                                    │
+│                              │                                  │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │              Admin Portal App                             │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
-│  │  │   Admin      │  │   User       │  │   Listing    │   │   │
-│  │  │   Dashboard  │  │  Management │  │  Management │   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │
+│  │              Admin Portal App                            │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
+│  │  │   Admin      │  │   User       │  │   Listing    │    │   │
+│  │  │   Dashboard  │  │  Management │  │  Management   │    │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  └──────────────────────────────────────────────────────────┘   │
-│                              │                                    │
+│                              │                                  │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │              Shared Library (mm-shared)                    │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
-│  │  │   UI         │  │   Services   │  │   Forms     │   │   │
-│  │  │  Components  │  │              │  │  Module     │   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
-│  │  │   Auth       │  │   Storage    │  │   Notification│   │   │
-│  │  │   Service    │  │   Service    │  │   Module     │   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │
+│  │              Shared Library (mm-shared)                  │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
+│  │  │   UI         │  │   Services   │  │   Forms      │    │   │
+│  │  │  Components  │  │              │  │   Module     │    │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
+│  │  │   Auth       │  │   Storage    │  │ Notification │    │   │
+│  │  │   Service    │  │   Service    │  │    Module    │    │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
         │                    │                    │
@@ -63,319 +49,26 @@ The Component diagram shows the major components within the MarketMate frontend 
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
 │  SpringMate  │    │   Chat       │    │   Browser    │
 │  Backend API │    │   Service    │    │   Storage    │
-│  (REST)      │    │  (WebSocket) │    │  (LocalStorage)│
+│  (REST)      │    │  (WebSocket) │    │(LocalStorage)│
 └──────────────┘    └──────────────┘    └──────────────┘
 ```
 
-### Key Components
+### Key Architectural Decisions
 
-#### MarketMate Public App (`apps/marketmate`)
-
-**Feature Modules:**
-- **AppRootModule**: Root component with routing and layout
-- **AppHeaderModule**: Header navigation and user menu
-- **UserProfileModule**: User profile management
-- **ChatModule**: Real-time chat functionality (lazy-loaded)
-- **AppUtilModule**: Utility components (listing forms, filters, etc.)
-
-**Components:**
-- **AppRootComponent**: Main app container
-- **HomeComponent**: Homepage with listings
-- **FiltersComponent**: Listing filters (category, location, price)
-- **UserProfileComponent**: User profile display and editing
-- **ChatShellComponent**: Chat interface container
-- **ChatWindowComponent**: Individual chat window
-- **ConversationListComponent**: List of conversations
-- **MessageBubbleComponent**: Individual message display
-
-**Services:**
-- **ListingService**: Listing CRUD operations
-- **UserService**: User profile operations
-- **CategoryService**: Category data
-- **LocationService**: Location data
-- **ChatSocketService**: WebSocket connection for chat
-- **ChatStateService**: Chat state management
-
-#### Admin Portal App (`apps/mm-admin-portal`)
-
-**Feature Modules:**
-- Admin-specific modules for user and listing management
-- Shared components from `mm-shared`
-
-#### Shared Library (`apps/mm-shared`)
-
-**Modules:**
-- **SharedModule**: Core UI components and services
-- **FormsModule**: Reusable form components
-- **NotificationModule**: Toast notifications
-- **AppListingCardModule**: Listing card component
-
-**Services:**
-- **ApiService**: HTTP client wrapper with interceptors
-- **AuthService**: Authentication and session management
-- **StorageService**: Local storage abstraction
-- **FavoriteService**: Favorite listings management
-- **FilterService**: Filter state management
-- **ThemeService**: Theme switching (light/dark)
-- **LoggingService**: Centralized logging service for application-wide logging
-- **DeviceDetectorService**: Device type and screen size detection
-- **LocalStorageService**: Typed localStorage wrapper
-
-**Components:**
-- **AppButtonComponent**: Reusable button component
-- **AppLoaderComponent**: Loading spinner
-- **FormContainerComponent**: Login/signup forms
-- **AppListingCardComponent**: Listing card display
-- **ImageViewerComponent**: Image viewing
-- **FourOFourComponent**: 404 page
-
-**Utilities:**
-- **Guards**: Route guards (LoginSignupGuard)
-- **Initializers**: App initialization (auth, theme)
-- **Error Handlers**: GlobalErrorHandler for unhandled errors
-- **Animations**: Reusable Angular animations
-- **Pipes**: Format text pipe
-- **Models**: Shared TypeScript interfaces
-- **Utils**: API response wrapper, common utilities, bootstrap logger
+- **Monorepo with Shared Library**: Both apps consume `mm-shared` to avoid duplication and ensure consistency
+- **Lazy-Loaded Feature Modules**: Auth and UserProfile modules are lazy-loaded in both apps for code splitting and performance
+- **Hybrid Module/Standalone**: Uses Angular modules for shared library and standalone components in apps for flexibility
+- **REST API Communication**: All backend communication via REST API through centralized `ApiService`
 
 ---
 
-## Code Diagram (Level 4)
+## Shared Library Design
 
-### Overview
-The Code diagram shows the detailed structure of key components (Listing Service and Chat Module) as examples.
+The `mm-shared` library centralizes reusable code and enforces architectural patterns across both applications.
 
-#### ListingService Component
+### Module Configuration Pattern
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      ListingService Component                    │
-│                                                                   │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    Public Methods                         │   │
-│  │  ┌────────────────────────────────────────────────────┐   │   │
-│  │  │ createListing()                                    │   │   │
-│  │  │ - Creates new listing                              │   │   │
-│  │  │ - Returns Observable<ApiResponse>                  │   │   │
-│  │  └────────────────────────────────────────────────────┘   │   │
-│  │  ┌────────────────────────────────────────────────────┐   │   │
-│  │  │ getAll()                                          │   │   │
-│  │  │ - Fetches paginated listings                       │   │   │
-│  │  │ - Supports query parameters                        │   │   │
-│  │  └────────────────────────────────────────────────────┘   │   │
-│  │  ┌────────────────────────────────────────────────────┐   │   │
-│  │  │ getByUser()                                        │   │   │
-│  │  │ - User's listings                                  │   │   │
-│  │  │ - Pagination support                               │   │   │
-│  │  └────────────────────────────────────────────────────┘   │   │
-│  │  ┌────────────────────────────────────────────────────┐   │   │
-│  │  │ getFavoriteByUser()                               │   │   │
-│  │  │ - User's favorite listings                        │   │   │
-│  │  └────────────────────────────────────────────────────┘   │   │
-│  │  ┌────────────────────────────────────────────────────┐   │   │
-│  │  │ uploadImageFallback()                             │   │   │
-│  │  │ - Fallback image upload                            │   │   │
-│  │  └────────────────────────────────────────────────────┘   │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                              │                                    │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    Dependencies                          │   │
-│  │  ┌──────────────┐                                       │   │
-│  │  │  ApiService  │  - HTTP client wrapper                │   │
-│  │  │  (from       │  - Handles auth headers               │   │
-│  │  │  mm-shared)  │  - Error handling                     │   │
-│  │  └──────────────┘                                       │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-#### ChatModule Component
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      ChatModule Component                        │
-│                                                                   │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    Components                             │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
-│  │  │   ChatShell  │  │   ChatWindow │  │ Conversation │   │   │
-│  │  │  Component  │  │  Component  │  │ List Component│   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │
-│  │  ┌──────────────┐  ┌──────────────┐                     │   │
-│  │  │   ChatInput  │  │  Message     │                     │   │
-│  │  │  Component   │  │  Bubble      │                     │   │
-│  │  │              │  │  Component   │                     │   │
-│  │  └──────────────┘  └──────────────┘                     │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                              │                                    │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    Services                              │   │
-│  │  ┌──────────────┐  ┌──────────────┐                     │   │
-│  │  │  ChatSocket  │  │  ChatState   │                     │   │
-│  │  │   Service    │  │   Service    │                     │   │
-│  │  │              │  │              │                     │   │
-│  │  │ - connect()  │  │ - State      │                     │   │
-│  │  │ - disconnect()│ │   management│                     │   │
-│  │  │ - joinConv() │  │ - Message    │                     │   │
-│  │  │ - sendMsg()  │  │   handling   │                     │   │
-│  │  │ - onMessage()│  │              │                     │   │
-│  │  └──────────────┘  └──────────────┘                     │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                              │                                    │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    Dependencies                          │   │
-│  │  ┌──────────────┐                                       │   │
-│  │  │  Socket.IO  │  - WebSocket client                    │   │
-│  │  │  Client      │  - Real-time communication            │   │
-│  │  └──────────────┘                                       │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Technology Stack
-
-### Frontend Framework
-- **Angular**: 17+ (standalone components + modules)
-- **Nx Workspace**: Monorepo management
-- **TypeScript**: Type-safe development
-- **RxJS**: Reactive programming for async operations
-
-### UI Libraries
-- **Angular Material**: UI component library
-- **SCSS**: Styling with variables and mixins
-- **Angular Animations**: Smooth UI transitions
-
-### Communication
-- **HTTP Client**: Angular HttpClient for REST API calls
-- **Socket.IO Client**: WebSocket for real-time chat
-- **Fetch API**: Alternative HTTP client (via withFetch)
-
-### State Management
-- **RxJS Observables**: Reactive state management
-- **Services**: Injectable services for state
-- **Local Storage**: Browser storage for persistence
-
-### Build & Development
-- **Nx**: Build system and tooling
-- **Angular CLI**: Development server and build
-- **Docker**: Containerization for development
-
----
-
-## Data Flow Examples
-
-### 1. Listing Creation Flow
-```
-User Input → PublishListingFormComponent → ListingService
-                                              ↓
-                                        ApiService (mm-shared)
-                                              ↓
-                                        HTTP POST → SpringMate Backend
-                                              ↓
-                                        Response → Component Update
-```
-
-### 2. Listing Retrieval Flow (with Pagination)
-```
-HomeComponent → ListingService.getAll() → ApiService
-                                              ↓
-                                        HTTP GET with query params
-                                              ↓
-                                        SpringMate Backend → PaginatedResponse
-                                              ↓
-                                        Component renders listings
-```
-
-### 3. Real-time Chat Flow
-```
-User Input → ChatInputComponent → ChatSocketService
-                                      ↓
-                                Socket.IO emit('send_message')
-                                      ↓
-                                Chat Service (NestJS)
-                                      ↓
-                                Socket.IO on('new_message')
-                                      ↓
-                                ChatStateService → ChatWindowComponent
-```
-
-### 4. Authentication Flow
-```
-User Login → FormContainerComponent → AuthService (mm-shared)
-                                          ↓
-                                    ApiService → SpringMate Backend
-                                          ↓
-                                    JWT Cookie → Local Storage
-                                          ↓
-                                    Auth Guard → Route Protection
-```
-
----
-
-## State Management
-
-### Service-Based State
-The application uses Angular services with RxJS for state management:
-
-- **AuthService**: User authentication state
-- **ChatStateService**: Chat conversations and messages
-- **FilterService**: Listing filter state
-- **ThemeService**: Theme preference (light/dark)
-- **LoggingService**: Application logging (dev mode only)
-- **LoggingService**: Application logging (dev mode only)
-
-### State Flow Pattern
-```
-Component → Service Method → HTTP/Socket → Response
-     ↑                                           ↓
-     └─────────── Update State ──────────────────┘
-```
-
-### Local Storage
-- **Auth tokens**: Stored in httpOnly cookies (handled by backend)
-- **User preferences**: Theme, filters (via StorageService)
-- **Session data**: Managed by backend via cookies
-
----
-
-## Shared Library Architecture
-
-### mm-shared Library Structure
-
-```
-mm-shared/
-├── lib/
-│   ├── modules/
-│   │   ├── shared/          # Core UI components
-│   │   ├── forms/           # Form components
-│   │   └── app-listing-card/ # Listing card
-│   ├── services/            # Shared services
-│   │   ├── api.service.ts
-│   │   ├── auth.service.ts
-│   │   ├── storage.service.ts
-│   │   └── favorite.service.ts
-│   ├── guards/              # Route guards
-│   ├── initializers/        # App initializers
-│   ├── animations/          # Reusable animations
-│   ├── models/              # TypeScript interfaces
-│   ├── pipes/               # Custom pipes
-│   └── utils/               # Utility functions
-└── styles/                  # Global SCSS
-    ├── styles.scss          # Material core
-    └── lib/                 # Variables, mixins
-```
-
-### Shared Module Configuration
-
-The `SharedModule.forRoot()` pattern provides:
-- **ApiService**: Configured with API URL
-- **AuthService**: Authentication management
-- **StorageService**: Local storage abstraction
-- **FavoriteService**: Favorite listings
-
-### Usage Pattern
+Uses `forRoot()` pattern for singleton service configuration:
 
 ```typescript
 // In app.config.ts
@@ -386,134 +79,118 @@ importProvidersFrom(
 )
 ```
 
----
+**Rationale**: Allows environment-specific configuration (API URLs, feature flags) while maintaining singleton services across the app.
 
-## Routing Architecture
+### Core Services
 
-### MarketMate Public App Routes
+- **ApiService**: Centralized HTTP client with interceptors for auth headers, error handling, and request/response transformation
+- **AuthService**: Session management with cookie-based JWT (httpOnly cookies managed by backend)
+- **StorageService**: Typed abstraction over localStorage with expiration support
+- **GlobalErrorHandler**: Catches unhandled errors to prevent white-screen crashes, logs to console in dev mode
+
+### Library Structure
 
 ```
-/ (root)
-├── /home                    # HomeComponent
-├── /auth/login              # FormContainerComponent (login)
-├── /auth/signup             # FormContainerComponent (signup)
-├── /user/:uuid              # UserProfileComponent
-├── /chat                    # ChatModule (lazy-loaded)
-│   ├── /chat/:conversationId
-│   └── /chat
-└── /404                     # FourOFourComponent
+mm-shared/
+├── lib/
+│   ├── modules/          # Feature modules (forms, notifications, listing cards)
+│   ├── services/         # Shared business logic services
+│   ├── guards/           # Route guards (LoginSignupGuard)
+│   ├── initializers/     # App initialization (auth, theme)
+│   ├── models/           # Shared TypeScript interfaces
+│   └── utils/            # API response wrappers, common utilities
+└── styles/               # Global SCSS with design tokens
 ```
 
-### Route Guards
-- **LoginSignupGuard**: Prevents authenticated users from accessing login/signup
+**Design Principle**: All cross-app dependencies flow through `mm-shared`, preventing direct dependencies between apps.
 
 ---
 
-## Component Communication Patterns
+## Key Data Flows
 
-### 1. Parent-Child Communication
-- **@Input()**: Data from parent to child
-- **@Output()**: Events from child to parent
+### Authentication Flow
 
-### 2. Service-Based Communication
-- **Shared Services**: Cross-component communication
-- **RxJS Subjects**: Reactive state updates
+```
+User Login → AuthService → ApiService → SpringMate Backend
+                                      ↓
+                            JWT in httpOnly Cookie
+                                      ↓
+                            AuthService validates session
+                                      ↓
+                            Route Guards enforce protection
+```
 
-### 3. Event Bus (via Services)
-- **NotificationService**: Toast notifications
-- **ChatStateService**: Chat state updates
+**Security Decision**: JWT stored in httpOnly cookies (backend-managed) prevents XSS token theft. Frontend never directly accesses tokens.
 
----
+### Listing Creation Flow
 
-## Performance Optimizations
+```
+PublishListingFormComponent → ListingService → ApiService
+                                              ↓
+                                    HTTP POST (withCredentials)
+                                              ↓
+                                    SpringMate Backend
+                                              ↓
+                                    Response → NotificationService
+```
 
-### Lazy Loading
-- **ChatModule**: Lazy-loaded for code splitting
-- **Route-based**: Components loaded on demand
+### 3. Real-time Chat Flow
+```
+ChatInputComponent → ChatSocketService → Socket.IO emit('send_message')
+                                              ↓
+                                    Chat Service (NestJS)
+                                              ↓
+                                    Socket.IO on('new_message')
+                                              ↓
+                                    ChatStateService → ChatWindowComponent
+```
 
-### Change Detection
-- **OnPush Strategy**: Where applicable
-- **Zone.js**: Optimized change detection
-
-### Caching
-- **Service-level**: API response caching in services
-- **Browser Cache**: HTTP cache headers
-
-### Bundle Optimization
-- **Tree Shaking**: Unused code elimination
-- **Code Splitting**: Route-based splitting
-- **Shared Library**: Common code in mm-shared
+**Architecture**: Chat state managed in `ChatStateService` (RxJS Subjects) to decouple Socket.IO events from component rendering. Enables offline message queuing and reconnection handling.
 
 ---
 
 ## Security Architecture
 
-### Authentication
-- **JWT Tokens**: Stored in httpOnly cookies (backend-managed)
-- **AuthService**: Token validation and refresh
-- **Route Guards**: Protected routes
+### Authentication & Authorization
+
+- **Cookie-Based JWT**: Tokens stored in httpOnly cookies, preventing JavaScript access (XSS protection)
+- **withCredentials**: All API calls include credentials for cookie transmission
+- **Route Guards**: `LoginSignupGuard` prevents authenticated users from accessing auth pages
+- **Session Validation**: `AuthService` validates session on app initialization and route navigation
 
 ### API Communication
-- **HTTPS**: All API calls over HTTPS
-- **CORS**: Configured on backend
-- **Credentials**: withCredentials for cookie-based auth
 
-### Input Sanitization
-- **Angular Sanitization**: Built-in XSS protection
-- **Form Validation**: Reactive forms validation
+- **HTTPS Only**: All API calls over HTTPS in production
+- **CORS**: Configured on backend with specific origin whitelist
+- **Request Interceptors**: `ApiService` automatically attaches auth headers and handles token refresh
 
 ### Error Handling
-- **GlobalErrorHandler**: Catches unhandled runtime errors and prevents white-screen crashes
-- **LoggingService**: Centralized logging for debugging and monitoring (dev mode only)
-- **NotificationService**: User-friendly error notifications
-- **Error Recovery**: Graceful error handling with user feedback
+
+- **GlobalErrorHandler**: Catches unhandled runtime errors, logs to console (dev mode), and prevents white-screen crashes
+- **User-Facing Errors**: `NotificationService` provides consistent error messaging
+- **Input Sanitization**: Angular's built-in sanitization for XSS protection
+- **Form Validation**: Reactive forms with server-side validation feedback
 
 ---
 
-## Styling Architecture
+## Performance & Optimization
 
-### Global Styles (mm-shared)
-- **Material Core**: Single import in shared styles
-- **Design Tokens**: Colors, spacing, typography
-- **Mixins**: Reusable SCSS patterns
+### Code Splitting
 
-### App-Specific Styles
-- **Component Styles**: Scoped to components
-- **App Overrides**: Minimal app-specific overrides
+- **Lazy-Loaded Feature Modules**: Auth and UserProfile modules loaded on-demand in both applications
+- **Shared Library**: Common code bundled once via `mm-shared` to minimize bundle size
 
-### Theming
-- **ThemeService**: Light/dark theme switching
-- **Material Theming**: Angular Material theme configuration
+### State Management
+
+- **Service-Based State**: RxJS Observables in services (no NgRx)
+- **Local Storage**: User preferences (theme, filters) persisted via `StorageService`
+- **No Global State Store**: State scoped to feature services to avoid over-engineering
+
+**Decision**: Service-based state sufficient for current complexity. NgRx considered for future if state management becomes complex.
 
 ---
 
 ## Related Documentation
 
-- **System Architecture**: See `mm-infra/docs/ARCHITECTURE.md` for system-level diagrams
-- **Backend Architecture**: See `SpringMate/SpringMate/docs/ARCHITECTURE.md` for API details
-- **Shared Library**: See `apps/mm-shared/README.md` for library documentation
-
----
-
-## Notes
-
-- The frontend uses a **service-based architecture** with RxJS for state management
-- **mm-shared library** centralizes reusable components and services
-- **Lazy loading** is used for feature modules (chat)
-- **Standalone components** are used alongside modules for flexibility
-- **Angular Material** provides consistent UI components
-- **Socket.IO** handles real-time chat communication
-- All API calls go through **ApiService** which handles authentication and error handling
-- **GlobalErrorHandler** provides a safety net for unhandled errors
-- **LoggingService** centralizes application logging (console output in dev mode only)
-- **NotificationService** provides consistent user-facing error messages
-
----
-
-## Future Enhancements
-
-1. **State Management Library**: Consider NgRx for complex state
-2. **Server-Side Rendering**: Enhance SSR capabilities
-3. **Progressive Web App**: Add PWA features
-4. **Component Library**: Expand shared component library
-5. **Testing**: Increase unit and e2e test coverage
+- **System Architecture**: `mm-infra/docs/ARCHITECTURE.md` (system-level diagrams)
+- **Backend Architecture**: `SpringMate/SpringMate/docs/ARCHITECTURE.md` (API details)

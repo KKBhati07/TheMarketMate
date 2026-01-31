@@ -47,7 +47,7 @@ cursor-pointer br-24 w-288 h-312">
           <mat-icon
               class="fs-20 w-20 h-20"
               [fontIcon]="iconName"
-              [matTooltip]="listing?.category?.name | formatText"
+              [matTooltip]="(listing?.category?.name ?? '') | formatText"
               matTooltipShowDelay="500"
               matTooltipPosition="below"
           >

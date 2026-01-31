@@ -14,7 +14,7 @@ export class ThemeService {
 	private className = 'light-theme';
 	private activeTheme: ThemeOptions | null = null;
 
-	constructor(private localStorageService: LocalStorageService) {
+	constructor(private readonly localStorageService: LocalStorageService) {
 	}
 
 	init() {

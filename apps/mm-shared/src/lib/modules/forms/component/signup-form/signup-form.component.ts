@@ -8,13 +8,6 @@ import { AppUrls } from "../../../../common.urls";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
 import { Subject, takeUntil } from "rxjs";
 
-/**
- * Signup form component for user registration.
- * 
- * Multi-step form for user registration with name, email, and password.
- * Includes password strength validation and confirmation. Supports both
- * regular page and bottom sheet display modes.
- */
 @Component({
 	selector: "mm-signup-form",
 	templateUrl: "./signup-form.component.html",

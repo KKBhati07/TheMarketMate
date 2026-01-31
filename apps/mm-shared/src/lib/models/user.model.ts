@@ -24,7 +24,7 @@ export interface UpdateUserPayload {
 	uuid: string;
 	name?: string;
 	email?: string;
-	contact_no?: string;
+	contact_no?: string | null;
 	profileImage?: File | null;
 	profile_url?: string;
 }

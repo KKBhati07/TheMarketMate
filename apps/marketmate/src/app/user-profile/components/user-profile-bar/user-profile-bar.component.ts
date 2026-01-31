@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
 	selector: 'mm-user-profile-bar',
@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, OnInit
 	styleUrls: ['user-profile-bar.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserProfileBarComponent implements OnInit {
+export class UserProfileBarComponent {
 
 	@Input() userProfileUrl: string | null = null;
 	@Input() userName: string | null = null;
@@ -14,8 +14,4 @@ export class UserProfileBarComponent implements OnInit {
 	@Output() showProfileDetails:
 			EventEmitter<boolean> =
 			new EventEmitter<boolean>();
-
-	ngOnInit() {
-
-	}
 }

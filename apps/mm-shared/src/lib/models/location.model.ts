@@ -16,5 +16,9 @@ export interface State extends Common {
 export interface City extends Common {
 }
 
-export type LocationType = 'CITY' | 'STATE' | 'COUNTRY';
+export enum LocationType {
+	CITY = 'CITY',
+	STATE = 'STATE',
+	COUNTRY = 'COUNTRY'
+}
 

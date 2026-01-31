@@ -26,4 +26,7 @@ interface PresignFailureResponse {
 	reason: string;
 }
 
-export type Directory = 'PROFILE' | 'LISTINGS'
+export enum Directory {
+	PROFILE = 'PROFILE',
+	LISTINGS = 'LISTINGS'
+}

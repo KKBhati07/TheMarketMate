@@ -25,13 +25,6 @@ import { AppLoaderComponent } from './components/app-loader/app-loader.component
 import { UserProfileEditComponent } from './components/user-profile-edit/user-profile-edit.component';
 import { FavoriteService } from '../../services/favorite.service';
 
-/**
- * Shared module providing core UI components and services.
- * 
- * Exports reusable components like buttons, loaders, dialogs, and image viewers.
- * Provides core services (ApiService, AuthService, StorageService, FavoriteService)
- * when used with forRoot() configuration.
- */
 @NgModule({
 	declarations: [
 		AppButtonComponent,
@@ -73,13 +66,7 @@ import { FavoriteService } from '../../services/favorite.service';
 })
 export class SharedModule {
 	/**
-	 * Configures the SharedModule with application-specific settings.
-	 * 
-	 * Provides core services (ApiService, AuthService, StorageService, FavoriteService)
-	 * with the specified configuration. Must be called in the root module/app config.
-	 * 
-	 * @param config - Configuration object containing API URL
-	 * @returns ModuleWithProviders for use in app configuration
+	 * Must be called in root module to provide core services with app-specific config.
 	 */
 	static forRoot(config: SharedLibConfig): ModuleWithProviders<SharedModule> {
 		return {

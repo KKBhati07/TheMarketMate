@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.route.queryParamMap
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(params => {
-					const queryParams: Record<string, any> = {};
+					const queryParams: Record<string, string | number | boolean> = {};
 					params.keys.forEach(key => {
 						const value = params.get(key);
 						if (value !== null) {
@@ -83,7 +83,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 
-	updateQueryParams(queryParams: Record<string, any>) {
+	updateQueryParams(queryParams: Record<string, string | number | boolean>) {
 		this.router.navigate([], {
 			relativeTo: this.route,
 			queryParams: queryParams,
@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 
-	getListings(queryParams: Record<string, any>, page?: number, append: boolean = false) {
+	getListings(queryParams: Record<string, string | number | boolean>, page?: number, append: boolean = false) {
 		if (this.isLoading) return;
 
 		this.isLoading = true;
@@ -178,7 +178,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (!this.hasMore || this.isLoading) return;
 
 		const params = this.route.snapshot.queryParamMap;
-		const queryParams: Record<string, any> = {};
+		const queryParams: Record<string, string | number | boolean> = {};
 		params.keys.forEach(key => {
 			const value = params.get(key);
 			if (value !== null) {

@@ -22,17 +22,12 @@ import { Injectable } from "@angular/core";
 })
 export class UserProfileGuard implements CanActivate {
 
-	constructor(private authService: AuthService,
-							private router: Router) {
+	constructor(
+			private readonly authService: AuthService,
+			private readonly router: Router
+	) {
 	}
 
-	/**
-	 * Determines if the route can be activated.
-	 * 
-	 * @param route - The activated route snapshot
-	 * @param state - The router state snapshot
-	 * @returns True if admin or own profile, UrlTree to redirect otherwise
-	 */
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
 		const profileUuid = route.params['uuid'];
 		if (this.authService.IsAdmin

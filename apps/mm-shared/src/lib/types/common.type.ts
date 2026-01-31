@@ -13,4 +13,7 @@ export type RouteTarget = '_self' | '_blank' | '_parent' | '_top';
 
 export type NavOption = 'CATEGORIES' | 'SELL_ITEM' | 'ADMIN' | 'LOGOUT';
 
-export type AppContext = 'ADMIN' | 'PUBLIC';
+export enum AppContext {
+	ADMIN = 'ADMIN',
+	PUBLIC = 'PUBLIC'
+}

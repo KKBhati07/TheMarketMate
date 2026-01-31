@@ -8,10 +8,7 @@ import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../../common.urls";
 
 /**
- * Container component for login and signup forms.
- * 
- * Automatically displays the appropriate form (login or signup) based on route data.
- * On mobile devices, opens the form in a bottom sheet instead of full page.
+ * Opens forms in bottom sheet on mobile for better UX than full-page forms.
  */
 @Component({
 	selector: 'mm-form-container',

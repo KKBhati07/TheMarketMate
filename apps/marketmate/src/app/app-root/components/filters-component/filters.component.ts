@@ -2,7 +2,6 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	EventEmitter,
-	OnInit,
 	Output,
 } from '@angular/core';
 
@@ -12,17 +11,11 @@ import {
 	styleUrls: ['./filters.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent {
 
 	isExpanded = true;
 	@Output() expand: EventEmitter<boolean>
 			= new EventEmitter<boolean>();
-
-	constructor() {}
-
-	ngOnInit() {
-	}
-
 
 	toggleFilters() {
 		this.isExpanded = !this.isExpanded;

@@ -7,29 +7,18 @@ import { AppUrls } from "../app.urls";
 import { shareReplay } from "rxjs/operators";
 
 /**
- * Service for managing category data.
- * 
- * Provides cached access to marketplace categories. Categories are fetched
- * once and cached using shareReplay for efficient reuse across components.
- * Cache is cleared on fetch failure to allow retry.
+ * Caches categories using shareReplay to avoid redundant API calls.
+ * Cache is cleared on failure to allow retry on subsequent calls.
  */
 @Injectable({
 	providedIn: 'root'
 })
 export class CategoryService {
-	constructor(private apiService: ApiService) {
+	constructor(private readonly apiService: ApiService) {
 	}
 
 	private categories$: Observable<ApiHttpResponse<ApiResponse<CategoriesResponse>>> | null = null;
 
-	/**
-	 * Gets all marketplace categories.
-	 * 
-	 * Results are cached after first fetch. Cache is cleared if the request fails,
-	 * allowing retry on subsequent calls.
-	 * 
-	 * @returns Observable of the API response containing categories (cached)
-	 */
 	getCategories(): Observable<ApiHttpResponse<ApiResponse<CategoriesResponse>>> {
 		if (this.categories$) return this.categories$;
 		this.categories$ = this.apiService

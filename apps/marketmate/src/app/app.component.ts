@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppHeaderModule } from "./app-header/app-header.module";
 import { FormsModule } from 'mm-shared';
@@ -27,13 +27,7 @@ import { NotificationModule } from 'mm-shared';
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 	title = 'marketmate';
-
-	constructor() {
-	}
-
-	ngOnInit() {
-	}
 }
 

@@ -14,8 +14,8 @@ import { LoggingService } from '../services/logging.service';
  */
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-	private readonly notificationService = inject(NotificationService);
-	private readonly logger = inject(LoggingService);
+	private notificationService = inject(NotificationService);
+	private logger = inject(LoggingService);
 
 	handleError(error: unknown): void {
 

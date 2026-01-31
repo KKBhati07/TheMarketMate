@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { AppUrls } from '../../../app.urls';
 import { AuthService, LoggingService, NotificationService } from 'mm-shared';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { fadeInOut } from 'mm-shared';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [fadeInOut]
 })
-export class HeaderUserMenuComponent implements OnInit {
+export class HeaderUserMenuComponent {
 
 	@Input() userName: string = '';
 	@Input() profileImgUrl: string | undefined;
@@ -24,10 +24,6 @@ export class HeaderUserMenuComponent implements OnInit {
 			private logger: LoggingService,
 	) {
 	}
-
-	ngOnInit() {
-	}
-
 
 	onUserIconClick() {
 		const uuid = this.authService.UserDetails?.uuid;
