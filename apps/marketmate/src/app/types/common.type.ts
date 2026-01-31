@@ -1,4 +1,4 @@
-import { ProfileDetails } from 'mm-shared';
+import { UserDetailsDto } from 'mm-shared';
 
 export interface ProductImage {
 	image: File;
@@ -13,6 +13,6 @@ export interface PriceRange {
 
 export interface ProfileDetailsBottomSheetData {
 	isBottomSheet: boolean;
-	userDetails: ProfileDetails | null;
+	userDetails: UserDetailsDto | null;
 	isMobile: boolean;
 }

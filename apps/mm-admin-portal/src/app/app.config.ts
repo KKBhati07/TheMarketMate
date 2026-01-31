@@ -9,7 +9,6 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './utils/app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   authInitializerFactory,
@@ -26,7 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideClientHydration(),
     provideAnimationsAsync(),
 
     // 3. LIBRARY CONFIG: must run first to configure ApiService, AuthService, etc.

@@ -8,7 +8,12 @@ import {
 	OnInit,
 	Output
 } from "@angular/core";
-import { NotificationService, ProfileDetails, UpdateUserPayload, User } from "mm-shared";
+import {
+	NotificationService,
+	UpdateUserPayload,
+	UpdateUserResponse,
+	UserDetailsDto, UserDetailsResponse
+} from "mm-shared";
 import { LoggingService } from "mm-shared";
 import { MatDialog } from "@angular/material/dialog";
 import { UserProfileEditComponent } from "mm-shared";
@@ -32,10 +37,11 @@ import { ApiResponse } from 'mm-shared';
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 	@Input() isExpanded = false;
-	@Input() userDetails: ProfileDetails | null = null;
+	@Input() userDetails: UserDetailsDto | null = null;
+	@Input() self: boolean = false;
 	@Input() isMobile: boolean = false;
 	isBottomSheet = false;
-	destroy$: Subject<any> = new Subject();
+	destroy$: Subject<void> = new Subject();
 	renderIcon = false
 	@Output() expandComponent = new EventEmitter<boolean>();
 
@@ -236,26 +242,25 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	setUpdatedUserState(res: HttpResponse<ApiResponse<any>>) {
+	setUpdatedUserState(res: HttpResponse<ApiResponse<UpdateUserResponse | UserDetailsResponse>>) {
 		this.userDetails = res.body?.data?.user_details ?? this.userDetails;
 		if (this.userDetails) {
-			this.userDetails.self = res.body?.data?.self
+			this.self = res.body?.data?.self ?? false;
 			this.authService.setUpdatedUser({
 				name: this.userDetails.name,
 				email: this.userDetails.email,
 				uuid: this.userDetails.uuid,
-				profile_url: this.userDetails.profile_url,
+				profile_url: (this.userDetails.profile_url ?? ''),
 				contact_no: this.userDetails.contact_no,
-				is_admin: res.body?.data?.is_admin,
-				admin: res.body?.data?.admin,
-				deleted: res.body?.data?.deleted,
+				is_admin: this.userDetails.is_admin,
+				admin: this.userDetails.is_admin,
 			})
 		}
 		this.cdr.markForCheck();
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(null);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 }

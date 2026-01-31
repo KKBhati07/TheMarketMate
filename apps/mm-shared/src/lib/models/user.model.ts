@@ -10,13 +10,14 @@ export interface User {
 	deleted?: boolean;
 }
 
-export interface ProfileDetails {
+export interface UserDetailsDto {
 	name: string;
 	email: string;
 	uuid: string;
-	profile_url?: string;
-	self?: boolean;
+	is_admin: boolean;
 	contact_no: string | null;
+	profile_url: string | null;
+	deleted?: boolean;
 }
 
 export interface UpdateUserPayload {

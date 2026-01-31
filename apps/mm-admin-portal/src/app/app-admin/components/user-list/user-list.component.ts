@@ -9,9 +9,8 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
-	AppConfirmDeleteDialogComponent
+	AppConfirmDeleteDialogComponent, UserDetailsDto
 } from 'mm-shared';
-import { User } from 'mm-shared';
 import { LoggingService } from 'mm-shared';
 import { NotificationService } from 'mm-shared';
 import { Subject, takeUntil } from "rxjs";
@@ -29,7 +28,7 @@ import { fadeSlideIn } from 'mm-shared';
 	animations: [fadeSlideIn],
 })
 export class AdminUserListComponent implements OnDestroy {
-	@Input() user: User | null = null;
+	@Input() user: UserDetailsDto | null = null;
 	@Input() isMobile: boolean = false;
 	@Output() deleteOrRestoreUser: EventEmitter<{ action: string, uuid: string }>
 			= new EventEmitter<{ action: string, uuid: string }>()
@@ -111,9 +110,5 @@ export class AdminUserListComponent implements OnDestroy {
 	onRestoreClick() {
 		if (!this.user) return;
 		this.deleteOrRestoreUser.emit({ action: 'RESTORE', uuid: this.user.uuid });
-	}
-
-	onImageNotFound() {
-		// this.
 	}
 }

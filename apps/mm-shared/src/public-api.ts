@@ -46,6 +46,7 @@ export * from './lib/models/storage.model';
 export * from './lib/models/category.model';
 export * from './lib/models/location.model';
 export * from './lib/models/listing.model';
+export * from './lib/models/response.model';
 
 //Initializers
 export * from './lib/initializers/theme-initializer.factory'

@@ -66,7 +66,9 @@
     <mm-profile-detail
         [isExpanded]="expandProfileDetails"
         (expandComponent)="onExpandProfileDetails($event)"
-        [userDetails]="userDetails">
+        [userDetails]="userDetails"
+        [self]="self"
+    >
     </mm-profile-detail>
   </div>
   <ng-container *ngIf="isMobile">

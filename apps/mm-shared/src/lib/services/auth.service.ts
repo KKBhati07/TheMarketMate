@@ -5,6 +5,7 @@ import { AppUrls } from "../common.urls";
 import { Login, Signup } from "../models/login-signup.model";
 import { ApiHttpResponse } from "../utils/api-response.util";
 import { ApiResponse } from "../models/api-response.model";
+import { AuthDetailsResponse, LogoutResponse, CreateUserResponse, LoginResponse } from "../models/response.model";
 import { CookieService } from "ngx-cookie-service";
 import { User } from "../models/user.model";
 import { AppContext } from '../types/common.type';
@@ -33,13 +34,24 @@ export class AuthService {
 	 * 
 	 * @returns Observable of the API response containing authentication details
 	 */
-	loadUserDetails(): Observable<ApiHttpResponse<ApiResponse<any>>> {
-		return this.apiService.get<ApiResponse<any>>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
+	loadUserDetails(): Observable<ApiHttpResponse<ApiResponse<AuthDetailsResponse>>> {
+		return this.apiService.get<ApiResponse<AuthDetailsResponse>>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
 				tap(res => {
 					if (res.isSuccessful()) {
-						this.isAuthenticated = res.body?.data?.authenticated || false;
-						this.userDetails = res.body?.data?.auth_details;
-						this.isAdmin = res.body?.data?.auth_details?.admin;
+						this.isAuthenticated = res.body?.data?.is_authenticated || false;
+						const authDetails = res.body?.data?.auth_details;
+						if (authDetails) {
+							this.userDetails = {
+								name: authDetails.name,
+								email: authDetails.email,
+								uuid: authDetails.uuid,
+								profile_url: authDetails.profile_url || undefined,
+								is_admin: authDetails.is_admin,
+								admin: authDetails.is_admin,
+								contact_no: authDetails.contact_no
+							};
+							this.isAdmin = authDetails.is_admin;
+						}
 					}
 				})
 		);
@@ -51,7 +63,7 @@ export class AuthService {
 	 * @param body - Signup credentials (email, password, etc.)
 	 * @returns Observable of the API response
 	 */
-	signupUser(body: Signup): Observable<ApiHttpResponse<ApiResponse<any>>> {
+	signupUser(body: Signup): Observable<ApiHttpResponse<ApiResponse<CreateUserResponse>>> {
 		return this.apiService.post(AppUrls.API.V1.USER.CREATE, body)
 	}
 
@@ -62,8 +74,8 @@ export class AuthService {
 	 * @param appContext - Application context ('PUBLIC' or 'ADMIN')
 	 * @returns Observable of the API response
 	 */
-	loginUser(body: Login, appContext: AppContext): Observable<ApiHttpResponse<ApiResponse<any>>> {
-		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGIN, body, { 'X-App-Context': appContext })
+	loginUser(body: Login, appContext: AppContext): Observable<ApiHttpResponse<ApiResponse<LoginResponse>>> {
+		return this.apiService.post<ApiResponse<LoginResponse>>(AppUrls.API.V1.AUTH.LOGIN, body, { 'X-App-Context': appContext })
 	}
 
 	/**
@@ -71,8 +83,8 @@ export class AuthService {
 	 * 
 	 * @returns Observable of the API response
 	 */
-	logoutUser(): Observable<ApiHttpResponse<ApiResponse<any>>> {
-		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.LOGOUT, {})
+	logoutUser(): Observable<ApiHttpResponse<ApiResponse<LogoutResponse>>> {
+		return this.apiService.post<ApiResponse<LogoutResponse>>(AppUrls.API.V1.AUTH.LOGOUT, {})
 	}
 
 	/**

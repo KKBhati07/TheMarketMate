@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { LoggingService, NotificationService, User } from "mm-shared";
+import { LoggingService, NotificationService, User, UserDetailsDto } from "mm-shared";
 import { DeviceDetectorService } from "mm-shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
@@ -11,7 +11,7 @@ import { AdminService } from '../../../services/admin.service';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
-	users: User[] = [];
+	users: UserDetailsDto[] = [];
 	isMobile = false;
 	isLoading = false;
 	destroy$ = new Subject();

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "mm-shared";
 import { Observable } from "rxjs";
-import { ApiResponse } from "mm-shared";
+import { ApiResponse, UserDetailsResponse, UpdateUserResponse } from "mm-shared";
 import { ApiHttpResponse } from "mm-shared";
 import { AppUrls } from "../app.urls";
 import { UpdateUserPayload } from 'mm-shared';
@@ -25,7 +25,7 @@ export class UserService {
 	 * @param uuid - User UUID
 	 * @returns Observable of the API response containing user details
 	 */
-	getDetails(uuid: string): Observable<ApiHttpResponse<ApiResponse<any>>> {
+	getDetails(uuid: string): Observable<ApiHttpResponse<ApiResponse<UserDetailsResponse>>> {
 		return this.apiService.get(AppUrls.API.V1.USER.USER_DETAILS(uuid))
 	}
 
@@ -35,7 +35,7 @@ export class UserService {
 	 * @param data - Update payload containing fields to update (name, email, contact_no, profileImage)
 	 * @returns Observable of the API response
 	 */
-	updateUser(data: UpdateUserPayload): Observable<ApiHttpResponse<ApiResponse<any>>> {
+	updateUser(data: UpdateUserPayload): Observable<ApiHttpResponse<ApiResponse<UpdateUserResponse>>> {
 		return this.apiService.put(AppUrls.API.V1.USER.UPDATE_USER, data)
 	}
 

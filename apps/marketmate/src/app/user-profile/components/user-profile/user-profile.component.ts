@@ -1,8 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { DeviceDetectorService } from "mm-shared";
+import { DeviceDetectorService, UserDetailsDto } from "mm-shared";
 import { UserService } from "../../../services/user.service";
-import { ProfileDetails } from "mm-shared";
 import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
@@ -22,7 +21,8 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	renderComponent = false;
 	expandProfileDetails = false;
 	isMobile = false;
-	userDetails: ProfileDetails | null = null;
+	userDetails: UserDetailsDto | null = null;
+	self: boolean = false;
 	destroy$ = new Subject();
 	userUuid: string = '';
 	userListings: Listing[] = [];
@@ -312,8 +312,8 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
-						this.userDetails = res.body?.data?.user_details;
-						if (this.userDetails) this.userDetails.self = res.body?.data?.self
+						this.userDetails = res.body?.data?.user_details ?? null;
+						if (this.userDetails) this.self = res.body?.data?.self ?? false;
 						this.renderComponent = true;
 						this.expandProfileDetails = true;
 						this.cdr.markForCheck();

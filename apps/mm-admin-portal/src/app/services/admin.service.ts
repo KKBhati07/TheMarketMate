@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiHttpResponse } from 'mm-shared';
-import { ApiResponse } from 'mm-shared';
+import { ApiResponse,
+	PaginatedResponse,
+	UserDetailsDto,
+	UpdateUserResponse } from 'mm-shared';
 import { ListingResponse } from 'mm-shared';
 import { AppUrls } from '../utils/app.urls';
 import { ApiService } from 'mm-shared';
@@ -25,7 +28,7 @@ export class AdminService {
 	 * @param data - FormData containing user update fields
 	 * @returns Observable of the API response
 	 */
-	updateUser(data: FormData): Observable<ApiHttpResponse<ApiResponse<any>>> {
+	updateUser(data: FormData): Observable<ApiHttpResponse<ApiResponse<UpdateUserResponse>>> {
 		return this.apiService.put(AppUrls.API.V1.ADMIN.USERS.UPDATE, data)
 	}
 
@@ -35,7 +38,7 @@ export class AdminService {
 	 * @param page - Page number for pagination (optional)
 	 * @returns Observable of the API response containing paginated users list
 	 */
-	getAllUsers(page?: number): Observable<ApiHttpResponse<ApiResponse<any>>> {
+	getAllUsers(page?: number): Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<UserDetailsDto>>>> {
 		return this.apiService.get(AppUrls.API.V1.ADMIN.USERS.GET_ALL, page !== undefined ? { page } : {})
 	}
 

@@ -60,7 +60,7 @@
         Contact: {{ userDetails?.contact_no }}
       </p>
     </div>
-    <mm-button *ngIf="userDetails?.self"
+    <mm-button *ngIf="self"
                (click)="onEditProfileClick()"
                class="w-100p h-56" [type]="'button'"
                [class]="'w-100p h-34'" [text]="'EDIT PROFILE'">
