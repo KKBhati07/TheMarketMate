@@ -5,11 +5,11 @@ import { ApiHttpResponse, apiResponse } from '../utils/api-response.util';
 import { SHARED_LIB_CONFIG, SharedLibConfig } from '../utils/tokens.util';
 
 /**
- * Base HTTP service for making API requests.
+ * Centralizes HTTP request handling with consistent error normalization.
  * 
- * Provides methods for all HTTP verbs (GET, POST, PUT, PATCH, DELETE)
- * with automatic error handling and response wrapping.
- * All requests include credentials (cookies) for authentication.
+ * Wraps all responses in ApiHttpResponse to prevent HTTP errors from throwing
+ * and allows uniform error handling across the application. All requests include
+ * credentials to maintain session state via cookies.
  */
 @Injectable()
 export class ApiService {
@@ -27,13 +27,6 @@ export class ApiService {
 		return new HttpHeaders();
 	}
 
-	/**
-	 * Performs a GET request to the specified endpoint.
-	 * 
-	 * @param endpoint - The API endpoint path (relative to baseUrl)
-	 * @param queryParams - Optional query parameters as key-value pairs
-	 * @returns Observable of the HTTP response wrapped in ApiHttpResponse`
-	 */
 	get<T>(endpoint: string, queryParams?: Record<string, any>)
 			: Observable<ApiHttpResponse<T>> {
 		const headers = this.getAuthHeaders();
@@ -54,14 +47,6 @@ export class ApiService {
 		);
 	}
 
-	/**
-	 * Performs a POST request to the specified endpoint.
-	 * 
-	 * @param endpoint - The API endpoint path (relative to baseUrl)
-	 * @param body - The request body to send
-	 * @param extraHeaders - Optional additional HTTP headers
-	 * @returns Observable of the HTTP response wrapped in ApiHttpResponse
-	 */
 	post<T>(endpoint: string, body: any, extraHeaders?:Record<string, string>): Observable<ApiHttpResponse<T>> {
 		let headers = this.getAuthHeaders();
 		if (extraHeaders) {
@@ -82,13 +67,6 @@ export class ApiService {
 		);
 	}
 
-	/**
-	 * Performs a PUT request to the specified endpoint.
-	 * 
-	 * @param endpoint - The API endpoint path (relative to baseUrl)
-	 * @param body - The request body to send
-	 * @returns Observable of the HTTP response wrapped in ApiHttpResponse
-	 */
 	put<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
 		const headers = this.getAuthHeaders();
 		return apiResponse(
@@ -100,13 +78,6 @@ export class ApiService {
 		);
 	}
 
-	/**
-	 * Performs a PATCH request to the specified endpoint.
-	 * 
-	 * @param endpoint - The API endpoint path (relative to baseUrl)
-	 * @param body - The request body to send (partial update)
-	 * @returns Observable of the HTTP response wrapped in ApiHttpResponse
-	 */
 	patch<T>(endpoint: string, body: any): Observable<ApiHttpResponse<T>> {
 		const headers = this.getAuthHeaders();
 		return apiResponse(
@@ -118,13 +89,6 @@ export class ApiService {
 		);
 	}
 
-	/**
-	 * Performs a DELETE request to the specified endpoint.
-	 * 
-	 * @param endpoint - The API endpoint path (relative to baseUrl)
-	 * @param body - Optional request body (some APIs require body for DELETE)
-	 * @returns Observable of the HTTP response wrapped in ApiHttpResponse
-	 */
 	delete<T>(endpoint: string, body?: any): Observable<ApiHttpResponse<T>> {
 		const headers: HttpHeaders = this.getAuthHeaders();
 

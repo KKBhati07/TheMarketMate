@@ -2,13 +2,8 @@ import { AuthService } from "../services/auth.service";
 import { bootstrapLogger } from '../utils/bootstrap-logger.util';
 
 /**
- * Factory function for creating the authentication initializer.
- * 
- * Loads user authentication details on application startup.
- * If loading fails, logs the error but does not prevent app initialization.
- * 
- * @param authService - The AuthService instance to use for loading user details
- * @returns A function that returns a Promise resolving when initialization completes
+ * Resolves even on error to prevent blocking app startup if auth service
+ * is unavailable. Auth state will be checked on-demand when routes require it.
  */
 export function authInitializerFactory(authService: AuthService): () => Promise<void> {
 	return () => {

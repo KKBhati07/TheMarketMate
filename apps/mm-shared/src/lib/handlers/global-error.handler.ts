@@ -17,11 +17,6 @@ export class GlobalErrorHandler implements ErrorHandler {
 	private readonly notificationService = inject(NotificationService);
 	private readonly logger = inject(LoggingService);
 
-	/**
-	 * Handles unhandled errors from the Angular error handling system.
-	 * 
-	 * @param error - The unhandled error object
-	 */
 	handleError(error: unknown): void {
 
 		if (isDevMode()) {

@@ -4,13 +4,6 @@ import { Platform } from "@angular/cdk/platform";
 import { Observable } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
 
-/**
- * Service for detecting device type and screen size.
- * 
- * Determines if the current device is mobile based on screen width
- * or platform (iOS/Android). Uses Angular CDK's BreakpointObserver
- * for responsive breakpoint detection.
- */
 @Injectable({
 	providedIn: 'root'
 })
@@ -22,12 +15,8 @@ export class DeviceDetectorService {
 	}
 
 	/**
-	 * Determines if the current device is a mobile device.
-	 * 
-	 * Checks screen width (max 969px) or platform (iOS/Android).
-	 * Result is cached and shared across subscribers.
-	 * 
-	 * @returns Observable that emits true for mobile devices, false otherwise
+	 * Uses shareReplay(1) to cache the breakpoint observation result,
+	 * preventing duplicate subscriptions and unnecessary CDK observer overhead.
 	 */
 	isMobile(): Observable<boolean> {
 		return this.breakpointObserver.observe([this.MOBILE_MAX_WIDTH]).pipe(map(
