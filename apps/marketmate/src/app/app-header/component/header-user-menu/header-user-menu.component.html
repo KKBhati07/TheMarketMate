@@ -32,7 +32,7 @@
         textContainerClass="h-48 pl-4 pr-4"
         iconClass="h-28 w-28 fs-28"
         textClass="fw-6 fs-16"
-        text="Logout"
+        [text]="isLoggingOut ? 'LOGGING OUT...' : 'Logout'"
         imageClass="h-20 w-20"
         gap="8"
         [showIcon]="true"

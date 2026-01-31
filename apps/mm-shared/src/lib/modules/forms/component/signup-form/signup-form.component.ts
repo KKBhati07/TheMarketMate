@@ -24,6 +24,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 	errorText: ErrorText = {}
 	isBottomSheet = false;
 	destroy$ = new Subject();
+	isLoading = false;
 
 	constructor(
 			private fb: FormBuilder,
@@ -132,7 +133,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmit() {
-		if (this.signUpForm.valid) {
+		if (this.signUpForm.valid && !this.isLoading) {
 			const { name, email, password } = this.signUpForm.value
 
 			const confirmationPass = this.signUpForm.get('confirmPassword')?.value;
@@ -141,10 +142,13 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 				// return;
 			}
 			if (name && email && password) {
+				this.isLoading = true;
+				this.cdr.markForCheck();
 				this.authService.signupUser({
 					name, email, password
 				}).pipe(takeUntil(this.destroy$))
 						.subscribe(res => {
+							this.isLoading = false;
 							if (res.isSuccessful()) {
 								const data = res.body?.data;
 								if (data) {
@@ -158,6 +162,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 									}
 								}
 							}
+							this.cdr.markForCheck();
 						})
 			}
 		} else {

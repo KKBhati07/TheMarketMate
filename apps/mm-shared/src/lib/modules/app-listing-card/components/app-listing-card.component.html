@@ -20,13 +20,16 @@ cursor-pointer br-24 w-288 h-312">
       <ng-container *ngIf="showFavoriteIcon">
         <div
             (click)="onFavoriteIconClick()"
+            [class.disabled]="isFavoriteLoading"
             class="favorite-icon position-absolute">
           <mat-icon
+              *ngIf="!isFavoriteLoading"
               [class.favorite]="listing?.is_favorite"
               class="fs-28 w-28 h-28"
               [fontIcon]="listing?.is_favorite?'favorite':'favorite_border'"
           >
           </mat-icon>
+          <mm-loader *ngIf="isFavoriteLoading" class="w-20 h-20"></mm-loader>
         </div>
       </ng-container>
 
@@ -75,7 +78,7 @@ cursor-pointer br-24 w-288 h-312">
       </div>
       <div class="location-item flex-row align-i-center">
         <p
-            (click)="onLocationClick('CITY',listing?.location?.city?.id)"
+            (click)="onLocationClick(LocationType.CITY,listing?.location?.city?.id)"
             class="fs-12">
           {{ listing?.location?.city?.name ?? 'City' }}
         </p>
@@ -84,7 +87,7 @@ cursor-pointer br-24 w-288 h-312">
 
       <div class="location-item flex-row align-i-center">
         <p
-            (click)="onLocationClick('STATE',listing?.location?.state?.id)"
+            (click)="onLocationClick(LocationType.STATE,listing?.location?.state?.id)"
             class="fs-12">
           {{ listing?.location?.state?.name ?? 'State' }}
         </p>
@@ -93,7 +96,7 @@ cursor-pointer br-24 w-288 h-312">
 
       <div class="location-item flex-row align-i-center">
         <p
-            (click)="onLocationClick('COUNTRY',listing?.location?.country?.id)"
+            (click)="onLocationClick(LocationType.COUNTRY,listing?.location?.country?.id)"
             class="fs-12">
           {{ listing?.location?.country?.name ?? 'Country' }}
         </p>

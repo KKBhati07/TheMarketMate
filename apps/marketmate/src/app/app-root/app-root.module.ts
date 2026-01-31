@@ -14,7 +14,15 @@ import { AppListingCardModule, SharedModule } from 'mm-shared';
 		HomeComponent,
 		FiltersComponent
 	],
-	imports: [CommonModule, MatIconModule, AppListingCardModule, AppUtilModule, MatSlider, MatSliderRangeThumb, SharedModule, AppListingCardModule]
+	imports: [
+		CommonModule,
+		MatIconModule,
+		AppListingCardModule,
+		AppUtilModule, MatSlider,
+		MatSliderRangeThumb,
+		SharedModule,
+		AppListingCardModule
+	]
 })
 export class AppRootModule {
 }

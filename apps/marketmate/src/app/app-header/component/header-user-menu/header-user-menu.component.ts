@@ -16,6 +16,7 @@ export class HeaderUserMenuComponent {
 	@Input() userName: string = '';
 	@Input() profileImgUrl: string | undefined;
 	@Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
+	isLoggingOut = false;
 
 	constructor(
 			private authService: AuthService,
@@ -37,7 +38,10 @@ export class HeaderUserMenuComponent {
 	}
 
 	onLogOutClick() {
+		if (this.isLoggingOut) return;
+		this.isLoggingOut = true;
 		this.authService.logoutUser().subscribe(res => {
+			this.isLoggingOut = false;
 			if (res.isSuccessful()) {
 				this.router.navigate([AppUrls.ROOT]).then(r => {
 					window.location.reload();

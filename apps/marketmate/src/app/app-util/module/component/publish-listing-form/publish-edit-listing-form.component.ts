@@ -29,6 +29,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	destroy$: Subject<void> = new Subject<void>();
 	productImages: ProductImage[] = [];
 	protected readonly CONSTANTS = CONSTANTS;
+	isLoading = false;
 
 	constructor(
 			private fb: FormBuilder,
@@ -180,7 +181,9 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmit() {
-		if (this.createListingForm.valid) {
+		if (this.createListingForm.valid && !this.isLoading) {
+			this.isLoading = true;
+			this.cdr.markForCheck();
 			if (this.productImages.length) {
 				const filePayload: FilePayload[] =
 						this.productImages.map(i => ({
@@ -222,7 +225,11 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 							return of(null)
 						})
 				).subscribe(res => {
-					if (!res) return
+					if (!res) {
+						this.isLoading = false;
+						this.cdr.markForCheck();
+						return;
+					}
 					return this.createListing(this.createListingForm.value, res);
 				})
 			} else {
@@ -243,6 +250,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 			images
 		}).pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.isLoading = false;
 					if (res.isSuccessful()) {
 						this.createListingForm.reset();
 						this.productImages = [];
@@ -255,8 +263,8 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 						this.notificationService.error({
 							message: `Item listing failed!`,
 						});
-
 					}
+					this.cdr.markForCheck();
 				})
 	}
 

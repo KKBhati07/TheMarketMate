@@ -46,7 +46,7 @@
                   iconContainerClass="h-32 w-32"
                   iconClass="h-20 w-20 fs-20"
                   textClass="fw-6"
-                  text="Logout"
+                  [text]="isLoggingOut ? 'LOGGING OUT...' : 'Logout'"
                   gap="5"
                   [showIcon]="true"
                   [headerNav]="true"

@@ -63,7 +63,9 @@
     <mm-button *ngIf="self"
                (click)="onEditProfileClick()"
                class="w-100p h-56" [type]="'button'"
-               [class]="'w-100p h-34'" [text]="'EDIT PROFILE'">
+               [class]="'w-100p h-34'"
+               [text]="isUpdatingProfile ? 'UPDATING...' : 'EDIT PROFILE'"
+               [disabled]="isUpdatingProfile">
 
     </mm-button>
   </ng-container>

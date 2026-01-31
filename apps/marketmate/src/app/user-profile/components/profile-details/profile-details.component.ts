@@ -44,6 +44,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 	destroy$: Subject<void> = new Subject();
 	renderIcon = false
 	@Output() expandComponent = new EventEmitter<boolean>();
+	isUpdatingProfile = false;
 
 	constructor(private cdr: ChangeDetectorRef,
 							private userService: UserService,
@@ -104,6 +105,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 			dialogRef.afterClosed().subscribe((updatedPayload: UpdateUserPayload | null) => {
 				if (!updatedPayload) return;
+				this.isUpdatingProfile = true;
+				this.cdr.markForCheck();
 				const { profile_url, profileImage, ...remainingPayload } = updatedPayload
 				let objectKey: string;
 
@@ -113,15 +116,19 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 						if (res.isSuccessful()) {
 							this.setUpdatedUserState(res)
 							if (!profileImage) {
+								this.isUpdatingProfile = false;
 								this.notificationService.success({
 									message: 'User profile updated',
 								});
+								this.cdr.markForCheck();
 							}
 						} else {
 							if (!profileImage) {
+								this.isUpdatingProfile = false;
 								this.notificationService.error({
 									message: 'Error updating user',
 								});
+								this.cdr.markForCheck();
 							}
 						}
 					});
@@ -220,17 +227,20 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 						catchError(finalErr => {
 							this.logger.error('All upload attempts failed', finalErr, { uuid: updatedPayload.uuid });
 							// TODO: Show user notification with a Retry button (In update pipeline)
+							this.isUpdatingProfile = false;
 							this.notificationService.error({
 								message: `Error updating profile`,
 							});
-
+							this.cdr.markForCheck();
 							return of(null);
 						})
 				).subscribe(finalResult => {
+					this.isUpdatingProfile = false;
 					if (!finalResult) {
 						this.notificationService.error({
 							message: 'Error updating profile',
 						});
+						this.cdr.markForCheck();
 						return;
 					}
 
@@ -239,6 +249,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							message: 'User profile updated',
 						});
 					}
+					this.cdr.markForCheck();
 				});
 			});
 		}

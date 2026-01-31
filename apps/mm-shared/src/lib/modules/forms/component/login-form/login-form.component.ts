@@ -25,6 +25,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 	destroy$: Subject<boolean> = new Subject<boolean>();
 	isFourOOne = false;
 	errorText: string = '';
+	isLoading = false;
 
 	constructor(
 			private fb: FormBuilder,
@@ -108,15 +109,18 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmit() {
-		if (this.loginForm.invalid) {
+		if (this.loginForm.invalid || this.isLoading) {
 			this.handleFormValidationError();
 			return;
 		}
 		const { email, password } = this.loginForm.value;
+		this.isLoading = true;
+		this.cdr.markForCheck();
 		this.authService.loginUser({ email, password },
 				this.iSAdminPortal ? AppContext.ADMIN : AppContext.PUBLIC)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.isLoading = false;
 					if (res.isSuccessful()) {
 						const redirectUrl = this.route.snapshot.queryParamMap.get('redirect');
 						this.router.navigateByUrl(redirectUrl || AppUrls.ROOT).then(r => {

@@ -103,10 +103,10 @@
         </div>
         <mm-button
             [type]="'submit'"
-            [text]="'Sign up'"
+            [text]="isLoading ? 'SIGNING UP...' : 'Sign up'"
             [class]="'h-60 w-100p fs-16'"
             [iconClass]="'fw-1'"
-            [disabled]="checkForPasswordValidation(false,true) || false"
+            [disabled]="checkForPasswordValidation(false,true) || isLoading"
         ></mm-button>
       </ng-container>
     </form>

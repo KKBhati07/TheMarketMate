@@ -97,11 +97,11 @@
       <div class="">
         <mm-button [class]="'w-100p h-56 br-4 gap-20'"
                    position="RIGHT"
-                   [disabled]="createListingForm.invalid"
+                   [disabled]="createListingForm.invalid || isLoading"
                    icon="cloud_done"
                    iconClass="fs-20 w-20 h-20"
                    type='submit'
-                   text="Publish"
+                   [text]="isLoading ? 'PUBLISHING...' : 'Publish'"
         ></mm-button>
       </div>
 
@@ -111,6 +111,7 @@
                    iconClass="fs-20 w-20 h-20"
                    type='button'
                    text="Close"
+                   [disabled]="isLoading"
                    (click)="closeDialog()"
         ></mm-button>
       </div>

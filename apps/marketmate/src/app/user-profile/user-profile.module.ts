@@ -18,7 +18,8 @@ import { userProfileRoutes } from './user-profile.routes';
 		ProfileDetailsComponent,
 		UserProfileBarComponent
 	],
-	imports: [CommonModule,
+	imports: [
+		CommonModule,
 		MatIconModule,
 		AppUtilModule,
 		ReactiveFormsModule,

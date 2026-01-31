@@ -4,6 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { CommonModule, CurrencyPipe, NgIf, UpperCasePipe } from '@angular/common';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormatTextPipe } from '../../pipes/format-text.pipe';
+import { SharedModule } from '../shared/mm-shared.module';
 
 @NgModule({
 	declarations: [ListingCardComponent],
@@ -14,7 +15,8 @@ import { FormatTextPipe } from '../../pipes/format-text.pipe';
 		CurrencyPipe,
 		MatTooltip,
 		FormatTextPipe,
-		CommonModule
+		CommonModule,
+		SharedModule
 	],
 	exports: [
 		ListingCardComponent

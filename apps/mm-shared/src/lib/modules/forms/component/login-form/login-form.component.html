@@ -51,10 +51,10 @@
 
       <mm-button
           [type]="'submit'"
-          [text]="'LOG IN'"
+          [text]="isLoading ? 'LOGGING IN...' : 'LOG IN'"
           [class]="'h-60 w-100p fs-16'"
           [iconClass]="'fw-1'"
-          [disabled]=" getEmailValidation(true) || false"
+          [disabled]="getEmailValidation(true) || isLoading"
       ></mm-button>
     </form>
 

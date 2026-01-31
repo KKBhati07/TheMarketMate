@@ -37,6 +37,7 @@ export class AppHeaderComponent implements OnInit {
 	renderIcon = false;
 	expandedCategories = false;
 	renderExpandedContent = false;
+	isLoggingOut = false;
 	@ViewChild('header') header!: ElementRef;
 
 	protected readonly AppUrls = AppUrls;
@@ -133,7 +134,11 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onLogOutClick() {
+		if (this.isLoggingOut) return;
+		this.isLoggingOut = true;
+		this.cdr.markForCheck();
 		this.authService.logoutUser().subscribe(res => {
+			this.isLoggingOut = false;
 			if (res.isSuccessful()) {
 				this.router.navigate([AppUrls.ROOT]).then(r => {
 					window.location.reload();
@@ -143,6 +148,7 @@ export class AppHeaderComponent implements OnInit {
 				this.notificationService.error({
 					message: `Logout attempt failed`,
 				});
+				this.cdr.markForCheck();
 			}
 		})
 	}

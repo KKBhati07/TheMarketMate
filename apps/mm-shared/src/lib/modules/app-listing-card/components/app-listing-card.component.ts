@@ -53,6 +53,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	renderBrokenImage = false;
 	iconName: string = '';
 	destroy$: Subject<void> = new Subject();
+	isFavoriteLoading = false;
+	protected readonly LocationType = LocationType;
 
 	constructor(private cdr: ChangeDetectorRef,
 							private favoriteService: FavoriteService,
@@ -88,9 +90,13 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 					{ queryParams: { redirect: this.router.url } }).then(r => null)
 			return;
 		}
+		if (this.isFavoriteLoading) return;
+		this.isFavoriteLoading = true;
+		this.cdr.markForCheck();
 		this.favoriteService.setUnsetFavorite(this.listing?.id ?? 0)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.isFavoriteLoading = false;
 					if (res.isSuccessful()) {
 						if (this.listing) {
 							this.listing.is_favorite =
@@ -109,6 +115,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 							}
 							this.cdr.markForCheck();
 						}
+					} else {
+						this.cdr.markForCheck();
 					}
 				})
 
