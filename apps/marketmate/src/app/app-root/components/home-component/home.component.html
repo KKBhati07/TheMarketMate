@@ -21,4 +21,9 @@
     </ng-container>
   </div>
 
+  <div id="listing-sentinel" *ngIf="hasMore" style="height: 1px; width: 100%;"></div>
+  <div *ngIf="isLoading && listings.length > 0" class="loading-indicator w-100p p-12">
+    <p class="text-center">Loading more listings...</p>
+  </div>
+
 </div>

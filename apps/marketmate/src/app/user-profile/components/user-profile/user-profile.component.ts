@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DeviceDetectorService } from "mm-shared";
 import { UserService } from "../../../services/user.service";
@@ -18,7 +18,7 @@ import { LoggingService, NotificationService } from 'mm-shared';
 	styleUrls: ["./user-profile.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	renderComponent = false;
 	expandProfileDetails = false;
 	isMobile = false;
@@ -29,6 +29,18 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 	favoriteListings: Listing[] = [];
 	selfUser = false;
 	selectedTabIndex = 0;
+
+	// Pagination state for posts
+	postsCurrentPage = 0;
+	postsHasMore = true;
+	postsIsLoading = false;
+
+	// Pagination state for favorites
+	favoritesCurrentPage = 0;
+	favoritesHasMore = true;
+	favoritesIsLoading = false;
+
+	private intersectionObserver?: IntersectionObserver;
 
 	constructor(
 			private router: Router,
@@ -54,45 +66,66 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 		this.getUserDetails();
 	}
 
+	ngAfterViewInit() {
+		this.setupIntersectionObserver();
+	}
+
 	onTabChange(index: number) {
 		this.selectedTabIndex = index;
+		setTimeout(() => this.observeSentinel(), 0);
 		if (index === 0) {
 			this.updateQueryParams({ posts: true })
-			return !this.userListings.length &&
-					this.getListingsByUser(this.userUuid);
+			if (!this.userListings.length) {
+				this.postsCurrentPage = 0;
+				this.postsHasMore = true;
+				this.getListingsByUser(this.userUuid, 0, false);
+			}
 		}
 		if (index === 1) {
 			this.updateQueryParams({ favorites: true })
-			return !this.favoriteListings.length &&
-					this.getFavoriteListingsByUser(this.userUuid);
+			if (!this.favoriteListings.length) {
+				this.favoritesCurrentPage = 0;
+				this.favoritesHasMore = true;
+				this.getFavoriteListingsByUser(this.userUuid, 0, false);
+			}
 		}
 	}
 
 	setIsMobile() {
-		this.deviceDetector.isMobile().subscribe(isMobile => {
-			this.isMobile = isMobile;
-			this.cdr.markForCheck();
-		})
+		this.deviceDetector.isMobile()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(isMobile => {
+					this.isMobile = isMobile;
+					this.cdr.markForCheck();
+				})
 	}
 
 	setTabFronQueryParams() {
 		const qp = this.activatedRoute.snapshot.queryParams;
 		if (qp['posts'] == undefined && qp['favorites'] == undefined) {
 			this.updateQueryParams({ posts: true })
-			return this.getListingsByUser(this.userUuid);
+			this.postsCurrentPage = 0;
+			this.postsHasMore = true;
+			return this.getListingsByUser(this.userUuid, 0, false);
 		}
 		if (qp['favorites']) {
 			if (this.selfUser) {
 				this.selectedTabIndex = 1;
-				return this.getFavoriteListingsByUser(this.userUuid);
+				this.favoritesCurrentPage = 0;
+				this.favoritesHasMore = true;
+				return this.getFavoriteListingsByUser(this.userUuid, 0, false);
 			} else {
 				this.updateQueryParams({ posts: true })
-				return this.getListingsByUser(this.userUuid);
+				this.postsCurrentPage = 0;
+				this.postsHasMore = true;
+				return this.getListingsByUser(this.userUuid, 0, false);
 			}
 
 		}
 		if (qp['posts']) {
-			return this.getListingsByUser(this.userUuid);
+			this.postsCurrentPage = 0;
+			this.postsHasMore = true;
+			return this.getListingsByUser(this.userUuid, 0, false);
 		}
 	}
 
@@ -123,19 +156,47 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 	}
 
 	getListingsByUser(uuid: string, page?: number, append: boolean = false) {
-		this.listingService.getByUser(uuid, page)
+		if (this.postsIsLoading) return;
+
+		this.postsIsLoading = true;
+		const pageToLoad = page ?? this.postsCurrentPage;
+
+		this.listingService.getByUser(uuid, pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.postsIsLoading = false;
 					if (res.isSuccessful()) {
+						const response = res.body?.data;
+						const newItems = response?.items ?? [];
+
 						if (append) {
-							this.userListings.push(...(res.body?.data.items ?? []))
+							this.userListings.push(...newItems);
 						} else {
-							this.userListings = res.body?.data.items ?? []
+							this.userListings = response?.items ?? [];
+							this.postsCurrentPage = 0;
+						}
+
+						// Check if there are more pages
+						if (response?.total_pages !== undefined) {
+							this.postsHasMore = (response.current_page ?? pageToLoad) < (response.total_pages - 1);
+						} else {
+							this.postsHasMore = newItems.length > 0;
+						}
+
+						if (append) {
+							this.postsCurrentPage = (response?.current_page ?? pageToLoad) + 1;
+						} else {
+							this.postsCurrentPage = (response?.current_page ?? 0) + 1;
 						}
 						this.renderComponent = true;
 						this.cdr.markForCheck();
 					} else {
-						this.logger.warn('Failed to load user listings', { uuid, page, status: res.status, statusText: res.statusText });
+						this.logger.warn('Failed to load user listings', {
+							uuid,
+							page: pageToLoad,
+							status: res.status,
+							statusText: res.statusText
+						});
 						this.notificationService.error({
 							message: 'Failed to load posts. Please try again.',
 						});
@@ -144,24 +205,100 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 	}
 
 	getFavoriteListingsByUser(uuid: string, page?: number, append: boolean = false) {
-		this.listingService.getFavoriteByUser(uuid, page)
+		if (this.favoritesIsLoading) return;
+
+		this.favoritesIsLoading = true;
+		const pageToLoad = page ?? this.favoritesCurrentPage;
+
+		this.listingService.getFavoriteByUser(uuid, pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.favoritesIsLoading = false;
 					if (res.isSuccessful()) {
+						const response = res.body?.data;
+						const newItems = response?.items ?? [];
+
 						if (append) {
-							this.favoriteListings.push(...(res.body?.data.items ?? []))
+							this.favoriteListings.push(...newItems);
 						} else {
-							this.favoriteListings = res.body?.data.items ?? []
+							this.favoriteListings = response?.items ?? [];
+							this.favoritesCurrentPage = 0;
 						}
+
+						// Check if there are more pages
+						if (response?.total_pages !== undefined) {
+							this.favoritesHasMore = (response.current_page ?? pageToLoad) < (response.total_pages - 1);
+						} else {
+							this.favoritesHasMore = newItems.length > 0;
+						}
+
+						if (append) {
+							this.favoritesCurrentPage = (response?.current_page ?? pageToLoad) + 1;
+						} else {
+							this.favoritesCurrentPage = (response?.current_page ?? 0) + 1;
+						}
+
 						this.renderComponent = true;
 						this.cdr.markForCheck();
 					} else {
-						this.logger.warn('Failed to load favorite listings', { uuid, page, status: res.status, statusText: res.statusText });
+						this.logger.warn('Failed to load favorite listings', {
+							uuid,
+							page: pageToLoad,
+							status: res.status,
+							statusText: res.statusText
+						});
 						this.notificationService.error({
 							message: 'Failed to load favorites. Please try again.',
 						});
 					}
 				})
+	}
+
+	setupIntersectionObserver() {
+		if (typeof IntersectionObserver === 'undefined') {
+			return;
+		}
+
+		this.intersectionObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							if (this.selectedTabIndex === 0 && this.postsHasMore
+									&& !this.postsIsLoading && this.userListings.length > 0) {
+								this.loadNextPagePosts();
+							} else if (this.selectedTabIndex === 1 && this.favoritesHasMore
+									&& !this.favoritesIsLoading && this.favoriteListings.length > 0
+							) {
+								this.loadNextPageFavorites();
+							}
+						}
+					});
+				},
+				{
+					rootMargin: '200px',
+					threshold: 0.1
+				}
+		);
+
+		setTimeout(() => this.observeSentinel(), 0);
+	}
+
+	observeSentinel() {
+		this.intersectionObserver?.disconnect();
+		const sentinel = document.getElementById('user-profile-sentinel');
+		if (sentinel && this.intersectionObserver) {
+			this.intersectionObserver.observe(sentinel);
+		}
+	}
+
+	loadNextPagePosts() {
+		if (!this.postsHasMore || this.postsIsLoading) return;
+		this.getListingsByUser(this.userUuid, this.postsCurrentPage, true);
+	}
+
+	loadNextPageFavorites() {
+		if (!this.favoritesHasMore || this.favoritesIsLoading) return;
+		this.getFavoriteListingsByUser(this.userUuid, this.favoritesCurrentPage, true);
 	}
 
 
@@ -187,6 +324,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
+		if (this.intersectionObserver) {
+			this.intersectionObserver.disconnect();
+		}
 		this.destroy$.next(null);
 		this.destroy$.complete();
 	}

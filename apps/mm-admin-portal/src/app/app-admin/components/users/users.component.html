@@ -8,11 +8,15 @@
       <mm-admin-user-list
           [user]="user"
           (deleteOrRestoreUser)="onDeleteOrRestoreUser($event)"
-          (getUpdatedList)="getAllUsers()"
+          (getUpdatedList)="getAllUsers(0, false)"
           [isMobile]="isMobile"></mm-admin-user-list>
     </div>
 
+  </div>
 
+  <div id="users-sentinel" *ngIf="hasMore" style="height: 1px; width: 100%;"></div>
+  <div *ngIf="isLoading && users.length > 0" class="loading-indicator w-100p p-12">
+    <p class="text-center">Loading more users...</p>
   </div>
 
 </ng-container>

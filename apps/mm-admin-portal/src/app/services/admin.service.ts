@@ -8,7 +8,7 @@ import { ApiService } from 'mm-shared';
 
 /**
  * Service for admin portal operations.
- * 
+ *
  * Handles administrative tasks including user management (CRUD operations,
  * restore deleted users) and listing management (view all, bulk delete).
  */
@@ -21,7 +21,7 @@ export class AdminService {
 
 	/**
 	 * Updates a user's profile information.
-	 * 
+	 *
 	 * @param data - FormData containing user update fields
 	 * @returns Observable of the API response
 	 */
@@ -30,17 +30,18 @@ export class AdminService {
 	}
 
 	/**
-	 * Gets all users in the system.
-	 * 
-	 * @returns Observable of the API response containing users list
+	 * Gets all users in the system with optional pagination.
+	 *
+	 * @param page - Page number for pagination (optional)
+	 * @returns Observable of the API response containing paginated users list
 	 */
-	getAllUsers(): Observable<ApiHttpResponse<ApiResponse<any>>> {
-		return this.apiService.get(AppUrls.API.V1.ADMIN.USERS.GET_ALL)
+	getAllUsers(page?: number): Observable<ApiHttpResponse<ApiResponse<any>>> {
+		return this.apiService.get(AppUrls.API.V1.ADMIN.USERS.GET_ALL, page !== undefined ? { page } : {})
 	}
 
 	/**
 	 * Deletes a user by UUID.
-	 * 
+	 *
 	 * @param uuid - User UUID to delete
 	 * @returns Observable of the API response
 	 */
@@ -50,7 +51,7 @@ export class AdminService {
 
 	/**
 	 * Restores a previously deleted user.
-	 * 
+	 *
 	 * @param uuid - User UUID to restore
 	 * @returns Observable of the API response
 	 */
@@ -60,7 +61,7 @@ export class AdminService {
 
 	/**
 	 * Gets all listings with optional filtering and pagination.
-	 * 
+	 *
 	 * @param queryParams - Filter parameters (category, location, status, etc.)
 	 * @param page - Page number for pagination (optional)
 	 * @returns Observable of the API response containing paginated listings
@@ -71,7 +72,7 @@ export class AdminService {
 
 	/**
 	 * Deletes multiple listings in bulk.
-	 * 
+	 *
 	 * @param listingIds - Array of listing IDs to delete
 	 * @returns Observable of the API response
 	 */

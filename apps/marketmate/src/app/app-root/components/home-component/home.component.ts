@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -13,13 +13,17 @@ import { LoggingService, NotificationService } from 'mm-shared';
 	styleUrls: ['./home.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	destroy$: Subject<void> = new Subject<void>();
 	listings: Listing[] = [];
 	isExpanded = true;
 	isMobile = false;
 	render = false;
+	currentPage = 0;
+	hasMore = true;
+	isLoading = false;
+	private intersectionObserver?: IntersectionObserver;
 
 	constructor(
 			private listingService: ListingService,
@@ -37,6 +41,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.setIsMobile();
 		this.subscribeToRoute();
 		this.getFilters();
+	}
+
+	ngAfterViewInit() {
+		this.setupIntersectionObserver();
 	}
 
 	setIsMobile() {
@@ -68,7 +76,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 							queryParams[key] = value;
 						}
 					});
-					this.getListings(queryParams);
+					this.currentPage = 0;
+					this.hasMore = true;
+					this.getListings(queryParams, 0, false);
 				});
 	}
 
@@ -84,14 +94,38 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 	getListings(queryParams: Record<string, any>, page?: number, append: boolean = false) {
-		this.listingService.getAll(queryParams, page)
+		if (this.isLoading) return;
+
+		this.isLoading = true;
+		const pageToLoad = page ?? this.currentPage;
+
+		this.listingService.getAll(queryParams, pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.isLoading = false;
 					if (res.isSuccessful()) {
+						const response = res.body?.data;
+						const newItems = response?.items ?? [];
+
 						if (append) {
-							this.listings.push(...(res.body?.data.items ?? []))
+							this.listings.push(...newItems);
 						} else {
-							this.listings = res.body?.data.items ?? []
+							this.listings = newItems;
+							this.currentPage = 0;
+							setTimeout(() => this.observeSentinel(), 0);
+						}
+
+						if (response?.total_pages !== undefined) {
+							this.hasMore = (response.current_page ?? pageToLoad) < (response.total_pages - 1);
+						} else {
+							//Assuming more pages
+							this.hasMore = newItems.length > 0;
+						}
+
+						if (append) {
+							this.currentPage++;
+						} else {
+							this.currentPage = (response?.current_page ?? 0) + 1;
 						}
 						this.cdr.markForCheck();
 					} else {
@@ -99,7 +133,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 							status: res.status,
 							statusText: res.statusText,
 							queryParams,
-							page,
+							page: pageToLoad,
 						});
 						this.notificationService.error({
 							message: 'Failed to load listings. Please try again.',
@@ -107,6 +141,51 @@ export class HomeComponent implements OnInit, OnDestroy {
 					}
 				})
 
+	}
+
+	setupIntersectionObserver() {
+		if (typeof IntersectionObserver === 'undefined') {
+			// Fallback for browsers that don't support IntersectionObserver
+			return;
+		}
+
+		this.intersectionObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting && this.hasMore && !this.isLoading && this.listings.length > 0) {
+							this.loadNextPage();
+						}
+					});
+				},
+				{
+					rootMargin: '200px',
+					threshold: 0.1
+				}
+		);
+
+		setTimeout(() => this.observeSentinel(), 0);
+	}
+
+	observeSentinel() {
+		this.intersectionObserver?.disconnect();
+		const sentinel = document.getElementById('listing-sentinel');
+		if (sentinel && this.intersectionObserver) {
+			this.intersectionObserver.observe(sentinel);
+		}
+	}
+
+	loadNextPage() {
+		if (!this.hasMore || this.isLoading) return;
+
+		const params = this.route.snapshot.queryParamMap;
+		const queryParams: Record<string, any> = {};
+		params.keys.forEach(key => {
+			const value = params.get(key);
+			if (value !== null) {
+				queryParams[key] = value;
+			}
+		});
+		this.getListings(queryParams, this.currentPage, true);
 	}
 
 	trackByListingId(index: number, item: Listing) {
@@ -118,6 +197,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
+		if (this.intersectionObserver) {
+			this.intersectionObserver.disconnect();
+		}
 		this.destroy$.next();
 		this.destroy$.complete();
 	}

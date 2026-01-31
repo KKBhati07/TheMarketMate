@@ -28,6 +28,10 @@
                 [listing]="listing"></mm-listing-card>
           </ng-container>
         </div>
+        <div id="user-profile-sentinel" *ngIf="selectedTabIndex === 0 && postsHasMore" style="height: 1px; width: 100%;"></div>
+        <div *ngIf="selectedTabIndex === 0 && postsIsLoading && userListings.length > 0" class="loading-indicator w-100p p-12">
+          <p class="text-center">Loading more posts...</p>
+        </div>
       </mat-tab>
 
       <mat-tab
@@ -44,6 +48,11 @@
             </ng-container>
           </ng-container>
 
+<!--          TODO :: Add proper design for this-->
+        </div>
+        <div id="user-profile-sentinel" *ngIf="selectedTabIndex === 1 && favoritesHasMore" style="height: 1px; width: 100%;"></div>
+        <div *ngIf="selectedTabIndex === 1 && favoritesIsLoading && favoriteListings.length > 0" class="loading-indicator w-100p p-12">
+          <p class="text-center">Loading more favorites...</p>
         </div>
       </mat-tab>
     </mat-tab-group>
