@@ -56,7 +56,10 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 
 	attachFormValueChangeListener() {
 		this.createListingForm.get('countryId')?.valueChanges
-				.pipe(debounceTime(800))
+				.pipe(
+						debounceTime(800),
+						takeUntil(this.destroy$)
+				)
 				.subscribe(countryId => {
 					if (countryId) {
 						this.states = [];
@@ -66,7 +69,10 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 					}
 				});
 		this.createListingForm.get('stateId')?.valueChanges
-				.pipe(debounceTime(800))
+				.pipe(
+						debounceTime(800),
+						takeUntil(this.destroy$)
+				)
 				.subscribe(stateCode => {
 					if (stateCode) {
 						this.cities = [];
@@ -122,12 +128,14 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	}
 
 	getCities(stateCode: number) {
-		this.locationApiService.getCities(stateCode).subscribe(r => {
-			if (r.isSuccessful()) {
-				this.cities = r.body?.data ?? [];
-				this.createListingForm.get('cityId')?.enable();
-			}
-		});
+		this.locationApiService.getCities(stateCode)
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(r => {
+					if (r.isSuccessful()) {
+						this.cities = r.body?.data ?? [];
+						this.createListingForm.get('cityId')?.enable();
+					}
+				});
 	}
 
 	onDragOver(event: DragEvent) {
@@ -223,7 +231,8 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 							});
 
 							return of(null)
-						})
+						}),
+						takeUntil(this.destroy$)
 				).subscribe(res => {
 					if (!res) {
 						this.isLoading = false;

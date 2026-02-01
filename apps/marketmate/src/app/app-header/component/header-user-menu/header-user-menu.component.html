@@ -11,7 +11,7 @@
        w-264 mt-72">
 
     <mm-user-menu-nav
-        (click)="onUserIconClick()"
+        (click)="onUserIconClick($event)"
         class="pl-4 pr-4 h-56 br-20"
         iconImgContainerClass="h-48 w-48"
         textContainerClass="h-48 pl-4 pr-4"
@@ -26,7 +26,7 @@
     >
     </mm-user-menu-nav>
     <mm-user-menu-nav
-        (click)="onLogOutClick()"
+        (click)="onLogOutClick($event)"
         class="pl-4 pr-4 h-56 br-20"
         iconImgContainerClass="h-48 w-48"
         textContainerClass="h-48 pl-4 pr-4"

@@ -41,7 +41,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 	@Input() self: boolean = false;
 	@Input() isMobile: boolean = false;
 	isBottomSheet = false;
-	destroy$: Subject<void> = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 	renderIcon = false
 	@Output() expandComponent = new EventEmitter<boolean>();
 	isUpdatingProfile = false;
@@ -103,7 +103,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 						}
 					});
 
-			dialogRef.afterClosed().subscribe((updatedPayload: UpdateUserPayload | null) => {
+			dialogRef.afterClosed()
+					.pipe(takeUntil(this.destroy$))
+					.subscribe((updatedPayload: UpdateUserPayload | null) => {
 				if (!updatedPayload) return;
 				this.isUpdatingProfile = true;
 				this.cdr.markForCheck();
@@ -233,7 +235,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							});
 							this.cdr.markForCheck();
 							return of(null);
-						})
+						}),
+						takeUntil(this.destroy$)
 				).subscribe(finalResult => {
 					this.isUpdatingProfile = false;
 					if (!finalResult) {

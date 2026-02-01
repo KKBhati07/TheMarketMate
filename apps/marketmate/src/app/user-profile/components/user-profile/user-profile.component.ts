@@ -23,7 +23,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	isMobile = false;
 	userDetails: UserDetailsDto | null = null;
 	self: boolean = false;
-	destroy$ = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 	userUuid: string = '';
 	userListings: Listing[] = [];
 	favoriteListings: Listing[] = [];
@@ -327,7 +327,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.intersectionObserver) {
 			this.intersectionObserver.disconnect();
 		}
-		this.destroy$.next(null);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 

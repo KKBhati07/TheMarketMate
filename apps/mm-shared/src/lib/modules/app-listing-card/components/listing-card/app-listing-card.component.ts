@@ -15,7 +15,7 @@ import { AppUrls } from '../../../../common.urls';
 import { fadeSlideIn } from '../../../../animations/fade-slide-in.animation';
 import { FavoriteService } from '../../../../services/favorite.service';
 import { AuthService } from '../../../../services/auth.service';
-import { Subject, takeUntil } from 'rxjs';
+import { concatMap, debounceTime, Subject, takeUntil } from 'rxjs';
 import { LocationType } from '../../../../models/location.model';
 import { FilterService } from '../../../../services/filter.service';
 import { NotificationService } from '../../../../notification';
@@ -29,32 +29,33 @@ import { NotificationService } from '../../../../notification';
 })
 export class ListingCardComponent implements OnInit, OnDestroy {
 
-	/**
-	 * Side effect: Updates icon name and deleted status when listing changes.
-	 */
 	@Input('listing') set setListing(listing: Listing) {
 		this.listing = listing;
 		this.iconName = getIconName(listing?.category.name);
 		this.isDeleted = listing.is_deleted ?? false;
+		this.lastConfirmedFavoriteState = listing.is_favorite;
 		this.cdr.markForCheck();
 	}
 
 	@Input() showFavoriteIcon: boolean = true;
 	@Input() isSelectionMode: boolean = false;
-	
+
+	private favoriteIntent$ = new Subject<boolean>();
+
+
 	isDeleted: boolean = true;
-	
+
 	@Output() onSelect: EventEmitter<{ isSelected: boolean, id: number | undefined }>
 			= new EventEmitter<{ isSelected: boolean, id: number | undefined }>();
-	
+
 	isSelected: boolean = false;
 
 	listing: Listing | undefined;
 	renderBrokenImage = false;
 	iconName: string = '';
-	destroy$: Subject<void> = new Subject();
-	isFavoriteLoading = false;
+	destroy$: Subject<void> = new Subject<void>();
 	protected readonly LocationType = LocationType;
+	lastConfirmedFavoriteState: boolean = false;
 
 	constructor(private cdr: ChangeDetectorRef,
 							private favoriteService: FavoriteService,
@@ -66,7 +67,48 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
+		this.subscribeToFavoriteIntent();
 	}
+
+	subscribeToFavoriteIntent(): void {
+		this.favoriteIntent$
+				.pipe(
+						debounceTime(800),
+						// Process one request at a time
+						concatMap(isFavorite =>
+								this.favoriteService
+										.setFavorite(this.listing!.id, isFavorite)
+										.pipe(takeUntil(this.destroy$))
+						)
+				)
+				.subscribe(res => {
+					if (res.isSuccessful()) {
+						if (this.listing) {
+							this.listing.is_favorite = this.lastConfirmedFavoriteState =
+									res.body?.data?.is_favorite ?? this.listing.is_favorite;
+
+							if (this.listing.is_favorite) {
+								this.notificationService.success({
+									message: `Added to favorites`,
+								});
+							} else {
+								this.notificationService.success({
+									message: `Removed from Favorites`,
+								});
+							}
+
+							this.cdr.markForCheck();
+						}
+					} else {
+						this.listing!.is_favorite = this.lastConfirmedFavoriteState;
+						this.notificationService.error({
+							message: 'Failed to update favorite',
+						});
+						this.cdr.markForCheck();
+					}
+				});
+	}
+
 
 	onItemClick() {
 		if (this.isSelectionMode) {
@@ -86,40 +128,16 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 
 	onFavoriteIconClick() {
 		if (!this.authService.Authenticated) {
-			this.router.navigate([AppUrls.AUTH.BASE,AppUrls.AUTH.LOGIN],
-					{ queryParams: { redirect: this.router.url } }).then(r => null)
+			this.router.navigate([AppUrls.AUTH.BASE, AppUrls.AUTH.LOGIN],
+					{ queryParams: { redirect: this.router.url } }).then(r => null);
 			return;
 		}
-		if (this.isFavoriteLoading) return;
-		this.isFavoriteLoading = true;
+
+		if (!this.listing) return;
+		const next = !this.listing.is_favorite;
+		this.listing.is_favorite = next;
 		this.cdr.markForCheck();
-		this.favoriteService.setUnsetFavorite(this.listing?.id ?? 0)
-				.pipe(takeUntil(this.destroy$))
-				.subscribe(res => {
-					this.isFavoriteLoading = false;
-					if (res.isSuccessful()) {
-						if (this.listing) {
-							this.listing.is_favorite =
-									res.body?.data?.is_favorite ?? false;
-
-							if (this.listing.is_favorite) {
-								this.notificationService.success({
-									message: `Added to favorites`,
-								});
-
-							} else {
-								this.notificationService.success({
-									message: `Removed form Favorites`,
-								});
-
-							}
-							this.cdr.markForCheck();
-						}
-					} else {
-						this.cdr.markForCheck();
-					}
-				})
-
+		this.favoriteIntent$.next(next);
 	}
 
 	onLocationClick(type: LocationType, id: number | undefined) {

@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AppUrls } from '../../../app.urls';
 import { AuthService, LoggingService, NotificationService } from 'mm-shared';
 import { Router } from '@angular/router';
 import { fadeInOut } from 'mm-shared';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'mm-header-user-menu',
@@ -11,12 +12,13 @@ import { fadeInOut } from 'mm-shared';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [fadeInOut]
 })
-export class HeaderUserMenuComponent {
+export class HeaderUserMenuComponent implements OnDestroy {
 
 	@Input() userName: string = '';
 	@Input() profileImgUrl: string | undefined;
 	@Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
 	isLoggingOut = false;
+	destroy$: Subject<void> = new Subject<void>();
 
 	constructor(
 			private authService: AuthService,
@@ -26,33 +28,43 @@ export class HeaderUserMenuComponent {
 	) {
 	}
 
-	onUserIconClick() {
+	onUserIconClick(event: Event) {
+		event.stopPropagation();
 		const uuid = this.authService.UserDetails?.uuid;
 		if (!uuid) return;
 		this.router.navigate(
-				[AppUrls.USER.BASE,AppUrls.USER.USER_PROFILE(uuid)],
+				[AppUrls.USER.BASE, AppUrls.USER.USER_PROFILE(uuid)],
 				{ queryParams: { posts: true } }
 		).then(r => {
 			this.closeMenu.emit();
 		});
 	}
 
-	onLogOutClick() {
+	onLogOutClick(event: Event) {
+		event.stopPropagation();
 		if (this.isLoggingOut) return;
 		this.isLoggingOut = true;
-		this.authService.logoutUser().subscribe(res => {
-			this.isLoggingOut = false;
-			if (res.isSuccessful()) {
-				this.router.navigate([AppUrls.ROOT]).then(r => {
-					window.location.reload();
-				});
-			} else {
-				this.logger.warn('Logout attempt failed', { status: res.status, statusText: res.statusText });
-				this.notificationService.error({
-					message: `Logout attempt failed`,
-				});
-			}
-		})
+		this.authService.logoutUser()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					this.isLoggingOut = false;
+					if (res.isSuccessful()) {
+						this.router.navigate([AppUrls.ROOT]).then(r => {
+							window.location.reload();
+						});
+					} else {
+						this.logger.warn('Logout attempt failed', { status: res.status, statusText: res.statusText });
+						this.notificationService.error({
+							message: `Logout attempt failed`,
+						});
+					}
+				})
+	}
+
+	ngOnDestroy() {
+		console.warn('ON Destroy called !!')
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 
 }

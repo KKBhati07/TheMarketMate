@@ -43,6 +43,7 @@
             class="flex-1"
             formControlName="categoryId"
             [data]="categories"
+            valueKey="id"
             placeholder="Category"
         ></mm-autocomplete-select>
       </div>
@@ -57,18 +58,21 @@
             class="flex-1"
             formControlName="countryId"
             [data]="countries"
+            valueKey="id"
             placeholder="Country"
         ></mm-autocomplete-select>
         <mm-autocomplete-select
             class="flex-1"
             formControlName="stateId"
             [data]="states"
+            valueKey="id"
             placeholder="State"
         ></mm-autocomplete-select>
         <mm-autocomplete-select
             class="flex-1"
             formControlName="cityId"
             [data]="cities"
+            valueKey="id"
             placeholder="City"
         ></mm-autocomplete-select>
 

@@ -21,7 +21,7 @@ export class FormContainerComponent implements OnInit, OnDestroy {
 	isAdMInPortal = false;
 	slideFrom = false;
 	isMobile = true;
-	destroy$: Subject<boolean> = new Subject<boolean>();
+	destroy$: Subject<void> = new Subject<void>();
 
 	constructor(
 			private cdr: ChangeDetectorRef,
@@ -76,7 +76,7 @@ export class FormContainerComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(true)
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 }

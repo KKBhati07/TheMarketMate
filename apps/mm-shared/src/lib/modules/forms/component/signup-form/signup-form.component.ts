@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PasswordValidator } from "./validator";
@@ -23,7 +23,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 	step = 1;
 	errorText: ErrorText = {}
 	isBottomSheet = false;
-	destroy$ = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 	isLoading = false;
 
 	constructor(
@@ -63,6 +63,15 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 	closeForm() {
 		this.signUpForm.reset();
 		this.router.navigate([AppUrls.ROOT]).then(r => null)
+	}
+
+	@HostListener('keydown.enter', ['$event'])
+	onEnterKeyPress(event: KeyboardEvent) {
+		// handle Enter key on step 1
+		if (this.step === 1 && !this.checkForNameEmailValidation(true)) {
+			event.preventDefault();
+			this.onNextClick();
+		}
 	}
 
 	onNextClick() {
@@ -171,7 +180,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(null)
-		this.destroy$.complete()
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

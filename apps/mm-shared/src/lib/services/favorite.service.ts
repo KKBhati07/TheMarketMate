@@ -10,7 +10,7 @@ export class FavoriteService {
 	constructor(private readonly apiService: ApiService) {
 	}
 
-	setUnsetFavorite(listingId: number): Observable<ApiHttpResponse<ApiResponse<{ is_favorite: boolean }>>> {
-		return this.apiService.post(AppUrls.API.V1.FAVORITE.SET_UNSET, { listing_id: listingId });
+	setFavorite(listingId: number, isFavorite: boolean): Observable<ApiHttpResponse<ApiResponse<{ is_favorite: boolean }>>> {
+		return this.apiService.put(`${AppUrls.API.V1.FAVORITE.SET}/${listingId}`, { is_favorite: isFavorite });
 	}
 }

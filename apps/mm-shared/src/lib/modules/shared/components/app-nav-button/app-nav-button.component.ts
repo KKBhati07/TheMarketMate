@@ -42,7 +42,7 @@ export class AppNavButtonComponent implements OnDestroy {
 	@Input() target?: RouteTarget;
 	@Input() exact: boolean = true;
 
-	destroy$: Subject<void> = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 	otherActiveRoutes: string[] = [];
 	isActiveRoute = false;
 

@@ -2,6 +2,7 @@ import {
 	Component,
 	Input,
 	OnInit,
+	OnDestroy,
 	forwardRef,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -10,6 +11,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject, takeUntil } from 'rxjs';
 import { FormatTextPipe } from 'mm-shared';
 import { dropdownAnimation } from 'mm-shared';
 
@@ -28,7 +30,7 @@ import { dropdownAnimation } from 'mm-shared';
 export class AutocompleteSelectComponent<
 		T = Record<string, unknown>,
 		V extends keyof T = keyof T
-> implements OnInit, ControlValueAccessor {
+> implements OnInit, OnDestroy, ControlValueAccessor {
 	@Input('data') set setData(data: T[]) {
 		if (data?.length) {
 			this.data = data;
@@ -49,6 +51,7 @@ export class AutocompleteSelectComponent<
 	searchControl = new FormControl('');
 	filteredData: T[] = [];
 	isDropdownOpen = false;
+	destroy$: Subject<void> = new Subject<void>();
 
 	private onChange: (value: T[keyof T] | null) => void = () => {};
 	private onTouched: () => void = () => {};
@@ -61,7 +64,11 @@ export class AutocompleteSelectComponent<
 
 	ngOnInit() {
 		this.searchControl.valueChanges
-				.pipe(debounceTime(500), distinctUntilChanged())
+				.pipe(
+						debounceTime(500),
+						distinctUntilChanged(),
+						takeUntil(this.destroy$)
+				)
 				.subscribe(value => {
 					const term = (value || '').toLowerCase();
 					this.filteredData = this.data.filter(item =>
@@ -125,4 +132,10 @@ export class AutocompleteSelectComponent<
 		}, 200);
 		this.onTouched();
 	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
+
 }

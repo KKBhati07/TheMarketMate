@@ -28,7 +28,7 @@ export const AppUrls = {
 				OBJECT_EXISTS: 'v1/storage/object_exists',
 			},
 			FAVORITE: {
-				SET_UNSET: 'v1/favorite/set_unset'
+				SET: 'v1/favorite'
 			}
 		}
 	}

@@ -34,7 +34,7 @@ export class AdminUserListComponent implements OnDestroy {
 			= new EventEmitter<{ action: string, uuid: string }>()
 	@Output() getUpdatedList: EventEmitter<boolean>
 			= new EventEmitter<boolean>()
-	destroy$ = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 	renderIcon = false;
 
 	constructor(
@@ -82,7 +82,9 @@ export class AdminUserListComponent implements OnDestroy {
 							isMobile: this.isMobile
 						}
 					});
-			dialogRef.afterClosed().subscribe((data: FormData | null) => {
+			dialogRef.afterClosed()
+					.pipe(takeUntil(this.destroy$))
+					.subscribe((data: FormData | null) => {
 				if (data) {
 					this.adminService.updateUser(data)
 							.pipe(takeUntil(this.destroy$))
@@ -103,7 +105,7 @@ export class AdminUserListComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(true);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 

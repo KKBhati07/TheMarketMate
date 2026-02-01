@@ -14,7 +14,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 	users: UserDetailsDto[] = [];
 	isMobile = false;
 	isLoading = false;
-	destroy$ = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 	currentPage = 0;
 	hasMore = true;
 	private intersectionObserver?: IntersectionObserver;
@@ -137,7 +137,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.intersectionObserver) {
 			this.intersectionObserver.disconnect();
 		}
-		this.destroy$.next(null);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 

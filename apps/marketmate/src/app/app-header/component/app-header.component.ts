@@ -4,11 +4,12 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
+	OnDestroy,
 	OnInit,
 	ViewChild
 } from "@angular/core";
 import { NavigationEnd, Params, Router } from "@angular/router";
-import { BehaviorSubject, filter } from "rxjs";
+import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
 import { AuthService } from "mm-shared";
 import { User } from "mm-shared";
 import { Redirect } from "mm-shared";
@@ -33,7 +34,7 @@ import { environment } from '../../../environments/environment';
 	styleUrls: ['./app-header.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
 	categories: Category[] = []
 	isMobile = false;
 	isLoading = true;
@@ -43,6 +44,7 @@ export class AppHeaderComponent implements OnInit {
 	showHeaderMenu = false;
 	showUserMenu = false;
 	isAuthenticated$ = new BehaviorSubject<boolean>(false);
+	destroy$: Subject<void> = new Subject<void>();
 
 	user: User | null = null;
 	renderIcon = false;
@@ -92,17 +94,20 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	checkForUserUpdate() {
-		this.authService.getUpdatedUser().subscribe(user => {
-			this.user = user;
-			this.renderIcon = false;
-			this.isAdmin = this.user.admin;
-			this.cdr.markForCheck();
-		})
+		this.authService.getUpdatedUser()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(user => {
+					this.user = user;
+					this.renderIcon = false;
+					this.isAdmin = this.user.admin;
+					this.cdr.markForCheck();
+				})
 	}
 
 	checkForActiveRoute() {
 		this.router.events.pipe(
-				filter(event => event instanceof NavigationEnd)
+				filter(event => event instanceof NavigationEnd),
+				takeUntil(this.destroy$)
 		).subscribe((event: NavigationEnd) => {
 			this.showHeader = !(event.url.includes(SharedUrls.AUTH.LOGIN)
 					|| event.url.includes(SharedUrls.AUTH.SIGNUP));
@@ -173,19 +178,21 @@ export class AppHeaderComponent implements OnInit {
 	getCategories() {
 		this.categoriesLoading = true;
 		this.cdr.markForCheck();
-		this.categoryService.getCategories().subscribe(res => {
-			this.categoriesLoading = false;
-			if (res.isSuccessful()) {
-				this.categories = res.body?.data?.categories ?? [];
-				this.cdr.markForCheck();
-			} else {
-				this.logger.warn('Failed to load categories', { status: res.status, statusText: res.statusText });
-				this.notificationService.error({
-					message: 'Failed to load categories. Please try again.',
-				});
-				this.cdr.markForCheck();
-			}
-		})
+		this.categoryService.getCategories()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					this.categoriesLoading = false;
+					if (res.isSuccessful()) {
+						this.categories = res.body?.data?.categories ?? [];
+						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load categories', { status: res.status, statusText: res.statusText });
+						this.notificationService.error({
+							message: 'Failed to load categories. Please try again.',
+						});
+						this.cdr.markForCheck();
+					}
+				})
 	}
 
 	private checkForAuthenticationAndSetUser() {
@@ -235,13 +242,20 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	private setIsMobile() {
-		this.deviceDetector.isMobile().subscribe(isMobile => {
-			this.isMobile = isMobile;
-			this.cdr.markForCheck();
-		});
+		this.deviceDetector.isMobile()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(isMobile => {
+					this.isMobile = isMobile;
+					this.cdr.markForCheck();
+				});
 	}
 
 	onLogoClick() {
 		this.router.navigate(AppUrls.ROOT.split('/')).then(r => null);
+	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

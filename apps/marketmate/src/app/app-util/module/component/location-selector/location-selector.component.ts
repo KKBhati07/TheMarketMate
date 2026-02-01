@@ -17,7 +17,7 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 	countries: Country[] = [];
 	states: State[] = [];
 	cities: City[] = [];
-	destroy$: Subject<void> = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 
 	constructor(
 			private locationService: LocationApiService,
@@ -87,7 +87,7 @@ export class LocationSelectorComponent implements OnInit, OnDestroy {
 		this.filterService.updateFilter({ state_id: stateId })
 	}
 
-	onCitySelected(cityId: string) {
+	onCitySelected(cityId: number) {
 		this.filterService.updateFilter({ city_id: cityId })
 	}
 

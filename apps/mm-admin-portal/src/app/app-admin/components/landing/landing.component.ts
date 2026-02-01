@@ -14,7 +14,7 @@ import { Subject, takeUntil } from "rxjs";
 export class LandingComponent implements OnInit, OnDestroy {
 	isMobile: boolean = false;
 	isUsersSelected = true;
-	destroy$ = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 
 	protected readonly AppUrls = AppUrls;
 
@@ -65,7 +65,7 @@ export class LandingComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(true);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 }

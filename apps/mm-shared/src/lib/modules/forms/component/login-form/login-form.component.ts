@@ -22,7 +22,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 	loginForm: FormGroup;
 	invalidEmailText = '';
 	isBottomSheet = false
-	destroy$: Subject<boolean> = new Subject<boolean>();
+	destroy$: Subject<void> = new Subject<void>();
 	isFourOOne = false;
 	errorText: string = '';
 	isLoading = false;
@@ -143,7 +143,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(true);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 

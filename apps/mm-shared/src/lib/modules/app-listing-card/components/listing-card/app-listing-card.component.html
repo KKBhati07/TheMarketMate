@@ -20,16 +20,13 @@ cursor-pointer br-24 w-288 h-312">
       <ng-container *ngIf="showFavoriteIcon">
         <div
             (click)="onFavoriteIconClick()"
-            [class.disabled]="isFavoriteLoading"
             class="favorite-icon position-absolute">
           <mat-icon
-              *ngIf="!isFavoriteLoading"
               [class.favorite]="listing?.is_favorite"
               class="fs-28 w-28 h-28"
               [fontIcon]="listing?.is_favorite?'favorite':'favorite_border'"
           >
           </mat-icon>
-          <mm-loader *ngIf="isFavoriteLoading" class="w-20 h-20"></mm-loader>
         </div>
       </ng-container>
 
