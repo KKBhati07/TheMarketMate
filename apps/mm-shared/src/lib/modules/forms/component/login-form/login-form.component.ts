@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from "../../../../services/auth.service";
@@ -34,7 +35,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 			private cdr: ChangeDetectorRef,
 			private authService: AuthService,
 			@Inject(MAT_BOTTOM_SHEET_DATA) public data: { openInBottomSheet: boolean },
-			private bsr: MatBottomSheetRef
+			private bsr: MatBottomSheetRef,
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 		this.loginForm = this.fb.group({
 			email: ['', [Validators.required, Validators.email]],
@@ -124,7 +126,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 					if (res.isSuccessful()) {
 						const redirectUrl = this.route.snapshot.queryParamMap.get('redirect');
 						this.router.navigateByUrl(redirectUrl || AppUrls.ROOT).then(r => {
-							window.location.reload();
+							if (isPlatformBrowser(this.platformId)) {
+								window.location.reload();
+							}
 						});
 					} else {
 						if (res.status === 401) {

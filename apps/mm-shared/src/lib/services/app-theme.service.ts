@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CONSTANTS } from '../app.constants';
 import { LocalStorageService } from './local-storage.service';
 import { ThemeOptions } from '../types/common.type';
@@ -13,11 +14,19 @@ export class ThemeService {
 	private key = CONSTANTS.THEME.KEY;
 	private className = 'light-theme';
 	private activeTheme: ThemeOptions | null = null;
+	private readonly isBrowser: boolean;
 
-	constructor(private readonly localStorageService: LocalStorageService) {
+	constructor(
+		private readonly localStorageService: LocalStorageService,
+		@Inject(PLATFORM_ID) private platformId: Object
+	) {
+		this.isBrowser = isPlatformBrowser(this.platformId);
 	}
 
 	init() {
+		if (!this.isBrowser) {
+			return;
+		}
 		const savedTheme = this.localStorageService.AppTheme;
 		if (savedTheme === CONSTANTS.THEME.LIGHT) this.setLight();
 		else if (savedTheme === CONSTANTS.THEME.DARK) this.setDark();
@@ -27,13 +36,17 @@ export class ThemeService {
 	}
 
 	setLight() {
-		document.documentElement.classList.add(this.className);
+		if (this.isBrowser && typeof document !== 'undefined') {
+			document.documentElement.classList.add(this.className);
+		}
 		this.localStorageService.AppTheme = CONSTANTS.THEME.LIGHT as ThemeOptions;
 		this.activeTheme = CONSTANTS.THEME.LIGHT as ThemeOptions;
 	}
 
 	setDark() {
-		document.documentElement.classList.remove(this.className);
+		if (this.isBrowser && typeof document !== 'undefined') {
+			document.documentElement.classList.remove(this.className);
+		}
 		this.localStorageService.AppTheme = CONSTANTS.THEME.DARK as ThemeOptions
 		this.activeTheme = CONSTANTS.THEME.DARK as ThemeOptions;
 

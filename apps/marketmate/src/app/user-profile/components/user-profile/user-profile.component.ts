@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
 import { DeviceDetectorService, UserDetailsDto } from "mm-shared";
 import { UserService } from "../../../services/user.service";
@@ -53,6 +54,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 			private listingService: ListingService,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 	}
 
@@ -255,7 +257,8 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	setupIntersectionObserver() {
-		if (typeof IntersectionObserver === 'undefined') {
+		if (!isPlatformBrowser(this.platformId) || typeof IntersectionObserver === 'undefined') {
+			// Fallback for SSR or browsers that don't support IntersectionObserver
 			return;
 		}
 
@@ -284,6 +287,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	observeSentinel() {
+		if (!isPlatformBrowser(this.platformId)) return;
 		this.intersectionObserver?.disconnect();
 		const sentinel = document.getElementById('user-profile-sentinel');
 		if (sentinel && this.intersectionObserver) {

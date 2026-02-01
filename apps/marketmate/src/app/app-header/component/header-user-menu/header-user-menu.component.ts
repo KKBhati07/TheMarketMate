@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { AppUrls } from '../../../app.urls';
 import { AuthService, LoggingService, NotificationService } from 'mm-shared';
 import { Router } from '@angular/router';
@@ -25,6 +26,7 @@ export class HeaderUserMenuComponent implements OnDestroy {
 			private router: Router,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 	}
 
@@ -50,7 +52,9 @@ export class HeaderUserMenuComponent implements OnDestroy {
 					this.isLoggingOut = false;
 					if (res.isSuccessful()) {
 						this.router.navigate([AppUrls.ROOT]).then(r => {
-							window.location.reload();
+							if (isPlatformBrowser(this.platformId)) {
+								window.location.reload();
+							}
 						});
 					} else {
 						this.logger.warn('Logout attempt failed', { status: res.status, statusText: res.statusText });

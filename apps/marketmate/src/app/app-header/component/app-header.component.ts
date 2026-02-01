@@ -4,10 +4,13 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
+	Inject,
 	OnDestroy,
 	OnInit,
+	PLATFORM_ID,
 	ViewChild
 } from "@angular/core";
+import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
 import { AuthService } from "mm-shared";
@@ -65,7 +68,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 			private filterService: FilterService,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
-			private dialog: MatDialog
+			private dialog: MatDialog,
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 	}
 
@@ -78,6 +82,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
 	@HostListener('document:click', ['$event'])
 	onDocumentClick(event: MouseEvent): void {
+		if (!isPlatformBrowser(this.platformId)) return;
 		const headerMenu = document.querySelector('.header-menu-container');
 		const target = event.target as Node;
 		if (!this.header?.nativeElement.contains(target)
@@ -227,7 +232,9 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 	}
 
 	onAdminClick() {
-		window.open(environment.adminAppUrl, '_blank', 'noopener');
+		if (isPlatformBrowser(this.platformId)) {
+			window.open(environment.adminAppUrl, '_blank', 'noopener');
+		}
 		this.closeHeader();
 	}
 

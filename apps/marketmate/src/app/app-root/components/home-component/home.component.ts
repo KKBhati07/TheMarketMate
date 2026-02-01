@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from '@angular/common';
 import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -33,7 +34,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 			private deviceDetectorService: DeviceDetectorService,
 			private filterService: FilterService,
 			private notificationService: NotificationService,
-			private logger: LoggingService
+			private logger: LoggingService,
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 	}
 
@@ -144,8 +146,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	setupIntersectionObserver() {
-		if (typeof IntersectionObserver === 'undefined') {
-			// Fallback for browsers that don't support IntersectionObserver
+		if (!isPlatformBrowser(this.platformId) || typeof IntersectionObserver === 'undefined') {
+			// Fallback for SSR or browsers that don't support IntersectionObserver
 			return;
 		}
 
@@ -167,6 +169,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	observeSentinel() {
+		if (!isPlatformBrowser(this.platformId)) return;
 		this.intersectionObserver?.disconnect();
 		const sentinel = document.getElementById('listing-sentinel');
 		if (sentinel && this.intersectionObserver) {

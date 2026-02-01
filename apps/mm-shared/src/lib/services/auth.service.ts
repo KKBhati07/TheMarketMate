@@ -1,12 +1,16 @@
 import { Injectable } from "@angular/core";
-import { Observable, Subject, tap } from "rxjs";
+import { map, Observable, of, Subject, tap } from "rxjs";
 import { ApiService } from "./api.service";
 import { AppUrls } from "../common.urls";
 import { Login, Signup } from "../models/login-signup.model";
 import { ApiHttpResponse } from "../utils/api-response.util";
 import { ApiResponse } from "../models/api-response.model";
-import { AuthDetailsResponse, LogoutResponse, CreateUserResponse, LoginResponse } from "../models/response.model";
-import { CookieService } from "ngx-cookie-service";
+import {
+	AuthDetailsResponse,
+	LogoutResponse,
+	CreateUserResponse,
+	LoginResponse,
+} from "../models/response.model";
 import { User } from "../models/user.model";
 import { AppContext } from '../types/common.type';
 
@@ -27,31 +31,39 @@ export class AuthService {
 
 	constructor(
 			private readonly apiService: ApiService,
-			private readonly cookieService: CookieService
 	) {
 	}
 
-	loadUserDetails(): Observable<ApiHttpResponse<ApiResponse<AuthDetailsResponse>>> {
+	loadUserDetails(): Observable<void> {
+		if (this.isAuthenticated) {
+			return of(void 0);
+		}
+
 		return this.apiService.get<ApiResponse<AuthDetailsResponse>>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
 				tap(res => {
 					if (res.isSuccessful()) {
-						this.isAuthenticated = res.body?.data?.authenticated || false;
-						const authDetails = res.body?.data?.auth_details;
-						if (authDetails) {
-							this.userDetails = {
-								name: authDetails.name,
-								email: authDetails.email,
-								uuid: authDetails.uuid,
-								profile_url: authDetails.profile_url || undefined,
-								is_admin: authDetails.is_admin,
-								admin: authDetails.is_admin,
-								contact_no: authDetails.contact_no
-							};
-							this.isAdmin = authDetails.is_admin;
-						}
+						this.setUser(res.body?.data)
 					}
-				})
+				}),
+				map(() => void 0)
 		);
+	}
+
+	setUser(data: AuthDetailsResponse | undefined | null): void {
+		this.isAuthenticated = data?.authenticated || false;
+		const authDetails = data?.auth_details;
+		if (authDetails) {
+			this.userDetails = {
+				name: authDetails.name,
+				email: authDetails.email,
+				uuid: authDetails.uuid,
+				profile_url: authDetails.profile_url || undefined,
+				is_admin: authDetails.is_admin,
+				admin: authDetails.is_admin,
+				contact_no: authDetails.contact_no
+			};
+			this.isAdmin = authDetails.is_admin;
+		}
 	}
 
 	signupUser(body: Signup): Observable<ApiHttpResponse<ApiResponse<CreateUserResponse>>> {
