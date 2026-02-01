@@ -37,6 +37,7 @@ export class AppHeaderComponent implements OnInit {
 	categories: Category[] = []
 	isMobile = false;
 	isLoading = true;
+	categoriesLoading = false;
 	isAdmin = false;
 	showHeader = true;
 	showHeaderMenu = false;
@@ -170,7 +171,10 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	getCategories() {
+		this.categoriesLoading = true;
+		this.cdr.markForCheck();
 		this.categoryService.getCategories().subscribe(res => {
+			this.categoriesLoading = false;
 			if (res.isSuccessful()) {
 				this.categories = res.body?.data?.categories ?? [];
 				this.cdr.markForCheck();
@@ -179,6 +183,7 @@ export class AppHeaderComponent implements OnInit {
 				this.notificationService.error({
 					message: 'Failed to load categories. Please try again.',
 				});
+				this.cdr.markForCheck();
 			}
 		})
 	}
@@ -201,10 +206,10 @@ export class AppHeaderComponent implements OnInit {
 	onNavigationClick(redirectTo: Redirect) {
 		if (!redirectTo) return;
 		if (redirectTo === 'LOGIN') {
-			this.router.navigate([SharedUrls.AUTH.BASE,SharedUrls.AUTH.LOGIN],
+			this.router.navigate([SharedUrls.AUTH.BASE, SharedUrls.AUTH.LOGIN],
 					{ queryParams: { redirect: this.router.url } }).then(r => null)
 		} else if (redirectTo === 'SIGNUP') {
-			this.router.navigate([SharedUrls.AUTH.BASE,SharedUrls.AUTH.SIGNUP]).then(r => null)
+			this.router.navigate([SharedUrls.AUTH.BASE, SharedUrls.AUTH.SIGNUP]).then(r => null)
 		}
 	}
 

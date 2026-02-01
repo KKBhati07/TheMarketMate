@@ -66,14 +66,19 @@
     </div>
   </div>
   <div class="listings-container mt-8 gap-12 flex-row">
-    <ng-container *ngFor="let listing of listings">
-      <mm-listing-card
-          (onSelect)="onListingSelect($event)"
-          [isSelectionMode]="isSelectionMode"
-          [showFavoriteIcon]="false"
-          [listing]="listing"
-      >
-      </mm-listing-card>
+    <ng-container *ngIf="!isLoading || listings.length > 0">
+      <ng-container *ngFor="let listing of listings">
+        <mm-listing-card
+            (onSelect)="onListingSelect($event)"
+            [isSelectionMode]="isSelectionMode"
+            [showFavoriteIcon]="false"
+            [listing]="listing"
+        >
+        </mm-listing-card>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="isLoading && listings.length === 0">
+      <mm-listing-card-skeleton *ngFor="let i of [1,2,3,4,5,6]"></mm-listing-card-skeleton>
     </ng-container>
   </div>
 

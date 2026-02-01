@@ -103,11 +103,19 @@
 </div>
 
 <ng-template #expandedCategoryTemplate>
-  <ng-container *ngFor="let category of categories">
-    <mm-product-category
-        (onCategoryClickEmitter)="onCategorySelect($event)"
+  <ng-container *ngIf="!categoriesLoading">
+    <ng-container *ngFor="let category of categories">
+      <mm-product-category
+          (onCategoryClickEmitter)="onCategorySelect($event)"
+          [isMobile]="isMobile"
+          [category]="category"></mm-product-category>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="categoriesLoading">
+    <mm-category-skeleton
         [isMobile]="isMobile"
-        [category]="category"></mm-product-category>
+        *ngFor="let i of [1,2,3,4,5,6,7]"
+    ></mm-category-skeleton>
   </ng-container>
 </ng-template>
 

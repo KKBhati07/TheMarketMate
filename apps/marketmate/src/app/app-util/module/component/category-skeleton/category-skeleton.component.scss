@@ -1,0 +1,20 @@
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.category-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--items-bg) 0px,
+    rgba(255, 255, 255, 0.4) 40px,
+    var(--items-bg) 80px
+  );
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}

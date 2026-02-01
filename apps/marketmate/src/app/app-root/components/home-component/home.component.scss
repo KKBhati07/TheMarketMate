@@ -13,9 +13,12 @@
 
   .right-section {
     width: 75vw;
-    flex-wrap: wrap;
-    overflow: auto;
-    transition: width 0.4s ease-in-out;
+
+    .items-container {
+      flex-wrap: wrap;
+      overflow: auto;
+      transition: width 0.4s ease-in-out;
+    }
 
     &.mobile {
       width: 100vw;

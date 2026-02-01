@@ -23,13 +23,10 @@
 
 <ng-template #noUsersOrLoadingTemplate>
   <ng-container *ngIf="isLoading">
-    <div class="no-content flex-row justify-content-center align-i-center h-100p">
-
-      <mm-loader></mm-loader>
+    <div class="admin-users-container h-100p br-44 pt-12 pb-20 ml-8 mb-12">
+      <mm-user-list-skeleton *ngFor="let i of [1,2,3,4,5,6]"></mm-user-list-skeleton>
     </div>
-
   </ng-container>
-
 
   <ng-container *ngIf="!isLoading && !users.length">
     <div class="no-content flex-row justify-content-center align-i-center h-100p">

@@ -14,16 +14,27 @@
   <div
       [ngClass]="isMobile?'justify-content-center':'pl-12'"
       [class.mobile]="isMobile"
-      class="right-section pt-4 flex-row br-20 gap-12">
+      class="right-section pt-4">
 
-    <ng-container *ngFor="let listing of listings; trackBy: trackByListingId">
-      <mm-listing-card [listing]="listing"></mm-listing-card>
-    </ng-container>
-  </div>
+    <div class="items-container flex-row br-20 gap-12"
+         [ngClass]="isMobile?'justify-content-center':'pl-12'"
+    >
 
-  <div id="listing-sentinel" *ngIf="hasMore" style="height: 1px; width: 100%;"></div>
-  <div *ngIf="isLoading && listings.length > 0" class="loading-indicator w-100p p-12">
-    <p class="text-center">Loading more listings...</p>
+      <ng-container *ngIf="!isLoading || listings.length > 0">
+        <ng-container *ngFor="let listing of listings; trackBy: trackByListingId">
+          <mm-listing-card [listing]="listing"></mm-listing-card>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="isLoading && listings.length === 0">
+        <mm-listing-card-skeleton *ngFor="let i of [1,2,3,4,5,6]"></mm-listing-card-skeleton>
+      </ng-container>
+
+    </div>
+    <div id="listing-sentinel" *ngIf="hasMore" style="height: 1px; width: 100%;"></div>
+    <div *ngIf="isLoading && listings.length > 0" class="loading-indicator w-100p p-12">
+      <p class="text-center">Loading more listings...</p>
+    </div>
   </div>
 
 </div>

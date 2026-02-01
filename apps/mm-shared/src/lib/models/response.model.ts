@@ -25,7 +25,7 @@ export interface UpdateUserResponse {
 
 export interface AuthDetailsResponse {
 	auth_details: UserDetailsDto;
-	is_authenticated: boolean;
+	authenticated: boolean;
 }
 
 export interface LogoutResponse {

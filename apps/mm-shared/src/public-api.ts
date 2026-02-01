@@ -13,6 +13,7 @@ export * from './lib/modules/shared/components/image-viewer/image-viewer.compone
 export * from './lib/modules/shared/components/image-preview/image-preview.component';
 export * from './lib/modules/shared/components/app-loader/app-loader.component';
 export * from './lib/modules/shared/components/user-profile-edit/user-profile-edit.component';
+export * from './lib/modules/app-listing-card/components/listing-card-skeleton/listing-card-skeleton.component';
 
 
 // Forms Module
@@ -24,7 +25,7 @@ export * from './lib/modules/forms/component/signup-form/signup-form.component';
 
 //Listing card module
 export * from './lib/modules/app-listing-card/app-listing-card.module';
-export * from './lib/modules/app-listing-card/components/app-listing-card.component';
+export * from './lib/modules/app-listing-card/components/listing-card/app-listing-card.component';
 
 
 // Services

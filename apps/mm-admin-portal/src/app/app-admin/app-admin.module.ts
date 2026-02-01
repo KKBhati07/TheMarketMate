@@ -8,13 +8,15 @@ import { MatIcon } from "@angular/material/icon";
 import { SharedModule } from "mm-shared";
 import { AdminUserListComponent } from "./components/user-list/user-list.component";
 import { AppListingCardModule } from 'mm-shared';
+import { UserListSkeletonComponent } from './components/user-list-skeleton/user-list-skeleton.component';
 
 @NgModule({
 	declarations: [
 		LandingComponent,
 		UsersComponent,
 		ListingComponent,
-		AdminUserListComponent
+		AdminUserListComponent,
+		UserListSkeletonComponent
 	],
 	imports: [
 		CommonModule,

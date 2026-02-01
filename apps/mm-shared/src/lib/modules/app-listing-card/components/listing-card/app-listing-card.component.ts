@@ -8,17 +8,17 @@ import {
 	OnInit,
 	Output
 } from '@angular/core';
-import { Listing } from '../../../models/listing.model';
-import { getIconName } from '../../../utils/common.util';
+import { Listing } from '../../../../models/listing.model';
+import { getIconName } from '../../../../utils/common.util';
 import { Router } from '@angular/router';
-import { AppUrls } from '../../../common.urls';
-import { fadeSlideIn } from '../../../animations/fade-slide-in.animation';
-import { FavoriteService } from '../../../services/favorite.service';
-import { AuthService } from '../../../services/auth.service';
+import { AppUrls } from '../../../../common.urls';
+import { fadeSlideIn } from '../../../../animations/fade-slide-in.animation';
+import { FavoriteService } from '../../../../services/favorite.service';
+import { AuthService } from '../../../../services/auth.service';
 import { Subject, takeUntil } from 'rxjs';
-import { LocationType } from '../../../models/location.model';
-import { FilterService } from '../../../services/filter.service';
-import { NotificationService } from '../../../notification';
+import { LocationType } from '../../../../models/location.model';
+import { FilterService } from '../../../../services/filter.service';
+import { NotificationService } from '../../../../notification';
 
 @Component({
 	selector: 'mm-listing-card',

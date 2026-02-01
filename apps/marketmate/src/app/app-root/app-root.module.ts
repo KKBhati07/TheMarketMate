@@ -21,7 +21,6 @@ import { AppListingCardModule, SharedModule } from 'mm-shared';
 		AppUtilModule, MatSlider,
 		MatSliderRangeThumb,
 		SharedModule,
-		AppListingCardModule
 	]
 })
 export class AppRootModule {

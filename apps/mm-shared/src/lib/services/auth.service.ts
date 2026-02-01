@@ -12,7 +12,7 @@ import { AppContext } from '../types/common.type';
 
 /**
  * Maintains authentication state in memory to avoid repeated server calls.
- * 
+ *
  * State is updated via side effects in loadUserDetails() to keep it synchronized
  * with server session. The Subject-based update stream allows components to
  * react to user profile changes without polling.
@@ -35,7 +35,7 @@ export class AuthService {
 		return this.apiService.get<ApiResponse<AuthDetailsResponse>>(AppUrls.API.V1.AUTH.AUTH_DETAILS).pipe(
 				tap(res => {
 					if (res.isSuccessful()) {
-						this.isAuthenticated = res.body?.data?.is_authenticated || false;
+						this.isAuthenticated = res.body?.data?.authenticated || false;
 						const authDetails = res.body?.data?.auth_details;
 						if (authDetails) {
 							this.userDetails = {

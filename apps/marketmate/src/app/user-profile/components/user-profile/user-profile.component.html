@@ -22,14 +22,21 @@
             [ngClass]="isMobile?'justify-content-center':''"
             style="flex-wrap: wrap"
             class="flex-row h-100p flex-wrap gap-12 pt-12">
-          <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
-            <mm-listing-card
-                [showFavoriteIcon]="false"
-                [listing]="listing"></mm-listing-card>
+          <ng-container *ngIf="!postsIsLoading || userListings.length > 0">
+            <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
+              <mm-listing-card
+                  [showFavoriteIcon]="false"
+                  [listing]="listing"></mm-listing-card>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="selectedTabIndex === 0 && postsIsLoading && userListings.length === 0">
+            <mm-listing-card-skeleton *ngFor="let i of [1,2,3,4,5,6]"></mm-listing-card-skeleton>
           </ng-container>
         </div>
-        <div id="user-profile-sentinel" *ngIf="selectedTabIndex === 0 && postsHasMore" style="height: 1px; width: 100%;"></div>
-        <div *ngIf="selectedTabIndex === 0 && postsIsLoading && userListings.length > 0" class="loading-indicator w-100p p-12">
+        <div id="user-profile-sentinel" *ngIf="selectedTabIndex === 0 && postsHasMore"
+             style="height: 1px; width: 100%;"></div>
+        <div *ngIf="selectedTabIndex === 0 && postsIsLoading && userListings.length > 0"
+             class="loading-indicator w-100p p-12">
           <p class="text-center">Loading more posts...</p>
         </div>
       </mat-tab>
@@ -42,16 +49,22 @@
             [ngClass]="isMobile?'justify-content-center':''"
             style="flex-wrap: wrap"
             class="flex-row gap-12 pt-12">
-          <ng-container *ngIf="favoriteListings?.length; else noFavoriteFoundTemplate">
-            <ng-container *ngFor="let listing of favoriteListings; trackBy: trackByListingId">
-              <mm-listing-card [listing]="listing"></mm-listing-card>
+          <ng-container *ngIf="!favoritesIsLoading || favoriteListings.length > 0">
+            <ng-container *ngIf="favoriteListings?.length; else noFavoriteFoundTemplate">
+              <ng-container *ngFor="let listing of favoriteListings; trackBy: trackByListingId">
+                <mm-listing-card [listing]="listing"></mm-listing-card>
+              </ng-container>
             </ng-container>
           </ng-container>
-
-<!--          TODO :: Add proper design for this-->
+          <ng-container *ngIf="selectedTabIndex === 1 && favoritesIsLoading && favoriteListings.length === 0">
+            <mm-listing-card-skeleton *ngFor="let i of [1,2,3,4,5,6]"></mm-listing-card-skeleton>
+          </ng-container>
+          <!--          TODO :: Add proper design for this-->
         </div>
-        <div id="user-profile-sentinel" *ngIf="selectedTabIndex === 1 && favoritesHasMore" style="height: 1px; width: 100%;"></div>
-        <div *ngIf="selectedTabIndex === 1 && favoritesIsLoading && favoriteListings.length > 0" class="loading-indicator w-100p p-12">
+        <div id="user-profile-sentinel" *ngIf="selectedTabIndex === 1 && favoritesHasMore"
+             style="height: 1px; width: 100%;"></div>
+        <div *ngIf="selectedTabIndex === 1 && favoritesIsLoading && favoriteListings.length > 0"
+             class="loading-indicator w-100p p-12">
           <p class="text-center">Loading more favorites...</p>
         </div>
       </mat-tab>
