@@ -6,7 +6,7 @@ import { AdminGuard } from '../guards/admin.guard';
 import {
 	AppUrls as SharedUrls,
 	FourOFourComponent,
-} from 'mm-shared';
+} from '@marketmate/shared';
 import { AppUrls } from './app.urls';
 import { AdminListingGuard } from '../guards/admin-listing.guard';
 

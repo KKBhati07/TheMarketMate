@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Category, City, Country, LoggingService, NotificationService, State } from 'mm-shared';
+import { Category, City, Country, LoggingService, NotificationService, State } from '@marketmate/shared';
 import { LocationApiService } from '../../../../services/location.service';
 import { CategoryService } from '../../../../services/category.service';
 import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { CONSTANTS } from '../../../../app.constants';
 import { ProductImage } from '../../../../types/common.type';
 import { ListingService } from '../../../../services/listing.service';
-import { StorageService, Directory } from 'mm-shared';
-import { FilePayload } from 'mm-shared';
+import { StorageService, Directory } from '@marketmate/shared';
+import { FilePayload } from '@marketmate/shared';
 import { PayloadImage } from '../../../../models/listing.model';
 
 @Component({

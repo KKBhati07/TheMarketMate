@@ -12,8 +12,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
-import { FormatTextPipe } from 'mm-shared';
-import { dropdownAnimation } from 'mm-shared';
+import { FormatTextPipe } from '@marketmate/shared';
+import { dropdownAnimation } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-autocomplete-select',

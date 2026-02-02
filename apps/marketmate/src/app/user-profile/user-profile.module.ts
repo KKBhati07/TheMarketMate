@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { UserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { AppListingCardModule, SharedModule } from 'mm-shared';
+import { AppListingCardModule, SharedModule } from '@marketmate/shared';
 import { RouterModule } from '@angular/router';
 import { userProfileRoutes } from './user-profile.routes';
 

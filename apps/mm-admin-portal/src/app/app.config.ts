@@ -17,7 +17,7 @@ import {
   SharedModule,
   themeInitializerFactory,
   ThemeService
-} from 'mm-shared';
+} from '@marketmate/shared';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {

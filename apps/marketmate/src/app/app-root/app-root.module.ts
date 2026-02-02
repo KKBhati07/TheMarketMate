@@ -6,7 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppUtilModule } from '../app-util/module/app-util.module';
 import { FiltersComponent } from './components/filters-component/filters.component';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
-import { AppListingCardModule, SharedModule } from 'mm-shared';
+import { AppListingCardModule, SharedModule } from '@marketmate/shared';
 
 @NgModule({
 	declarations: [

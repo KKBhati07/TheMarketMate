@@ -12,11 +12,11 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from "@angular/common/http";
 
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
-import { authInitializerFactory, GlobalErrorHandler, NotificationModule } from "mm-shared";
-import { AuthService } from "mm-shared";
-import { themeInitializerFactory } from 'mm-shared';
-import { ThemeService } from 'mm-shared';
-import { SharedModule } from 'mm-shared';
+import { authInitializerFactory, GlobalErrorHandler, NotificationModule } from "@marketmate/shared";
+import { AuthService } from "@marketmate/shared";
+import { themeInitializerFactory } from '@marketmate/shared';
+import { ThemeService } from '@marketmate/shared';
+import { SharedModule } from '@marketmate/shared';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {

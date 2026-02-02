@@ -3,11 +3,11 @@ import { isPlatformBrowser } from '@angular/common';
 import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Listing } from 'mm-shared';
-import { DeviceDetectorService } from 'mm-shared';
-import { FilterService } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { Listing } from '@marketmate/shared';
+import { DeviceDetectorService } from '@marketmate/shared';
+import { FilterService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-home',

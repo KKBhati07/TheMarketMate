@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { NavigationStart, Router } from "@angular/router";
 import { AppUrls } from '../../../utils/app.urls';
-import { DeviceDetectorService } from "mm-shared";
+import { DeviceDetectorService } from "@marketmate/shared";
 import { Subject, takeUntil } from "rxjs";
 
 @Component({

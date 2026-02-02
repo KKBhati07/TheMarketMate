@@ -13,23 +13,23 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
-import { AuthService } from "mm-shared";
-import { User } from "mm-shared";
-import { Redirect } from "mm-shared";
+import { AuthService } from "@marketmate/shared";
+import { User } from "@marketmate/shared";
+import { Redirect } from "@marketmate/shared";
 import { AppUrls } from "../../app.urls";
-import { AppUrls as SharedUrls } from "mm-shared";
+import { AppUrls as SharedUrls } from "@marketmate/shared";
 import { CONSTANTS } from "../../app.constants";
-import { DeviceDetectorService } from "mm-shared";
+import { DeviceDetectorService } from "@marketmate/shared";
 import { CategoryService } from "../../services/category.service";
-import { Category } from 'mm-shared';
-import { NavOption } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
-import { handleKeyboardActivation } from 'mm-shared';
+import { Category } from '@marketmate/shared';
+import { NavOption } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
 import {
 	PublishEditListingFormComponent
 } from '../../app-util/module/component/publish-listing-form/publish-edit-listing-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FilterService } from 'mm-shared';
+import { FilterService } from '@marketmate/shared';
 import { environment } from '../../../environments/environment';
 
 @Component({

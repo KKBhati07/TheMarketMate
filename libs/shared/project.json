@@ -1,0 +1,30 @@
+{
+  "name": "@marketmate/shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/shared/src",
+  "prefix": "lib",
+  "tags": [
+    "type:lib"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "project": "libs/shared/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{workspaceRoot}/dist/mm-libs/shared"
+      ]
+    }
+  }
+}

@@ -5,9 +5,9 @@ import { LandingComponent } from "./components/landing/landing.component";
 import { UsersComponent } from "./components/users/users.component";
 import { ListingComponent } from "./components/listings/listing.component";
 import { MatIcon } from "@angular/material/icon";
-import { SharedModule } from "mm-shared";
+import { SharedModule } from "@marketmate/shared";
 import { AdminUserListComponent } from "./components/user-list/user-list.component";
-import { AppListingCardModule } from 'mm-shared';
+import { AppListingCardModule } from '@marketmate/shared';
 import { UserListSkeletonComponent } from './components/user-list-skeleton/user-list-skeleton.component';
 
 @NgModule({

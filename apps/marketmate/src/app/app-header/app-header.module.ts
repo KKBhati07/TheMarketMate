@@ -8,7 +8,7 @@ import { AppHeaderMenuComponent } from './component/app-header-menu/app-header-m
 import { HeaderUserMenuComponent } from './component/header-user-menu/header-user-menu.component';
 import { UserMenuNavComponent } from './component/app-user-menu-nav/app-user-menu-nav.component';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'mm-shared';
+import { SharedModule } from '@marketmate/shared';
 
 
 @NgModule({

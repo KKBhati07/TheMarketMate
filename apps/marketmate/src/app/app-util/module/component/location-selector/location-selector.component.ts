@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { City, Country, State } from 'mm-shared';
+import { City, Country, State } from '@marketmate/shared';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationApiService } from '../../../../services/location.service';
-import { fadeSlideIn } from 'mm-shared';
-import { FilterService } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
+import { fadeSlideIn } from '@marketmate/shared';
+import { FilterService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-location-selector',

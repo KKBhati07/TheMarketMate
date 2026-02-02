@@ -1,0 +1,79 @@
+@if (renderComponent) {
+  <div class="login-signup-form-container-i"
+    [ngClass]="isBottomSheet?'':'w-600'"
+       [ngStyle]="{'border-top-right-radius':isBottomSheet?'20px':'',
+                  'height':isBottomSheet?'745px':'100vh',
+                  'border-bottom-left-radius':isBottomSheet?'': '20px'
+       }"
+    >
+    @if (isBottomSheet) {
+      <mm-bottomsheet-pill></mm-bottomsheet-pill>
+    }
+    @if (!isBottomSheet && !iSAdminPortal) {
+      <div (click)="closeForm()"
+        class="close-icon-container position-absolute cursor-pointer flex-row justify-content-center align-i-center border-circle w-36 h-36">
+        <mat-icon class="close-icon" fontIcon="close"></mat-icon>
+      </div>
+    }
+    <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+      <p class="form-heading cursor-default">{{ formHeading }}</p>
+      <input id="loginEmail"
+        [ngStyle]="{'border-color':getEmailValidation() || isFourOOne?'red':''}"
+        class="pass-input-container fs-12 display-block h-60 position-relative br-32 pl-12 mt-30"
+        formControlName="email" type="email"
+        placeholder="Enter your email"/>
+        <div class="invalid-text-container h-28 p-12">
+          @if (getEmailValidation()) {
+            <p class="invalid-text fs-12">* {{ invalidEmailText }}</p>
+          }
+        </div>
+        <div class="pass-input-container display-block h-60 position-relative br-32 pl-12 mt-30"
+          [ngStyle]="{'border-color':getPassValidation() || isFourOOne ? 'red':''}">
+          <input class="fs-12 pass-input border-none br-32" id="loginPassword" formControlName="password"
+            type="{{showPassword?'text':'password'}}"
+            placeholder="Enter your password"/>
+            <mat-icon
+              (click)="toggleShowPassword()"
+              (keydown)="onTogglePasswordKeydown($event)"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+              class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
+            </mat-icon>
+          </div>
+          <div class="invalid-text-container h-28 mt-12 p-12">
+            @if (getPassValidation()) {
+              <p class="invalid-text fs-12">* Password is required!</p>
+            }
+          </div>
+          @if (errorText.length) {
+        <div class="error-text-container flex-row justify-content-center
+        align-i-center h-60 w-100p br-32 pl-12 mt-16 mb-16">
+              <p>{{ errorText }}</p>
+            </div>
+          }
+          <mm-button
+            [type]="'submit'"
+            [text]="isLoading ? 'LOGGING IN...' : 'LOG IN'"
+            [class]="'h-60 w-100p fs-16'"
+            [iconClass]="'fw-1'"
+            [disabled]="getEmailValidation(true) || isLoading"
+          ></mm-button>
+        </form>
+        @if (!iSAdminPortal) {
+          <div class="signup-text-container pl-10">
+            <p class="signup-text">
+              Not a user?
+              <span (click)="navigateToLoginForm()"
+                (keydown)="onSignupLinkKeydown($event)"
+                tabindex="0"
+                role="link"
+                aria-label="Navigate to signup form"
+                class="cursor-pointer">
+                Signup
+              </span>
+            </p>
+          </div>
+        }
+      </div>
+    }

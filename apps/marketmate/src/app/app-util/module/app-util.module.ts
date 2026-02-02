@@ -7,7 +7,7 @@ import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
 import { LocationSelectorComponent } from './component/location-selector/location-selector.component';
 import { AutocompleteSelectComponent } from './component/app-autocomplete-select/app-autocomplete-select.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormatTextPipe, SharedModule } from 'mm-shared';
+import { FormatTextPipe, SharedModule } from '@marketmate/shared';
 import { HeadingComponent } from './component/product-category/app-heading/heading.component';
 import { SellItemButtonComponent } from './component/app-sell-item-button/app-sell-item-btn.component';
 import { RouterModule } from '@angular/router';

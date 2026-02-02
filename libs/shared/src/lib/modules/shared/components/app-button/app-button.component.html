@@ -1,0 +1,33 @@
+@if (type) {
+  <button
+      class="btn-container border-none flex-row
+       justify-content-center align-i-center
+     br-36 {{disabled?'disable':'enable cursor-pointer'}} "
+    [type]="type"
+    [ngClass]="class"
+    [class.warning]="isWarningBtn && !disabled"
+    [disabled]="disabled"
+    [ngStyle]="style"
+    >
+    @if ( showIcon && position === 'LEFT') {
+      <mat-icon
+        class="{{disabled? 'icon-disable':'icon-enable'}}"
+        [ngClass]="iconClass"
+        [fontIcon]="icon"
+      ></mat-icon>
+    }
+    @if (text?.length) {
+      <p [ngClass]="textClass">
+        {{ text }}
+      </p>
+    }
+    @if ( showIcon && position === 'RIGHT') {
+      <mat-icon
+        class="{{disabled? 'icon-disable':'icon-enable'}}"
+        [ngClass]="iconClass"
+        [fontIcon]="icon"
+      ></mat-icon>
+    }
+  </button>
+}
+

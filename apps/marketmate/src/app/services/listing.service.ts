@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiService, Listing, PaginatedResponse } from 'mm-shared';
+import { ApiService, Listing, PaginatedResponse } from '@marketmate/shared';
 import { AppUrls } from '../app.urls';
 import { Observable } from 'rxjs';
-import { ApiResponse } from 'mm-shared';
-import { ApiHttpResponse } from 'mm-shared';
+import { ApiResponse } from '@marketmate/shared';
+import { ApiHttpResponse } from '@marketmate/shared';
 import { CreateListingPayload } from '../models/listing.model';
 
 @Injectable({

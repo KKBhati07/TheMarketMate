@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { LoggingService, NotificationService, User, UserDetailsDto } from "mm-shared";
-import { DeviceDetectorService } from "mm-shared";
+import { LoggingService, NotificationService, User, UserDetailsDto } from "@marketmate/shared";
+import { DeviceDetectorService } from "@marketmate/shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-admin-users',

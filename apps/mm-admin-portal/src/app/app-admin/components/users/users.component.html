@@ -1,44 +1,40 @@
-<ng-container
-    *ngIf="!isLoading && users && users.length;
-     else noUsersOrLoadingTemplate">
+@if (!isLoading && users && users.length) {
   <div class="admin-users-container
   h-100p br-44 pt-12 pb-20 ml-8 mb-12">
-
-    <div *ngFor="let user of users">
-      <mm-admin-user-list
+    @for (user of users; track user) {
+      <div>
+        <mm-admin-user-list
           [user]="user"
           (deleteOrRestoreUser)="onDeleteOrRestoreUser($event)"
           (getUpdatedList)="getAllUsers(0, false)"
-          [isMobile]="isMobile"></mm-admin-user-list>
+        [isMobile]="isMobile"></mm-admin-user-list>
+      </div>
+    }
+  </div>
+  @if (hasMore) {
+    <div id="users-sentinel" style="height: 1px; width: 100%;"></div>
+  }
+  @if (isLoading && users.length > 0) {
+    <div class="loading-indicator w-100p p-12">
+      <p class="text-center">Loading more users...</p>
     </div>
-
-  </div>
-
-  <div id="users-sentinel" *ngIf="hasMore" style="height: 1px; width: 100%;"></div>
-  <div *ngIf="isLoading && users.length > 0" class="loading-indicator w-100p p-12">
-    <p class="text-center">Loading more users...</p>
-  </div>
-
-</ng-container>
-
-<ng-template #noUsersOrLoadingTemplate>
-  <ng-container *ngIf="isLoading">
+  }
+} @else {
+  @if (isLoading) {
     <div class="admin-users-container h-100p br-44 pt-12 pb-20 ml-8 mb-12">
-      <mm-user-list-skeleton *ngFor="let i of [1,2,3,4,5,6]"></mm-user-list-skeleton>
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <mm-user-list-skeleton></mm-user-list-skeleton>
+      }
     </div>
-  </ng-container>
-
-  <ng-container *ngIf="!isLoading && !users.length">
+  }
+  @if (!isLoading && !users.length) {
     <div class="no-content flex-row justify-content-center align-i-center h-100p">
       <div class="flex-column justify-content-center align-i-center">
-
         <mat-icon class="ls-option-icon cursor-pointer fs-100 h-100 w-100"
-                  [fontIcon]="'warning'"></mat-icon>
+        [fontIcon]="'warning'"></mat-icon>
         <p class="fs-40">No Users Found!</p>
       </div>
-
     </div>
+  }
+}
 
-  </ng-container>
-
-</ng-template>

@@ -1,7 +1,9 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "name": "marketmate",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "sourceRoot": "apps/marketmate/src",
+  "prefix": "app",
   "tags": [
     "type:app"
   ],
@@ -10,8 +12,6 @@
       "style": "scss"
     }
   },
-  "sourceRoot": "apps/marketmate/src",
-  "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
@@ -78,32 +78,11 @@
           "buildTarget": "marketmate:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n"
-    },
-    "test": {
-      "executor": "@angular-devkit/build-angular:karma",
-      "options": {
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
-        "tsConfig": "apps/marketmate/tsconfig.spec.json",
-        "inlineStyleLanguage": "scss",
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "apps/marketmate/public"
-          }
-        ],
-        "styles": [
-          "apps/mm-shared/src/styles/styles.scss",
-          "apps/marketmate/src/styles.scss"
-        ],
-        "scripts": []
-      }
     }
   }
 }

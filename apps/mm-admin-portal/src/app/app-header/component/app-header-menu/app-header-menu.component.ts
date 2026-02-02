@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { NavOption } from 'mm-shared';
-import { fadeInOut } from 'mm-shared';
-import { AppUrls as SharedUrls } from 'mm-shared';
+import { NavOption } from '@marketmate/shared';
+import { fadeInOut } from '@marketmate/shared';
+import { AppUrls as SharedUrls } from '@marketmate/shared';
 import { AppUrls } from '../../../utils/app.urls';
 
 @Component({

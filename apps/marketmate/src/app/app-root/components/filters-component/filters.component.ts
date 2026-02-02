@@ -4,7 +4,7 @@ import {
 	EventEmitter,
 	Output,
 } from '@angular/core';
-import { handleKeyboardActivation } from 'mm-shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-filters-component',

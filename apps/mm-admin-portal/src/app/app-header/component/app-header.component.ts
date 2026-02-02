@@ -10,14 +10,14 @@ import {
 } from "@angular/core";
 import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
-import { AuthService, LoggingService, NotificationService } from "mm-shared";
-import { User } from "mm-shared";
-import { AppUrls as SharedUrls } from "mm-shared";
+import { AuthService, LoggingService, NotificationService } from "@marketmate/shared";
+import { User } from "@marketmate/shared";
+import { AppUrls as SharedUrls } from "@marketmate/shared";
 import { AppUrls } from "../../utils/app.urls";
 import { CONSTANTS } from "../../utils/app.constants";
-import { DeviceDetectorService } from "mm-shared";
-import { NavOption } from 'mm-shared';
-import { handleKeyboardActivation } from 'mm-shared';
+import { DeviceDetectorService } from "@marketmate/shared";
+import { NavOption } from '@marketmate/shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-app-header',

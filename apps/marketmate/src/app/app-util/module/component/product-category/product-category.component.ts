@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { CONSTANTS } from "../../../../app.constants";
-import { Category } from 'mm-shared';
-import { getIconName } from 'mm-shared';
+import { Category } from '@marketmate/shared';
+import { getIconName } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-product-category',

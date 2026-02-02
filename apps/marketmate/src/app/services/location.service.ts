@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'mm-shared';
+import { ApiService } from '@marketmate/shared';
 import { AppUrls } from '../app.urls';
 import { Observable } from 'rxjs';
-import { ApiHttpResponse } from 'mm-shared';
-import { ApiResponse } from 'mm-shared';
-import { City, Country, State } from 'mm-shared';
+import { ApiHttpResponse } from '@marketmate/shared';
+import { ApiResponse } from '@marketmate/shared';
+import { City, Country, State } from '@marketmate/shared';
 
 @Injectable({
 	providedIn: 'root'

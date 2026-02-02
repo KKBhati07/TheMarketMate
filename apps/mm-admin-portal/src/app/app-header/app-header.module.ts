@@ -5,7 +5,7 @@ import { MatIcon } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppHeaderMenuComponent } from './component/app-header-menu/app-header-menu.component';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'mm-shared';
+import { SharedModule } from '@marketmate/shared';
 
 
 @NgModule({

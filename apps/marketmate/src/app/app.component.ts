@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppHeaderModule } from "./app-header/app-header.module";
-import { FormsModule } from 'mm-shared';
+import { FormsModule } from '@marketmate/shared';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
 import { UserProfileModule } from "./user-profile/user-profile.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { AppRootModule } from './app-root/app-root.module';
-import { NotificationModule } from 'mm-shared';
+import { NotificationModule } from '@marketmate/shared';
 
 @Component({
 	selector: 'app-root',

@@ -1,40 +1,47 @@
 <div
-    [ngClass]="isMobile?'':'p-12'"
-    class="home-container flex-row pt-4 br-20 mt-100 gap-12">
+  [ngClass]="isMobile?'':'p-12'"
+  class="home-container flex-row pt-4 br-20 mt-100 gap-12">
 
-  <div *ngIf="!isMobile" class="left-section pb-12 h-100p"
-       [class.collapsed]="!isExpanded">
-
-    <mm-filters-component
+  @if (!isMobile) {
+    <div class="left-section pb-12 h-100p"
+      [class.collapsed]="!isExpanded">
+      <mm-filters-component
         (expand)="toggleFilters($event)"
-    >
-    </mm-filters-component>
-  </div>
+        >
+      </mm-filters-component>
+    </div>
+  }
 
   <div
-      [ngClass]="isMobile?'justify-content-center':'pl-12'"
-      [class.mobile]="isMobile"
-      class="right-section pt-4">
+    [ngClass]="isMobile?'justify-content-center':'pl-12'"
+    [class.mobile]="isMobile"
+    class="right-section pt-4">
 
     <div class="items-container flex-row br-20 gap-12"
-         [ngClass]="isMobile?'justify-content-center':'pl-12'"
-    >
+      [ngClass]="isMobile?'justify-content-center':'pl-12'"
+      >
 
-      <ng-container *ngIf="!isLoading || listings.length > 0">
-        <ng-container *ngFor="let listing of listings; trackBy: trackByListingId">
+      @if (!isLoading || listings.length > 0) {
+        @for (listing of listings; track trackByListingId($index, listing)) {
           <mm-listing-card [listing]="listing"></mm-listing-card>
-        </ng-container>
-      </ng-container>
+        }
+      }
 
-      <ng-container *ngIf="isLoading && listings.length === 0">
-        <mm-listing-card-skeleton *ngFor="let i of [1,2,3,4,5,6]"></mm-listing-card-skeleton>
-      </ng-container>
+      @if (isLoading && listings.length === 0) {
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <mm-listing-card-skeleton></mm-listing-card-skeleton>
+        }
+      }
 
     </div>
-    <div id="listing-sentinel" *ngIf="hasMore" style="height: 1px; width: 100%;"></div>
-    <div *ngIf="isLoading && listings.length > 0" class="loading-indicator w-100p p-12">
-      <p class="text-center">Loading more listings...</p>
-    </div>
+    @if (hasMore) {
+      <div id="listing-sentinel" style="height: 1px; width: 100%;"></div>
+    }
+    @if (isLoading && listings.length > 0) {
+      <div class="loading-indicator w-100p p-12">
+        <p class="text-center">Loading more listings...</p>
+      </div>
+    }
   </div>
 
 </div>

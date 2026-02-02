@@ -1,17 +1,17 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
-import { DeviceDetectorService, UserDetailsDto } from "mm-shared";
+import { DeviceDetectorService, UserDetailsDto } from "@marketmate/shared";
 import { UserService } from "../../../services/user.service";
 import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ListingService } from '../../../services/listing.service';
-import { Listing } from 'mm-shared';
-import { AuthService } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { Listing } from '@marketmate/shared';
+import { AuthService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 
 @Component({
 	selector: "mm-user-profile",

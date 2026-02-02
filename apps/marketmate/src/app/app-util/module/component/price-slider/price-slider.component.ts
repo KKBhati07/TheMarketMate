@@ -8,7 +8,7 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { PriceRange } from '../../../../types/common.type';
-import { FilterService } from '../../../../../../../mm-shared/src/lib/services/filter.service';
+import { FilterService } from '../../../../../../../@marketmate/shared/src/lib/services/filter.service';
 
 @Component({
 	selector: 'mm-price-slider',
