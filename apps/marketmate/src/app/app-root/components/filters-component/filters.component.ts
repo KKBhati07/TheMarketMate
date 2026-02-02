@@ -4,6 +4,7 @@ import {
 	EventEmitter,
 	Output,
 } from '@angular/core';
+import { handleKeyboardActivation } from 'mm-shared';
 
 @Component({
 	selector: 'mm-filters-component',
@@ -20,6 +21,10 @@ export class FiltersComponent {
 	toggleFilters() {
 		this.isExpanded = !this.isExpanded;
 		this.expand.emit(this.isExpanded);
+	}
+
+	onToggleKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.toggleFilters(), event);
 	}
 
 }

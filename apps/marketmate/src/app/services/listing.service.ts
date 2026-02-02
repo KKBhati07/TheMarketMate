@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'mm-shared';
+import { ApiService, Listing, PaginatedResponse } from 'mm-shared';
 import { AppUrls } from '../app.urls';
 import { Observable } from 'rxjs';
 import { ApiResponse } from 'mm-shared';
 import { ApiHttpResponse } from 'mm-shared';
-import { CreateListingPayload, ListingResponse } from '../models/listing.model';
+import { CreateListingPayload } from '../models/listing.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -21,15 +21,18 @@ export class ListingService {
 		return this.apiService.patch(AppUrls.API.V1.LISTING.IMAGE_UPLOAD_FALLBACK, data)
 	}
 
-	getAll(queryParams: Record<string, string | number | boolean>, page?: number): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+	getAll(queryParams: Record<string, string | number | boolean>, page?: number):
+			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_ALL, page ? { ...queryParams, page } : queryParams)
 	}
 
-	getByUser(uuid: string, page: number = 0): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+	getByUser(uuid: string, page: number = 0):
+			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_BY_USER, { user: uuid, page })
 	}
 
-	getFavoriteByUser(uuid: string, page: number = 0): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+	getFavoriteByUser(uuid: string, page: number = 0):
+			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_FAVORITES, { user: uuid, page })
 	}
 }

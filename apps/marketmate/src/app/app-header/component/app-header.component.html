@@ -18,6 +18,10 @@
         <ng-container *ngIf="!isLoading">
           <ng-container *ngIf="(isAuthenticated$ | async) && isMobile">
             <div (click)="onProfileClick()"
+                 (keydown)="onProfileKeydown($event)"
+                 tabindex="0"
+                 role="button"
+                 aria-label="View user profile"
                  [ngClass]="!renderIcon?'styles_ri':''"
                  class=" profile-pic-container p-4 cursor-pointer border-circle align-i-center
                   justify-content-center flex-row w-36 h-36">
@@ -30,6 +34,10 @@
           <ng-container *ngIf="!isMobile; else menuIconTemplate ">
             <ng-container *ngIf="isAuthenticated$ | async; else loginSignupTemplate">
               <div (click)="onProfileClick()"
+                   (keydown)="onProfileKeydown($event)"
+                   tabindex="0"
+                   role="button"
+                   aria-label="View user profile"
                    [ngClass]="!renderIcon?'styles_ri':''"
                    class=" profile-pic-container p-4 cursor-pointer border-circle align-i-center
                   justify-content-center flex-row w-36 h-36">
@@ -151,6 +159,10 @@
 
 <ng-template #menuIconTemplate>
   <mat-icon (click)="onHeaderMenuClick()"
+            (keydown)="onMenuIconKeydown($event)"
+            tabindex="0"
+            role="button"
+            aria-label="Open menu"
             class=" profile-pic-icon ls-option-icon cursor-pointer fs-28 h-28 w-28"
             [fontIcon]="'menu'"></mat-icon>
 </ng-template>

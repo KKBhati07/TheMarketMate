@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { handleKeyboardActivation } from '../../../../utils/keyboard.util';
 
 @Component({
 	selector: 'mm-image-preview',
@@ -14,5 +15,8 @@ export class ImagePreviewComponent {
 	@Input() showRemoveIcon: boolean = true;
 	@Output() removeImage: EventEmitter<void> = new EventEmitter();
 
+	onRemoveKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.removeImage.emit(), event);
+	}
 
 }

@@ -8,6 +8,7 @@ import {
 	OnInit,
 	Output
 } from "@angular/core";
+import { handleKeyboardActivation } from 'mm-shared';
 import {
 	NotificationService,
 	UpdateUserPayload,
@@ -73,6 +74,16 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 	onProfilePicClick() {
 		return this.openImageViewerInMatDialog();
+	}
+
+	onExpandKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.expandComponent.emit(!this.isExpanded), event);
+	}
+
+	onProfilePicKeydown(event: KeyboardEvent) {
+		if (this.userDetails?.profile_url && !this.renderIcon) {
+			handleKeyboardActivation(() => this.onProfilePicClick(), event);
+		}
 	}
 
 	openImageViewerInMatDialog() {

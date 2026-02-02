@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { handleKeyboardActivation } from '../../../../utils/keyboard.util';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from "../../../../services/auth.service";
@@ -87,6 +88,18 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 	closeForm() {
 		this.loginForm.reset();
 		this.router.navigate([AppUrls.ROOT]).then(r => null);
+	}
+
+	onCloseKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.closeForm(), event);
+	}
+
+	onTogglePasswordKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.toggleShowPassword(), event);
+	}
+
+	onSignupLinkKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.navigateToLoginForm(), event);
 	}
 
 	getEmailValidation(submitBtnValidations = false) {

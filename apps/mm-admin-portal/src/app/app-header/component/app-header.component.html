@@ -83,6 +83,10 @@
 
 <ng-template #menuIconTemplate>
   <mat-icon (click)="onHeaderMenuClick()"
+            (keydown)="onMenuIconKeydown($event)"
+            tabindex="0"
+            role="button"
+            aria-label="Open menu"
             class=" profile-pic-icon ls-option-icon cursor-pointer fs-28 h-28 w-28"
             [fontIcon]="'menu'"></mat-icon>
 </ng-template>

@@ -7,6 +7,7 @@ import { Listing } from 'mm-shared';
 import { DeviceDetectorService } from 'mm-shared';
 import { FilterService } from 'mm-shared';
 import { LoggingService, NotificationService } from 'mm-shared';
+import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
 
 @Component({
 	selector: 'mm-home',
@@ -107,7 +108,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.isLoading = false;
 					if (res.isSuccessful()) {
 						const response = res.body?.data;
-						const newItems = response?.items ?? [];
+						const newItems = extractItems(response);
 
 						if (append) {
 							this.listings.push(...newItems);
@@ -117,18 +118,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 							setTimeout(() => this.observeSentinel(), 0);
 						}
 
-						if (response?.total_pages !== undefined) {
-							this.hasMore = (response.current_page ?? pageToLoad) < (response.total_pages - 1);
-						} else {
-							//Assuming more pages
-							this.hasMore = newItems.length > 0;
-						}
-
-						if (append) {
-							this.currentPage++;
-						} else {
-							this.currentPage = (response?.current_page ?? 0) + 1;
-						}
+						this.hasMore = calculateHasMore(response, pageToLoad);
+						this.currentPage = calculateNextPage(response, pageToLoad, append);
 						this.cdr.markForCheck();
 					} else {
 						this.logger.warn('Failed to load listings', {

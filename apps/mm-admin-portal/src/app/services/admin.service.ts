@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiHttpResponse } from 'mm-shared';
+import { ApiHttpResponse, Listing } from 'mm-shared';
 import { ApiResponse,
 	PaginatedResponse,
 	UserDetailsDto,
 	UpdateUserResponse } from 'mm-shared';
-import { ListingResponse } from 'mm-shared';
 import { AppUrls } from '../utils/app.urls';
 import { ApiService } from 'mm-shared';
 
@@ -32,7 +31,8 @@ export class AdminService {
 		return this.apiService.patch(AppUrls.API.V1.ADMIN.USERS.RESTORE(uuid), { restore: true })
 	}
 
-	getAllListings(queryParams: Record<string, string | number | boolean>, page?: number): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+	getAllListings(queryParams: Record<string, string | number | boolean>, page?: number)
+			: Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.ADMIN.LISTINGS.GET_ALL, page ? { ...queryParams, page } : queryParams)
 	}
 

@@ -1,5 +1,3 @@
-import { Listing } from 'mm-shared';
-
 export interface CreateListingPayload {
 	title: string;
 	description: string;
@@ -14,11 +12,4 @@ export interface CreateListingPayload {
 export interface PayloadImage {
 	object_key: string;
 	is_cover: boolean;
-}
-
-export interface ListingResponse {
-	current_page: number
-	items: Listing[]
-	total_pages?: number
-	total_items?: number
 }

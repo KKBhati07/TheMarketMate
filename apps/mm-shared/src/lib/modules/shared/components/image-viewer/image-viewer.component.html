@@ -2,7 +2,7 @@
 justify-content-center align-i-center">
   <div class="close-btn-container position-absolute">
     <mm-close-btn
-        (click)="onCloseClick()"
+        (clicked)="onCloseClick()"
         containerClass="w-40 h-40"
         iconClass="w-28 h-28 fs-28"
     >
@@ -15,7 +15,7 @@ justify-content-center align-i-center">
       class="back-fw-icon-container cursor-pointer position-absolute left">
     <mm-back-fw-icon
         [isForwardIcon]="false"
-        (click)="prev()"
+        (clicked)="prev()"
         containerClass=""
         iconClass="w-36 h-36 fs-36"
         iconColor="white">
@@ -30,7 +30,7 @@ justify-content-center align-i-center">
           *ngIf="!renderFallback; else fallbackTemplate"
           (error)="renderFallback = true"
           [src]="currentImage"
-          alt="image"
+          [alt]="'Image ' + (currentIndex + 1) + ' of ' + images.length"
           class="image-display br-12"
           loading="lazy"
       />
@@ -45,7 +45,7 @@ justify-content-center align-i-center">
       class="back-fw-icon-container position-absolute cursor-pointer right">
     <mm-back-fw-icon
         [isForwardIcon]="true"
-        (click)="next()"
+        (clicked)="next()"
         containerClass=""
         iconClass="w-36 h-36 fs-36"
         iconColor="white">

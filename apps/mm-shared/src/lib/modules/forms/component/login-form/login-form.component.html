@@ -32,7 +32,10 @@
                placeholder="Enter your password"/>
         <mat-icon
             (click)="toggleShowPassword()"
-            [fontIcon]="showPassword?'visibility_off':'visibility'"
+            (keydown)="onTogglePasswordKeydown($event)"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
             class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
         </mat-icon>
       </div>
@@ -61,7 +64,12 @@
     <div *ngIf="!iSAdminPortal" class="signup-text-container pl-10">
       <p class="signup-text">
         Not a user?
-        <span (click)="navigateToLoginForm()" class="cursor-pointer">
+        <span (click)="navigateToLoginForm()"
+              (keydown)="onSignupLinkKeydown($event)"
+              tabindex="0"
+              role="link"
+              aria-label="Navigate to signup form"
+              class="cursor-pointer">
           Signup
         </span>
       </p>

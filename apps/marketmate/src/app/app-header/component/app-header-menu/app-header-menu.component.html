@@ -1,4 +1,8 @@
 <div (click)="onItemClick.emit()"
+     (keydown)="onOuterKeydown($event)"
+     tabindex="0"
+     role="button"
+     aria-label="Close menu"
      class="header-menu-outer-container
      position-absolute
      flex-row justify-content-center p-8

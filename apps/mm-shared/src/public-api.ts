@@ -64,6 +64,8 @@ export * from './lib/pipes/format-text.pipe';
 export * from './lib/utils/api-response.util';
 export * from './lib/utils/common.util';
 export * from './lib/utils/bootstrap-logger.util';
+export * from './lib/utils/pagination.util';
+export * from './lib/utils/keyboard.util';
 
 //Urls & Constants
 export * from './lib/common.urls';

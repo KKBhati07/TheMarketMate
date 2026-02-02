@@ -8,12 +8,19 @@
 
   >
     <mm-bottomsheet-pill *ngIf="isBottomSheet"></mm-bottomsheet-pill>
-    <div *ngIf="step===2" (click)="step = 1" class="back-icon-container m-20 cursor-pointer ">
+    <div *ngIf="step===2" (click)="step = 1" (keydown)="onBackKeydown($event)"
+         tabindex="0"
+         role="button"
+         aria-label="Go back to step 1"
+         class="back-icon-container m-20 cursor-pointer ">
       <mat-icon fontIcon="arrow_back" class="back-icon h-32 w-32 fs-32">
       </mat-icon>
     </div>
 
-    <div *ngIf="!isBottomSheet" (click)="closeForm()"
+    <div *ngIf="!isBottomSheet" (click)="closeForm()" (keydown)="onCloseKeydown($event)"
+         tabindex="0"
+         role="button"
+         aria-label="Close signup form"
          class="close-icon-container position-absolute
           cursor-pointer flex-row justify-content-center
            align-i-center border-circle w-36 h-36">
@@ -51,7 +58,10 @@
              class="invalid-text fs-12">* {{ errorText.email }}</p>
         </div>
 
-        <div (click)="onNextClick()"
+        <div (click)="onNextClick()" (keydown)="onNextContainerKeydown($event)"
+             tabindex="0"
+             role="button"
+             aria-label="Continue to next step"
              class="next-btn-container h-60 flex-row ">
 
           <mm-button [ngClass]="isBottomSheet?'w-100p':''"
@@ -79,7 +89,10 @@
                  placeholder="Enter your password"/>
           <mat-icon
               (click)="toggleShowPassword()"
-              [fontIcon]="showPassword?'visibility_off':'visibility'"
+              (keydown)="onTogglePasswordKeydown($event)"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
               class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
           </mat-icon>
         </div>

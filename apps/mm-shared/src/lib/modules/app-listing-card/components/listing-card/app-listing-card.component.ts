@@ -19,6 +19,7 @@ import { concatMap, debounceTime, Subject, takeUntil } from 'rxjs';
 import { LocationType } from '../../../../models/location.model';
 import { FilterService } from '../../../../services/filter.service';
 import { NotificationService } from '../../../../notification';
+import { handleKeyboardActivation } from '../../../../utils/keyboard.util';
 
 @Component({
 	selector: 'mm-listing-card',
@@ -156,6 +157,22 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 				this.filterService.updateFilter({ country_id: id });
 				break;
 		}
+	}
+
+	onCardKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onItemClick(), event);
+	}
+
+	onFavoriteKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onFavoriteIconClick(), event);
+	}
+
+	onCategoryKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onCategoryIconClick(), event);
+	}
+
+	onLocationKeydown(event: KeyboardEvent, type: LocationType, id: number | undefined) {
+		handleKeyboardActivation(() => this.onLocationClick(type, id), event);
 	}
 
 	ngOnDestroy() {

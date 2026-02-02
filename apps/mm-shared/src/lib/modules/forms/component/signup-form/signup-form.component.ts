@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, In
 import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PasswordValidator } from "./validator";
-import { ErrorText, Signup } from "../../../../models/login-signup.model";
+import { ErrorText } from "../../../../models/login-signup.model";
 import { AuthService } from "../../../../services/auth.service";
 import { AppUrls } from "../../../../common.urls";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
 import { Subject, takeUntil } from "rxjs";
+import { handleKeyboardActivation } from '../../../../utils/keyboard.util';
 
 @Component({
 	selector: "mm-signup-form",
@@ -78,6 +79,22 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 		if (this.checkForNameEmailValidation(true)) return;
 		this.step = 2;
 		this.cdr.markForCheck();
+	}
+
+	onBackKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => { this.step = 1; }, event);
+	}
+
+	onCloseKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.closeForm(), event);
+	}
+
+	onNextContainerKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onNextClick(), event);
+	}
+
+	onTogglePasswordKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.toggleShowPassword(), event);
 	}
 
 	checkForNameEmailValidation(forNextBtn = false, checkFor = 'email'): boolean | undefined {

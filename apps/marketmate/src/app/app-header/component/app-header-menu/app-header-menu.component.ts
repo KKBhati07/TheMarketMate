@@ -3,6 +3,7 @@ import { NavOption } from 'mm-shared';
 import { fadeInOut } from 'mm-shared';
 import { AppUrls } from '../../../app.urls';
 import { AppUrls as SharedUrls} from 'mm-shared';
+import { handleKeyboardActivation } from 'mm-shared';
 
 @Component({
 	selector: 'mm-header-menu',
@@ -25,5 +26,9 @@ export class AppHeaderMenuComponent {
 			= new EventEmitter<void>();
 
 	constructor() {
+	}
+
+	onOuterKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onItemClick.emit(), event);
 	}
 }

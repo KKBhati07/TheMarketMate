@@ -3,6 +3,7 @@ import { LoggingService, NotificationService, User, UserDetailsDto } from "mm-sh
 import { DeviceDetectorService } from "mm-shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
+import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
 
 @Component({
 	selector: 'mm-admin-users',
@@ -49,7 +50,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.isLoading = false;
 					if (res.isSuccessful()) {
 						const response = res.body?.data;
-						const newItems = response?.items ?? [];
+						const newItems = extractItems(response);
 
 						if (append) {
 							this.users.push(...newItems);
@@ -59,20 +60,8 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 							setTimeout(() => this.observeSentinel(), 0);
 						}
 
-						// Check if there are more pages
-						if (response?.total_pages !== undefined) {
-							this.hasMore = (response.current_page ?? pageToLoad) < (response.total_pages - 1);
-						} else {
-							// Assume more pages
-							this.hasMore = newItems.length > 0;
-						}
-
-						if (append) {
-							this.currentPage = (response?.current_page ?? pageToLoad) + 1;
-						} else {
-							this.currentPage = (response?.current_page ?? 0) + 1;
-						}
-
+						this.hasMore = calculateHasMore(response, pageToLoad);
+						this.currentPage = calculateNextPage(response, pageToLoad, append);
 						this.cdr.markForCheck();
 					} else {
 						this.logger.warn('Failed to load users', {

@@ -7,15 +7,19 @@
       [src]="imageUrl"
       (error)="renderTemplate = true"
       [ngClass]="imgClass"
-      alt="Preview"
+      alt="Image preview"
       class="w-100 h-100 br-16"
       loading="lazy"
-  />
+      />
   <div *ngIf="showRemoveIcon"
        class="remove-btn w-24 h-24 fs-24
       flex-row justify-content-center align-i-center
        position-absolute border-circle"
        (click)="removeImage.emit()"
+       (keydown)="onRemoveKeydown($event)"
+       tabindex="0"
+       role="button"
+       aria-label="Remove image"
   >
     <mat-icon
         fontIcon="close_small"

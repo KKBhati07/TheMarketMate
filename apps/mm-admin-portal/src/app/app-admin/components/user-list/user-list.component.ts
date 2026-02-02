@@ -19,6 +19,7 @@ import {
 } from 'mm-shared';
 import { AdminService } from '../../../services/admin.service';
 import { fadeSlideIn } from 'mm-shared';
+import { handleKeyboardActivation } from 'mm-shared';
 
 @Component({
 	selector: 'mm-admin-user-list',
@@ -66,6 +67,10 @@ export class AdminUserListComponent implements OnDestroy {
 						this.deleteOrRestoreUser.emit({ action: 'DELETE', uuid: this.user.uuid });
 					}
 				});
+	}
+
+	onEditProfileKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onEditProfileClick(), event);
 	}
 
 	onEditProfileClick() {

@@ -11,6 +11,7 @@ import { ListingService } from '../../../services/listing.service';
 import { Listing } from 'mm-shared';
 import { AuthService } from 'mm-shared';
 import { LoggingService, NotificationService } from 'mm-shared';
+import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
 
 @Component({
 	selector: "mm-user-profile",
@@ -169,27 +170,17 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.postsIsLoading = false;
 					if (res.isSuccessful()) {
 						const response = res.body?.data;
-						const newItems = response?.items ?? [];
+						const newItems = extractItems(response);
 
 						if (append) {
 							this.userListings.push(...newItems);
 						} else {
-							this.userListings = response?.items ?? [];
+							this.userListings = newItems;
 							this.postsCurrentPage = 0;
 						}
 
-						// Check if there are more pages
-						if (response?.total_pages !== undefined) {
-							this.postsHasMore = (response.current_page ?? pageToLoad) < (response.total_pages - 1);
-						} else {
-							this.postsHasMore = newItems.length > 0;
-						}
-
-						if (append) {
-							this.postsCurrentPage = (response?.current_page ?? pageToLoad) + 1;
-						} else {
-							this.postsCurrentPage = (response?.current_page ?? 0) + 1;
-						}
+						this.postsHasMore = calculateHasMore(response, pageToLoad);
+						this.postsCurrentPage = calculateNextPage(response, pageToLoad, append);
 						this.renderComponent = true;
 						this.cdr.markForCheck();
 					} else {
@@ -218,28 +209,17 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.favoritesIsLoading = false;
 					if (res.isSuccessful()) {
 						const response = res.body?.data;
-						const newItems = response?.items ?? [];
+						const newItems = extractItems(response);
 
 						if (append) {
 							this.favoriteListings.push(...newItems);
 						} else {
-							this.favoriteListings = response?.items ?? [];
+							this.favoriteListings = newItems;
 							this.favoritesCurrentPage = 0;
 						}
 
-						// Check if there are more pages
-						if (response?.total_pages !== undefined) {
-							this.favoritesHasMore = (response.current_page ?? pageToLoad) < (response.total_pages - 1);
-						} else {
-							this.favoritesHasMore = newItems.length > 0;
-						}
-
-						if (append) {
-							this.favoritesCurrentPage = (response?.current_page ?? pageToLoad) + 1;
-						} else {
-							this.favoritesCurrentPage = (response?.current_page ?? 0) + 1;
-						}
-
+						this.favoritesHasMore = calculateHasMore(response, pageToLoad);
+						this.favoritesCurrentPage = calculateNextPage(response, pageToLoad, append);
 						this.renderComponent = true;
 						this.cdr.markForCheck();
 					} else {

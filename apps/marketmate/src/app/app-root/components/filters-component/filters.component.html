@@ -3,9 +3,14 @@
     class="filters-container flex-column w-100p align-i-center
      position-relative br-20 h-100p gap-20">
   <div class="expand-icon-container position-absolute"
-       (click)="toggleFilters()">
+       (click)="toggleFilters()"
+       (keydown)="onToggleKeydown($event)"
+       tabindex="0"
+       role="button"
+       [attr.aria-label]="isExpanded ? 'Collapse filters' : 'Expand filters'">
     <mm-back-fw-icon
         [isForwardIcon]="!isExpanded"
+        (clicked)="toggleFilters()"
         backgroundColor="var(--border-color)"
         iconClass="fs-12 w-12 h-12"
         containerClass="w-20 h-20"

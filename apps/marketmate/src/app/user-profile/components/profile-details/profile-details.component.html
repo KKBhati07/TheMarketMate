@@ -19,11 +19,16 @@
   </div>
   <div *ngIf="!isBottomSheet"
        (click)="expandComponent.emit(!isExpanded)"
+       (keydown)="onExpandKeydown($event)"
+       tabindex="0"
+       role="button"
+       [attr.aria-label]="isExpanded ? 'Collapse profile details' : 'Expand profile details'"
        [ngClass]="isExpanded? 'ml-8': 'ml-4'"
        class="expand-icon-container cursor-pointer flex-row
        w-100p position-absolute">
     <mm-back-fw-icon
         [isForwardIcon]="isExpanded"
+        (clicked)="expandComponent.emit(!isExpanded)"
         backgroundColor="var(--border-color)"
         iconClass="fs-12 w-12 h-12"
         containerClass="w-20 h-20"
@@ -36,6 +41,10 @@
         [ngStyle]="{'height': isBottomSheet ? '100%'
     :'80vh'}"
         (click)="userDetails?.profile_url && !renderIcon ? onProfilePicClick():null"
+        (keydown)="onProfilePicKeydown($event)"
+        [attr.tabindex]="userDetails?.profile_url && !renderIcon ? '0' : null"
+        [attr.role]="userDetails?.profile_url && !renderIcon ? 'button' : null"
+        [attr.aria-label]="userDetails?.name ? 'View ' + userDetails.name + ' profile picture' : 'View profile picture'"
         class="profile-pic-container p-4 flex-row
          w-100 h-100 border-circle cursor-pointer
       align-i-center justify-content-center">
@@ -44,6 +53,7 @@
         <img (error)="renderIcon=true"
              class="profile-pic border-circle w-100p h-100p"
              [src]="userDetails?.profile_url"
+             [alt]="userDetails?.name ? userDetails.name + ' profile picture' : 'User profile picture'"
              loading="lazy">
       </ng-container>
     </div>

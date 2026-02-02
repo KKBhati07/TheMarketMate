@@ -5,6 +5,7 @@ import { AuthService, LoggingService, NotificationService } from 'mm-shared';
 import { Router } from '@angular/router';
 import { fadeInOut } from 'mm-shared';
 import { Subject, takeUntil } from 'rxjs';
+import { handleKeyboardActivation } from 'mm-shared';
 
 @Component({
 	selector: 'mm-header-user-menu',
@@ -63,6 +64,10 @@ export class HeaderUserMenuComponent implements OnDestroy {
 						});
 					}
 				})
+	}
+
+	onOuterKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.closeMenu.emit(), event);
 	}
 
 	ngOnDestroy() {

@@ -24,6 +24,7 @@ import { CategoryService } from "../../services/category.service";
 import { Category } from 'mm-shared';
 import { NavOption } from 'mm-shared';
 import { LoggingService, NotificationService } from 'mm-shared';
+import { handleKeyboardActivation } from 'mm-shared';
 import {
 	PublishEditListingFormComponent
 } from '../../app-util/module/component/publish-listing-form/publish-edit-listing-form.component';
@@ -229,6 +230,14 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 		this.closeHeader()
 		this.showUserMenu = !this.showUserMenu;
 		this.cdr.markForCheck();
+	}
+
+	onProfileKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onProfileClick(), event);
+	}
+
+	onMenuIconKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onHeaderMenuClick(), event);
 	}
 
 	onAdminClick() {

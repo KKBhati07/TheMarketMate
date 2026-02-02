@@ -22,6 +22,10 @@
        flex-row justify-content-center
         align-i-center border-circle">
         <mat-icon (click)="onEditProfileClick()"
+                  (keydown)="onEditProfileKeydown($event)"
+                  tabindex="0"
+                  role="button"
+                  aria-label="Edit user profile"
                   class="edit-icon cursor-pointer fs-28 h-28 w-28"
                   [fontIcon]="'edit'"></mat-icon>
       </div>

@@ -17,6 +17,7 @@ import { AppUrls } from "../../utils/app.urls";
 import { CONSTANTS } from "../../utils/app.constants";
 import { DeviceDetectorService } from "mm-shared";
 import { NavOption } from 'mm-shared';
+import { handleKeyboardActivation } from 'mm-shared';
 
 @Component({
 	selector: 'mm-app-header',
@@ -121,6 +122,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 		this.showHeaderMenu = !this.showHeaderMenu;
 		this.closeExpandedHeader();
 		this.cdr.markForCheck();
+	}
+
+	onMenuIconKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onHeaderMenuClick(), event);
 	}
 
 	private checkForAuthenticationAndSetUser() {
