@@ -1,22 +1,27 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Category, City, Country, LoggingService, NotificationService, State } from 'mm-shared';
+import { Category, City, Country, LoggingService, NotificationService, State, SHARED_UI_DEPS, ImagePreviewComponent } from '@marketmate/shared';
 import { LocationApiService } from '../../../../services/location.service';
 import { CategoryService } from '../../../../services/category.service';
 import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { CONSTANTS } from '../../../../app.constants';
 import { ProductImage } from '../../../../types/common.type';
 import { ListingService } from '../../../../services/listing.service';
-import { StorageService, Directory } from 'mm-shared';
-import { FilePayload } from 'mm-shared';
+import { StorageService, Directory } from '@marketmate/shared';
+import { FilePayload } from '@marketmate/shared';
 import { PayloadImage } from '../../../../models/listing.model';
+import { ImageUploadIconComponent } from '../image-upload-icon/image-upload-icon.component';
+import { AutocompleteSelectComponent } from '../app-autocomplete-select/app-autocomplete-select.component';
+import { AppButtonComponent } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-publish-listing-form',
 	templateUrl: './publish-edit-listing-form.component.html',
 	styleUrls: ['./publish-edit-listing-form.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, ReactiveFormsModule, ImageUploadIconComponent, ImagePreviewComponent, AutocompleteSelectComponent, AppButtonComponent]
 })
 export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	createListingForm!: FormGroup;

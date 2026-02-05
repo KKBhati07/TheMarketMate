@@ -1,18 +1,20 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AppUrls } from '../../../app.urls';
-import { AuthService, LoggingService, NotificationService } from 'mm-shared';
+import { AuthService, LoggingService, NotificationService, SHARED_UI_DEPS, fadeInOut } from '@marketmate/shared';
 import { Router } from '@angular/router';
-import { fadeInOut } from 'mm-shared';
 import { Subject, takeUntil } from 'rxjs';
-import { handleKeyboardActivation } from 'mm-shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
+import { UserMenuNavComponent } from '../app-user-menu-nav/app-user-menu-nav.component';
 
 @Component({
 	selector: 'mm-header-user-menu',
 	templateUrl: './header-user-menu.component.html',
 	styleUrls: ['./header-user-menu.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [fadeInOut]
+	animations: [fadeInOut],
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, UserMenuNavComponent]
 })
 export class HeaderUserMenuComponent implements OnDestroy {
 

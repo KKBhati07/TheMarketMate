@@ -8,32 +8,34 @@ import {
 	OnInit,
 	Output
 } from "@angular/core";
-import { handleKeyboardActivation } from 'mm-shared';
+import { handleKeyboardActivation, SHARED_UI_DEPS, AppButtonComponent, BottomSheetPillComponent, BackForwardIconComponent } from '@marketmate/shared';
 import {
 	NotificationService,
 	UpdateUserPayload,
 	UpdateUserResponse,
 	UserDetailsDto, UserDetailsResponse
-} from "mm-shared";
-import { LoggingService } from "mm-shared";
+} from "@marketmate/shared";
+import { LoggingService } from "@marketmate/shared";
 import { MatDialog } from "@angular/material/dialog";
-import { UserProfileEditComponent } from "mm-shared";
+import { UserProfileEditComponent } from "@marketmate/shared";
 import { catchError, map, of, Subject, switchMap, takeUntil, tap, throwError, timer } from "rxjs";
 import { UserService } from "../../../services/user.service";
-import { AuthService } from "mm-shared";
+import { AuthService } from "@marketmate/shared";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { ProfileDetailsBottomSheetData } from '../../../types/common.type';
-import { ImageViewerComponent } from 'mm-shared';
-import { StorageService, Directory } from 'mm-shared';
+import { ImageViewerComponent } from '@marketmate/shared';
+import { StorageService, Directory } from '@marketmate/shared';
 import { CONSTANTS } from '../../../app.constants';
 import { HttpResponse } from '@angular/common/http';
-import { ApiHttpResponse, ApiResponse } from 'mm-shared';
+import { ApiHttpResponse, ApiResponse } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-profile-detail',
 	templateUrl: './profile-details.component.html',
 	styleUrls: ['./profile-details.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, AppButtonComponent, BottomSheetPillComponent, BackForwardIconComponent]
 })
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
 

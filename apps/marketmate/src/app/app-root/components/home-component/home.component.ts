@@ -3,17 +3,20 @@ import { isPlatformBrowser } from '@angular/common';
 import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Listing } from 'mm-shared';
-import { DeviceDetectorService } from 'mm-shared';
-import { FilterService } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { Listing, SHARED_UI_DEPS, ListingCardComponent, ListingCardSkeletonComponent } from '@marketmate/shared';
+import { DeviceDetectorService } from '@marketmate/shared';
+import { FilterService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
+import { FiltersComponent } from '../filters-component/filters.component';
 
 @Component({
 	selector: 'mm-home',
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, FiltersComponent, ListingCardComponent, ListingCardSkeletonComponent]
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 

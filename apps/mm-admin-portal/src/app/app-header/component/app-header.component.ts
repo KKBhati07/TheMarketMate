@@ -10,20 +10,23 @@ import {
 } from "@angular/core";
 import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
-import { AuthService, LoggingService, NotificationService } from "mm-shared";
-import { User } from "mm-shared";
-import { AppUrls as SharedUrls } from "mm-shared";
+import { AuthService, LoggingService, NotificationService, SHARED_UI_DEPS, AppNavButtonComponent } from "@marketmate/shared";
+import { User } from "@marketmate/shared";
+import { AppUrls as SharedUrls } from "@marketmate/shared";
 import { AppUrls } from "../../utils/app.urls";
 import { CONSTANTS } from "../../utils/app.constants";
-import { DeviceDetectorService } from "mm-shared";
-import { NavOption } from 'mm-shared';
-import { handleKeyboardActivation } from 'mm-shared';
+import { DeviceDetectorService } from "@marketmate/shared";
+import { NavOption } from '@marketmate/shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
+import { AppHeaderMenuComponent } from './app-header-menu/app-header-menu.component';
 
 @Component({
 	selector: 'mm-app-header',
+	standalone: true,
 	templateUrl: './app-header.component.html',
 	styleUrls: ['./app-header.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppHeaderMenuComponent]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
 	protected readonly CONSTANTS = CONSTANTS;

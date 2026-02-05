@@ -1,4 +1,4 @@
-import { UserDetailsDto } from 'mm-shared';
+import { UserDetailsDto } from '@marketmate/shared';
 
 export interface ProductImage {
 	image: File;

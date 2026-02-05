@@ -1,23 +1,27 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
-import { DeviceDetectorService, UserDetailsDto } from "mm-shared";
+import { DeviceDetectorService, UserDetailsDto, SHARED_UI_DEPS, ListingCardComponent, ListingCardSkeletonComponent } from "@marketmate/shared";
 import { UserService } from "../../../services/user.service";
 import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ListingService } from '../../../services/listing.service';
-import { Listing } from 'mm-shared';
-import { AuthService } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { Listing } from '@marketmate/shared';
+import { AuthService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
+import { UserProfileBarComponent } from '../user-profile-bar/user-profile-bar.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
 
 @Component({
 	selector: "mm-user-profile",
 	templateUrl: "./user-profile.component.html",
 	styleUrls: ["./user-profile.component.scss"],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, ProfileDetailsComponent, UserProfileBarComponent, ListingCardComponent, ListingCardSkeletonComponent, MatTabGroup, MatTab]
 })
 export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	renderComponent = false;

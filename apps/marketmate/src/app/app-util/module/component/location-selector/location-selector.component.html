@@ -4,42 +4,40 @@
 
   <div class="justify-content-center flex-row">
     <mm-heading
-        text="Location"
-        class="pt-8 pb-8 pl-20 pr-20"
-        textClass="fs-12 fw-7"
-    >
+      text="Location"
+      class="pt-8 pb-8 pl-20 pr-20"
+      textClass="fs-12 fw-7"
+      >
     </mm-heading>
 
   </div>
 
   <mm-autocomplete-select
-      class="flex-1"
-      (valueSelected)="onCountrySelected($event)"
-      valueKey="id"
-      [data]="countries"
-      placeholder="Country"
+    class="flex-1"
+    (valueSelected)="onCountrySelected($event)"
+    valueKey="id"
+    [data]="countries"
+    placeholder="Country"
   ></mm-autocomplete-select>
-  <ng-container
-      *ngIf="states.length">
+  @if (states.length) {
     <mm-autocomplete-select
-        [@fadeSlideIn]="states.length ? 'open':'close'"
-        class="flex-1"
-        (valueSelected)="onStateSelected($event)"
-        [data]="states"
-        valueKey="id"
-        placeholder="State"
+      [@fadeSlideIn]="states.length ? 'open':'close'"
+      class="flex-1"
+      (valueSelected)="onStateSelected($event)"
+      [data]="states"
+      valueKey="id"
+      placeholder="State"
     ></mm-autocomplete-select>
-  </ng-container>
+  }
 
-  <ng-container
-      *ngIf="cities.length">
+  @if (cities.length) {
     <mm-autocomplete-select
-        [@fadeSlideIn]="cities.length ? 'open':'close'"
-        class="flex-1"
-        (valueSelected)="onCitySelected($event)"
-        [data]="cities"
-        valueKey="id"
-        placeholder="City "
+      [@fadeSlideIn]="cities.length ? 'open':'close'"
+      class="flex-1"
+      (valueSelected)="onCitySelected($event)"
+      [data]="cities"
+      valueKey="id"
+      placeholder="City "
     ></mm-autocomplete-select>
-  </ng-container>
+  }
 </div>

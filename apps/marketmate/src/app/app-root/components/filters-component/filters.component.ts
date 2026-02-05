@@ -4,13 +4,17 @@ import {
 	EventEmitter,
 	Output,
 } from '@angular/core';
-import { handleKeyboardActivation } from 'mm-shared';
+import { handleKeyboardActivation, SHARED_UI_DEPS, BackForwardIconComponent } from '@marketmate/shared';
+import { PriceSliderComponent } from '../../../app-util/module/component/price-slider/price-slider.component';
+import { LocationSelectorComponent } from '../../../app-util/module/component/location-selector/location-selector.component';
 
 @Component({
 	selector: 'mm-filters-component',
 	templateUrl: './filters.component.html',
 	styleUrls: ['./filters.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, PriceSliderComponent, LocationSelectorComponent, BackForwardIconComponent]
 })
 export class FiltersComponent {
 

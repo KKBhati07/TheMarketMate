@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiHttpResponse, Listing } from 'mm-shared';
+import { ApiHttpResponse, Listing } from '@marketmate/shared';
 import { ApiResponse,
 	PaginatedResponse,
 	UserDetailsDto,
-	UpdateUserResponse } from 'mm-shared';
+	UpdateUserResponse } from '@marketmate/shared';
 import { AppUrls } from '../utils/app.urls';
-import { ApiService } from 'mm-shared';
+import { ApiService } from '@marketmate/shared';
 
 @Injectable({
 	providedIn: 'root',

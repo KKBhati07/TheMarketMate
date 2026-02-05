@@ -1,17 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { City, Country, State } from 'mm-shared';
+import { City, Country, State, SHARED_UI_DEPS, fadeSlideIn } from '@marketmate/shared';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationApiService } from '../../../../services/location.service';
-import { fadeSlideIn } from 'mm-shared';
-import { FilterService } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
+import { FilterService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { AutocompleteSelectComponent } from '../app-autocomplete-select/app-autocomplete-select.component';
+import { HeadingComponent } from '../product-category/app-heading/heading.component';
 
 @Component({
 	selector: 'mm-location-selector',
 	templateUrl: './location-selector.component.html',
 	styleUrls: ['./location-selector.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [fadeSlideIn]
+	animations: [fadeSlideIn],
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, AutocompleteSelectComponent, HeadingComponent]
 })
 export class LocationSelectorComponent implements OnInit, OnDestroy {
 	countries: Country[] = [];

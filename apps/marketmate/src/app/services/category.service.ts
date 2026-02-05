@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { ApiService } from "mm-shared";
+import { ApiService } from "@marketmate/shared";
 import { Observable, tap } from "rxjs";
-import { ApiHttpResponse } from "mm-shared";
-import { ApiResponse, CategoriesResponse } from "mm-shared";
+import { ApiHttpResponse } from "@marketmate/shared";
+import { ApiResponse, CategoriesResponse } from "@marketmate/shared";
 import { AppUrls } from "../app.urls";
 import { shareReplay } from "rxjs/operators";
 
