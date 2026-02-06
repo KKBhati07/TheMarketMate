@@ -73,16 +73,33 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4200
+      },
       "configurations": {
-        "production": {
-          "buildTarget": "marketmate:build:production"
-        },
         "development": {
-          "buildTarget": "marketmate:build:development"
+          "buildTarget": "marketmate:build:development",
+          "hmr": true,
+          "publicHost": "marketmate.local:4200",
+          "disableHostCheck": true
         }
       },
       "defaultConfiguration": "development",
       "continuous": true
+    },
+    "serve-ssr": {
+      "executor": "@angular-devkit/build-angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "buildTarget": "marketmate:build:development",
+          "serverTarget": "marketmate:build:development"
+        },
+        "production": {
+          "buildTarget": "marketmate:build:production",
+          "serverTarget": "marketmate:build:production"
+        }
+      },
+      "defaultConfiguration": "development"
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n"
