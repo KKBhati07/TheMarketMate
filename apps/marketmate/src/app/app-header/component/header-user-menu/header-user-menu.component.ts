@@ -73,7 +73,6 @@ export class HeaderUserMenuComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		console.warn('ON Destroy called !!')
 		this.destroy$.next();
 		this.destroy$.complete();
 	}

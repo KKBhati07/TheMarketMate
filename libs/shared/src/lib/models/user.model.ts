@@ -14,7 +14,7 @@ export interface UserDetailsDto {
 	name: string;
 	email: string;
 	uuid: string;
-	is_admin: boolean;
+	admin: boolean;
 	contact_no: string | null;
 	profile_url: string | null;
 	deleted?: boolean;

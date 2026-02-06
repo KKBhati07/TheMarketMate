@@ -20,8 +20,6 @@ const httpsOptions = {
 	cert: fs.readFileSync('/certs/wildcard.marketmate.local.pem'),
 };
 
-console.log('🔥 EXPRESS SSR SERVER BOOTED 🔥');
-
 /**
  * In-memory SSR cache
  * Key = URL, Value = rendered HTML

@@ -17,7 +17,7 @@
     }
     <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
       <p class="form-heading cursor-default">{{ formHeading }}</p>
-      <input id="loginEmail"
+      <input #emailInput id="loginEmail"
         [ngStyle]="{'border-color':getEmailValidation() || isFourOOne?'red':''}"
         class="pass-input-container fs-12 display-block h-60 position-relative br-32 pl-12 mt-30"
         formControlName="email" type="email"

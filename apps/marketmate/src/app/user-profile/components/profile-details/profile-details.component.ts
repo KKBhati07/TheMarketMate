@@ -281,8 +281,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 				uuid: this.userDetails.uuid,
 				profile_url: (this.userDetails.profile_url ?? ''),
 				contact_no: this.userDetails.contact_no,
-				is_admin: this.userDetails.is_admin,
-				admin: this.userDetails.is_admin,
+				is_admin: this.userDetails.admin,
+				admin: this.userDetails.admin,
 			})
 		}
 		this.cdr.markForCheck();

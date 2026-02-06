@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, AfterViewInit, ViewChild } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { AbstractControl, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PasswordValidator } from "./validator";
@@ -20,7 +21,9 @@ import { AppButtonComponent } from '../../../shared/components/app-button/app-bu
 	standalone: true,
 	imports: [...SHARED_UI_DEPS, ReactiveFormsModule, BottomSheetPillComponent, AppButtonComponent]
 })
-export class SignupFormComponent implements OnInit, OnDestroy {
+export class SignupFormComponent implements OnInit, OnDestroy, AfterViewInit {
+	@ViewChild('nameInput', { static: false }) nameInput!: ElementRef<HTMLInputElement>;
+	@ViewChild('passwordInput', { static: false }) passwordInput!: ElementRef<HTMLInputElement>;
 
 	renderComponent = false;
 	formHeading = 'Signup to MM!'
@@ -40,6 +43,7 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 			private authService: AuthService,
 			private bsr: MatBottomSheetRef,
 			@Inject(MAT_BOTTOM_SHEET_DATA) public data: { openInBottomSheet: boolean },
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 		this.signUpForm = this.fb.group({
 			name: ['', [Validators.required]],
@@ -53,6 +57,26 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 		this.checkForBottomSheet()
 		this.renderComponent = true;
 		this.cdr.markForCheck();
+	}
+
+	ngAfterViewInit() {
+		if (isPlatformBrowser(this.platformId)) {
+			setTimeout(() => {
+				this.focusFirstInput();
+			}, 0);
+		}
+	}
+
+	private focusFirstInput() {
+		if (!isPlatformBrowser(this.platformId)) return;
+
+		setTimeout(() => {
+			if (this.step === 1 && this.nameInput?.nativeElement) {
+				this.nameInput.nativeElement.focus();
+			} else if (this.step === 2 && this.passwordInput?.nativeElement) {
+				this.passwordInput.nativeElement.focus();
+			}
+		}, 0);
 	}
 
 	private checkForBottomSheet() {
@@ -85,10 +109,26 @@ export class SignupFormComponent implements OnInit, OnDestroy {
 		if (this.checkForNameEmailValidation(true)) return;
 		this.step = 2;
 		this.cdr.markForCheck();
+
+		if (isPlatformBrowser(this.platformId)) {
+			setTimeout(() => {
+				this.focusFirstInput();
+			}, 0);
+		}
+	}
+
+	onBackClick() {
+		this.step = 1;
+		this.cdr.markForCheck();
+		if (isPlatformBrowser(this.platformId)) {
+			setTimeout(() => {
+				this.focusFirstInput();
+			}, 0);
+		}
 	}
 
 	onBackKeydown(event: KeyboardEvent) {
-		handleKeyboardActivation(() => { this.step = 1; }, event);
+		handleKeyboardActivation(() => this.onBackClick(), event);
 	}
 
 	onCloseKeydown(event: KeyboardEvent) {

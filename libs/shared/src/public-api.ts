@@ -58,6 +58,8 @@ export * from './lib/guards/login-signup.guard';
 
 export * from './lib/pipes/format-text.pipe';
 
+export * from './lib/interceptors/ssr-http.interceptor';
+
 //Utils
 export * from './lib/utils/api-response.util';
 export * from './lib/utils/common.util';

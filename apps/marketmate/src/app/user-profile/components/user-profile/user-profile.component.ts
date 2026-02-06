@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
 import { DeviceDetectorService, UserDetailsDto, SHARED_UI_DEPS, ListingCardComponent, ListingCardSkeletonComponent } from "@marketmate/shared";
 import { UserService } from "../../../services/user.service";
@@ -68,8 +68,15 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.selfUser =
 				this.authService.UserDetails?.uuid.toLowerCase()
 				=== this.userUuid.toLowerCase();
-		this.setTabFronQueryParams();
 		this.setIsMobile();
+
+		if (isPlatformServer(this.platformId)) {
+			this.postsIsLoading = true;
+			this.favoritesIsLoading = true;
+			this.cdr.markForCheck();
+			return;
+		}
+		this.setTabFromQueryParams();
 		this.getUserDetails();
 	}
 
@@ -107,7 +114,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 				})
 	}
 
-	setTabFronQueryParams() {
+	setTabFromQueryParams() {
 		const qp = this.activatedRoute.snapshot.queryParams;
 		if (qp['posts'] == undefined && qp['favorites'] == undefined) {
 			this.updateQueryParams({ posts: true })
@@ -137,7 +144,10 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	updateQueryParams(queryParams: Record<string, boolean>) {
-		this.router.navigate(this.activatedRoute.snapshot.url.map(uri => uri.path), {
+		this.router.navigate([
+				AppUrls.USER.BASE,
+			...this.activatedRoute.snapshot.url.map(uri => uri.path)
+		], {
 			queryParams,
 			replaceUrl: true
 		}).then(r => null);
@@ -163,6 +173,8 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	getListingsByUser(uuid: string, page?: number, append: boolean = false) {
+		if (isPlatformServer(this.platformId)) return;
+		
 		if (this.postsIsLoading) return;
 
 		this.postsIsLoading = true;
@@ -202,6 +214,8 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	getFavoriteListingsByUser(uuid: string, page?: number, append: boolean = false) {
+		if (isPlatformServer(this.platformId)) return;
+		
 		if (this.favoritesIsLoading) return;
 
 		this.favoritesIsLoading = true;
@@ -296,6 +310,9 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 	getUserDetails() {
+		// Skip API calls during SSR
+		if (isPlatformServer(this.platformId)) return;
+		
 		this.userService.getDetails(this.userUuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
@@ -306,7 +323,9 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 						this.expandProfileDetails = true;
 						this.cdr.markForCheck();
 					} else {
-						this.router.navigate([AppUrls.FOUROFOUR]).then(r => null);
+						if (isPlatformBrowser(this.platformId)) {
+							this.router.navigate([AppUrls.FOUROFOUR]).then(r => null);
+						}
 					}
 				})
 	}

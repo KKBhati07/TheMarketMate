@@ -1,4 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Inject,
+	Input,
+	OnDestroy,
+	OnInit,
+	PLATFORM_ID,
+	ViewChild,
+	AfterViewInit
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { handleKeyboardActivation } from '../../../../utils/keyboard.util';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -7,7 +19,6 @@ import { AuthService } from "../../../../services/auth.service";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
 import { AppUrls } from "../../../../common.urls";
 import { Subject, takeUntil } from "rxjs";
-import { CONSTANTS } from '../../../../app.constants';
 import { AppContext } from '../../../../types/common.type';
 import { SHARED_UI_DEPS } from '../../../../constants/shared-imports';
 import { BottomSheetPillComponent } from '../../../shared/components/bottomsheet-pill/bottomsheet-pill.component';
@@ -21,7 +32,9 @@ import { AppButtonComponent } from '../../../shared/components/app-button/app-bu
 	standalone: true,
 	imports: [...SHARED_UI_DEPS, ReactiveFormsModule, BottomSheetPillComponent, AppButtonComponent]
 })
-export class LoginFormComponent implements OnInit, OnDestroy {
+export class LoginFormComponent implements OnInit, AfterViewInit, OnDestroy {
+
+	@ViewChild('emailInput') emailInput!: ElementRef<HTMLInputElement>;
 	@Input() iSAdminPortal = false;
 	renderComponent = false;
 	formHeading = 'Welcome to MM!'
@@ -62,6 +75,16 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 		this.cdr.markForCheck();
 	}
 
+	ngAfterViewInit() {
+		if (isPlatformBrowser(this.platformId)) {
+			setTimeout(() => {
+				if (this.emailInput) {
+					this.emailInput.nativeElement.focus();
+				}
+			}, 0);
+		}
+	}
+
 	resetLoginError() {
 		if (!this.errorText && !this.isFourOOne) return;
 
@@ -86,7 +109,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 		if (this.isBottomSheet) {
 			this.bsr?.dismiss('redirect_to_signup');
 		} else {
-			this.router.navigate([AppUrls.AUTH.BASE,AppUrls.AUTH.SIGNUP]).then(r => null);
+			this.router.navigate([AppUrls.AUTH.BASE, AppUrls.AUTH.SIGNUP]).then(r => null);
 		}
 	}
 

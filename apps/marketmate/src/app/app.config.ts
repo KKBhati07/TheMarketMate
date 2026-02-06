@@ -1,5 +1,4 @@
 import {
-	// APP_INITIALIZER,
 	ApplicationConfig,
 	ErrorHandler, inject, provideAppInitializer,
 	provideZoneChangeDetection
@@ -8,10 +7,15 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from "@angular/common/http";
+import { provideHttpClient, withFetch, withInterceptors } from "@angular/common/http";
 
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
-import { authInitializerFactory, GlobalErrorHandler, provideNotification } from "@marketmate/shared";
+import {
+	authInitializerFactory,
+	GlobalErrorHandler,
+	provideNotification,
+	ssrNoHttpInterceptor
+} from "@marketmate/shared";
 import { AuthService } from "@marketmate/shared";
 import { themeInitializerFactory } from '@marketmate/shared';
 import { ThemeService } from '@marketmate/shared';
@@ -20,7 +24,7 @@ import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
-		provideHttpClient(withFetch()),
+		provideHttpClient(withFetch(), withInterceptors([ssrNoHttpInterceptor])),
 		provideZoneChangeDetection({ eventCoalescing: true }),
 		provideRouter(routes),
 			// In case in incremental Hydration
@@ -44,20 +48,6 @@ export const appConfig: ApplicationConfig = {
 			const themeService = inject(ThemeService);
 			return themeInitializerFactory(themeService)();
 		}),
-
-		// {
-		// 	provide: APP_INITIALIZER,
-		// 	useFactory: authInitializerFactory,
-		// 	multi: true,
-		// 	// AuthService is safely resolved from the SharedModule.forRoot providers.
-		// 	deps: [AuthService]
-		// },
-		// {
-		// 	provide: APP_INITIALIZER,
-		// 	useFactory: themeInitializerFactory,
-		// 	multi: true,
-		// 	deps: [ThemeService]
-		// },
 		{
 			provide: ErrorHandler,
 			useClass: GlobalErrorHandler

@@ -58,11 +58,11 @@ export class AuthService {
 				email: authDetails.email,
 				uuid: authDetails.uuid,
 				profile_url: authDetails.profile_url || undefined,
-				is_admin: authDetails.is_admin,
-				admin: authDetails.is_admin,
+				is_admin: authDetails.admin,
+				admin: authDetails.admin,
 				contact_no: authDetails.contact_no
 			};
-			this.isAdmin = authDetails.is_admin;
+			this.isAdmin = authDetails.admin;
 		}
 	}
 

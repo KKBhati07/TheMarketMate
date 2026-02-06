@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -45,6 +45,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	ngOnInit() {
 		this.setIsMobile();
+
+		if (isPlatformServer(this.platformId)) {
+			this.isLoading = true;
+			this.cdr.markForCheck();
+			return;
+		}
 		this.subscribeToRoute();
 		this.getFilters();
 	}
@@ -100,6 +106,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 	getListings(queryParams: Record<string, string | number | boolean>, page?: number, append: boolean = false) {
+
+		if (isPlatformServer(this.platformId)) return;
+		
 		if (this.isLoading) return;
 
 		this.isLoading = true;
@@ -125,6 +134,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 						this.currentPage = calculateNextPage(response, pageToLoad, append);
 						this.cdr.markForCheck();
 					} else {
+						console.log(res)
 						this.logger.warn('Failed to load listings', {
 							status: res.status,
 							statusText: res.statusText,
