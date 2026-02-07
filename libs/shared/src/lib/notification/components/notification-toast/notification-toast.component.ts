@@ -3,7 +3,7 @@ import { NotificationPayload } from '../../notification.model';
 import { toastAnimation } from '../../notification.animation';
 import { NotificationType } from '../../notification.type';
 import { SHARED_UI_DEPS } from '../../../constants/shared-imports';
-import { CloseBtnComponent } from '../../../modules/shared/components/close-btn/close-btn.component';
+import { CloseBtnComponent } from '../../../components/ui/close-btn/close-btn.component';
 
 @Component({
 	selector: 'mm-notification-toast',

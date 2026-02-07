@@ -3,6 +3,7 @@ export interface CreateListingPayload {
 	description: string;
 	price: number;
 	category_id: number;
+	condition_id: number;
 	country_id: number;
 	state_id: number;
 	city_id: number;

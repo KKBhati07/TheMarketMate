@@ -1,4 +1,5 @@
-import { CONSTANTS } from '../app.constants';
+import { CONSTANTS } from '../constants/app.constants';
+import { CONDITION_COLORS } from '../constants/condition.constant';
 
 export function getIconName(categoryName: string): string {
 	switch (categoryName) {
@@ -19,4 +20,8 @@ export function getIconName(categoryName: string): string {
 		default:
 			return CONSTANTS.CATEGORY_ICON.OTHER;
 	}
+}
+
+export function getColors(label: string) {
+	return CONDITION_COLORS[label] || { bg: '#f5f5f5', text: '#757575', active: '#000' };
 }

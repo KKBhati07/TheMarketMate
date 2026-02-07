@@ -1,4 +1,5 @@
 import { Category } from './category.model';
+import { Condition } from './condition.model';
 import { UserDetailsDto } from './user.model';
 
 export interface PaginatedResponse<T> {
@@ -10,6 +11,10 @@ export interface PaginatedResponse<T> {
 
 export interface CategoriesResponse {
 	categories: Category[];
+}
+
+export interface ConditionsResponse {
+	conditions: Condition[];
 }
 
 export interface UserDetailsResponse {

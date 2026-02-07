@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
-import { ApiService, Listing, PaginatedResponse } from '@marketmate/shared';
+import { ApiService, Listing, PaginatedResponse, ConditionsResponse } from '@marketmate/shared';
 import { AppUrls } from '../app.urls';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ApiResponse } from '@marketmate/shared';
 import { ApiHttpResponse } from '@marketmate/shared';
 import { CreateListingPayload } from '../models/listing.model';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ListingService {
+	private conditions$: Observable<ApiHttpResponse<ApiResponse<ConditionsResponse>>> | null = null;
+
 	constructor(private readonly apiService: ApiService) {
 	}
 
@@ -34,5 +37,23 @@ export class ListingService {
 	getFavoriteByUser(uuid: string, page: number = 0):
 			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_FAVORITES, { user: uuid, page })
+	}
+
+	/**
+	 * Caches conditions using shareReplay.
+	 */
+	getConditions(): Observable<ApiHttpResponse<ApiResponse<ConditionsResponse>>> {
+		if (this.conditions$) return this.conditions$;
+		this.conditions$ = this.apiService
+			.get<ApiResponse<ConditionsResponse>>(AppUrls.API.V1.LISTING.GET_CONDITIONS)
+			.pipe(
+				shareReplay(1),
+				tap(res => {
+					if (!res.isSuccessful()) {
+						this.conditions$ = null;
+					}
+				}),
+			);
+		return this.conditions$;
 	}
 }

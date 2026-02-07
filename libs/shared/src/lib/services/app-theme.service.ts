@@ -1,6 +1,6 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { CONSTANTS } from '../app.constants';
+import { CONSTANTS } from '../constants/app.constants';
 import { LocalStorageService } from './local-storage.service';
 import { ThemeOptions } from '../types/common.type';
 
