@@ -81,7 +81,7 @@ cursor-pointer br-24 w-288 h-312">
             </mat-icon>
           </div>
 
-          <p class="fs-16 fw-6">{{ listing?.title | uppercase }}</p>
+          <p style="color: var(--text-main)" class="fs-16 fw-6">{{ listing?.title | uppercase }}</p>
         </div>
         <div class="price-condition-container flex-row justify-content-space-b align-i-center flex-row gap-4">
           @let colors = getColors(listing?.condition?.label ?? '');
@@ -93,7 +93,7 @@ cursor-pointer br-24 w-288 h-312">
               [activeColor]="colors.active"
               [text]="listing?.condition?.label ?? ''"
           ></mm-pill>
-          <p class="fs-20 fw-7">{{ listing?.price | currency:'INR':'symbol' }}</p>
+          <p style="color: var(--text-main)" class="fs-20 fw-7">{{ listing?.price | currency:'INR':'symbol' }}</p>
 
         </div>
         <p class="item-desc fs-12">{{ listing?.description }}</p>

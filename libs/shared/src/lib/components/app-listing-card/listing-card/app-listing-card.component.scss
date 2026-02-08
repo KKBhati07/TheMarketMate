@@ -45,6 +45,10 @@
           border: 1px solid transparent;
           background: var(--header-color);
 
+          mat-icon {
+            color: var(--text-main);
+          }
+
           &:hover {
             border: 1px solid var(--hover-color);
 

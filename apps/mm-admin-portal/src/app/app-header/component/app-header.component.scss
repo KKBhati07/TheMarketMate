@@ -19,7 +19,7 @@
         .profile-pic-container {
           overflow: hidden;
           backdrop-filter: blur(10px);
-          background: #0083B06E;
+          background: var(--items-bg);
 
           .profile-pic {
             overflow: hidden;
