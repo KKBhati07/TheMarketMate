@@ -82,17 +82,23 @@
           <div class="flex-row gap-12">
             @for (item of productConditions; track item.id) {
               @let colors = getColors(item.label);
-              <mm-pill
-                  [class]="'w-100 h-32 br-16'"
-                  textClass="fs-12 fw-500"
-                  [clickable]="true"
-                  [backgroundColor]="colors.bg"
-                  [textColor]="colors.text"
-                  [activeColor]="colors.active"
-                  [text]="item.label"
-                  [selected]="createListingForm.get('conditionId')?.value === item.id"
-                  (click)="onConditionSelectClick(item.id)"
-              ></mm-pill>
+              <div
+                  [matTooltip]="(item.description ?? '') | formatText"
+                  matTooltipShowDelay="500"
+                  matTooltipPosition="below"
+              >
+                <mm-pill
+                    [class]="'w-100 h-32 br-16'"
+                    textClass="fs-12 fw-500"
+                    [clickable]="true"
+                    [backgroundColor]="colors.bg"
+                    [textColor]="colors.text"
+                    [activeColor]="colors.active"
+                    [text]="item.label"
+                    [selected]="createListingForm.get('conditionId')?.value === item.id"
+                    (click)="onConditionSelectClick(item.id)"
+                ></mm-pill>
+              </div>
             }
           </div>
         </div>

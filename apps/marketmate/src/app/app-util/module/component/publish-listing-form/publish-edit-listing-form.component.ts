@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
 	Category, City, Country, LoggingService, NotificationService, State, SHARED_UI_DEPS, ImagePreviewComponent,
-	Condition, PillComponent, getColors
+	Condition, PillComponent, getColors, FormatTextPipe
 } from '@marketmate/shared';
 import { LocationApiService } from '../../../../services/location.service';
 import { CategoryService } from '../../../../services/category.service';
@@ -24,7 +24,16 @@ import { AppButtonComponent } from '@marketmate/shared';
 	styleUrls: ['./publish-edit-listing-form.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, ReactiveFormsModule, ImageUploadIconComponent, ImagePreviewComponent, AutocompleteSelectComponent, AppButtonComponent, PillComponent]
+	imports: [
+		...SHARED_UI_DEPS,
+		ReactiveFormsModule,
+		ImageUploadIconComponent,
+		ImagePreviewComponent,
+		AutocompleteSelectComponent,
+		AppButtonComponent,
+		PillComponent,
+		FormatTextPipe
+	]
 })
 export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	createListingForm!: FormGroup;
@@ -294,7 +303,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 			country_id: formValue.countryId,
 			state_id: formValue.stateId,
 			city_id: formValue.cityId,
-			condition_id:formValue.conditionId,
+			condition_id: formValue.conditionId,
 			price: formValue.price,
 			images
 		}).pipe(takeUntil(this.destroy$))
