@@ -1,9 +1,12 @@
 import { Component, Input } from '@angular/core';
+import { SHARED_UI_DEPS } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-user-menu-nav',
 	templateUrl: './app-user-menu-nav.component.html',
 	styleUrls: ['./app-user-menu-nav.component.scss'],
+	standalone: true,
+	imports: [...SHARED_UI_DEPS]
 })
 export class UserMenuNavComponent {
 	@Input() class = '';

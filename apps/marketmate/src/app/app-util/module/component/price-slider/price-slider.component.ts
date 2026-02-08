@@ -8,13 +8,17 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { PriceRange } from '../../../../types/common.type';
-import { FilterService } from '../../../../../../../mm-shared/src/lib/services/filter.service';
+import { FilterService, SHARED_UI_DEPS } from '@marketmate/shared';
+import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
+import { HeadingComponent } from '../product-category/app-heading/heading.component';
 
 @Component({
 	selector: 'mm-price-slider',
 	templateUrl: './price-slider.component.html',
 	styleUrls: ['./price-slider.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, MatSlider, MatSliderRangeThumb, HeadingComponent]
 })
 export class PriceSliderComponent implements OnInit {
 	@Input() minValue: number = 0;

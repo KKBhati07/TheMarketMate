@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
+import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -9,7 +9,7 @@ import https from 'node:https';
 import fs from 'node:fs';
 
 import bootstrap from './src/main.server';
-import { bootstrapLogger } from 'mm-shared';
+import { bootstrapLogger } from '@marketmate/shared';
 
 /**
  * HTTPS certificates for local SSL
@@ -19,8 +19,6 @@ const httpsOptions = {
 	key: fs.readFileSync('/certs/wildcard.marketmate.local-key.pem'),
 	cert: fs.readFileSync('/certs/wildcard.marketmate.local.pem'),
 };
-
-console.log('🔥 EXPRESS SSR SERVER BOOTED 🔥');
 
 /**
  * In-memory SSR cache

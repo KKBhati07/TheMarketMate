@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { SHARED_UI_DEPS } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-image-upload-icon',
 	templateUrl: 'image-upload-icon.component.html',
 	styleUrls: ['image-upload-icon.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS]
 })
 export class ImageUploadIconComponent {
 

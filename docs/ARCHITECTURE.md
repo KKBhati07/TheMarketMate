@@ -20,7 +20,7 @@ The MarketMate frontend is an Nx monorepo containing two Angular applications sh
 │  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
 │  │  │   User       │  │   Chat       │  │   Filters    │    │   │
-│  │  │   Profile    │  │   Module     │  │  Component   │    │   │
+│  │  │   Profile    │  │  Component   │  │  Component   │    │   │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                              │                                  │
@@ -33,14 +33,14 @@ The MarketMate frontend is an Nx monorepo containing two Angular applications sh
 │  └──────────────────────────────────────────────────────────┘   │
 │                              │                                  │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │              Shared Library (mm-shared)                  │   │
+│  │        Shared Library (@marketmate/shared)                │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
 │  │  │   UI         │  │   Services   │  │   Forms      │    │   │
-│  │  │  Components  │  │              │  │   Module     │    │   │
+│  │  │  Components  │  │              │  │   Components │    │   │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
 │  │  │   Auth       │  │   Storage    │  │ Notification │    │   │
-│  │  │   Service    │  │   Service    │  │    Module    │    │   │
+│  │  │   Service    │  │   Service    │  │   Service    │    │   │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
@@ -55,28 +55,35 @@ The MarketMate frontend is an Nx monorepo containing two Angular applications sh
 
 ### Key Architectural Decisions
 
-- **Monorepo with Shared Library**: Both apps consume `mm-shared` to avoid duplication and ensure consistency
-- **Lazy-Loaded Feature Modules**: Auth and UserProfile modules are lazy-loaded in both apps for code splitting and performance
-- **Hybrid Module/Standalone**: Uses Angular modules for shared library and standalone components in apps for flexibility
+- **Monorepo with Shared Library**: Both apps consume `@marketmate/shared` (located at `libs/shared`) to avoid duplication and ensure consistency
+- **Standalone Components Architecture**: All components are standalone (Angular 21), eliminating NgModules for better tree-shaking and performance
+- **Lazy-Loaded Routes**: Routes are lazy-loaded for code splitting and performance optimization
+- **Server-Side Rendering (SSR)**: MarketMate app supports SSR with incremental hydration for improved SEO and initial load performance
 - **REST API Communication**: All backend communication via REST API through centralized `ApiService`
 
 ---
 
 ## Shared Library Design
 
-The `mm-shared` library centralizes reusable code and enforces architectural patterns across both applications.
+The `@marketmate/shared` library (located at `libs/shared`) centralizes reusable code and enforces architectural patterns across both applications.
 
-### Module Configuration Pattern
+### Provider Configuration Pattern
 
-Uses `forRoot()` pattern for singleton service configuration:
+Uses functional providers pattern for singleton service configuration:
 
 ```typescript
 // In app.config.ts
-importProvidersFrom(
-  SharedModule.forRoot({
-    apiUrl: environment.apiUrl
-  })
-)
+import { provideSharedLib } from '@marketmate/shared';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ... other providers
+    ...provideSharedLib({
+      apiUrl: environment.apiUrl
+    }),
+    // ... other providers
+  ]
+};
 ```
 
 **Rationale**: Allows environment-specific configuration (API URLs, feature flags) while maintaining singleton services across the app.
@@ -91,19 +98,27 @@ importProvidersFrom(
 ### Library Structure
 
 ```
-mm-shared/
-├── lib/
-│   ├── modules/          # Feature modules (forms, notifications, listing cards)
-│   ├── services/         # Shared business logic services
-│   ├── guards/           # Route guards (LoginSignupGuard)
-│   ├── initializers/     # App initialization (auth, theme)
-│   ├── models/           # Shared TypeScript interfaces
-│   └── utils/            # API response wrappers, common utilities
-└── styles/               # Global SCSS with design tokens
+libs/shared/
+├── src/
+│   ├── lib/
+│   │   ├── components/      # Standalone UI components (buttons, pills, cards, forms, etc.)
+│   │   ├── services/         # Shared business logic services
+│   │   ├── guards/           # Route guards (LoginSignupGuard)
+│   │   ├── interceptors/      # HTTP interceptors (SSR-aware)
+│   │   ├── initializers/     # App initialization (auth, theme)
+│   │   ├── models/           # Shared TypeScript interfaces
+│   │   ├── pipes/            # Custom pipes (formatText, etc.)
+│   │   ├── animations/       # Reusable Angular animations
+│   │   ├── utils/            # API response wrappers, common utilities
+│   │   └── constants/        # Shared constants (SHARED_UI_DEPS, etc.)
+│   ├── styles/               # Global SCSS with design tokens
+│   └── public-api.ts         # Library exports (tree-shakeable)
 ```
 
-**Design Principle**: All cross-app dependencies flow through `mm-shared`, preventing direct dependencies between apps.
-
+**Design Principles**:
+- All cross-app dependencies flow through `@marketmate/shared`, preventing direct dependencies between apps
+- Standalone components and functional providers for optimal tree-shaking
+- Tree-shakeable exports via `public-api.ts`
 ---
 
 ## Key Data Flows
@@ -177,8 +192,10 @@ ChatInputComponent → ChatSocketService → Socket.IO emit('send_message')
 
 ### Code Splitting
 
-- **Lazy-Loaded Feature Modules**: Auth and UserProfile modules loaded on-demand in both applications
-- **Shared Library**: Common code bundled once via `mm-shared` to minimize bundle size
+- **Lazy-Loaded Routes**: Routes are lazy-loaded for on-demand code splitting
+- **Standalone Components**: Each component is independently importable, enabling better tree-shaking
+- **Shared Library**: Common code bundled once via `@marketmate/shared` to minimize bundle size
+- **Server-Side Rendering**: SSR with incremental hydration for faster initial page load
 
 ### State Management
 
@@ -186,9 +203,24 @@ ChatInputComponent → ChatSocketService → Socket.IO emit('send_message')
 - **Local Storage**: User preferences (theme, filters) persisted via `StorageService`
 - **No Global State Store**: State scoped to feature services to avoid over-engineering
 
-**Decision**: Service-based state sufficient for current complexity. NgRx considered for future if state management becomes complex.
+**Decision**: Service-based state with RxJS sufficient for current complexity. Signals adopted incrementally for new features. NgRx considered for future if state management becomes complex.
+
+### SSR & Hydration
+
+- **Server-Side Rendering**: Full SSR support with Express server
+- **Incremental Hydration**: Progressive hydration using `provideClientHydration(withEventReplay())` for better performance
+- **Prerendering**: Static routes are prerendered at build time
+- **SSR Caching**: In-memory caching of rendered pages for improved performance
 
 ---
+
+## Technology Stack
+
+- **Angular**: 21.1.2 (standalone components, SSR, incremental hydration)
+- **Nx**: 22.4.4 (monorepo tooling)
+- **TypeScript**: ~5.9.3
+- **Angular Material**: 21.1.2
+- **RxJS**: ~7.8.0
 
 ## Related Documentation
 

@@ -1,16 +1,13 @@
 .price-range-container {
 
-  .title-container {
-    p {
-      background-color: var(--items-bg);
-    }
-  }
-
   background: var(--header-color);
 
   .inner-container {
     .price-values-container {
       top: -8px;
+      span{
+        color: var(--text-main);
+      }
     }
 
     .min-max-text-container {

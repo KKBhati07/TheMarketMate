@@ -4,8 +4,8 @@ import {
 	Router, RouterStateSnapshot,
 	UrlTree
 } from '@angular/router';
-import { AppUrls as SharedUrls } from 'mm-shared';
-import { AuthService } from 'mm-shared';
+import { AppUrls as SharedUrls } from '@marketmate/shared';
+import { AuthService } from '@marketmate/shared';
 import { Injectable } from '@angular/core';
 
 /**

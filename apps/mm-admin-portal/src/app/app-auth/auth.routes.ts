@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { FormContainerComponent, AppUrls as SharedUrls, LoginSignupGuard } from 'mm-shared';
+import { FormContainerComponent, AppUrls as SharedUrls, LoginSignupGuard } from '@marketmate/shared';
 
 export const authRoutes: Routes = [
 	{

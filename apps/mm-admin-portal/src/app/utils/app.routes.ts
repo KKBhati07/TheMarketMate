@@ -6,7 +6,7 @@ import { AdminGuard } from '../guards/admin.guard';
 import {
 	AppUrls as SharedUrls,
 	FourOFourComponent,
-} from 'mm-shared';
+} from '@marketmate/shared';
 import { AppUrls } from './app.urls';
 import { AdminListingGuard } from '../guards/admin-listing.guard';
 
@@ -27,7 +27,7 @@ export const routes: Routes = [
 	},
 	{
 		path: SharedUrls.AUTH.BASE,
-		loadChildren: () => import('../app-auth/auth.module').then(m => m.AuthModule)
+		loadChildren: () => import('../app-auth/auth.routes').then(r => r.authRoutes)
 	},
 	{ path: SharedUrls.FOUROFOUR, component: FourOFourComponent },
 	{ path: '**', redirectTo: SharedUrls.FOUROFOUR }

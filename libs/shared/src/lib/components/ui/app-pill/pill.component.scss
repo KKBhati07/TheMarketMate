@@ -1,0 +1,17 @@
+.pill-container {
+	background-color: var(--pill-bg);
+	color: var(--pill-text);
+	border: 1.5px solid transparent;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+	&:hover {
+		transform: translateY(-1px);
+		filter: brightness(0.95);
+	}
+
+	&.selected {
+		background-color: var(--pill-active) !important;
+		color: white !important;
+		box-shadow: 0 4px 10px -2px var(--pill-active);
+	}
+}

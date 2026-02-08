@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { SHARED_UI_DEPS } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-user-profile-bar',
 	templateUrl: 'user-profile-bar.component.html',
 	styleUrls: ['user-profile-bar.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS]
 })
 export class UserProfileBarComponent {
 

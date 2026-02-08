@@ -17,6 +17,7 @@
   input {
     background-color: var(--items-bg);
     outline: none;
+    color: var(--text-main);
 
     &.disabled {
       cursor: not-allowed !important;
@@ -27,7 +28,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
+    background: var(--items-bg);
     max-height: 220px;
     overflow-y: auto;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10),
@@ -38,13 +39,15 @@
 
     .dropdown-option {
       transition: background 0.2s ease;
+      color: var(--text-main);
 
       &:hover {
-        background: var(--items-bg);
+        color: white;
+        background: var(--hover-color);
       }
 
       &.selected {
-        background: var(--hover-color);
+        background: var(--primary-color);
         font-weight: 500;
         color: white;
       }

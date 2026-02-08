@@ -1,7 +1,9 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "name": "marketmate",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "sourceRoot": "apps/marketmate/src",
+  "prefix": "app",
   "tags": [
     "type:app"
   ],
@@ -10,8 +12,6 @@
       "style": "scss"
     }
   },
-  "sourceRoot": "apps/marketmate/src",
-  "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
@@ -31,10 +31,13 @@
           }
         ],
         "styles": [
-          "apps/mm-shared/src/styles/styles.scss",
+          "libs/shared/src/styles/styles.scss",
           "apps/marketmate/src/styles.scss"
         ],
         "scripts": [],
+        "allowedCommonJsDependencies": [
+          "compression"
+        ],
         "server": "apps/marketmate/src/main.server.ts",
         "prerender": true,
         "ssr": {
@@ -47,7 +50,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kB",
-              "maximumError": "1MB"
+              "maximumError": "1.2MB"
             },
             {
               "type": "anyComponentStyle",
@@ -70,40 +73,36 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4200
+      },
       "configurations": {
-        "production": {
-          "buildTarget": "marketmate:build:production"
-        },
         "development": {
-          "buildTarget": "marketmate:build:development"
+          "buildTarget": "marketmate:build:development",
+          "hmr": true,
+          "publicHost": "marketmate.local:4200",
+          "disableHostCheck": true
+        }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "serve-ssr": {
+      "executor": "@angular-devkit/build-angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "buildTarget": "marketmate:build:development",
+          "serverTarget": "marketmate:build:development"
+        },
+        "production": {
+          "buildTarget": "marketmate:build:production",
+          "serverTarget": "marketmate:build:production"
         }
       },
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n"
-    },
-    "test": {
-      "executor": "@angular-devkit/build-angular:karma",
-      "options": {
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
-        "tsConfig": "apps/marketmate/tsconfig.spec.json",
-        "inlineStyleLanguage": "scss",
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "apps/marketmate/public"
-          }
-        ],
-        "styles": [
-          "apps/mm-shared/src/styles/styles.scss",
-          "apps/marketmate/src/styles.scss"
-        ],
-        "scripts": []
-      }
     }
   }
 }

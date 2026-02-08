@@ -1,0 +1,19 @@
+<div
+	class="toggle-container flex-row align-i-center gap-12 cursor-pointer {{class}}"
+	[class.disabled]="disabled"
+	[class.checked]="checked"
+	(click)="onToggleClick($event)"
+	(keydown)="onKeydown($event)"
+	tabindex="0"
+	role="switch"
+	[attr.aria-checked]="checked"
+	[attr.aria-disabled]="disabled"
+	[attr.aria-label]="label || 'Toggle'">
+	<div class="toggle-track flex-row align-i-center p-4 position-relative w-48 h-24 br-12">
+		<div class="toggle-thumb w-20 h-20 border-circle position-absolute" [@toggleAnimation]="checked ? 'checked' : 'unchecked'">
+		</div>
+	</div>
+	@if (label) {
+		<span class="toggle-label fs-12 fw-5">{{ label }}</span>
+	}
+</div>

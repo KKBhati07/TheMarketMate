@@ -1,22 +1,39 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Category, City, Country, LoggingService, NotificationService, State } from 'mm-shared';
+import {
+	Category, City, Country, LoggingService, NotificationService, State, SHARED_UI_DEPS, ImagePreviewComponent,
+	Condition, PillComponent, getColors, FormatTextPipe
+} from '@marketmate/shared';
 import { LocationApiService } from '../../../../services/location.service';
 import { CategoryService } from '../../../../services/category.service';
 import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { CONSTANTS } from '../../../../app.constants';
 import { ProductImage } from '../../../../types/common.type';
 import { ListingService } from '../../../../services/listing.service';
-import { StorageService, Directory } from 'mm-shared';
-import { FilePayload } from 'mm-shared';
+import { StorageService, Directory } from '@marketmate/shared';
+import { FilePayload } from '@marketmate/shared';
 import { PayloadImage } from '../../../../models/listing.model';
+import { ImageUploadIconComponent } from '../image-upload-icon/image-upload-icon.component';
+import { AutocompleteSelectComponent } from '../app-autocomplete-select/app-autocomplete-select.component';
+import { AppButtonComponent } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-publish-listing-form',
 	templateUrl: './publish-edit-listing-form.component.html',
 	styleUrls: ['./publish-edit-listing-form.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [
+		...SHARED_UI_DEPS,
+		ReactiveFormsModule,
+		ImageUploadIconComponent,
+		ImagePreviewComponent,
+		AutocompleteSelectComponent,
+		AppButtonComponent,
+		PillComponent,
+		FormatTextPipe
+	]
 })
 export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	createListingForm!: FormGroup;
@@ -28,6 +45,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 	cities: City[] = [];
 	destroy$: Subject<void> = new Subject<void>();
 	productImages: ProductImage[] = [];
+	productConditions: Condition[] = [];
 	protected readonly CONSTANTS = CONSTANTS;
 	isLoading = false;
 
@@ -51,7 +69,23 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 		this.cdr.markForCheck();
 		this.getCountries();
 		this.getCategories();
+		this.getProductConditions();
 		this.attachFormValueChangeListener();
+	}
+
+	getProductConditions() {
+		this.listingService.getConditions()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					if (res.isSuccessful()) {
+						this.productConditions = res.body?.data.conditions ?? []
+					} else {
+						this.logger.error('Unalbe to load conditions', res);
+						this.notificationService.error({ message: 'Something went wrong!' })
+						this.closeDialog();
+					}
+					this.cdr.markForCheck();
+				})
 	}
 
 	attachFormValueChangeListener() {
@@ -82,12 +116,17 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 				});
 	}
 
+	protected onConditionSelectClick(id: number) {
+		this.createListingForm.get('conditionId')?.setValue(id)
+	}
+
 	initForm() {
 		this.createListingForm = this.fb.group({
 			title: ['', Validators.required],
 			description: [''],
 			price: [null, Validators.required],
 			categoryId: [null, Validators.required],
+			conditionId: [null, Validators.required],
 			countryId: [null, Validators.required],
 			stateId: [{ value: null, disabled: true }, Validators.required],
 			cityId: [{ value: null, disabled: true }, Validators.required],
@@ -247,7 +286,16 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	createListing(formValue: { title: string; description: string; price: number; categoryId: number; countryId: number; stateId: number; cityId: number }, images: PayloadImage[] = []) {
+	createListing(formValue: {
+		title: string;
+		description: string;
+		price: number;
+		categoryId: number;
+		countryId: number;
+		conditionId: number;
+		stateId: number;
+		cityId: number
+	}, images: PayloadImage[] = []) {
 		this.listingService.createListing({
 			title: formValue.title,
 			description: formValue.description,
@@ -255,6 +303,7 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 			country_id: formValue.countryId,
 			state_id: formValue.stateId,
 			city_id: formValue.cityId,
+			condition_id: formValue.conditionId,
 			price: formValue.price,
 			images
 		}).pipe(takeUntil(this.destroy$))
@@ -286,4 +335,6 @@ export class PublishEditListingFormComponent implements OnInit, OnDestroy {
 		this.destroy$.next();
 		this.destroy$.complete();
 	}
+
+	protected readonly getColors = getColors;
 }

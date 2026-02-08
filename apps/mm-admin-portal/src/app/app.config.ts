@@ -2,7 +2,6 @@ import {
   APP_INITIALIZER,
   ApplicationConfig,
   ErrorHandler,
-  importProvidersFrom,
   provideZoneChangeDetection
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -14,10 +13,10 @@ import {
   authInitializerFactory,
   AuthService,
   GlobalErrorHandler,
-  SharedModule,
+  provideSharedLib,
   themeInitializerFactory,
   ThemeService
-} from 'mm-shared';
+} from '@marketmate/shared';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
@@ -28,11 +27,9 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
 
     // 3. LIBRARY CONFIG: must run first to configure ApiService, AuthService, etc.
-    importProvidersFrom(
-        SharedModule.forRoot({
-          apiUrl: environment.apiUrl
-        })
-    ),
+    ...provideSharedLib({
+      apiUrl: environment.apiUrl
+    }),
     {
       provide: APP_INITIALIZER,
       useFactory: authInitializerFactory,

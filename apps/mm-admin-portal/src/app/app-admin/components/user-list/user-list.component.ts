@@ -9,24 +9,26 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
-	AppConfirmDeleteDialogComponent, UserDetailsDto
-} from 'mm-shared';
-import { LoggingService } from 'mm-shared';
-import { NotificationService } from 'mm-shared';
+	AppConfirmDeleteDialogComponent, UserDetailsDto, SHARED_UI_DEPS
+} from '@marketmate/shared';
+import { LoggingService } from '@marketmate/shared';
+import { NotificationService } from '@marketmate/shared';
 import { Subject, takeUntil } from "rxjs";
 import {
 	UserProfileEditComponent
-} from 'mm-shared';
+} from '@marketmate/shared';
 import { AdminService } from '../../../services/admin.service';
-import { fadeSlideIn } from 'mm-shared';
-import { handleKeyboardActivation } from 'mm-shared';
+import { fadeSlideIn } from '@marketmate/shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-admin-user-list',
+	standalone: true,
 	templateUrl: './user-list.component.html',
 	styleUrls: ['./user-list.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [fadeSlideIn],
+	imports: [...SHARED_UI_DEPS]
 })
 export class AdminUserListComponent implements OnDestroy {
 	@Input() user: UserDetailsDto | null = null;

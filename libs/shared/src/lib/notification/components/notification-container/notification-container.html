@@ -1,0 +1,8 @@
+<div class="notification-container flex-column gap-12">
+  @for (notification of notifications; track trackById($index, notification)) {
+    <mm-notification-toast
+      [notification]="notification"
+      (dismiss)="dismiss(notification.id!)"
+      />
+  }
+</div>

@@ -1,15 +1,19 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { LoggingService, NotificationService, User, UserDetailsDto } from "mm-shared";
-import { DeviceDetectorService } from "mm-shared";
+import { LoggingService, NotificationService, User, UserDetailsDto, SHARED_UI_DEPS } from "@marketmate/shared";
+import { DeviceDetectorService } from "@marketmate/shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
+import { AdminUserListComponent } from '../user-list/user-list.component';
+import { UserListSkeletonComponent } from '../user-list-skeleton/user-list-skeleton.component';
 
 @Component({
 	selector: 'mm-admin-users',
+	standalone: true,
 	templateUrl: './users.component.html',
 	styleUrls: ['./users.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [...SHARED_UI_DEPS, AdminUserListComponent, UserListSkeletonComponent]
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 	users: UserDetailsDto[] = [];

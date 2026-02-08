@@ -1,17 +1,19 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { Listing, LoggingService, NotificationService } from 'mm-shared';
+import { Listing, LoggingService, NotificationService, SHARED_UI_DEPS, AppNavButtonComponent, AppButtonComponent, ListingCardComponent, ListingCardSkeletonComponent } from '@marketmate/shared';
 import { map, Subject, takeUntil } from 'rxjs';
 import { AdminService } from '../../../services/admin.service';
 import { AppUrls } from '../../../utils/app.urls';
 import { ActivatedRoute } from '@angular/router';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-admin-listing',
+	standalone: true,
 	templateUrl: './listing.component.html',
 	styleUrls: ['./listing.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppButtonComponent, ListingCardComponent, ListingCardSkeletonComponent]
 })
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 

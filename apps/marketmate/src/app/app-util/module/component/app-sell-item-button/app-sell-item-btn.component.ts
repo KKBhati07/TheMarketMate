@@ -1,9 +1,12 @@
 import { Component, Input } from '@angular/core';
+import { SHARED_UI_DEPS } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-sell-item-button',
 	templateUrl: './app-sell-item-btn.component.html',
-	styleUrls: ['./app-sell-item-btn.component.scss']
+	styleUrls: ['./app-sell-item-btn.component.scss'],
+	standalone: true,
+	imports: [...SHARED_UI_DEPS]
 })
 export class SellItemButtonComponent {
 	@Input() class = '';

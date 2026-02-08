@@ -77,24 +77,53 @@
         ></mm-autocomplete-select>
 
       </div>
+      @if (productConditions.length) {
+        <div class="product-condition-container pl-20 pr-20 flex-row justify-content-center w-100p mt-8">
+          <div class="flex-row gap-12">
+            @for (item of productConditions; track item.id) {
+              @let colors = getColors(item.label);
+              <div
+                  [matTooltip]="(item.description ?? '') | formatText"
+                  matTooltipShowDelay="500"
+                  matTooltipPosition="below"
+              >
+                <mm-pill
+                    [class]="'w-100 h-32 br-16'"
+                    textClass="fs-12 fw-500"
+                    [clickable]="true"
+                    [backgroundColor]="colors.bg"
+                    [textColor]="colors.text"
+                    [activeColor]="colors.active"
+                    [text]="item.label"
+                    [selected]="createListingForm.get('conditionId')?.value === item.id"
+                    (click)="onConditionSelectClick(item.id)"
+                ></mm-pill>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
 
       <div class=" images-container p-8 flex-row form-input gap-8 br-16 mt-4">
-        <mm-image-preview
-            *ngFor="let image of productImages; let i = index"
-            [imageUrl]="image.previewUrl"
-            iconClass="w-32 h-32 fs-32"
-            imgClass="w-100 h-100 br-16"
-            (removeImage)="removeImage(i)"
-        ></mm-image-preview>
+        @for (image of productImages; track image; let i = $index) {
+          <mm-image-preview
+              [imageUrl]="image.previewUrl"
+              iconClass="w-32 h-32 fs-32"
+              imgClass="w-100 h-100 br-16"
+              (removeImage)="removeImage(i)"
+          ></mm-image-preview>
+        }
 
-        <mm-image-upload-icon
-            *ngIf="productImages.length <
-            CONSTANTS.LISTING.IMAGES.MAX_LIMIT"
-            class="w-100 h-100 br-16"
-            iconClass="w-28 h-28 fs-28"
-            (onImageSelect)="handleImageFiles($event)"
-        >
-        </mm-image-upload-icon>
+        @if (productImages.length <
+        CONSTANTS.LISTING.IMAGES.MAX_LIMIT) {
+          <mm-image-upload-icon
+              class="w-100 h-100 br-16"
+              iconClass="w-28 h-28 fs-28"
+              (onImageSelect)="handleImageFiles($event)"
+          >
+          </mm-image-upload-icon>
+        }
       </div>
 
 

@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { CONSTANTS } from "../../../../app.constants";
-import { Category } from 'mm-shared';
-import { getIconName } from 'mm-shared';
+import { Category, SHARED_UI_DEPS, getIconName } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-product-category',
 	templateUrl: './product-category.component.html',
 	styleUrls: ['./product-category.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS]
 })
 export class ProductCategoryComponent {
 	@Output() onCategoryClickEmitter = new EventEmitter<Category | null>();

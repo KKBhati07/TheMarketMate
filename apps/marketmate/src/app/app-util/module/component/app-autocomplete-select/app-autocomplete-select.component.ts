@@ -8,12 +8,11 @@ import {
 	ChangeDetectorRef,
 	Output, EventEmitter
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
-import { FormatTextPipe } from 'mm-shared';
-import { dropdownAnimation } from 'mm-shared';
+import { FormatTextPipe, SHARED_UI_DEPS, dropdownAnimation } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-autocomplete-select',
@@ -21,6 +20,8 @@ import { dropdownAnimation } from 'mm-shared';
 	styleUrls: ['./app-autocomplete-select.component.scss'],
 	animations: [dropdownAnimation],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, ReactiveFormsModule, FormatTextPipe],
 	providers: [{
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: forwardRef(() => AutocompleteSelectComponent),

@@ -1,0 +1,49 @@
+.toggle-container {
+	user-select: none;
+	outline: none;
+
+	&:focus-visible {
+		outline: 2px solid var(--primary-color);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+
+	&:hover:not(.disabled) .toggle-track {
+		opacity: 0.9;
+	}
+
+	&.disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}
+
+.toggle-track {
+	background-color: var(--button-color-disable);
+	transition: background-color 0.2s ease;
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+	.toggle-container.checked & {
+		background-color: var(--primary-color);
+	}
+
+	.toggle-container.disabled & {
+		opacity: 0.6;
+	}
+}
+
+.toggle-thumb {
+	background-color: white;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
+	left: 2px;
+	transition: box-shadow 0.2s ease;
+
+	.toggle-container.checked & {
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
+	}
+}
+
+.toggle-label {
+	color: var(--text-main);
+	user-select: none;
+}

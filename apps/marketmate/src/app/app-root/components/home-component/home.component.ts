@@ -1,19 +1,22 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Listing } from 'mm-shared';
-import { DeviceDetectorService } from 'mm-shared';
-import { FilterService } from 'mm-shared';
-import { LoggingService, NotificationService } from 'mm-shared';
-import { calculateHasMore, calculateNextPage, extractItems } from 'mm-shared';
+import { Listing, SHARED_UI_DEPS, ListingCardComponent, ListingCardSkeletonComponent } from '@marketmate/shared';
+import { DeviceDetectorService } from '@marketmate/shared';
+import { FilterService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
+import { FiltersComponent } from '../filters-component/filters.component';
 
 @Component({
 	selector: 'mm-home',
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, FiltersComponent, ListingCardComponent, ListingCardSkeletonComponent]
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -42,6 +45,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	ngOnInit() {
 		this.setIsMobile();
+
+		if (isPlatformServer(this.platformId)) {
+			this.isLoading = true;
+			this.cdr.markForCheck();
+			return;
+		}
 		this.subscribeToRoute();
 		this.getFilters();
 	}
@@ -97,6 +106,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 	getListings(queryParams: Record<string, string | number | boolean>, page?: number, append: boolean = false) {
+
+		if (isPlatformServer(this.platformId)) return;
+		
 		if (this.isLoading) return;
 
 		this.isLoading = true;
@@ -122,6 +134,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 						this.currentPage = calculateNextPage(response, pageToLoad, append);
 						this.cdr.markForCheck();
 					} else {
+						console.log(res)
 						this.logger.warn('Failed to load listings', {
 							status: res.status,
 							statusText: res.statusText,
