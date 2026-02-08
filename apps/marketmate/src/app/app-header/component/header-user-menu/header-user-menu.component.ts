@@ -1,7 +1,27 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Inject,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output,
+	PLATFORM_ID
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AppUrls } from '../../../app.urls';
-import { AuthService, LoggingService, NotificationService, SHARED_UI_DEPS, fadeInOut } from '@marketmate/shared';
+import {
+	AuthService,
+	LoggingService,
+	NotificationService,
+	SHARED_UI_DEPS,
+	fadeInOut,
+	ThemeService,
+	CONSTANTS,
+	AppToggleComponent
+} from '@marketmate/shared';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { handleKeyboardActivation } from '@marketmate/shared';
@@ -14,14 +34,15 @@ import { UserMenuNavComponent } from '../app-user-menu-nav/app-user-menu-nav.com
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [fadeInOut],
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, UserMenuNavComponent]
+	imports: [...SHARED_UI_DEPS, UserMenuNavComponent, AppToggleComponent]
 })
-export class HeaderUserMenuComponent implements OnDestroy {
+export class HeaderUserMenuComponent implements OnInit, OnDestroy {
 
 	@Input() userName: string = '';
 	@Input() profileImgUrl: string | undefined;
 	@Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
 	isLoggingOut = false;
+	isLightTheme = false;
 	destroy$: Subject<void> = new Subject<void>();
 
 	constructor(
@@ -29,8 +50,29 @@ export class HeaderUserMenuComponent implements OnDestroy {
 			private router: Router,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
+			private themeService: ThemeService,
+			private cdr: ChangeDetectorRef,
 			@Inject(PLATFORM_ID) private platformId: Object
 	) {
+	}
+
+	ngOnInit() {
+		this.updateThemeState();
+	}
+
+	updateThemeState() {
+		const currentTheme = this.themeService.ActiveTheme;
+		this.isLightTheme = currentTheme === CONSTANTS.THEME.LIGHT;
+		this.cdr.markForCheck();
+	}
+
+	onThemeToggle(checked: boolean) {
+		if (checked) {
+			this.themeService.setDark();
+		} else {
+			this.themeService.setLight();
+		}
+		this.updateThemeState();
 	}
 
 	onUserIconClick(event: Event) {

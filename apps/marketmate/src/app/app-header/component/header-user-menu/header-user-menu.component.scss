@@ -8,5 +8,15 @@
   .user-menu-container {
     background: var(--header-color);
     right: 8px;
+
+
+    .theme-toggle-container {
+      background: var(--items-bg);
+      border: 1px solid var(--border-color);
+
+      .mat-icon {
+        color: var(--primary-color);
+      }
+    }
   }
 }

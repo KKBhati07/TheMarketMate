@@ -11,7 +11,6 @@ import { ThemeOptions } from '../types/common.type';
  */
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-	private key = CONSTANTS.THEME.KEY;
 	private className = 'light-theme';
 	private activeTheme: ThemeOptions | null = null;
 	private readonly isBrowser: boolean;
@@ -34,6 +33,11 @@ export class ThemeService {
 			this.setLight();
 		}
 	}
+
+	get ActiveTheme(): ThemeOptions {
+		return this.activeTheme ?? this.localStorageService.AppTheme ?? CONSTANTS.THEME.LIGHT;
+	}
+
 
 	setLight() {
 		if (this.isBrowser && typeof document !== 'undefined') {

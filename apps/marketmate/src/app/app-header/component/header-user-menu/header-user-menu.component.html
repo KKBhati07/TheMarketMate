@@ -11,12 +11,12 @@
       [@fadeInOut]
       class="user-menu-container
       position-absolute
-       br-32 flex-column justify-content-center gap-12 h-200
+       br-32 pt-8 pb-8 pl-8 pr-8 flex-column justify-content-center gap-12
        w-264 mt-72">
 
     <mm-user-menu-nav
         (click)="onUserIconClick($event)"
-        class="pl-4 pr-4 h-56 br-28"
+        [class]="'pl-4 pr-4 h-56 br-28'"
         iconImgContainerClass="h-48 w-48"
         textContainerClass="h-48 pl-4 pr-4"
         iconClass="h-28 w-28 fs-28"
@@ -31,7 +31,7 @@
     </mm-user-menu-nav>
     <mm-user-menu-nav
         (click)="onLogOutClick($event)"
-        class="pl-4 pr-4 h-56 br-28"
+        [class]="'pl-4 pr-4 h-56 br-28'"
         iconImgContainerClass="h-48 w-48"
         textContainerClass="h-48 pl-4 pr-4"
         iconClass="h-28 w-28 fs-28"
@@ -43,5 +43,24 @@
         icon="logout"
     >
     </mm-user-menu-nav>
+    <div
+        class="theme-toggle-container pl-8 pr-8 h-56 br-28 w-100p
+        flex-row align-i-center justify-content-space-b">
+      <div class="flex-row align-i-center gap-8 h-48">
+        <div class="h-48 w-48 flex-row align-i-center justify-content-center">
+          <mat-icon
+              [fontIcon]="'palette'"
+              class="h-28 w-28 fs-28"></mat-icon>
+        </div>
+        <div style="color: var(--primary-color)" class="h-48 pl-4 pr-4 flex-row align-i-center">
+          <span class="fw-6 fs-16">{{ isLightTheme ? 'Light' : 'Dark' }}</span>
+        </div>
+      </div>
+      <mm-toggle
+          [checked]="!isLightTheme"
+          (toggleChange)="onThemeToggle($event)"
+          label="">
+      </mm-toggle>
+    </div>
   </div>
 </div>

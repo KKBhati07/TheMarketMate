@@ -4,6 +4,7 @@ export * from './lib/providers/shared.providers';
 // Components
 export * from './lib/components/ui/app-button/app-button.component';
 export * from './lib/components/ui/app-nav-button/app-nav-button.component';
+export * from './lib/components/ui/app-toggle/app-toggle.component';
 export * from './lib/components/ui/back-forward-icon/back-forward-icon.component';
 export * from './lib/components/ui/bottomsheet-pill/bottomsheet-pill.component';
 export * from './lib/components/ui/close-btn/close-btn.component';
