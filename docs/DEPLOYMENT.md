@@ -30,6 +30,12 @@ This guide covers the deployment process for the MarketMate Angular applications
   npm install -g nx
   ```
 
+### Technology Versions
+
+- **Angular**: 21.1.2
+- **Nx**: 22.4.4
+- **TypeScript**: ~5.9.3
+
 ## Environment Configuration
 
 ### Environment Files
@@ -82,8 +88,11 @@ For local development:
 # Install dependencies
 npm install
 
-# Serve MarketMate app
+# Serve MarketMate app (client-side only)
 nx serve marketmate
+
+# Serve MarketMate app with SSR
+nx serve-ssr marketmate
 
 # Serve Admin Portal (in another terminal)
 nx serve mm-admin-portal
@@ -91,6 +100,7 @@ nx serve mm-admin-portal
 
 Default ports:
 - MarketMate: `http://localhost:4200`
+- MarketMate SSR: `http://localhost:4000` (when using `serve-ssr`)
 - Admin Portal: `http://localhost:4201`
 
 ### Production Build
@@ -117,7 +127,7 @@ nx build mm-admin-portal --configuration=production
 
 ```bash
 # Build shared library (if needed separately)
-nx build mm-shared
+nx build shared
 ```
 
 ### Build Output Structure
@@ -142,7 +152,7 @@ dist/
 
 ## Server-Side Rendering (SSR)
 
-The MarketMate app supports SSR for better SEO and initial load performance.
+The MarketMate app supports SSR with incremental hydration (Angular 21 feature) for better SEO and initial load performance. The SSR implementation uses Express server with in-memory caching for optimal performance.
 
 ### Running SSR Locally
 
@@ -442,15 +452,16 @@ npx webpack-bundle-analyzer dist/marketmate/browser/stats.json
 
 **Optimize**:
 - Enable lazy loading for routes
-- Use tree-shaking
+- Use tree-shaking (automatic with standalone components)
 - Remove unused dependencies
 - Consider code splitting
 
 #### Slow Initial Load
 
 **Solutions**:
-- Enable SSR for faster first paint
-- Implement lazy loading
+- Enable SSR with incremental hydration for faster first paint
+- Implement lazy loading for routes
+- Use standalone components for better tree-shaking
 - Optimize images (WebP, lazy loading)
 - Use CDN for static assets
 - Enable compression (gzip/brotli)
@@ -491,8 +502,10 @@ If a deployment fails:
 ## Additional Resources
 
 - [Angular Deployment Guide](https://angular.io/guide/deployment)
-- [Nx Documentation](https://nx.dev)
 - [Angular SSR Guide](https://angular.io/guide/ssr)
+- [Angular Standalone Components](https://angular.io/guide/standalone-components)
+- [Nx Documentation](https://nx.dev)
+- [Angular 21 Release Notes](https://angular.dev/reference/releases)
 
 ---
 
@@ -506,5 +519,6 @@ For deployment issues or questions:
 
 ---
 
-**Last Updated**: 2024
+**Last Updated**: 2026
+**Angular Version**: 21.1.2
 **Maintained By**: MarketMate Development Team
