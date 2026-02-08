@@ -1,20 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { NavigationStart, Router } from "@angular/router";
+import { NavigationStart, Router, RouterOutlet } from "@angular/router";
 import { AppUrls } from '../../../utils/app.urls';
-import { DeviceDetectorService } from "mm-shared";
+import { DeviceDetectorService, SHARED_UI_DEPS, AppNavButtonComponent } from "@marketmate/shared";
 import { Subject, takeUntil } from "rxjs";
 
 @Component({
 	selector: "mm-admin",
+	standalone: true,
 	templateUrl: "./landing.component.html",
 	styleUrls: ["./landing.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [...SHARED_UI_DEPS, RouterOutlet, AppNavButtonComponent]
 })
 
 export class LandingComponent implements OnInit, OnDestroy {
 	isMobile: boolean = false;
 	isUsersSelected = true;
-	destroy$ = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 
 	protected readonly AppUrls = AppUrls;
 
@@ -65,7 +67,7 @@ export class LandingComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(true);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 }

@@ -1,33 +1,52 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
-import { DeviceDetectorService } from "mm-shared";
+import { DeviceDetectorService, UserDetailsDto, SHARED_UI_DEPS, ListingCardComponent, ListingCardSkeletonComponent } from "@marketmate/shared";
 import { UserService } from "../../../services/user.service";
-import { ProfileDetails } from "mm-shared";
 import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ListingService } from '../../../services/listing.service';
-import { Listing } from 'mm-shared';
-import { AuthService } from 'mm-shared';
+import { Listing } from '@marketmate/shared';
+import { AuthService } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
+import { UserProfileBarComponent } from '../user-profile-bar/user-profile-bar.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
 
 @Component({
 	selector: "mm-user-profile",
 	templateUrl: "./user-profile.component.html",
 	styleUrls: ["./user-profile.component.scss"],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, ProfileDetailsComponent, UserProfileBarComponent, ListingCardComponent, ListingCardSkeletonComponent, MatTabGroup, MatTab]
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	renderComponent = false;
 	expandProfileDetails = false;
 	isMobile = false;
-	userDetails: ProfileDetails | null = null;
-	destroy$ = new Subject();
+	userDetails: UserDetailsDto | null = null;
+	self: boolean = false;
+	destroy$: Subject<void> = new Subject<void>();
 	userUuid: string = '';
 	userListings: Listing[] = [];
 	favoriteListings: Listing[] = [];
 	selfUser = false;
 	selectedTabIndex = 0;
+
+	// Pagination state for posts
+	postsCurrentPage = 0;
+	postsHasMore = true;
+	postsIsLoading = false;
+
+	// Pagination state for favorites
+	favoritesCurrentPage = 0;
+	favoritesHasMore = true;
+	favoritesIsLoading = false;
+
+	private intersectionObserver?: IntersectionObserver;
 
 	constructor(
 			private router: Router,
@@ -38,6 +57,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 			private activatedRoute: ActivatedRoute,
 			private bottomSheet: MatBottomSheet,
 			private listingService: ListingService,
+			private notificationService: NotificationService,
+			private logger: LoggingService,
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 	}
 
@@ -46,55 +68,86 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 		this.selfUser =
 				this.authService.UserDetails?.uuid.toLowerCase()
 				=== this.userUuid.toLowerCase();
-		this.setTabFronQueryParams();
 		this.setIsMobile();
+
+		if (isPlatformServer(this.platformId)) {
+			this.postsIsLoading = true;
+			this.favoritesIsLoading = true;
+			this.cdr.markForCheck();
+			return;
+		}
+		this.setTabFromQueryParams();
 		this.getUserDetails();
+	}
+
+	ngAfterViewInit() {
+		this.setupIntersectionObserver();
 	}
 
 	onTabChange(index: number) {
 		this.selectedTabIndex = index;
+		setTimeout(() => this.observeSentinel(), 0);
 		if (index === 0) {
 			this.updateQueryParams({ posts: true })
-			return !this.userListings.length &&
-					this.getListingsByUser(this.userUuid);
+			if (!this.userListings.length) {
+				this.postsCurrentPage = 0;
+				this.postsHasMore = true;
+				this.getListingsByUser(this.userUuid, 0, false);
+			}
 		}
 		if (index === 1) {
 			this.updateQueryParams({ favorites: true })
-			return !this.favoriteListings.length &&
-					this.getFavoriteListingsByUser(this.userUuid);
+			if (!this.favoriteListings.length) {
+				this.favoritesCurrentPage = 0;
+				this.favoritesHasMore = true;
+				this.getFavoriteListingsByUser(this.userUuid, 0, false);
+			}
 		}
 	}
 
 	setIsMobile() {
-		this.deviceDetector.isMobile().subscribe(isMobile => {
-			this.isMobile = isMobile;
-			this.cdr.markForCheck();
-		})
+		this.deviceDetector.isMobile()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(isMobile => {
+					this.isMobile = isMobile;
+					this.cdr.markForCheck();
+				})
 	}
 
-	setTabFronQueryParams() {
+	setTabFromQueryParams() {
 		const qp = this.activatedRoute.snapshot.queryParams;
 		if (qp['posts'] == undefined && qp['favorites'] == undefined) {
 			this.updateQueryParams({ posts: true })
-			return this.getListingsByUser(this.userUuid);
+			this.postsCurrentPage = 0;
+			this.postsHasMore = true;
+			return this.getListingsByUser(this.userUuid, 0, false);
 		}
 		if (qp['favorites']) {
 			if (this.selfUser) {
 				this.selectedTabIndex = 1;
-				return this.getFavoriteListingsByUser(this.userUuid);
+				this.favoritesCurrentPage = 0;
+				this.favoritesHasMore = true;
+				return this.getFavoriteListingsByUser(this.userUuid, 0, false);
 			} else {
 				this.updateQueryParams({ posts: true })
-				return this.getListingsByUser(this.userUuid);
+				this.postsCurrentPage = 0;
+				this.postsHasMore = true;
+				return this.getListingsByUser(this.userUuid, 0, false);
 			}
 
 		}
 		if (qp['posts']) {
-			return this.getListingsByUser(this.userUuid);
+			this.postsCurrentPage = 0;
+			this.postsHasMore = true;
+			return this.getListingsByUser(this.userUuid, 0, false);
 		}
 	}
 
 	updateQueryParams(queryParams: Record<string, boolean>) {
-		this.router.navigate(this.activatedRoute.snapshot.url.map(uri => uri.path), {
+		this.router.navigate([
+				AppUrls.USER.BASE,
+			...this.activatedRoute.snapshot.url.map(uri => uri.path)
+		], {
 			queryParams,
 			replaceUrl: true
 		}).then(r => null);
@@ -120,35 +173,134 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 	}
 
 	getListingsByUser(uuid: string, page?: number, append: boolean = false) {
-		this.listingService.getByUser(uuid, page)
+		if (isPlatformServer(this.platformId)) return;
+		
+		if (this.postsIsLoading) return;
+
+		this.postsIsLoading = true;
+		const pageToLoad = page ?? this.postsCurrentPage;
+
+		this.listingService.getByUser(uuid, pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.postsIsLoading = false;
 					if (res.isSuccessful()) {
+						const response = res.body?.data;
+						const newItems = extractItems(response);
+
 						if (append) {
-							this.userListings.push(...(res.body?.data.items ?? []))
+							this.userListings.push(...newItems);
 						} else {
-							this.userListings = res.body?.data.items ?? []
+							this.userListings = newItems;
+							this.postsCurrentPage = 0;
 						}
+
+						this.postsHasMore = calculateHasMore(response, pageToLoad);
+						this.postsCurrentPage = calculateNextPage(response, pageToLoad, append);
 						this.renderComponent = true;
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load user listings', {
+							uuid,
+							page: pageToLoad,
+							status: res.status,
+							statusText: res.statusText
+						});
+						this.notificationService.error({
+							message: 'Failed to load posts. Please try again.',
+						});
 					}
 				})
 	}
 
 	getFavoriteListingsByUser(uuid: string, page?: number, append: boolean = false) {
-		this.listingService.getFavoriteByUser(uuid, page)
+		if (isPlatformServer(this.platformId)) return;
+		
+		if (this.favoritesIsLoading) return;
+
+		this.favoritesIsLoading = true;
+		const pageToLoad = page ?? this.favoritesCurrentPage;
+
+		this.listingService.getFavoriteByUser(uuid, pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.favoritesIsLoading = false;
 					if (res.isSuccessful()) {
+						const response = res.body?.data;
+						const newItems = extractItems(response);
+
 						if (append) {
-							this.favoriteListings.push(...(res.body?.data.items ?? []))
+							this.favoriteListings.push(...newItems);
 						} else {
-							this.favoriteListings = res.body?.data.items ?? []
+							this.favoriteListings = newItems;
+							this.favoritesCurrentPage = 0;
 						}
+
+						this.favoritesHasMore = calculateHasMore(response, pageToLoad);
+						this.favoritesCurrentPage = calculateNextPage(response, pageToLoad, append);
 						this.renderComponent = true;
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load favorite listings', {
+							uuid,
+							page: pageToLoad,
+							status: res.status,
+							statusText: res.statusText
+						});
+						this.notificationService.error({
+							message: 'Failed to load favorites. Please try again.',
+						});
 					}
 				})
+	}
+
+	setupIntersectionObserver() {
+		if (!isPlatformBrowser(this.platformId) || typeof IntersectionObserver === 'undefined') {
+			// Fallback for SSR or browsers that don't support IntersectionObserver
+			return;
+		}
+
+		this.intersectionObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							if (this.selectedTabIndex === 0 && this.postsHasMore
+									&& !this.postsIsLoading && this.userListings.length > 0) {
+								this.loadNextPagePosts();
+							} else if (this.selectedTabIndex === 1 && this.favoritesHasMore
+									&& !this.favoritesIsLoading && this.favoriteListings.length > 0
+							) {
+								this.loadNextPageFavorites();
+							}
+						}
+					});
+				},
+				{
+					rootMargin: '200px',
+					threshold: 0.1
+				}
+		);
+
+		setTimeout(() => this.observeSentinel(), 0);
+	}
+
+	observeSentinel() {
+		if (!isPlatformBrowser(this.platformId)) return;
+		this.intersectionObserver?.disconnect();
+		const sentinel = document.getElementById('user-profile-sentinel');
+		if (sentinel && this.intersectionObserver) {
+			this.intersectionObserver.observe(sentinel);
+		}
+	}
+
+	loadNextPagePosts() {
+		if (!this.postsHasMore || this.postsIsLoading) return;
+		this.getListingsByUser(this.userUuid, this.postsCurrentPage, true);
+	}
+
+	loadNextPageFavorites() {
+		if (!this.favoritesHasMore || this.favoritesIsLoading) return;
+		this.getFavoriteListingsByUser(this.userUuid, this.favoritesCurrentPage, true);
 	}
 
 
@@ -158,23 +310,31 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
 
 	getUserDetails() {
+		// Skip API calls during SSR
+		if (isPlatformServer(this.platformId)) return;
+		
 		this.userService.getDetails(this.userUuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					if (res.isSuccessful()) {
-						this.userDetails = res.body?.data?.user_details;
-						if (this.userDetails) this.userDetails.self = res.body?.data?.self
+						this.userDetails = res.body?.data?.user_details ?? null;
+						if (this.userDetails) this.self = res.body?.data?.self ?? false;
 						this.renderComponent = true;
 						this.expandProfileDetails = true;
 						this.cdr.markForCheck();
 					} else {
-						this.router.navigate([AppUrls.FOUROFOUR]).then(r => null);
+						if (isPlatformBrowser(this.platformId)) {
+							this.router.navigate([AppUrls.FOUROFOUR]).then(r => null);
+						}
 					}
 				})
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(null);
+		if (this.intersectionObserver) {
+			this.intersectionObserver.disconnect();
+		}
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 

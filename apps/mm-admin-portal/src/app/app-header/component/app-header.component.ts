@@ -4,26 +4,31 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
+	OnDestroy,
 	OnInit,
 	ViewChild
 } from "@angular/core";
 import { NavigationEnd, Params, Router } from "@angular/router";
-import { BehaviorSubject, filter } from "rxjs";
-import { AuthService, NotificationService } from "mm-shared";
-import { User } from "mm-shared";
-import { AppUrls as SharedUrls } from "mm-shared";
+import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
+import { AuthService, LoggingService, NotificationService, SHARED_UI_DEPS, AppNavButtonComponent } from "@marketmate/shared";
+import { User } from "@marketmate/shared";
+import { AppUrls as SharedUrls } from "@marketmate/shared";
 import { AppUrls } from "../../utils/app.urls";
 import { CONSTANTS } from "../../utils/app.constants";
-import { DeviceDetectorService } from "mm-shared";
-import { NavOption } from 'mm-shared';
+import { DeviceDetectorService } from "@marketmate/shared";
+import { NavOption } from '@marketmate/shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
+import { AppHeaderMenuComponent } from './app-header-menu/app-header-menu.component';
 
 @Component({
 	selector: 'mm-app-header',
+	standalone: true,
 	templateUrl: './app-header.component.html',
 	styleUrls: ['./app-header.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppHeaderMenuComponent]
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
 	protected readonly CONSTANTS = CONSTANTS;
 	isMobile = false;
 	isLoading = true;
@@ -31,12 +36,14 @@ export class AppHeaderComponent implements OnInit {
 	showHeader = true;
 	showHeaderMenu = false;
 	showUserMenu = false;
+	destroy$: Subject<void> = new Subject<void>();
 
 	isAuthenticated$ = new BehaviorSubject<boolean>(false);
 	user: User | null = null;
 	renderIcon = false;
 	expandedCategories = false;
 	renderExpandedContent = false;
+	isLoggingOut = false;
 	@ViewChild('header') header!: ElementRef;
 
 	protected readonly AppUrls = AppUrls;
@@ -48,6 +55,7 @@ export class AppHeaderComponent implements OnInit {
 			private cdr: ChangeDetectorRef,
 			private deviceDetector: DeviceDetectorService,
 			private notificationService: NotificationService,
+			private logger: LoggingService,
 	) {
 	}
 
@@ -76,17 +84,20 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	checkForUserUpdate() {
-		this.authService.getUpdatedUser().subscribe(user => {
-			this.user = user;
-			this.renderIcon = false;
-			this.isAdmin = this.user.admin;
-			this.cdr.markForCheck();
-		})
+		this.authService.getUpdatedUser()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(user => {
+					this.user = user;
+					this.renderIcon = false;
+					this.isAdmin = this.user.admin;
+					this.cdr.markForCheck();
+				})
 	}
 
 	checkForActiveRoute() {
 		this.router.events.pipe(
-				filter(event => event instanceof NavigationEnd)
+				filter(event => event instanceof NavigationEnd),
+				takeUntil(this.destroy$)
 		).subscribe((event: NavigationEnd) => {
 			this.showHeader = !(event.url.includes(SharedUrls.AUTH.LOGIN)
 					|| event.url.includes(SharedUrls.AUTH.SIGNUP));
@@ -116,6 +127,10 @@ export class AppHeaderComponent implements OnInit {
 		this.cdr.markForCheck();
 	}
 
+	onMenuIconKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onHeaderMenuClick(), event);
+	}
+
 	private checkForAuthenticationAndSetUser() {
 		if (this.authService.Authenticated) {
 			this.isAuthenticated$.next(true);
@@ -132,27 +147,42 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	onLogOutClick() {
-		this.authService.logoutUser().subscribe(res => {
-			if (res.isSuccessful()) {
-				this.router.navigate([AppUrls.ROOT]).then(r => {
-					window.location.reload();
-				});
-			} else {
-				this.notificationService.error({
-					message: `Logout attempt failed`,
-				});
-			}
-		})
+		if (this.isLoggingOut) return;
+		this.isLoggingOut = true;
+		this.cdr.markForCheck();
+		this.authService.logoutUser()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					this.isLoggingOut = false;
+					if (res.isSuccessful()) {
+						this.router.navigate([AppUrls.ROOT]).then(r => {
+							window.location.reload();
+						});
+					} else {
+						this.logger.warn('Logout attempt failed', { status: res.status, statusText: res.statusText });
+						this.notificationService.error({
+							message: `Logout attempt failed`,
+						});
+						this.cdr.markForCheck();
+					}
+				})
 	}
 
 	private setIsMobile() {
-		this.deviceDetector.isMobile().subscribe(isMobile => {
-			this.isMobile = isMobile;
-			this.cdr.markForCheck();
-		});
+		this.deviceDetector.isMobile()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(isMobile => {
+					this.isMobile = isMobile;
+					this.cdr.markForCheck();
+				});
 	}
 
 	onLogoClick() {
 		this.router.navigate(AppUrls.ROOT.split('/')).then(r => null);
+	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

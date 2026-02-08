@@ -1,56 +1,132 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
+import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
+import compression from 'compression';
+import helmet from 'helmet';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import bootstrap from './src/main.server';
+import https from 'node:https';
+import fs from 'node:fs';
 
-// The Express app is exported so that it can be used by serverless Functions.
+import bootstrap from './src/main.server';
+import { bootstrapLogger } from '@marketmate/shared';
+
+/**
+ * HTTPS certificates for local SSL
+ * (used to simulate real prod environment)
+ */
+const httpsOptions = {
+	key: fs.readFileSync('/certs/wildcard.marketmate.local-key.pem'),
+	cert: fs.readFileSync('/certs/wildcard.marketmate.local.pem'),
+};
+
+/**
+ * In-memory SSR cache
+ * Key = URL, Value = rendered HTML
+ * (Can be replaced by Redis later)
+ */
+const ssrCache = new Map<string, string>();
+
 export function app(): express.Express {
 	const server = express();
+
 	const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 	const browserDistFolder = resolve(serverDistFolder, '../browser');
 	const indexHtml = join(serverDistFolder, 'index.server.html');
 
 	const commonEngine = new CommonEngine();
 
-	server.set('view engine', 'html');
-	server.set('views', browserDistFolder);
+	// ---- Security headers (CSP etc) ----
+	server.use(
+			helmet({
+				contentSecurityPolicy: {
+					directives: {
+						defaultSrc: ["'self'"],
+						connectSrc: [
+							"'self'",
+							"https://api.marketmate.local:8080", // allow API calls
+						],
+						scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+						scriptSrcAttr: ["'unsafe-inline'"],
+						styleSrc: ["'self'", "'unsafe-inline'"],
+						imgSrc: ["'self'", "data:", "https:"],
+						fontSrc: ["'self'", "https:", "data:"],
+					},
+				},
+			})
+	);
 
-	// Example Express Rest API endpoints
-	// server.get('/api/**', (req, res) => { });
-	// Serve static files from /browser
-	server.get('**', express.static(browserDistFolder, {
-		maxAge: '1y',
-		index: 'index.html',
-	}));
+	server.use(compression()); // gzip responses
 
-	// All regular routes use the Angular engine
-	server.get('**', (req, res, next) => {
-		const { protocol, originalUrl, baseUrl, headers } = req;
+	// ---- Health check endpoint ----
+	server.get('/health', (_, res) => {
+		res.status(200).send('OK');
+	});
 
-		commonEngine
-				.render({
-					bootstrap,
-					documentFilePath: indexHtml,
-					url: `${ protocol }://${ headers.host }${ originalUrl }`,
-					publicPath: browserDistFolder,
-					providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
-				})
-				.then((html) => res.send(html))
-				.catch((err) => next(err));
+	/**
+	 * Serve static files first.
+	 * index:false is CRITICAL so Angular routes
+	 * don't return index.html as JS/CSS.
+	 */
+	server.use(
+			express.static(browserDistFolder, {
+				index: false,
+				maxAge: '1y',
+			})
+	);
+
+	// ---- SSR handler (all routes) ----
+	server.get('**', async (req, res, next): Promise<void> => {
+		try {
+			const { protocol, originalUrl, baseUrl, headers } = req;
+			const fullUrl = `${protocol}://${headers.host}${originalUrl}`;
+
+			// Serve from cache if exists
+			if (ssrCache.has(originalUrl)) {
+				res.setHeader('Cache-Control', 'public, max-age=300'); // 5 min
+				res.send(ssrCache.get(originalUrl)!);
+				return;
+			}
+
+			// Render Angular on server
+			const html = await commonEngine.render({
+				bootstrap,
+				documentFilePath: indexHtml,
+				url: fullUrl,
+				publicPath: browserDistFolder,
+				providers: [
+					{ provide: APP_BASE_HREF, useValue: baseUrl },
+				],
+			});
+
+			// Cache rendered HTML
+			ssrCache.set(originalUrl, html);
+			res.setHeader('Cache-Control', 'public, max-age=300');
+
+			res.send(html);
+		} catch (err) {
+			next(err);
+		}
+	});
+
+	// ---- Global error boundary ----
+	server.use((err: any, req: any, res: any, next: any) => {
+		bootstrapLogger.error('SSR Error', err);
+		res.status(500).send('Internal Server Error');
 	});
 
 	return server;
 }
 
+// ---- Bootstrap HTTPS server ----
 function run(): void {
 	const port = process.env['PORT'] || 4000;
-
-	// Start up the Node server
 	const server = app();
-	server.listen(port, () => {
-		console.log(`Node Express server listening on http://localhost:${ port }`);
+
+	https.createServer(httpsOptions, server).listen(port, () => {
+		bootstrapLogger.info(
+				`Angular SSR server running at https://marketmate.local:${port}`
+		);
 	});
 }
 

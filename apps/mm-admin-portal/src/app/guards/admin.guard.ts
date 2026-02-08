@@ -4,18 +4,25 @@ import {
 	Router, RouterStateSnapshot,
 	UrlTree
 } from '@angular/router';
-import { AppUrls as SharedUrls } from 'mm-shared';
-import { AuthService } from 'mm-shared';
+import { AppUrls as SharedUrls } from '@marketmate/shared';
+import { AuthService } from '@marketmate/shared';
 import { Injectable } from '@angular/core';
 
-
+/**
+ * Route guard that protects admin routes by requiring authentication.
+ * 
+ * Redirects unauthenticated users to the login page. Does not check for
+ * admin role - authentication is sufficient for access.
+ *
+ */
 @Injectable(
 		{ providedIn: 'root' }
 )
 export class AdminGuard implements CanActivate {
 
-	constructor(private router: Router,
-							private authService: AuthService
+	constructor(
+			private readonly router: Router,
+			private readonly authService: AuthService
 	) {
 	}
 
@@ -28,9 +35,8 @@ export class AdminGuard implements CanActivate {
 	// }
 
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): UrlTree | boolean {
-		console.warn('Guard Activated!!');
 		if (!this.authService.Authenticated) {
-			return this.router.createUrlTree([SharedUrls.AUTH.LOGIN])
+			return this.router.createUrlTree([SharedUrls.AUTH.BASE,SharedUrls.AUTH.LOGIN])
 		}
 		return true;
 	}

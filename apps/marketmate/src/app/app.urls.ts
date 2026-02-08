@@ -1,12 +1,9 @@
 export const AppUrls = {
 	ROOT: '',
 	HOME: 'home',
-	AUTH: {
-		LOGIN: 'auth/user_login',
-		SIGNUP: 'auth/user_signup',
-	},
 	USER: {
-		USER_PROFILE: (uuid: string | null = null) => (`user/${ uuid ? uuid : ':uuid' }`)
+		BASE: 'user',
+		USER_PROFILE: (uuid: string | null = null) => (`${ uuid ? uuid : ':uuid' }`)
 	},
 
 	FOUROFOUR: 'fourofour',
@@ -44,6 +41,7 @@ export const AppUrls = {
 				GET_ALL: 'v1/listing/get_all',
 				GET_BY_USER: 'v1/listing/get_by_user',
 				GET_FAVORITES: 'v1/listing/get_favorites',
+				GET_CONDITIONS: 'v1/listing/get_conditions',
 				IMAGE_UPLOAD_FALLBACK: 'v1/listing/image_upload_fallback',
 			},
 			LOCATION: {

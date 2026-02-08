@@ -4,17 +4,28 @@ import {
 	Router,
 	RouterStateSnapshot, UrlTree
 } from "@angular/router";
-import { AuthService } from "mm-shared";
+import { AuthService } from "@marketmate/shared";
 import { AppUrls } from '../utils/app.urls';
 import { Injectable } from "@angular/core";
 
+/**
+ * Route guard that controls access to user profile pages.
+ * 
+ * Allows access if:
+ * - User is an admin, OR
+ * - User is viewing their own profile
+ *
+ * Otherwise redirects to the public user profile view.
+ */
 @Injectable({
 	providedIn: 'root'
 })
 export class UserProfileGuard implements CanActivate {
 
-	constructor(private authService: AuthService,
-							private router: Router) {
+	constructor(
+			private readonly authService: AuthService,
+			private readonly router: Router
+	) {
 	}
 
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
@@ -24,7 +35,7 @@ export class UserProfileGuard implements CanActivate {
 				this.authService.UserDetails?.uuid) {
 			return true;
 		}
-		return this.router.createUrlTree([AppUrls.USER.USER_PROFILE(profileUuid)]);
+		return this.router.createUrlTree([AppUrls.USERS]);
 
 	}
 

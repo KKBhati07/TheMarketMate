@@ -1,0 +1,15 @@
+<div
+    [ngStyle]="{'backgroundColor':backgroundColor}"
+    (click)="onClick()"
+    (keydown)="onKeydown($event)"
+    tabindex="0"
+    role="button"
+    aria-label="Close"
+    class=" btn-container cursor-pointer border-circle flex-row {{containerClass}}
+    justify-content-center align-i-center">
+  <mat-icon
+      [ngStyle]="{'color':iconColor}"
+      [class]="iconClass"
+      [fontIcon]="'close'"
+  ></mat-icon>
+</div>

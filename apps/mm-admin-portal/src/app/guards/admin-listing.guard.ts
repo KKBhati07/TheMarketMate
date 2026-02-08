@@ -8,11 +8,20 @@ import {
 } from '@angular/router';
 import { AppUrls } from '../utils/app.urls';
 
+/**
+ * Route guard that ensures listing routes have required query parameters.
+ * 
+ * Redirects to the listings page with default 'posts=all' query parameter
+ * if the 'posts' query parameter is missing.
+ */
 @Injectable({
 	providedIn: "root",
 })
 export class AdminListingGuard implements CanActivate {
-	constructor(private router: Router, private route: ActivatedRoute) {
+	constructor(
+			private readonly router: Router,
+			private readonly route: ActivatedRoute
+	) {
 	}
 
 	canActivate(route: ActivatedRouteSnapshot): UrlTree | boolean {

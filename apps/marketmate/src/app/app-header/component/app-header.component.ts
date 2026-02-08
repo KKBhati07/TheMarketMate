@@ -4,43 +4,58 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
+	Inject,
+	OnDestroy,
 	OnInit,
+	PLATFORM_ID,
 	ViewChild
 } from "@angular/core";
+import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Params, Router } from "@angular/router";
-import { BehaviorSubject, filter } from "rxjs";
-import { AuthService } from "mm-shared";
-import { User } from "mm-shared";
-import { Redirect } from "mm-shared";
+import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
+import { AuthService, SHARED_UI_DEPS, AppNavButtonComponent } from "@marketmate/shared";
+import { User } from "@marketmate/shared";
+import { Redirect } from "@marketmate/shared";
 import { AppUrls } from "../../app.urls";
-import { AppUrls as SharedUrls } from "mm-shared";
+import { AppUrls as SharedUrls } from "@marketmate/shared";
 import { CONSTANTS } from "../../app.constants";
-import { DeviceDetectorService } from "mm-shared";
+import { DeviceDetectorService } from "@marketmate/shared";
 import { CategoryService } from "../../services/category.service";
-import { Category } from 'mm-shared';
-import { NavOption } from 'mm-shared';
+import { Category } from '@marketmate/shared';
+import { NavOption } from '@marketmate/shared';
+import { LoggingService, NotificationService } from '@marketmate/shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
 import {
 	PublishEditListingFormComponent
 } from '../../app-util/module/component/publish-listing-form/publish-edit-listing-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FilterService } from 'mm-shared';
+import { FilterService } from '@marketmate/shared';
 import { environment } from '../../../environments/environment';
+import { AppHeaderMenuComponent } from './app-header-menu/app-header-menu.component';
+import { HeaderUserMenuComponent } from './header-user-menu/header-user-menu.component';
+import { SellItemButtonComponent } from '../../app-util/module/component/app-sell-item-button/app-sell-item-btn.component';
+import { ProductCategoryComponent } from '../../app-util/module/component/product-category/product-category.component';
+import { CategorySkeletonComponent } from '../../app-util/module/component/category-skeleton/category-skeleton.component';
 
 @Component({
 	selector: 'mm-app-header',
 	templateUrl: './app-header.component.html',
 	styleUrls: ['./app-header.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppHeaderMenuComponent, HeaderUserMenuComponent, SellItemButtonComponent, ProductCategoryComponent, CategorySkeletonComponent]
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
 	categories: Category[] = []
 	isMobile = false;
 	isLoading = true;
+	categoriesLoading = false;
 	isAdmin = false;
 	showHeader = true;
 	showHeaderMenu = false;
 	showUserMenu = false;
 	isAuthenticated$ = new BehaviorSubject<boolean>(false);
+	destroy$: Subject<void> = new Subject<void>();
 
 	user: User | null = null;
 	renderIcon = false;
@@ -59,7 +74,10 @@ export class AppHeaderComponent implements OnInit {
 			private deviceDetector: DeviceDetectorService,
 			private categoryService: CategoryService,
 			private filterService: FilterService,
-			private dialog: MatDialog
+			private notificationService: NotificationService,
+			private logger: LoggingService,
+			private dialog: MatDialog,
+			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 	}
 
@@ -72,6 +90,7 @@ export class AppHeaderComponent implements OnInit {
 
 	@HostListener('document:click', ['$event'])
 	onDocumentClick(event: MouseEvent): void {
+		if (!isPlatformBrowser(this.platformId)) return;
 		const headerMenu = document.querySelector('.header-menu-container');
 		const target = event.target as Node;
 		if (!this.header?.nativeElement.contains(target)
@@ -88,20 +107,23 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	checkForUserUpdate() {
-		this.authService.getUpdatedUser().subscribe(user => {
-			this.user = user;
-			this.renderIcon = false;
-			this.isAdmin = this.user.admin;
-			this.cdr.markForCheck();
-		})
+		this.authService.getUpdatedUser()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(user => {
+					this.user = user;
+					this.renderIcon = false;
+					this.isAdmin = this.user.admin;
+					this.cdr.markForCheck();
+				})
 	}
 
 	checkForActiveRoute() {
 		this.router.events.pipe(
-				filter(event => event instanceof NavigationEnd)
+				filter(event => event instanceof NavigationEnd),
+				takeUntil(this.destroy$)
 		).subscribe((event: NavigationEnd) => {
-			this.showHeader = !(event.url.includes(AppUrls.AUTH.LOGIN)
-					|| event.url.includes(AppUrls.AUTH.SIGNUP));
+			this.showHeader = !(event.url.includes(SharedUrls.AUTH.LOGIN)
+					|| event.url.includes(SharedUrls.AUTH.SIGNUP));
 			this.cdr.markForCheck();
 		});
 	}
@@ -167,12 +189,23 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	getCategories() {
-		this.categoryService.getCategories().subscribe(res => {
-			if (res.isSuccessful()) {
-				this.categories = res.body?.data?.categories ?? [];
-				this.cdr.markForCheck();
-			}
-		})
+		this.categoriesLoading = true;
+		this.cdr.markForCheck();
+		this.categoryService.getCategories()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					this.categoriesLoading = false;
+					if (res.isSuccessful()) {
+						this.categories = res.body?.data?.categories ?? [];
+						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load categories', { status: res.status, statusText: res.statusText });
+						this.notificationService.error({
+							message: 'Failed to load categories. Please try again.',
+						});
+						this.cdr.markForCheck();
+					}
+				})
 	}
 
 	private checkForAuthenticationAndSetUser() {
@@ -193,10 +226,10 @@ export class AppHeaderComponent implements OnInit {
 	onNavigationClick(redirectTo: Redirect) {
 		if (!redirectTo) return;
 		if (redirectTo === 'LOGIN') {
-			this.router.navigate(AppUrls.AUTH.LOGIN.split('/'),
+			this.router.navigate([SharedUrls.AUTH.BASE, SharedUrls.AUTH.LOGIN],
 					{ queryParams: { redirect: this.router.url } }).then(r => null)
 		} else if (redirectTo === 'SIGNUP') {
-			this.router.navigate(AppUrls.AUTH.SIGNUP.split('/')).then(r => null)
+			this.router.navigate([SharedUrls.AUTH.BASE, SharedUrls.AUTH.SIGNUP]).then(r => null)
 		}
 	}
 
@@ -206,8 +239,18 @@ export class AppHeaderComponent implements OnInit {
 		this.cdr.markForCheck();
 	}
 
+	onProfileKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onProfileClick(), event);
+	}
+
+	onMenuIconKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onHeaderMenuClick(), event);
+	}
+
 	onAdminClick() {
-		window.open(environment.adminAppUrl, '_blank', 'noopener');
+		if (isPlatformBrowser(this.platformId)) {
+			window.open(environment.adminAppUrl, '_blank', 'noopener');
+		}
 		this.closeHeader();
 	}
 
@@ -222,13 +265,20 @@ export class AppHeaderComponent implements OnInit {
 	}
 
 	private setIsMobile() {
-		this.deviceDetector.isMobile().subscribe(isMobile => {
-			this.isMobile = isMobile;
-			this.cdr.markForCheck();
-		});
+		this.deviceDetector.isMobile()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(isMobile => {
+					this.isMobile = isMobile;
+					this.cdr.markForCheck();
+				});
 	}
 
 	onLogoClick() {
 		this.router.navigate(AppUrls.ROOT.split('/')).then(r => null);
+	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

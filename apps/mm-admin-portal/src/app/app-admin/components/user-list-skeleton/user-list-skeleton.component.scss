@@ -1,0 +1,27 @@
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.user-list-skeleton {
+  background: var(--items-bg);
+  position: relative;
+
+  .skeleton-avatar,
+  .skeleton-name,
+  .skeleton-email,
+  .skeleton-icon {
+    background: linear-gradient(
+                    90deg,
+                    var(--header-color) 0px,
+                    rgba(255, 255, 255, 0.4) 40px,
+                    var(--header-color) 80px
+    );
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+}

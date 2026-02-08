@@ -1,0 +1,38 @@
+:root {
+  --font-family: "SF Pro Display", "Mulish", sans-serif;
+  --app-background-color: #0B0E14;
+  --header-color: rgba(22, 27, 34, 0.8);
+  --items-bg: #263632;
+  --surface-elevated: #21262D;
+  --primary-color: #00C896;
+  --hover-color: #00B383;
+  --button-color-disable: #2D313E;
+  --text-main: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-color-disable: #4B5563;
+  --icon-color: #D1D5DB;
+  --success-notify-color: #2E7D32;
+  --error-notify-color: #D32F2F;
+  --warning-color: #F97316;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+:root.light-theme {
+  --app-background-color: #F5F5F7;
+  --header-color: rgba(255, 255, 255, 0.75);
+  --items-bg: #d3e2d6;
+  --surface-elevated: #F9FAFB;
+  --primary-color: #004f3c;
+  --hover-color: #003d2f;
+  --button-color-disable: #E5E7EB;
+  --text-main: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-color-disable: #ADADAE;
+  --icon-color: #343434;
+  --success-notify-color: #005851;
+  --error-notify-color: #BB2821;
+  --warning-color: #C92A2A;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+}

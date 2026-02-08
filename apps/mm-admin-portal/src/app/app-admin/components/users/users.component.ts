@@ -1,25 +1,34 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { NotificationService, User } from "mm-shared";
-import { DeviceDetectorService } from "mm-shared";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { LoggingService, NotificationService, User, UserDetailsDto, SHARED_UI_DEPS } from "@marketmate/shared";
+import { DeviceDetectorService } from "@marketmate/shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
+import { AdminUserListComponent } from '../user-list/user-list.component';
+import { UserListSkeletonComponent } from '../user-list-skeleton/user-list-skeleton.component';
 
 @Component({
-	selector: 'mm-users',
+	selector: 'mm-admin-users',
+	standalone: true,
 	templateUrl: './users.component.html',
 	styleUrls: ['./users.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [...SHARED_UI_DEPS, AdminUserListComponent, UserListSkeletonComponent]
 })
-export class UsersComponent implements OnInit, OnDestroy {
-	users: User[] = [];
+export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
+	users: UserDetailsDto[] = [];
 	isMobile = false;
-	isLoading = true;
-	destroy$ = new Subject();
+	isLoading = false;
+	destroy$: Subject<void> = new Subject<void>();
+	currentPage = 0;
+	hasMore = true;
+	private intersectionObserver?: IntersectionObserver;
 
 	constructor(private adminService: AdminService,
 							private cdr: ChangeDetectorRef,
 							private deviceDetectorService: DeviceDetectorService,
 							private notificationService: NotificationService,
+							private logger: LoggingService,
 	) {
 	}
 
@@ -28,17 +37,84 @@ export class UsersComponent implements OnInit, OnDestroy {
 		this.setIsMobile();
 	}
 
+	ngAfterViewInit() {
+		this.setupIntersectionObserver();
+	}
 
-	getAllUsers() {
-		this.adminService.getAllUsers()
+
+	getAllUsers(page?: number, append: boolean = false) {
+		if (this.isLoading) return;
+
+		this.isLoading = true;
+		const pageToLoad = page ?? this.currentPage;
+
+		this.adminService.getAllUsers(pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					this.isLoading = false;
 					if (res.isSuccessful()) {
-						this.users = res.body?.data?.items ?? [];
-						this.isLoading = false;
+						const response = res.body?.data;
+						const newItems = extractItems(response);
+
+						if (append) {
+							this.users.push(...newItems);
+						} else {
+							this.users = newItems;
+							this.currentPage = 0;
+							setTimeout(() => this.observeSentinel(), 0);
+						}
+
+						this.hasMore = calculateHasMore(response, pageToLoad);
+						this.currentPage = calculateNextPage(response, pageToLoad, append);
 						this.cdr.markForCheck();
+					} else {
+						this.logger.warn('Failed to load users', {
+							page: pageToLoad,
+							status: res.status,
+							statusText: res.statusText
+						});
+						this.cdr.markForCheck();
+						this.notificationService.error({
+							message: 'Failed to load users. Please refresh and try again.',
+						});
 					}
 				});
+	}
+
+	setupIntersectionObserver() {
+		if (typeof IntersectionObserver === 'undefined') {
+			return;
+		}
+
+		this.intersectionObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting && this.hasMore && !this.isLoading && this.users.length > 0) {
+							this.loadNextPage();
+						}
+					});
+				},
+				{
+					rootMargin: '200px',
+					threshold: 0.1
+				}
+		);
+
+		// Observe the sentinel
+		setTimeout(() => this.observeSentinel(), 0);
+	}
+
+	observeSentinel() {
+		this.intersectionObserver?.disconnect();
+		const sentinel = document.getElementById('users-sentinel');
+		if (sentinel && this.intersectionObserver) {
+			this.intersectionObserver.observe(sentinel);
+		}
+	}
+
+	loadNextPage() {
+		if (!this.hasMore || this.isLoading) return;
+		this.getAllUsers(this.currentPage, true);
 	}
 
 	setIsMobile() {
@@ -51,7 +127,10 @@ export class UsersComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(null);
+		if (this.intersectionObserver) {
+			this.intersectionObserver.disconnect();
+		}
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 
@@ -78,12 +157,12 @@ export class UsersComponent implements OnInit, OnDestroy {
 						);
 						this.isLoading = true;
 						this.cdr.markForCheck();
-						console.log(`User with id ${ uuid } deleted!`);
 						this.notificationService.success({
 							message: `User deleted`,
 						});
 
 					} else {
+						this.logger.warn('User delete failed', { uuid, status: res.status, statusText: res.statusText });
 						this.notificationService.error({
 							message: `User delete failed`,
 						});
@@ -108,6 +187,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 							message: `User restored`,
 						});
 					} else {
+						this.logger.warn('User restore failed', { uuid, status: res.status, statusText: res.statusText });
 						this.notificationService.error({
 							message: `User restore failed`,
 						});

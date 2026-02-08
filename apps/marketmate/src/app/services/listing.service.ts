@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'mm-shared';
+import { ApiService, Listing, PaginatedResponse, ConditionsResponse } from '@marketmate/shared';
 import { AppUrls } from '../app.urls';
-import { Observable } from 'rxjs';
-import { ApiResponse } from 'mm-shared';
-import { ApiHttpResponse } from 'mm-shared';
-import { CreateListingPayload, ListingResponse } from '../models/listing.model';
+import { Observable, tap } from 'rxjs';
+import { ApiResponse } from '@marketmate/shared';
+import { ApiHttpResponse } from '@marketmate/shared';
+import { CreateListingPayload } from '../models/listing.model';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ListingService {
-	constructor(private apiService: ApiService) {
+	private conditions$: Observable<ApiHttpResponse<ApiResponse<ConditionsResponse>>> | null = null;
+
+	constructor(private readonly apiService: ApiService) {
 	}
 
 	createListing(data: CreateListingPayload): Observable<ApiHttpResponse<ApiResponse<{ id: number }>>> {
@@ -21,15 +24,36 @@ export class ListingService {
 		return this.apiService.patch(AppUrls.API.V1.LISTING.IMAGE_UPLOAD_FALLBACK, data)
 	}
 
-	getAll(queryParams: Record<string, any>, page?: number): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+	getAll(queryParams: Record<string, string | number | boolean>, page?: number):
+			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_ALL, page ? { ...queryParams, page } : queryParams)
 	}
 
-	getByUser(uuid: string, page: number = 0): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+	getByUser(uuid: string, page: number = 0):
+			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_BY_USER, { user: uuid, page })
 	}
 
-	getFavoriteByUser(uuid: string, page: number = 0): Observable<ApiHttpResponse<ApiResponse<ListingResponse>>> {
+	getFavoriteByUser(uuid: string, page: number = 0):
+			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_FAVORITES, { user: uuid, page })
+	}
+
+	/**
+	 * Caches conditions using shareReplay.
+	 */
+	getConditions(): Observable<ApiHttpResponse<ApiResponse<ConditionsResponse>>> {
+		if (this.conditions$) return this.conditions$;
+		this.conditions$ = this.apiService
+			.get<ApiResponse<ConditionsResponse>>(AppUrls.API.V1.LISTING.GET_CONDITIONS)
+			.pipe(
+				shareReplay(1),
+				tap(res => {
+					if (!res.isSuccessful()) {
+						this.conditions$ = null;
+					}
+				}),
+			);
+		return this.conditions$;
 	}
 }

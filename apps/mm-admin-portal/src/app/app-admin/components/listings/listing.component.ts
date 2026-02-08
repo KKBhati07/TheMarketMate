@@ -1,18 +1,21 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { Listing, NotificationService } from 'mm-shared';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { Listing, LoggingService, NotificationService, SHARED_UI_DEPS, AppNavButtonComponent, AppButtonComponent, ListingCardComponent, ListingCardSkeletonComponent } from '@marketmate/shared';
 import { map, Subject, takeUntil } from 'rxjs';
 import { AdminService } from '../../../services/admin.service';
 import { AppUrls } from '../../../utils/app.urls';
 import { ActivatedRoute } from '@angular/router';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-admin-listing',
+	standalone: true,
 	templateUrl: './listing.component.html',
 	styleUrls: ['./listing.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppButtonComponent, ListingCardComponent, ListingCardSkeletonComponent]
 })
-export class ListingComponent implements OnInit, OnDestroy {
+export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	listings: Listing[] = [];
 	isSelectionMode = false;
@@ -20,6 +23,10 @@ export class ListingComponent implements OnInit, OnDestroy {
 	queryParams: Record<string, string | number | boolean> = {}
 	selectedListings: number[] = [];
 	isDeletedListingPage: boolean = false;
+	currentPage = 0;
+	hasMore = true;
+	isLoading = false;
+	private intersectionObserver?: IntersectionObserver;
 
 	protected readonly AppUrls = AppUrls;
 
@@ -28,11 +35,16 @@ export class ListingComponent implements OnInit, OnDestroy {
 			private cdr: ChangeDetectorRef,
 			private route: ActivatedRoute,
 			private notificationService: NotificationService,
+			private logger: LoggingService,
 	) {
 	}
 
 	ngOnInit() {
 		this.subscribeToParamChange();
+	}
+
+	ngAfterViewInit() {
+		this.setupIntersectionObserver();
 	}
 
 	subscribeToParamChange() {
@@ -45,22 +57,87 @@ export class ListingComponent implements OnInit, OnDestroy {
 				distinctUntilChanged()
 		).subscribe(deleted => {
 			this.isDeletedListingPage = deleted;
-			this.getListings(deleted);
+			this.currentPage = 0;
+			this.hasMore = true;
+			this.getListings(deleted, 0, false);
 		})
 	}
 
-	getListings(deleted: boolean = false) {
+	getListings(deleted: boolean = false, page?: number, append: boolean = false) {
+		if (this.isLoading) return;
+
+		this.isLoading = true;
 		this.queryParams['deleted'] = deleted;
-		this.adminService.getAllListings(this.queryParams)
+		const pageToLoad = page ?? this.currentPage;
+
+		this.adminService.getAllListings(this.queryParams, pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(
 						res => {
+							this.isLoading = false;
 							if (res.isSuccessful()) {
-								this.listings = res.body?.data.items ?? [];
+								const response = res.body?.data;
+								const newItems = extractItems(response);
+
+								if (append) {
+									this.listings.push(...newItems);
+								} else {
+									this.listings = newItems;
+									this.currentPage = 0;
+									setTimeout(() => this.observeSentinel(), 0);
+								}
+
+								this.hasMore = calculateHasMore(response, pageToLoad);
+								this.currentPage = calculateNextPage(response, pageToLoad, append);
 								this.cdr.markForCheck();
+							} else {
+								this.logger.warn('Failed to load listings (admin)', {
+									deleted,
+									page: pageToLoad,
+									status: res.status,
+									statusText: res.statusText,
+								});
+								this.notificationService.error({
+									message: 'Failed to load listings. Please try again.',
+								});
 							}
 						}
 				)
+	}
+
+	setupIntersectionObserver() {
+		if (typeof IntersectionObserver === 'undefined') {
+			return;
+		}
+
+		this.intersectionObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting && this.hasMore && !this.isLoading && this.listings.length > 0) {
+							this.loadNextPage();
+						}
+					});
+				},
+				{
+					rootMargin: '200px',
+					threshold: 0.1
+				}
+		);
+
+		setTimeout(() => this.observeSentinel(), 0);
+	}
+
+	observeSentinel() {
+		this.intersectionObserver?.disconnect();   // important
+		const sentinel = document.getElementById('listing-sentinel');
+		if (sentinel && this.intersectionObserver) {
+			this.intersectionObserver.observe(sentinel);
+		}
+	}
+
+	loadNextPage() {
+		if (!this.hasMore || this.isLoading) return;
+		this.getListings(this.isDeletedListingPage, this.currentPage, true);
 	}
 
 	onListingSelect({ isSelected, id }: { isSelected: boolean, id: number | undefined }) {
@@ -83,7 +160,12 @@ export class ListingComponent implements OnInit, OnDestroy {
 						});
 
 					} else {
-						this.notificationService.success({
+						this.logger.warn('Listing deletion failed', {
+							ids: this.selectedListings,
+							status: res.status,
+							statusText: res.statusText
+						});
+						this.notificationService.error({
 							message: `Listing deletion failed!`,
 						});
 					}
@@ -98,6 +180,9 @@ export class ListingComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
+		if (this.intersectionObserver) {
+			this.intersectionObserver.disconnect();
+		}
 		this.destroy$.next();
 		this.destroy$.complete();
 	}

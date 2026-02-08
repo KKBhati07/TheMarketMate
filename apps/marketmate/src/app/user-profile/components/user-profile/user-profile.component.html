@@ -1,91 +1,127 @@
-<div *ngIf="renderComponent"
-     [ngClass]="!isMobile?'flex-row':'flex-column'"
-     class="mt-100 main-container flex-row align-i-center w-100p">
+@if (renderComponent) {
   <div
+    [ngClass]="!isMobile?'flex-row':'flex-column'"
+    class="mt-100 main-container flex-row align-i-center w-100p">
+    <div
       [ngStyle]="{
     width: isMobile ? '100%' :
      (expandProfileDetails ? '75%' : 'calc(100% - 40px)')
   }"
       [ngClass]="isMobile ? 'justify-content-center' : 'flex-row pl-12 pt-4'"
       class="left-section h-100p flex-column br-20 gap-12"
-  >
-    <mat-tab-group
+      >
+      <mat-tab-group
         [ngClass]="isMobile?'pl-4 pr-4':''"
         [(selectedIndex)]="selectedTabIndex"
         class="pill-tabs w-100p h-100p"
         (selectedIndexChange)="onTabChange($event)"
-    >
-      <mat-tab
+        >
+        <mat-tab
           labelClass="br-32"
           [label]="selfUser?'My Posts':'Posts'">
-        <div
+          <div
             [ngClass]="isMobile?'justify-content-center':''"
             style="flex-wrap: wrap"
             class="flex-row h-100p flex-wrap gap-12 pt-12">
-          <ng-container *ngFor="let listing of userListings; trackBy: trackByListingId">
-            <mm-listing-card
-                [showFavoriteIcon]="false"
+            @if (!postsIsLoading || userListings.length > 0) {
+              @for (listing of userListings; track trackByListingId($index, listing)) {
+                <mm-listing-card
+                  [showFavoriteIcon]="false"
                 [listing]="listing"></mm-listing-card>
-          </ng-container>
-        </div>
-      </mat-tab>
-
-      <mat-tab
-          *ngIf="selfUser"
-          labelClass="br-32"
-          label="Favorites">
-        <div
-            [ngClass]="isMobile?'justify-content-center':''"
-            style="flex-wrap: wrap"
-            class="flex-row gap-12 pt-12">
-          <ng-container *ngIf="favoriteListings?.length; else noFavoriteFoundTemplate">
-            <ng-container *ngFor="let listing of favoriteListings; trackBy: trackByListingId">
-              <mm-listing-card [listing]="listing"></mm-listing-card>
-            </ng-container>
-          </ng-container>
-
-        </div>
-      </mat-tab>
-    </mat-tab-group>
-  </div>
-  <div
+              }
+            }
+            @if (selectedTabIndex === 0 && postsIsLoading && userListings.length === 0) {
+              @for (i of [1,2,3,4,5,6]; track i) {
+                <mm-listing-card-skeleton></mm-listing-card-skeleton>
+              }
+            }
+          </div>
+          @if (selectedTabIndex === 0 && postsHasMore) {
+            <div id="user-profile-sentinel"
+            style="height: 1px; width: 100%;"></div>
+          }
+          @if (selectedTabIndex === 0 && postsIsLoading && userListings.length > 0) {
+            <div
+              class="loading-indicator w-100p p-12">
+              <p class="text-center">Loading more posts...</p>
+            </div>
+          }
+        </mat-tab>
+        @if (selfUser) {
+          <mat-tab
+            labelClass="br-32"
+            label="Favorites">
+            <div
+              [ngClass]="isMobile?'justify-content-center':''"
+              style="flex-wrap: wrap"
+              class="flex-row gap-12 pt-12">
+              @if (!favoritesIsLoading || favoriteListings.length > 0) {
+                @if (favoriteListings.length) {
+                  @for (listing of favoriteListings; track trackByListingId($index, listing)) {
+                    <mm-listing-card [listing]="listing"></mm-listing-card>
+                  }
+                } @else {
+  <div class=" mt-20 w-100p outer-container h-100p
+  flex-row justify-content-center align-i-center">
+                    <div class="no-favorite-icon-container  align-i-center gap-12 flex-column">
+                      <mat-icon
+                        class=" no-favorite-icon h-52 w-52 fs-52"
+                        fontIcon='heart_broken'
+                        >
+                      </mat-icon>
+                      <span style="color: var(--primary-color)" class="fs-40">No Favorites Found!!</span>
+                    </div>
+                  </div>
+                }
+              }
+              @if (selectedTabIndex === 1 && favoritesIsLoading && favoriteListings.length === 0) {
+                @for (i of [1,2,3,4,5,6]; track i) {
+                  <mm-listing-card-skeleton></mm-listing-card-skeleton>
+                }
+              }
+              <!--          TODO :: Add proper design for this-->
+            </div>
+            @if (selectedTabIndex === 1 && favoritesHasMore) {
+              <div id="user-profile-sentinel"
+              style="height: 1px; width: 100%;"></div>
+            }
+            @if (selectedTabIndex === 1 && favoritesIsLoading && favoriteListings.length > 0) {
+              <div
+                class="loading-indicator w-100p p-12">
+                <p class="text-center">Loading more favorites...</p>
+              </div>
+            }
+          </mat-tab>
+        }
+      </mat-tab-group>
+    </div>
+    @if (!isMobile) {
+      <div
       [ngStyle]="{
     width:expandProfileDetails ? '25%':'40px',
   }"
-      *ngIf="!isMobile" class="right-section pl-4 pr-4">
-
-    <mm-profile-detail
-        [isExpanded]="expandProfileDetails"
-        (expandComponent)="onExpandProfileDetails($event)"
-        [userDetails]="userDetails">
-    </mm-profile-detail>
-  </div>
-  <ng-container *ngIf="isMobile">
+        class="right-section pl-4 pr-4">
+        <mm-profile-detail
+          [isExpanded]="expandProfileDetails"
+          (expandComponent)="onExpandProfileDetails($event)"
+          [userDetails]="userDetails"
+          [self]="self"
+          >
+        </mm-profile-detail>
+      </div>
+    }
+    @if (isMobile) {
     <div class="profile-details-bar-container w-100p pl-8 pr-8
      position-absolute">
-      <mm-user-profile-bar
+        <mm-user-profile-bar
           [userProfileUrl]="userDetails?.profile_url ?? null"
           [userName]="userDetails?.name ?? null"
           (showProfileDetails)="showDetailsBottomSheet($event)"
-      >
-
-      </mm-user-profile-bar>
-    </div>
-  </ng-container>
-</div>
-
-<ng-template #noFavoriteFoundTemplate>
-  <div class=" mt-20 w-100p outer-container h-100p
-  flex-row justify-content-center align-i-center">
-
-    <div class="no-favorite-icon-container  align-i-center gap-12 flex-column">
-      <mat-icon
-          class=" no-favorite-icon h-52 w-52 fs-52"
-          fontIcon='heart_broken'
-      >
-      </mat-icon>
-      <span class="fs-40">No Favorites Found!!</span>
-    </div>
+          >
+        </mm-user-profile-bar>
+      </div>
+    }
   </div>
-</ng-template>
+}
+
 

@@ -1,24 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AppHeaderModule } from "./app-header/app-header.module";
-import { FormsModule } from 'mm-shared';
+import { AppHeaderComponent } from "./app-header/component/app-header.component";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
-import { UserProfileModule } from "./user-profile/user-profile.module";
 import { MatDialogModule } from "@angular/material/dialog";
-import { AppRootModule } from './app-root/app-root.module';
-import { NotificationModule } from 'mm-shared';
 
 @Component({
 	selector: 'app-root',
 	standalone: true,
 	imports: [
 		RouterOutlet,
-		AppHeaderModule,
-		FormsModule,
-		UserProfileModule,
+		AppHeaderComponent,
 		MatDialogModule,
-		AppRootModule,
-		NotificationModule
 	],
 	providers: [
 		{ provide: MAT_BOTTOM_SHEET_DATA, useValue: {} },
@@ -27,13 +19,7 @@ import { NotificationModule } from 'mm-shared';
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 	title = 'marketmate';
-
-	constructor() {
-	}
-
-	ngOnInit() {
-	}
 }
 

@@ -9,37 +9,43 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
-	AppConfirmDeleteDialogComponent
-} from 'mm-shared';
-import { User } from 'mm-shared';
+	AppConfirmDeleteDialogComponent, UserDetailsDto, SHARED_UI_DEPS
+} from '@marketmate/shared';
+import { LoggingService } from '@marketmate/shared';
+import { NotificationService } from '@marketmate/shared';
 import { Subject, takeUntil } from "rxjs";
 import {
 	UserProfileEditComponent
-} from 'mm-shared';
+} from '@marketmate/shared';
 import { AdminService } from '../../../services/admin.service';
-import { fadeSlideIn } from 'mm-shared';
+import { fadeSlideIn } from '@marketmate/shared';
+import { handleKeyboardActivation } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-admin-user-list',
+	standalone: true,
 	templateUrl: './user-list.component.html',
 	styleUrls: ['./user-list.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [fadeSlideIn],
+	imports: [...SHARED_UI_DEPS]
 })
 export class AdminUserListComponent implements OnDestroy {
-	@Input() user: User | null = null;
+	@Input() user: UserDetailsDto | null = null;
 	@Input() isMobile: boolean = false;
 	@Output() deleteOrRestoreUser: EventEmitter<{ action: string, uuid: string }>
 			= new EventEmitter<{ action: string, uuid: string }>()
 	@Output() getUpdatedList: EventEmitter<boolean>
 			= new EventEmitter<boolean>()
-	destroy$ = new Subject();
+	destroy$: Subject<void> = new Subject<void>();
 	renderIcon = false;
 
 	constructor(
 			private dialog: MatDialog,
 			private cdr: ChangeDetectorRef,
 			private adminService: AdminService,
+			private logger: LoggingService,
+			private notificationService: NotificationService,
 	) {
 	}
 
@@ -65,6 +71,10 @@ export class AdminUserListComponent implements OnDestroy {
 				});
 	}
 
+	onEditProfileKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onEditProfileClick(), event);
+	}
+
 	onEditProfileClick() {
 		if (this.user) {
 			const dialogRef =
@@ -79,7 +89,9 @@ export class AdminUserListComponent implements OnDestroy {
 							isMobile: this.isMobile
 						}
 					});
-			dialogRef.afterClosed().subscribe((data: FormData | null) => {
+			dialogRef.afterClosed()
+					.pipe(takeUntil(this.destroy$))
+					.subscribe((data: FormData | null) => {
 				if (data) {
 					this.adminService.updateUser(data)
 							.pipe(takeUntil(this.destroy$))
@@ -87,9 +99,11 @@ export class AdminUserListComponent implements OnDestroy {
 								if (res.isSuccessful()) {
 									this.getUpdatedList.emit(true);
 									this.cdr.markForCheck();
-									console.log("Profile updated successfully!");
 								} else {
-									console.error("Error updating profile:", res.statusText);
+									this.logger.error('Error updating profile', res.statusText, { uuid: this.user?.uuid });
+									this.notificationService.error({
+										message: 'Error updating profile',
+									});
 								}
 							});
 				}
@@ -98,16 +112,12 @@ export class AdminUserListComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroy$.next(true);
+		this.destroy$.next();
 		this.destroy$.complete();
 	}
 
 	onRestoreClick() {
 		if (!this.user) return;
 		this.deleteOrRestoreUser.emit({ action: 'RESTORE', uuid: this.user.uuid });
-	}
-
-	onImageNotFound() {
-		// this.
 	}
 }
