@@ -1,6 +1,9 @@
 export const AppUrls = {
 	ROOT: '',
 	HOME: 'home',
+	LISTING: {
+		DETAIL: (id: number) => `listing/${id}`,
+	},
 	AUTH: {
 		BASE: 'auth',
 		LOGIN: 'user_login',

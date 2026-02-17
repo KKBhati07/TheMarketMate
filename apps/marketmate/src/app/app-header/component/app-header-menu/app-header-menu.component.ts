@@ -3,7 +3,7 @@ import { NavOption, SHARED_UI_DEPS, fadeInOut, AppNavButtonComponent } from '@ma
 import { AppUrls } from '../../../app.urls';
 import { AppUrls as SharedUrls} from '@marketmate/shared';
 import { handleKeyboardActivation } from '@marketmate/shared';
-import { SellItemButtonComponent } from '../../../app-util/module/component/app-sell-item-button/app-sell-item-btn.component';
+import { SellItemButtonComponent } from '../../../app-util/components/app-sell-item-button/app-sell-item-btn.component';
 
 @Component({
 	selector: 'mm-header-menu',

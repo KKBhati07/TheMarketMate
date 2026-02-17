@@ -27,15 +27,15 @@ import { LoggingService, NotificationService } from '@marketmate/shared';
 import { handleKeyboardActivation } from '@marketmate/shared';
 import {
 	PublishEditListingFormComponent
-} from '../../app-util/module/component/publish-listing-form/publish-edit-listing-form.component';
+} from '../../app-util/components/publish-listing-form/publish-edit-listing-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterService } from '@marketmate/shared';
 import { environment } from '../../../environments/environment';
 import { AppHeaderMenuComponent } from './app-header-menu/app-header-menu.component';
 import { HeaderUserMenuComponent } from './header-user-menu/header-user-menu.component';
-import { SellItemButtonComponent } from '../../app-util/module/component/app-sell-item-button/app-sell-item-btn.component';
-import { ProductCategoryComponent } from '../../app-util/module/component/product-category/product-category.component';
-import { CategorySkeletonComponent } from '../../app-util/module/component/category-skeleton/category-skeleton.component';
+import { SellItemButtonComponent } from '../../app-util/components/app-sell-item-button/app-sell-item-btn.component';
+import { ProductCategoryComponent } from '../../app-util/components/app-product-category/product-category/product-category.component';
+import { CategorySkeletonComponent } from '../../app-util/components/app-product-category/category-skeleton/category-skeleton.component';
 
 @Component({
 	selector: 'mm-app-header',

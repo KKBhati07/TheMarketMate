@@ -3,11 +3,13 @@ import { AppUrls } from "./app.urls";
 import { AppUrls as SharedUrls } from "@marketmate/shared";
 import { AppRootComponent } from "./app-root/components/app-root.component";
 import { HomeComponent } from "./app-root/components/home-component/home.component";
+import { ListingDetailComponent } from "./app-root/components/listing-detail/listing-detail.component";
 import { FourOFourComponent } from "@marketmate/shared";
 
 export const routes: Routes = [
 	{ path: AppUrls.ROOT, component: AppRootComponent },
 	{ path: AppUrls.HOME, component: HomeComponent },
+	{ path: 'listing/:id', component: ListingDetailComponent },
 	{
 		path: SharedUrls.AUTH.BASE,
 		loadChildren: () => import('./app-auth/auth.routes').then(r => r.authRoutes)

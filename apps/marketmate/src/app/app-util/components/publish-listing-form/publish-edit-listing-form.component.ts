@@ -5,15 +5,15 @@ import {
 	Category, City, Country, LoggingService, NotificationService, State, SHARED_UI_DEPS, ImagePreviewComponent,
 	Condition, PillComponent, getColors, FormatTextPipe
 } from '@marketmate/shared';
-import { LocationApiService } from '../../../../services/location.service';
-import { CategoryService } from '../../../../services/category.service';
+import { LocationApiService } from '../../../services/location.service';
+import { CategoryService } from '../../../services/category.service';
 import { catchError, debounceTime, forkJoin, map, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
-import { CONSTANTS } from '../../../../app.constants';
-import { ProductImage } from '../../../../types/common.type';
-import { ListingService } from '../../../../services/listing.service';
+import { CONSTANTS } from '../../../app.constants';
+import { ProductImage } from '../../../types/common.type';
+import { ListingService } from '../../../services/listing.service';
 import { StorageService, Directory } from '@marketmate/shared';
 import { FilePayload } from '@marketmate/shared';
-import { PayloadImage } from '../../../../models/listing.model';
+import { PayloadImage } from '../../../models/listing.model';
 import { ImageUploadIconComponent } from '../image-upload-icon/image-upload-icon.component';
 import { AutocompleteSelectComponent } from '../app-autocomplete-select/app-autocomplete-select.component';
 import { AppButtonComponent } from '@marketmate/shared';

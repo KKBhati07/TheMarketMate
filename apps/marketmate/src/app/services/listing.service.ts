@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { ApiService, Listing, PaginatedResponse, ConditionsResponse } from '@marketmate/shared';
 import { AppUrls } from '../app.urls';
 import { Observable, tap } from 'rxjs';
-import { ApiResponse } from '@marketmate/shared';
-import { ApiHttpResponse } from '@marketmate/shared';
+import { ApiResponse, ApiHttpResponse } from '@marketmate/shared';
 import { CreateListingPayload } from '../models/listing.model';
 import { shareReplay } from 'rxjs/operators';
+import { ListingDetail } from '../models/listing-detail.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -37,6 +37,10 @@ export class ListingService {
 	getFavoriteByUser(uuid: string, page: number = 0):
 			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_FAVORITES, { user: uuid, page })
+	}
+
+	getOne(id: number): Observable<ApiHttpResponse<ApiResponse<ListingDetail>>> {
+		return this.apiService.get<ApiResponse<ListingDetail>>(AppUrls.API.V1.LISTING.GET_DETAILS(id))
 	}
 
 	/**

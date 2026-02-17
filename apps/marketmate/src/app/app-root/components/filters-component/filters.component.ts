@@ -5,8 +5,8 @@ import {
 	Output,
 } from '@angular/core';
 import { handleKeyboardActivation, SHARED_UI_DEPS, BackForwardIconComponent } from '@marketmate/shared';
-import { PriceSliderComponent } from '../../../app-util/module/component/price-slider/price-slider.component';
-import { LocationSelectorComponent } from '../../../app-util/module/component/location-selector/location-selector.component';
+import { PriceSliderComponent } from '../../../app-util/components/price-slider/price-slider.component';
+import { LocationSelectorComponent } from '../../../app-util/components/location-selector/location-selector.component';
 
 @Component({
 	selector: 'mm-filters-component',

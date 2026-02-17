@@ -1,0 +1,127 @@
+<div class="listing-detail-container w-100p pl-24 pr-24 fade-in">
+  @if (!loading && listing) {
+    <div class="content-grid h-100p gap-32">
+      <div class="gallery-section h-100p flex-column gap-16">
+        <div class="main-image-container flex-row align-i-center justify-content-center
+				 br-24 position-relative
+">
+          @if (allImages.length > 0) {
+            <img [src]="allImages[selectedImageIndex]?.url"
+                 [alt]="listing.title + ' image ' + (selectedImageIndex + 1)" class="main-image h-100p w-100p"/>
+          } @else {
+            <div class="broken-image-placeholder h-100p flex-row justify-content-center align-i-center w-100p">
+              <mat-icon fontIcon="image_not_supported" class="fs-48"
+                        style="color: var(--text-secondary)"></mat-icon>
+            </div>
+          }
+        </div>
+
+        @if (allImages.length > 1) {
+          <div class="thumbnails-scroll flex-row gap-12 overflow-x-auto pb-4">
+            @for (img of allImages; track img.url; let i = $index) {
+              <div role="button" tabindex="0" class="thumbnail w-80 h-8- br-16 cursor-pointer position-relative"
+                   [class.selected]="selectedImageIndex === i" (click)="selectImage(i)"
+                   (keydown)="$event.key === 'Enter' && selectImage(i)">
+                <img [src]="img.url" [alt]="'Thumbnail ' + (i + 1)" class="w-100p h-100p"/>
+                @if (selectedImageIndex === i) {
+                  <div class="overlay position-absolute w-100p h-100p top-0 left-0"></div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <div class="info-section flex-column gap-24">
+        <div class="info-card p-24 br-24 flex-column gap-20">
+          <div class="category-date-container flex-row justify-content-space-b align-i-center">
+            <div class=" category-container flex-row align-i-center gap-8">
+              <div class="category-badge flex-row justify-content-center align-i-center border-circle w-32 h-32"
+                   [attr.aria-label]="listing.category?.name ?? ''">
+                <mat-icon class="fs-18 w-18 h-18"
+                          [fontIcon]="getIconName(listing.category?.name ?? '')"></mat-icon>
+              </div>
+              <span (click)="onCategoriesClick()" class="text cursor-pointer fs-14 fw-600">{{
+                      (listing.category?.name ?? '') | formatText
+                }}</span>
+            </div>
+            @if (postedAtFormatted) {
+              <span class="fs-12 text-secondary">{{ postedAtFormatted }}</span>
+            }
+          </div>
+
+          <div class="flex-column gap-8">
+            <h1 class="title fs-32 fw-800 lh-1-2 m-0">{{ listing.title }}</h1>
+            <div class="price-row flex-row align-i-center gap-16">
+						<span class="price fs-36 fw-700 primary-gradient-text">{{
+                    listing.price |
+                        currency:'INR':'symbol'
+              }}</span>
+
+              @let colors = getColors(listing.condition?.label ?? '');
+              <mm-pill
+                  class="h-32 br-16 pl-8 pr-8"
+                  textClass="fs-14 fw-600"
+                  [backgroundColor]="colors.bg"
+                  [textColor]="colors.text"
+                  [activeColor]="colors.active"
+                  [text]="listing.condition?.label ?? ''">
+              </mm-pill>
+            </div>
+          </div>
+
+          @if (listing.location) {
+            <div style="color: var(--text-secondary)"
+                class="location-row flex-row align-i-center gap-8 text-secondary">
+              <mat-icon class="fs-18 w-18 h-18" fontIcon="place"></mat-icon>
+              <span class="fs-14 fw-500">
+						{{ listing.location.city?.name }}, {{ listing.location.state?.name }}, {{
+                      listing.location.country?.name
+                }}
+					</span>
+            </div>
+          }
+        </div>
+
+        <div class="info-card p-24 br-24 flex-column gap-12">
+          <h2 style="color: var(--text-main)" class="fs-18 fw-700 m-0">Description</h2>
+          <p class="description-text fs-16 lh-1-6 m-0 pre-wrap">{{
+                  listing.description || 'No
+                      description provided.'
+            }}</p>
+        </div>
+
+        @if (listing.seller) {
+          <div class="seller-card p-16 br-20 flex-row align-i-center justify-content-space-b">
+            <div class="flex-row align-i-center gap-12">
+              <div class="avatar-container w-48 h-48 border-circle overflow-hidden position-relative">
+                @if (listing.seller.profileUrl) {
+                  <img style="object-fit: cover"
+                      [src]="listing.seller.profileUrl" alt="Seller" class="w-100p h-100p"/>
+                } @else {
+                  <div style="background: var(--items-bg)"
+                       class="placeholder w-100p h-100p flex-row justify-content-center align-i-center">
+                    <mat-icon fontIcon="person" class="fs-24 text-secondary"></mat-icon>
+                  </div>
+                }
+              </div>
+              <div class="flex-column">
+                <span style="color: var(--text-secondary)" class="fs-12 text-secondary fw-500">Sold by</span>
+                <span style="color: var(--text-main)" class="fs-16 fw-700 text-main">{{ listing.seller.name }}</span>
+              </div>
+            </div>
+            <mm-button
+                (click)="onContactBtnClick()"
+                [class]="'pl-16 pr-16 h-36'"
+                text="Contact"
+                [textClass]="'fs-16 fw-6'"
+                type="button"
+            >
+            </mm-button>
+          </div>
+        }
+      </div>
+    </div>
+  } @else if (loading) {
+    <mm-listing-detail-skeleton></mm-listing-detail-skeleton>
+  }
+</div>

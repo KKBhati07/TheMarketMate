@@ -122,6 +122,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 			this.isSelected = !this.isSelected;
 			this.onSelect.emit({ isSelected: this.isSelected, id: this.listing?.id });
 			this.cdr.markForCheck();
+		} else if (this.listing?.id != null) {
+			this.router.navigate([AppUrls.LISTING.DETAIL(this.listing.id)]).then(() => null);
 		}
 	}
 
