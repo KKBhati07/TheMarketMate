@@ -40,7 +40,9 @@
                 <mat-icon class="fs-18 w-18 h-18"
                           [fontIcon]="getIconName(listing.category?.name ?? '')"></mat-icon>
               </div>
-              <span (click)="onCategoriesClick()" class="text cursor-pointer fs-14 fw-600">{{
+              <span (click)="onCategoriesClick()"
+                    (keydown)="onCategoryKeydown($event)"
+                    class="text cursor-pointer fs-14 fw-600">{{
                       (listing.category?.name ?? '') | formatText
                 }}</span>
             </div>
@@ -71,7 +73,7 @@
 
           @if (listing.location) {
             <div style="color: var(--text-secondary)"
-                class="location-row flex-row align-i-center gap-8 text-secondary">
+                 class="location-row flex-row align-i-center gap-8 text-secondary">
               <mat-icon class="fs-18 w-18 h-18" fontIcon="place"></mat-icon>
               <span class="fs-14 fw-500">
 						{{ listing.location.city?.name }}, {{ listing.location.state?.name }}, {{
@@ -96,7 +98,7 @@
               <div class="avatar-container w-48 h-48 border-circle overflow-hidden position-relative">
                 @if (listing.seller.profileUrl) {
                   <img style="object-fit: cover"
-                      [src]="listing.seller.profileUrl" alt="Seller" class="w-100p h-100p"/>
+                       [src]="listing.seller.profileUrl" alt="Seller" class="w-100p h-100p"/>
                 } @else {
                   <div style="background: var(--items-bg)"
                        class="placeholder w-100p h-100p flex-row justify-content-center align-i-center">

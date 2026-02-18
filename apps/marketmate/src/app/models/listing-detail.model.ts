@@ -1,6 +1,11 @@
 import { Category } from '@marketmate/shared';
 import { Condition } from '@marketmate/shared';
-import { Location } from '@marketmate/shared';
+
+export interface ListingLocationDto {
+	city?: { id: number; name: string } | null;
+	state?: { id: number; name: string } | null;
+	country?: { id: number; name: string } | null;
+}
 
 export interface ListingImageDto {
 	id: number;
@@ -26,9 +31,9 @@ export interface ListingDetail {
 	sold?: boolean;
 	postedAt?: string;
 	posted_at?: string;
-	category: Category;
-	condition: Condition;
+	category?: Category | null;
+	condition?: Condition | null;
 	seller?: ListingSellerDto;
-	location?: Location;
+	location?: ListingLocationDto | null;
 	images?: ListingImageDto[];
 }

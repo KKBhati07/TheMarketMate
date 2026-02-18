@@ -1,0 +1,73 @@
+<div class="contact-dialog flex-column gap-16">
+  <div class="header flex-row align-i-center justify-content-space-b">
+    <div class="flex-column gap-4">
+      <h2 class="title fs-18 fw-700 m-0">Contact</h2>
+      <p class="subtitle fs-12 m-0">
+        Choose how you want to connect
+        @if (data?.sellerName) {
+          <span>with {{ data.sellerName }}</span>
+        }
+      </p>
+    </div>
+
+    <mm-close-btn
+        (clicked)="close()"
+        containerClass="w-36 h-36"
+        iconClass="fs-20 w-20 h-20"
+        backgroundColor="var(--items-bg)"
+        iconColor="var(--text-main)"
+    ></mm-close-btn>
+  </div>
+
+  <div class="options flex-column gap-12">
+    <div
+        class="option-card br-16 p-16 flex-row align-i-center justify-content-space-b cursor-pointer"
+        role="button"
+        tabindex="0"
+        (click)="select('EMAIL')"
+        (keydown)="onOptionKeydown($event, 'EMAIL')"
+        aria-label="Contact via email"
+    >
+      <div class="badge-title-container flex-row align-i-center gap-12">
+        <div class="icon-badge border-circle flex-row justify-content-center align-i-center">
+          <mat-icon fontIcon="mail_outline" class="fs-20 w-20 h-20"></mat-icon>
+        </div>
+        <div class="title-sub-container flex-column gap-4">
+          <p class="opt-title fs-14 fw-700 m-0">Email</p>
+          <p class="opt-sub fs-12 m-0">Send an email to the seller</p>
+        </div>
+      </div>
+      <mat-icon fontIcon="chevron_right" class="fs-22 w-22 h-22"></mat-icon>
+    </div>
+
+    <div
+        class="option-card br-16 p-16 flex-row align-i-center justify-content-space-b cursor-pointer"
+        role="button"
+        tabindex="0"
+        (click)="select('CHAT')"
+        (keydown)="onOptionKeydown($event, 'CHAT')"
+        aria-label="Contact via chat"
+    >
+      <div class="badge-title-container flex-row align-i-center gap-12">
+        <div class="icon-badge border-circle flex-row justify-content-center align-i-center">
+          <mat-icon fontIcon="chat_bubble_outline" class="fs-20 w-20 h-20"></mat-icon>
+        </div>
+        <div class="title-sub-container flex-column gap-4">
+          <p class="opt-title fs-14 fw-700 m-0">Chat</p>
+          <p class="opt-sub fs-12 m-0">Start a conversation in-app</p>
+        </div>
+      </div>
+      <mat-icon fontIcon="chevron_right" class="fs-22 w-22 h-22"></mat-icon>
+    </div>
+  </div>
+
+  <div class="actions flex-row justify-content-end">
+    <mm-button
+        type="button"
+        text="Cancel"
+        [class]="'pl-16 pr-16 h-36'"
+        (click)="close()"
+    ></mm-button>
+  </div>
+</div>
+

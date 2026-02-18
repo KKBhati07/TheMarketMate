@@ -43,21 +43,26 @@ export class ListingService {
 		return this.apiService.get<ApiResponse<ListingDetail>>(AppUrls.API.V1.LISTING.GET_DETAILS(id))
 	}
 
+	contactSellerByEmail(listingId: number, payload: { subject: string; body: string; listing_url?: string })
+			: Observable<ApiHttpResponse<ApiResponse<null>>> {
+		return this.apiService.post<ApiResponse<null>>(AppUrls.API.V1.LISTING.CONTACT_SELLER_EMAIL(listingId), payload)
+	}
+
 	/**
 	 * Caches conditions using shareReplay.
 	 */
 	getConditions(): Observable<ApiHttpResponse<ApiResponse<ConditionsResponse>>> {
 		if (this.conditions$) return this.conditions$;
 		this.conditions$ = this.apiService
-			.get<ApiResponse<ConditionsResponse>>(AppUrls.API.V1.LISTING.GET_CONDITIONS)
-			.pipe(
-				shareReplay(1),
-				tap(res => {
-					if (!res.isSuccessful()) {
-						this.conditions$ = null;
-					}
-				}),
-			);
+				.get<ApiResponse<ConditionsResponse>>(AppUrls.API.V1.LISTING.GET_CONDITIONS)
+				.pipe(
+						shareReplay(1),
+						tap(res => {
+							if (!res.isSuccessful()) {
+								this.conditions$ = null;
+							}
+						}),
+				);
 		return this.conditions$;
 	}
 }

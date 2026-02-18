@@ -44,5 +44,9 @@ export const CONSTANTS = {
 		KEY: 'app-theme',
 		DARK: 'dark',
 		LIGHT: 'light',
+	},
+	EMAIL: {
+		SUBJECT_MAX: 120,
+		BODY_MAX: 2000
 	}
 }

@@ -1,3 +1,10 @@
 .btn-container {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: var(--shadow-sm, 0 4px 8px rgba(0, 0, 0, 0.12));
+  border: 1px solid transparent;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    border-color: var(--hover-color);
+    transform: translateY(-1px);
+  }
 }

@@ -2,7 +2,7 @@ export const AppUrls = {
 	ROOT: '',
 	HOME: 'home',
 	LISTING: {
-		DETAIL: (id: number) => `listing/${id}`,
+		DETAIL: (id: number) => `listing/${ id }`,
 	},
 	USER: {
 		BASE: 'user',
@@ -45,7 +45,8 @@ export const AppUrls = {
 				GET_BY_USER: 'v1/listing/get_by_user',
 				GET_FAVORITES: 'v1/listing/get_favorites',
 				GET_CONDITIONS: 'v1/listing/get_conditions',
-				GET_DETAILS: (id: number) => `v1/listing/${id}/get_details`,
+				GET_DETAILS: (id: number) => `v1/listing/${ id }/get_details`,
+				CONTACT_SELLER_EMAIL: (id: number) => `v1/listing/${ id }/contact_seller_email`,
 				IMAGE_UPLOAD_FALLBACK: 'v1/listing/image_upload_fallback',
 			},
 			LOCATION: {
