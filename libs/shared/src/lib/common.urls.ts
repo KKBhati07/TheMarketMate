@@ -23,6 +23,8 @@ export const AppUrls = {
 			},
 			AUTH: {
 				LOGIN: 'v1/auth/login_with_password',
+				REQUEST_LOGIN_OTP: 'v1/auth/request_login_otp',
+				OTP_LOGIN: 'v1/auth/login_with_otp',
 				LOGOUT: 'v1/auth/logout',
 				AUTH_DETAILS: 'v1/auth/auth_details'
 			},

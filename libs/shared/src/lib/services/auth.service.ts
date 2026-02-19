@@ -14,6 +14,8 @@ import {
 import { User } from "../models/user.model";
 import { AppContext } from '../types/common.type';
 
+export type OtpType = 'LOGIN' | 'EMAIL_VERIFICATION' | 'PHONE_VERIFICATION';
+
 /**
  * Maintains authentication state in memory to avoid repeated server calls.
  *
@@ -76,6 +78,21 @@ export class AuthService {
 	 */
 	loginUser(body: Login, appContext: AppContext): Observable<ApiHttpResponse<ApiResponse<LoginResponse>>> {
 		return this.apiService.post<ApiResponse<LoginResponse>>(AppUrls.API.V1.AUTH.LOGIN, body, { 'X-App-Context': appContext })
+	}
+
+	requestLoginOtp(email: string): Observable<ApiHttpResponse<ApiResponse<null>>> {
+		return this.apiService.post<ApiResponse<null>>(AppUrls.API.V1.AUTH.REQUEST_LOGIN_OTP, {
+			type: 'LOGIN' as OtpType,
+			email
+		});
+	}
+
+	loginWithOtp(email: string, otp: string, appContext: AppContext): Observable<ApiHttpResponse<ApiResponse<any>>> {
+		return this.apiService.post<ApiResponse<any>>(AppUrls.API.V1.AUTH.OTP_LOGIN, {
+			email,
+			type: 'LOGIN' as OtpType,
+			otp
+		}, { 'X-App-Context': appContext });
 	}
 
 	logoutUser(): Observable<ApiHttpResponse<ApiResponse<LogoutResponse>>> {

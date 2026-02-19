@@ -17,9 +17,38 @@
     }
     <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
       <p class="form-heading cursor-default">{{ formHeading }}</p>
+      @if (!iSAdminPortal) {
+        <div class="login-method-toggle mt-16 flex-row justify-content-center align-i-center gap-12">
+          <mm-nav-button
+            tabindex="0"
+            role="button"
+            aria-label="Use password login"
+            [headerNav]="true"
+            [text]="'Password'"
+            [textClass]="'fs-12 fw-6'"
+            [class]="'h-40 br-32 pl-12 w-80 pr-12 ' + (isLoading ? 'disable' : '')"
+            [active]="loginMethod === 'PASSWORD'"
+            (click)="!isLoading && setLoginMethod('PASSWORD')"
+            (keydown)="onLoginMethodKeydown('PASSWORD', $event)"
+          ></mm-nav-button>
+          <mm-nav-button
+            tabindex="0"
+            role="button"
+            aria-label="Use OTP login"
+            [headerNav]="true"
+            [text]="'OTP'"
+            [textClass]="'fs-12 fw-6'"
+            [class]="'h-40 br-32 pl-12 w-80 pr-12 ' + (isLoading ? 'disable' : '')"
+            [active]="loginMethod === 'OTP'"
+            (click)="!isLoading && setLoginMethod('OTP')"
+            (keydown)="onLoginMethodKeydown('OTP', $event)"
+          ></mm-nav-button>
+        </div>
+      }
       <input #emailInput id="loginEmail"
         [ngStyle]="{'border-color':getEmailValidation() || isFourOOne?'red':''}"
         class="pass-input-container fs-12 display-block h-60 position-relative br-32 pl-12 mt-30"
+        [readonly]="loginMethod === 'OTP' && otpStep === 2"
         formControlName="email" type="email"
         placeholder="Enter your email"/>
         <div class="invalid-text-container h-28 p-12">
@@ -27,25 +56,67 @@
             <p class="invalid-text fs-12">* {{ invalidEmailText }}</p>
           }
         </div>
-        <div class="pass-input-container display-block h-60 position-relative br-32 pl-12 mt-30"
-          [ngStyle]="{'border-color':getPassValidation() || isFourOOne ? 'red':''}">
-          <input class="fs-12 pass-input border-none br-32" id="loginPassword" formControlName="password"
-            type="{{showPassword?'text':'password'}}"
-            placeholder="Enter your password"/>
-            <mat-icon
-              (click)="toggleShowPassword()"
-              (keydown)="onTogglePasswordKeydown($event)"
-              tabindex="0"
-              role="button"
-              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
-              class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
-            </mat-icon>
-          </div>
-          <div class="invalid-text-container h-28 mt-12 p-12">
-            @if (getPassValidation()) {
-              <p class="invalid-text fs-12">* Password is required!</p>
-            }
-          </div>
+        @if (loginMethod === 'PASSWORD') {
+          <div class="pass-input-container display-block h-60 position-relative br-32 pl-12 mt-30"
+            [ngStyle]="{'border-color':getPassValidation() || isFourOOne ? 'red':''}">
+            <input class="fs-12 pass-input border-none br-32" id="loginPassword" formControlName="password"
+              type="{{showPassword?'text':'password'}}"
+              placeholder="Enter your password"/>
+              <mat-icon
+                (click)="toggleShowPassword()"
+                (keydown)="onTogglePasswordKeydown($event)"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                class="visibility-icon position-absolute w-20 h-20 cursor-pointer">
+              </mat-icon>
+            </div>
+            <div class="invalid-text-container h-28 mt-12 p-12">
+              @if (getPassValidation()) {
+                <p class="invalid-text fs-12">* Password is required!</p>
+              }
+            </div>
+        }
+        @if (loginMethod === 'OTP') {
+          @if (otpStep === 2) {
+            <div class="otp-meta mt-12 pl-12 pr-12">
+              <p class="otp-meta-text cursor-default">
+                Sent to <span class="email">{{ loginForm.get('email')?.value }}</span>
+                <span
+                  tabindex="0"
+                  role="button"
+                  aria-label="Change email"
+                  class="cursor-pointer action"
+                  (click)="changeOtpEmail()"
+                  (keydown)="onChangeOtpEmailKeydown($event)"
+                >Change</span>
+              </p>
+            </div>
+            <div class="pass-input-container display-block h-60 position-relative br-32 pl-12 mt-16"
+              [ngStyle]="{'border-color':getOtpValidation() || isFourOOne ? 'red':''}">
+              <input
+                #otpInput
+                class="fs-12 pass-input border-none br-32"
+                id="loginOtp"
+                formControlName="otp"
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                placeholder="Enter OTP"
+              />
+            </div>
+            <div class="invalid-text-container h-28 mt-12 p-12">
+              @if (getOtpValidation()) {
+                <p class="invalid-text fs-12">* OTP is required!</p>
+              }
+            </div>
+          }
+          @if (otpInfoText.length) {
+            <div class="info-text-container flex-row justify-content-center align-i-center h-60 w-100p br-32 pl-12 mt-16 mb-16">
+              <p>{{ otpInfoText }}</p>
+            </div>
+          }
+        }
           @if (errorText.length) {
         <div class="error-text-container flex-row justify-content-center
         align-i-center h-60 w-100p br-32 pl-12 mt-16 mb-16">
@@ -54,7 +125,9 @@
           }
           <mm-button
             [type]="'submit'"
-            [text]="isLoading ? 'LOGGING IN...' : 'LOG IN'"
+            [text]="isLoading
+              ? (loginMethod === 'PASSWORD' ? 'LOGGING IN...' : (otpStep === 1 ? 'SENDING OTP...' : 'VERIFYING OTP...'))
+              : (loginMethod === 'PASSWORD' ? 'LOG IN' : (otpStep === 1 ? 'SEND OTP' : 'VERIFY OTP'))"
             [class]="'h-60 w-100p fs-16'"
             [iconClass]="'fw-1'"
             [disabled]="getEmailValidation(true) || isLoading"
