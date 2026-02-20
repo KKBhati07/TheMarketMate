@@ -27,6 +27,7 @@ export interface ListingDetail {
 	title: string;
 	description: string;
 	price: number;
+	is_favorite?: boolean;
 	isSold?: boolean;
 	sold?: boolean;
 	postedAt?: string;

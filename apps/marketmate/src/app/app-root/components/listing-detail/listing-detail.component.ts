@@ -7,13 +7,19 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { concatMap, debounceTime, Subject, takeUntil } from 'rxjs';
 import {
 	SHARED_UI_DEPS,
 	FormatTextPipe,
 	PillComponent,
 	getColors,
-	getIconName, AppButtonComponent, handleKeyboardActivation, FilterService, AuthService, NotificationService
+	getIconName,
+	AppButtonComponent,
+	handleKeyboardActivation,
+	FilterService,
+	AuthService,
+	NotificationService,
+	FavoriteService
 } from '@marketmate/shared';
 import { AppUrls as SharedUrls } from '@marketmate/shared';
 import { AppUrls } from '../../../app.urls';
@@ -46,8 +52,10 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 	selectedImageIndex = 0;
 	private listingId: number | null = null;
 	private destroy$ = new Subject<void>();
+	private favoriteIntent$ = new Subject<boolean>();
 	protected readonly getColors = getColors;
 	protected readonly getIconName = getIconName;
+	lastConfirmedFavoriteState: boolean = false;
 
 	constructor(
 			private route: ActivatedRoute,
@@ -58,12 +66,55 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 			private authService: AuthService,
 			private dialog: MatDialog,
 			private notificationService: NotificationService,
+			private favoriteService: FavoriteService,
 	) {
 	}
 
 	ngOnInit(): void {
+		this.subscribeToFavoriteIntent();
 		this.getListingIdFromParams();
 
+	}
+
+	subscribeToFavoriteIntent(): void {
+		this.favoriteIntent$
+				.pipe(
+						debounceTime(800),
+						concatMap(isFavorite =>
+								this.favoriteService
+										.setFavorite(this.listingId!, isFavorite)
+										.pipe(takeUntil(this.destroy$))
+						)
+				)
+				.subscribe(res => {
+					if (!this.listing) return;
+					if (res.isSuccessful()) {
+						this.listing.is_favorite = this.lastConfirmedFavoriteState =
+								res.body?.data?.is_favorite ?? (this.listing.is_favorite ?? false);
+					} else {
+						this.listing.is_favorite = this.lastConfirmedFavoriteState;
+						this.notificationService.error({ message: 'Failed to update favorite' });
+					}
+					this.cdr.markForCheck();
+				});
+	}
+
+	onFavoriteIconClick(): void {
+		if (!this.authService.Authenticated) {
+			this.router.navigate([SharedUrls.AUTH.BASE, SharedUrls.AUTH.LOGIN],
+					{ queryParams: { redirect: this.router.url } }).then(() => null);
+			return;
+		}
+		if (!this.listing || !this.listingId) return;
+
+		const next = !(this.listing.is_favorite ?? false);
+		this.listing.is_favorite = next;
+		this.cdr.markForCheck();
+		this.favoriteIntent$.next(next);
+	}
+
+	onFavoriteKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.onFavoriteIconClick(), event);
 	}
 
 	getListingIdFromParams(): void {
@@ -152,6 +203,7 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 				.subscribe(res => {
 					if (res.isSuccessful()) {
 						this.listing = res.body?.data ?? null;
+						this.lastConfirmedFavoriteState = this.listing?.is_favorite ?? false;
 						this.loading = false;
 						this.cdr.detectChanges();
 					}

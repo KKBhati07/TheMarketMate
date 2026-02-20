@@ -23,6 +23,16 @@
       overflow: hidden;
       border: 1px solid var(--border-color);
 
+      .favorite-icon {
+        z-index: 2;
+        top: 16px;
+        right: 16px;
+
+        .favorite {
+          color: #d33;
+        }
+      }
+
       .main-image {
         object-fit: contain;
         backdrop-filter: blur(10px);

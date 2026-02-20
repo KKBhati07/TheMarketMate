@@ -94,22 +94,12 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 							this.listing.is_favorite = this.lastConfirmedFavoriteState =
 									res.body?.data?.is_favorite ?? this.listing.is_favorite;
 
-							if (this.listing.is_favorite) {
-								this.notificationService.success({
-									message: `Added to favorites`,
-								});
-							} else {
-								this.notificationService.success({
-									message: `Removed from Favorites`,
-								});
-							}
-
 							this.cdr.markForCheck();
 						}
 					} else {
 						this.listing!.is_favorite = this.lastConfirmedFavoriteState;
 						this.notificationService.error({
-							message: 'Failed to update favorite',
+							message: 'Failed to update favorite, Please retry!',
 						});
 						this.cdr.markForCheck();
 					}

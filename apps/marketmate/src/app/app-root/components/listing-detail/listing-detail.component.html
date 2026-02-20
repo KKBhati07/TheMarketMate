@@ -5,6 +5,20 @@
         <div class="main-image-container flex-row align-i-center justify-content-center
 				 br-24 position-relative
 ">
+          <div
+            (click)="onFavoriteIconClick()"
+            (keydown)="onFavoriteKeydown($event)"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="listing.is_favorite ? 'Remove from favorites' : 'Add to favorites'"
+            class="favorite-icon position-absolute"
+          >
+            <mat-icon
+              [class.favorite]="listing.is_favorite"
+              class="fs-28 w-28 h-28"
+              [fontIcon]="listing.is_favorite ? 'favorite' : 'favorite_border'">
+            </mat-icon>
+          </div>
           @if (allImages.length > 0) {
             <img [src]="allImages[selectedImageIndex]?.url"
                  [alt]="listing.title + ' image ' + (selectedImageIndex + 1)" class="main-image h-100p w-100p"/>
