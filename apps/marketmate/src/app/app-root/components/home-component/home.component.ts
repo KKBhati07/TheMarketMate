@@ -201,6 +201,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	toggleFilters(expand: boolean) {
 		this.isExpanded = expand;
+		this.cdr.markForCheck();
 	}
 
 	ngOnDestroy() {

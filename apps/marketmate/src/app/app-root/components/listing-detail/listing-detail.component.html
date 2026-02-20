@@ -1,4 +1,4 @@
-<div class="listing-detail-container w-100p pl-24 pr-24 fade-in">
+<div class="listing-detail-container w-100p pl-24 pr-24 fade-in" [class.mobile]="isMobile">
   @if (!loading && listing) {
     <div class="content-grid h-100p gap-32">
       <div class="gallery-section h-100p flex-column gap-16">
@@ -11,7 +11,7 @@
             tabindex="0"
             role="button"
             [attr.aria-label]="listing.is_favorite ? 'Remove from favorites' : 'Add to favorites'"
-            class="favorite-icon position-absolute"
+            class="favorite-icon position-absolute cursor-pointer"
           >
             <mat-icon
               [class.favorite]="listing.is_favorite"

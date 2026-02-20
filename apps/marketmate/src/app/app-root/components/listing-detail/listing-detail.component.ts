@@ -19,7 +19,7 @@ import {
 	FilterService,
 	AuthService,
 	NotificationService,
-	FavoriteService
+	FavoriteService, DeviceDetectorService
 } from '@marketmate/shared';
 import { AppUrls as SharedUrls } from '@marketmate/shared';
 import { AppUrls } from '../../../app.urls';
@@ -42,7 +42,14 @@ import {
 	styleUrls: ['./listing-detail.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, FormatTextPipe, PillComponent, MatButtonModule, AppButtonComponent, ListingDetailSkeletonComponent]
+	imports: [
+		...SHARED_UI_DEPS,
+		FormatTextPipe,
+		PillComponent,
+		MatButtonModule,
+		AppButtonComponent,
+		ListingDetailSkeletonComponent
+	]
 })
 export class ListingDetailComponent implements OnInit, OnDestroy {
 
@@ -56,6 +63,7 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 	protected readonly getColors = getColors;
 	protected readonly getIconName = getIconName;
 	lastConfirmedFavoriteState: boolean = false;
+	isMobile: boolean = false;
 
 	constructor(
 			private route: ActivatedRoute,
@@ -67,13 +75,24 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 			private dialog: MatDialog,
 			private notificationService: NotificationService,
 			private favoriteService: FavoriteService,
+			private deviceDetectorService: DeviceDetectorService
 	) {
 	}
 
 	ngOnInit(): void {
+		this.setIsMobile();
 		this.subscribeToFavoriteIntent();
 		this.getListingIdFromParams();
 
+	}
+
+	setIsMobile() {
+		this.deviceDetectorService.isMobile()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(isMobile => {
+					this.isMobile = isMobile;
+					this.cdr.markForCheck();
+				});
 	}
 
 	subscribeToFavoriteIntent(): void {

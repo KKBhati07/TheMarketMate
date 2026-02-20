@@ -1,27 +1,56 @@
 .listing-detail-container {
   margin: 0 auto;
   min-height: calc(100vh - 100px);
-  overflow: scroll;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &.mobile {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+
+    .content-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .info-card {
+      padding: 16px !important;
+    }
+
+    .title {
+      font-size: 26px !important;
+    }
+
+    .price {
+      font-size: 28px !important;
+    }
+  }
 }
 
 .content-grid {
-  overflow: scroll;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 
   @media (max-width: 960px) {
     grid-template-columns: 1fr;
   }
 
   .gallery-section {
-    overflow: scroll;
+    width: 100%;
+    box-sizing: border-box;
 
     .main-image-container {
       background-color: var(--items-bg);
       aspect-ratio: 4/3;
       overflow: hidden;
       border: 1px solid var(--border-color);
+      width: 100%;
+      box-sizing: border-box;
 
       .favorite-icon {
         z-index: 2;
@@ -45,6 +74,8 @@
 
     .thumbnails-scroll {
       scrollbar-width: thin;
+      width: 100%;
+      box-sizing: border-box;
 
       &::-webkit-scrollbar {
         height: 4px;

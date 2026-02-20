@@ -6,7 +6,11 @@ import {
 	forwardRef,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	Output, EventEmitter
+	Output,
+	EventEmitter,
+	ElementRef,
+	ViewChildren,
+	QueryList
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { FormControl } from '@angular/forms';
@@ -52,7 +56,10 @@ export class AutocompleteSelectComponent<
 	searchControl = new FormControl('');
 	filteredData: T[] = [];
 	isDropdownOpen = false;
+	activeIndex = -1;
 	destroy$: Subject<void> = new Subject<void>();
+
+	@ViewChildren('optionEl') optionEls!: QueryList<ElementRef<HTMLElement>>;
 
 	private onChange: (value: T[keyof T] | null) => void = () => {};
 	private onTouched: () => void = () => {};
@@ -76,6 +83,10 @@ export class AutocompleteSelectComponent<
 							String(item[this.labelKey] ?? '')
 									.toLowerCase().includes((value ?? '').toLowerCase())
 					);
+
+					if (this.isDropdownOpen) {
+						this.resetActiveIndex();
+					}
 					this.cdr.markForCheck();
 				});
 	}
@@ -114,6 +125,8 @@ export class AutocompleteSelectComponent<
 		this.onChange(this.selectedValue);
 		this.valueSelected.emit(this.selectedValue);
 		this.isDropdownOpen = false;
+		this.activeIndex = -1;
+		this.cdr.markForCheck();
 	}
 
 	toString(value: unknown) {
@@ -124,11 +137,109 @@ export class AutocompleteSelectComponent<
 	toggleDropdown() {
 		if (this.disabled) return;
 		this.isDropdownOpen = !this.isDropdownOpen;
+		if (this.isDropdownOpen) {
+			this.resetActiveIndex();
+		} else {
+			this.activeIndex = -1;
+		}
+		this.cdr.markForCheck();
+	}
+
+	onFocus() {
+		if (this.disabled) return;
+		this.isDropdownOpen = true;
+		this.resetActiveIndex();
+		this.cdr.markForCheck();
+	}
+
+	onInputKeydown(event: KeyboardEvent) {
+		if (this.disabled) return;
+
+		if (!this.isDropdownOpen && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+			event.preventDefault();
+			this.isDropdownOpen = true;
+			this.resetActiveIndex();
+			this.cdr.markForCheck();
+			return;
+		}
+
+		if (!this.isDropdownOpen) return;
+
+		switch (event.key) {
+			case 'ArrowDown': {
+				event.preventDefault();
+				if (!this.filteredData.length) return;
+				const next = this.activeIndex < 0 ? 0 : Math.min(this.activeIndex + 1, this.filteredData.length - 1);
+				this.setActiveIndex(next);
+				return;
+			}
+			case 'ArrowUp': {
+				event.preventDefault();
+				if (!this.filteredData.length) return;
+				const next = this.activeIndex < 0 ? this.filteredData.length - 1 : Math.max(this.activeIndex - 1, 0);
+				this.setActiveIndex(next);
+				return;
+			}
+			case 'Enter': {
+				if (!this.filteredData.length) return;
+				event.preventDefault();
+				const idx = this.activeIndex < 0 ? 0 : this.activeIndex;
+				const item = this.filteredData[idx];
+				if (item) {
+					this.selectItem(item);
+				}
+				return;
+			}
+			case 'Escape': {
+				event.preventDefault();
+				this.isDropdownOpen = false;
+				this.activeIndex = -1;
+				this.cdr.markForCheck();
+				return;
+			}
+		}
+	}
+
+	onOptionMouseEnter(index: number) {
+		this.activeIndex = index;
+		this.cdr.markForCheck();
+	}
+
+	private resetActiveIndex() {
+		if (!this.filteredData.length) {
+			this.activeIndex = -1;
+			return;
+		}
+
+		const selectedIdx = this.selectedValue == null
+				? -1
+				: this.filteredData.findIndex(i => i[this.valueKey] === this.selectedValue);
+
+		this.activeIndex = selectedIdx >= 0 ? selectedIdx : 0;
+		this.ensureActiveVisible();
+	}
+
+	private setActiveIndex(index: number) {
+		this.activeIndex = index;
+		this.cdr.markForCheck();
+		this.ensureActiveVisible();
+	}
+
+	private ensureActiveVisible() {
+		const index = this.activeIndex;
+		if (index < 0) return;
+
+		// wait for view to reflect active class + option list
+		setTimeout(() => {
+			const el = this.optionEls?.get(index)?.nativeElement;
+			el?.scrollIntoView({ block: 'nearest' });
+		}, 0);
 	}
 
 	handleBlur() {
 		setTimeout(() => {
 			this.isDropdownOpen = false
+			this.activeIndex = -1;
 			this.cdr.markForCheck();
 		}, 200);
 		this.onTouched();

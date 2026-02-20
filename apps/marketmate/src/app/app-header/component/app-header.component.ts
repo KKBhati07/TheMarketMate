@@ -34,8 +34,12 @@ import { environment } from '../../../environments/environment';
 import { AppHeaderMenuComponent } from './app-header-menu/app-header-menu.component';
 import { HeaderUserMenuComponent } from './header-user-menu/header-user-menu.component';
 import { SellItemButtonComponent } from '../../app-util/components/app-sell-item-button/app-sell-item-btn.component';
-import { ProductCategoryComponent } from '../../app-util/components/app-product-category/product-category/product-category.component';
-import { CategorySkeletonComponent } from '../../app-util/components/app-product-category/category-skeleton/category-skeleton.component';
+import {
+	ProductCategoryComponent
+} from '../../app-util/components/app-product-category/product-category/product-category.component';
+import {
+	CategorySkeletonComponent
+} from '../../app-util/components/app-product-category/category-skeleton/category-skeleton.component';
 
 @Component({
 	selector: 'mm-app-header',
@@ -43,7 +47,15 @@ import { CategorySkeletonComponent } from '../../app-util/components/app-product
 	styleUrls: ['./app-header.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppHeaderMenuComponent, HeaderUserMenuComponent, SellItemButtonComponent, ProductCategoryComponent, CategorySkeletonComponent]
+	imports: [
+		...SHARED_UI_DEPS,
+		AppNavButtonComponent,
+		AppHeaderMenuComponent,
+		HeaderUserMenuComponent,
+		SellItemButtonComponent,
+		ProductCategoryComponent,
+		CategorySkeletonComponent
+	]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
 	categories: Category[] = []

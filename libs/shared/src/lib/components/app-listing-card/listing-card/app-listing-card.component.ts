@@ -125,7 +125,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 				.then(r => null)
 	}
 
-	onFavoriteIconClick() {
+	onFavoriteIconClick(event: Event) {
+		event.stopPropagation();
 		if (!this.authService.Authenticated) {
 			this.router.navigate([AppUrls.AUTH.BASE, AppUrls.AUTH.LOGIN],
 					{ queryParams: { redirect: this.router.url } }).then(r => null);
@@ -162,7 +163,7 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	}
 
 	onFavoriteKeydown(event: KeyboardEvent) {
-		handleKeyboardActivation(() => this.onFavoriteIconClick(), event);
+		handleKeyboardActivation(() => this.onFavoriteIconClick(event), event);
 	}
 
 	onCategoryKeydown(event: KeyboardEvent) {
