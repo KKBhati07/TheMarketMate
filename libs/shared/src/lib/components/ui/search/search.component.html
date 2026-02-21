@@ -1,6 +1,15 @@
-<div class="mm-search-wrapper position-relative">
+<div
+  class="mm-search-wrapper position-relative"
+  [class.active]="isOverlayOpen"
+  [style.--mm-search-scale]="focusScale"
+>
+  @if (isOverlayOpen) {
+    <div class="mm-search-backdrop" (mousedown)="close()"></div>
+  }
+
   <div class="mm-search-container justify-content-space-b flex-row align-i-center br-32 pl-12 pr-12 h-44 w-320"
-       [ngClass]="disabled ? 'disabled' : ''">
+       [ngClass]="disabled ? 'disabled' : ''"
+       [class.raised]="isOverlayOpen">
 
     <div class="left-section flex-row align-i-center gap-8 w-100p">
       <mat-icon class="fs-18 w-18 h-18" fontIcon="search"></mat-icon>
@@ -27,21 +36,21 @@
         ></mat-icon>
       }
     </div>
-  </div>
 
-  @if (isDropdownOpen) {
-    <div class="suggestions-dropdown position-absolute br-20 p-8 flex-column gap-4 mt-4">
-      @for (s of suggestions; track s; let i = $index) {
-        <div
+    @if (isDropdownOpen) {
+      <div class="suggestions-dropdown position-absolute br-20 p-8 flex-column gap-4 mt-4">
+        @for (s of suggestions; track s; let i = $index) {
+          <div
             class="suggestion-item br-12 p-8 cursor-pointer"
             [class.active]="i === activeIndex"
             (mouseenter)="onSuggestionMouseEnter(i)"
             (mousedown)="selectSuggestion(s)"
-        >
-          {{ s }}
-        </div>
-      }
-    </div>
-  }
+          >
+            {{ s }}
+          </div>
+        }
+      </div>
+    }
+  </div>
 </div>
 

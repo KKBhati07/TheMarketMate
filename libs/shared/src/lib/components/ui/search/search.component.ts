@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
@@ -18,6 +28,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 	@Input() debounceMs = 350;
 	@Input() showSuggestions = true;
 	@Input() minCharsForSuggestions = 2;
+	@Input() focusScale = 1.1;
+	@Input() showFocusOverlay = true;
 
 	@Input() set value(v: string) {
 		this.searchControl.setValue(v ?? '', { emitEvent: false });
@@ -27,9 +39,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 		this._suggestions = Array.isArray(value) ? value : [];
 		this.activeIndex = this._suggestions.length ? 0 : -1;
 	}
+
 	get suggestions(): string[] {
 		return this._suggestions;
 	}
+
 	private _suggestions: string[] = [];
 
 	@Output() valueChange = new EventEmitter<string>();
@@ -41,6 +55,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 	private destroy$ = new Subject<void>();
 	activeIndex = -1;
 	isFocused = false;
+
+	constructor(private hostEl: ElementRef<HTMLElement>) {
+	}
 
 	ngOnInit() {
 		this.searchControl.valueChanges
@@ -63,6 +80,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 				&& this._suggestions.length > 0;
 	}
 
+	get isOverlayOpen(): boolean {
+		return this.showFocusOverlay && this.isFocused && !this.disabled;
+	}
+
 	onFocus() {
 		this.isFocused = true;
 	}
@@ -71,6 +92,20 @@ export class SearchComponent implements OnInit, OnDestroy {
 		setTimeout(() => {
 			this.isFocused = false;
 		}, 150);
+	}
+
+	close() {
+		this.isFocused = false;
+	}
+
+	@HostListener('document:mousedown', ['$event'])
+	onDocumentMouseDown(event: MouseEvent) {
+		const target = event.target as Node | null;
+		if (!target) return;
+		if (!this.isFocused) return;
+		if (!this.hostEl?.nativeElement?.contains(target)) {
+			this.close();
+		}
 	}
 
 	onKeydown(event: KeyboardEvent) {
@@ -108,7 +143,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 			}
 			case 'Escape': {
 				event.preventDefault();
-				this.isFocused = false;
+				this.close();
 				return;
 			}
 		}
@@ -122,7 +157,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 		const v = (value ?? '').toString();
 		this.searchControl.setValue(v, { emitEvent: false });
 		this.suggestionSelected.emit(v);
-		this.isFocused = false;
+		this.close();
 	}
 
 	onSubmit() {
