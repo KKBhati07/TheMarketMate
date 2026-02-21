@@ -22,7 +22,7 @@
           <div
             [ngClass]="isMobile?'justify-content-center':''"
             style="flex-wrap: wrap"
-            class="flex-row h-100p flex-wrap gap-12 pt-12">
+            class="flex-row h-100p flex-wrap h-100p gap-12 pt-12">
             @if (!postsIsLoading || userListings.length > 0) {
               @for (listing of userListings; track trackByListingId($index, listing)) {
                 <mm-listing-card
@@ -34,6 +34,15 @@
               @for (i of [1,2,3,4,5,6]; track i) {
                 <mm-listing-card-skeleton></mm-listing-card-skeleton>
               }
+            }
+            @if (selectedTabIndex === 0 && !postsIsLoading && userListings.length === 0) {
+              <div class="w-100p h-100p">
+              <mm-empty-state
+                title="No posts found"
+                subtitle="Try creating a post to see your listings here."
+                [showSubtitle]="true"
+                ></mm-empty-state>
+              </div>
             }
           </div>
           @if (selectedTabIndex === 0 && postsHasMore) {
@@ -61,16 +70,13 @@
                     <mm-listing-card [listing]="listing"></mm-listing-card>
                   }
                 } @else {
-  <div class=" mt-20 w-100p outer-container h-100p
-  flex-row justify-content-center align-i-center">
-                    <div class="no-favorite-icon-container  align-i-center gap-12 flex-column">
-                      <mat-icon
-                        class=" no-favorite-icon h-52 w-52 fs-52"
-                        fontIcon='heart_broken'
-                        >
-                      </mat-icon>
-                      <span style="color: var(--primary-color)" class="fs-40">No Favorites Found!!</span>
-                    </div>
+                  <div class="w-100p h-100p">
+                    <mm-empty-state
+                      title="No favorites found"
+                      [icon]="'heart_broken'"
+                      subtitle="Try adding some favorites to see them here."
+                      [showSubtitle]="true"
+                    ></mm-empty-state>
                   </div>
                 }
               }

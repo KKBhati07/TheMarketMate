@@ -82,6 +82,15 @@
         <mm-listing-card-skeleton></mm-listing-card-skeleton>
       }
     }
+    @if (!isLoading && listings.length === 0) {
+      <div class="w-100p h-100p">
+        <mm-empty-state
+          title="No listings found"
+          [icon]="'search_off'"
+          [showSubtitle]="false"
+        ></mm-empty-state>
+      </div>
+    }
   </div>
 
   @if (hasMore) {

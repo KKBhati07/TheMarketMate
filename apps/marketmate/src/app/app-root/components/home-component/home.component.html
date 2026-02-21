@@ -15,11 +15,21 @@
   <div
     [ngClass]="isMobile?'justify-content-center':'pl-12'"
     [class.mobile]="isMobile"
-    class="right-section position-relative pt-4">
+    class="right-section position-relative h-100p pt-4">
 
-    <div class="items-container flex-row br-20 gap-12 pb-80"
+    <div class="items-container h-100p flex-row br-20 gap-12"
       [ngClass]="isMobile?'justify-content-center':'pl-12'"
       >
+
+      @if (!isLoading && listings.length === 0) {
+        <div class="w-100p h-100p">
+          <mm-empty-state
+            title="No listings found"
+            subtitle="Try changing your filters to see more results."
+            [showSubtitle]="true"
+          ></mm-empty-state>
+        </div>
+      }
 
       @if (!isLoading || listings.length > 0) {
         @for (listing of listings; track trackByListingId($index, listing)) {

@@ -1,7 +1,22 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	OnDestroy,
+	OnInit,
+	PLATFORM_ID
+} from "@angular/core";
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
-import { DeviceDetectorService, UserDetailsDto, SHARED_UI_DEPS, ListingCardComponent, ListingCardSkeletonComponent } from "@marketmate/shared";
+import {
+	DeviceDetectorService,
+	UserDetailsDto,
+	SHARED_UI_DEPS,
+	ListingCardComponent,
+	ListingCardSkeletonComponent
+} from "@marketmate/shared";
 import { UserService } from "../../../services/user.service";
 import { Subject, takeUntil } from "rxjs";
 import { AppUrls } from "../../../app.urls";
@@ -14,6 +29,7 @@ import { LoggingService, NotificationService } from '@marketmate/shared';
 import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 import { UserProfileBarComponent } from '../user-profile-bar/user-profile-bar.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { EmptyStateComponent } from '@marketmate/shared';
 
 @Component({
 	selector: "mm-user-profile",
@@ -21,7 +37,16 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 	styleUrls: ["./user-profile.component.scss"],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, ProfileDetailsComponent, UserProfileBarComponent, ListingCardComponent, ListingCardSkeletonComponent, MatTabGroup, MatTab]
+	imports: [
+		...SHARED_UI_DEPS,
+		ProfileDetailsComponent,
+		UserProfileBarComponent,
+		ListingCardComponent,
+		ListingCardSkeletonComponent,
+		MatTabGroup,
+		MatTab,
+		EmptyStateComponent
+	]
 })
 export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	renderComponent = false;
@@ -145,7 +170,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	updateQueryParams(queryParams: Record<string, boolean>) {
 		this.router.navigate([
-				AppUrls.USER.BASE,
+			AppUrls.USER.BASE,
 			...this.activatedRoute.snapshot.url.map(uri => uri.path)
 		], {
 			queryParams,
@@ -174,7 +199,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	getListingsByUser(uuid: string, page?: number, append: boolean = false) {
 		if (isPlatformServer(this.platformId)) return;
-		
+
 		if (this.postsIsLoading) return;
 
 		this.postsIsLoading = true;
@@ -215,7 +240,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	getFavoriteListingsByUser(uuid: string, page?: number, append: boolean = false) {
 		if (isPlatformServer(this.platformId)) return;
-		
+
 		if (this.favoritesIsLoading) return;
 
 		this.favoritesIsLoading = true;
@@ -312,7 +337,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 	getUserDetails() {
 		// Skip API calls during SSR
 		if (isPlatformServer(this.platformId)) return;
-		
+
 		this.userService.getDetails(this.userUuid)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
