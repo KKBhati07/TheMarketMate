@@ -9,6 +9,8 @@ import { FilterService } from '@marketmate/shared';
 import { LoggingService, NotificationService } from '@marketmate/shared';
 import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 import { FiltersComponent } from '../filters-component/filters.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { AppButtonComponent } from '@marketmate/shared';
 
 @Component({
 	selector: 'mm-home',
@@ -16,7 +18,7 @@ import { FiltersComponent } from '../filters-component/filters.component';
 	styleUrls: ['./home.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, FiltersComponent, ListingCardComponent, ListingCardSkeletonComponent]
+	imports: [...SHARED_UI_DEPS, FiltersComponent, ListingCardComponent, ListingCardSkeletonComponent, AppButtonComponent]
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -39,6 +41,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 			private filterService: FilterService,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
+			private bottomSheet: MatBottomSheet,
 			@Inject(PLATFORM_ID) private platformId: Object
 	) {
 	}
@@ -202,6 +205,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 	toggleFilters(expand: boolean) {
 		this.isExpanded = expand;
 		this.cdr.markForCheck();
+	}
+
+	openFiltersBottomSheet() {
+		const panelClass = 'home-filters-bottomsheet-container';
+		const backdropClass = 'home-filters-bottomsheet-backdrop';
+		this.bottomSheet.open(FiltersComponent, {
+			panelClass,
+			backdropClass,
+			data: { isBottomSheet: true },
+		});
 	}
 
 	ngOnDestroy() {

@@ -1,4 +1,11 @@
 .filters-container {
+  overflow: scroll;
+
+  .filters-header {
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
 
   .expand-icon-container {
     right: 4px;

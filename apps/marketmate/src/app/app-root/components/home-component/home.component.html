@@ -15,9 +15,9 @@
   <div
     [ngClass]="isMobile?'justify-content-center':'pl-12'"
     [class.mobile]="isMobile"
-    class="right-section pt-4">
+    class="right-section position-relative pt-4">
 
-    <div class="items-container flex-row br-20 gap-12"
+    <div class="items-container flex-row br-20 gap-12 pb-80"
       [ngClass]="isMobile?'justify-content-center':'pl-12'"
       >
 
@@ -40,6 +40,22 @@
     @if (isLoading && listings.length > 0) {
       <div class="loading-indicator w-100p p-12">
         <p class="text-center">Loading more listings...</p>
+      </div>
+    }
+
+    @if (isMobile) {
+      <div class="mobile-filters-fab position-absolute">
+        <mm-button
+          (click)="openFiltersBottomSheet()"
+          [type]="'button'"
+          [text]="'Filters'"
+          [showIcon]="true"
+          [icon]="'tune'"
+          [position]="'RIGHT'"
+          [class]="'h-44 br-32 gap-12 pl-16 pr-16'"
+          [textClass]="'fs-14 fw-6'"
+          [iconClass]="'fs-18 w-18 h-18'"
+        ></mm-button>
       </div>
     }
   </div>
