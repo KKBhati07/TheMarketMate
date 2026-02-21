@@ -1,0 +1,28 @@
+<div class="mm-search-container justify-content-space-b flex-row align-i-center br-32 pl-12 pr-12 h-44 w-320"
+     [ngClass]="disabled ? 'disabled' : ''">
+
+  <div class="'left-section flex-row align-i-center gap-8">
+    <mat-icon class="fs-18 w-18 h-18" fontIcon="search"></mat-icon>
+
+    <input
+        class="mm-search-input border-none fs-14 w-100p h-100p br-32 pl-12"
+        [formControl]="searchControl"
+        type="text"
+        [placeholder]="placeholder"
+        [readonly]="disabled"
+        (keydown.enter)="onSubmit()"
+    />
+  </div>
+
+  <div class="right-section flex-row align-i-center gap-8">
+    @if (searchControl.value.length) {
+      <mat-icon
+          class="fs-18 w-18 h-18 cursor-pointer"
+          fontIcon="close"
+          aria-label="Clear search"
+          (click)="onClear()"
+      ></mat-icon>
+    }
+  </div>
+</div>
+

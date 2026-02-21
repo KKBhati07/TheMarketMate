@@ -116,6 +116,17 @@
                   [showIcon]="true"
                   icon="home"
                 ></mm-nav-button>
+                @if (!isMobile) {
+                  <div class="header-search-container mr-12 flex-row align-i-center">
+                    <mm-search
+                        placeholder="Search listings"
+                        [value]="searchValue"
+                        (valueChange)="onSearchValueChange($event)"
+                        (submitted)="applySearch($event)"
+                        (cleared)="applySearch('')"
+                    ></mm-search>
+                  </div>
+                }
               } @else {
                 <mat-icon (click)="onHeaderMenuClick()"
                   (keydown)="onMenuIconKeydown($event)"

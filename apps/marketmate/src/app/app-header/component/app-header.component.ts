@@ -13,7 +13,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
-import { AuthService, SHARED_UI_DEPS, AppNavButtonComponent } from "@marketmate/shared";
+import { AuthService, SHARED_UI_DEPS, AppNavButtonComponent, SearchComponent } from "@marketmate/shared";
 import { User } from "@marketmate/shared";
 import { Redirect } from "@marketmate/shared";
 import { AppUrls } from "../../app.urls";
@@ -50,6 +50,7 @@ import {
 	imports: [
 		...SHARED_UI_DEPS,
 		AppNavButtonComponent,
+		SearchComponent,
 		AppHeaderMenuComponent,
 		HeaderUserMenuComponent,
 		SellItemButtonComponent,
@@ -78,6 +79,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 	protected readonly AppUrls = AppUrls;
 	protected readonly SharedUrls = SharedUrls;
 	protected readonly CONSTANTS = CONSTANTS;
+	searchValue = '';
 
 	constructor(
 			private router: Router,
@@ -287,6 +289,20 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
 	onLogoClick() {
 		this.router.navigate(AppUrls.ROOT.split('/')).then(r => null);
+	}
+
+	onSearchValueChange(value: string) {
+		this.searchValue = value;
+	}
+
+	applySearch(value: string) {
+		const v = (value ?? '').trim();
+		this.filterService.updateFilter({ search: v });
+		this.router.navigate([AppUrls.HOME], {
+			queryParams: v ? { search: v } : { search: null },
+			queryParamsHandling: 'merge',
+			replaceUrl: false,
+		}).then(() => null);
 	}
 
 	ngOnDestroy() {

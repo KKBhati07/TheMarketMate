@@ -1,9 +1,24 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	OnDestroy,
+	OnInit,
+	PLATFORM_ID
+} from "@angular/core";
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Listing, SHARED_UI_DEPS, ListingCardComponent, ListingCardSkeletonComponent, EmptyStateComponent } from '@marketmate/shared';
+import {
+	Listing,
+	SHARED_UI_DEPS,
+	ListingCardComponent,
+	ListingCardSkeletonComponent,
+	EmptyStateComponent
+} from '@marketmate/shared';
 import { DeviceDetectorService } from '@marketmate/shared';
 import { FilterService } from '@marketmate/shared';
 import { LoggingService, NotificationService } from '@marketmate/shared';
@@ -18,7 +33,14 @@ import { AppButtonComponent } from '@marketmate/shared';
 	styleUrls: ['./home.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, FiltersComponent, ListingCardComponent, ListingCardSkeletonComponent, AppButtonComponent, EmptyStateComponent]
+	imports: [
+		...SHARED_UI_DEPS,
+		FiltersComponent,
+		ListingCardComponent,
+		ListingCardSkeletonComponent,
+		AppButtonComponent,
+		EmptyStateComponent
+	]
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -31,6 +53,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 	hasMore = true;
 	isLoading = false;
 	private intersectionObserver?: IntersectionObserver;
+	private listingsRequestSeq = 0;
 
 	constructor(
 			private listingService: ListingService,
@@ -99,34 +122,49 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 	updateQueryParams(queryParams: Record<string, string | number | boolean>) {
+		const sanitized: Record<string, string | number | boolean | null> = {};
+		Object.entries(queryParams).forEach(([key, value]) => {
+			if (typeof value === 'string' && value.trim() === '') {
+				sanitized[key] = null;
+			} else {
+				sanitized[key] = value;
+			}
+		});
 		this.router.navigate([], {
 			relativeTo: this.route,
-			queryParams: queryParams,
+			queryParams: sanitized,
 			queryParamsHandling: 'merge',
 			replaceUrl: true
 		}).then(r => null);
 	}
 
 
-	getListings(queryParams: Record<string, string | number | boolean>, page?: number, append: boolean = false) {
-
+	getListings(
+			queryParams: Record<string, string | number | boolean>,
+			page?: number,
+			append: boolean = false) {
 		if (isPlatformServer(this.platformId)) return;
-		
-		if (this.isLoading) return;
 
+		if (append && this.isLoading) return;
+
+		const reqId = ++this.listingsRequestSeq;
+		this.listings = [];
 		this.isLoading = true;
+		this.cdr.markForCheck();
 		const pageToLoad = page ?? this.currentPage;
 
 		this.listingService.getAll(queryParams, pageToLoad)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
+					if (reqId !== this.listingsRequestSeq) return;
+
 					this.isLoading = false;
 					if (res.isSuccessful()) {
 						const response = res.body?.data;
 						const newItems = extractItems(response);
 
 						if (append) {
-							this.listings.push(...newItems);
+							this.listings = [...this.listings, ...newItems];
 						} else {
 							this.listings = newItems;
 							this.currentPage = 0;
@@ -137,7 +175,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 						this.currentPage = calculateNextPage(response, pageToLoad, append);
 						this.cdr.markForCheck();
 					} else {
-						console.log(res)
 						this.logger.warn('Failed to load listings', {
 							status: res.status,
 							statusText: res.statusText,
@@ -199,7 +236,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	trackByListingId(index: number, item: Listing) {
-		return item.id;
+		return index;
 	}
 
 	toggleFilters(expand: boolean) {

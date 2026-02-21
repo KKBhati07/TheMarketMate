@@ -1,0 +1,29 @@
+.mm-search-container {
+  border: 1px solid transparent;
+  background: var(--items-bg);
+  box-sizing: border-box;
+
+  &:hover {
+    border: 1px solid var(--hover-color);
+  }
+
+  &.disabled {
+    opacity: 0.9;
+
+    &:hover {
+      border: 1px solid transparent;
+    }
+  }
+
+  mat-icon {
+    color: var(--primary-color);
+  }
+
+  .mm-search-input {
+    background: var(--items-bg);
+    outline: none;
+    color: var(--text-main);
+  }
+
+
+}

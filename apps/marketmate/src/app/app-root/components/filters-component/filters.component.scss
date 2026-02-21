@@ -1,5 +1,6 @@
 .filters-container {
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   .filters-header {
     mat-icon {
@@ -14,8 +15,5 @@
     .mat-icon {
       color: var(--header-color);
     }
-  }
-
-  .price-range-filter {
   }
 }
