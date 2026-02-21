@@ -11,7 +11,7 @@ import {
 	ViewChild
 } from "@angular/core";
 import { isPlatformBrowser } from '@angular/common';
-import { NavigationEnd, Params, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
 import { AuthService, SHARED_UI_DEPS, AppNavButtonComponent, SearchComponent } from "@marketmate/shared";
 import { User } from "@marketmate/shared";
@@ -83,6 +83,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
 	constructor(
 			private router: Router,
+			private route: ActivatedRoute,
 			private authService: AuthService,
 			private cdr: ChangeDetectorRef,
 			private deviceDetector: DeviceDetectorService,
@@ -100,6 +101,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 		this.setIsMobile()
 		this.checkForAuthenticationAndSetUser();
 		this.checkForUserUpdate();
+		this.syncSearchFromQueryParams();
+		this.subscribeToSearchQueryParams();
 	}
 
 	@HostListener('document:click', ['$event'])
@@ -140,6 +143,23 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 					|| event.url.includes(SharedUrls.AUTH.SIGNUP));
 			this.cdr.markForCheck();
 		});
+	}
+
+	private syncSearchFromQueryParams() {
+		const value = this.route.snapshot.queryParamMap.get('search') ?? '';
+		if (value !== this.searchValue) {
+			this.searchValue = value;
+			this.cdr.markForCheck();
+		}
+	}
+
+	private subscribeToSearchQueryParams() {
+		this.router.events
+				.pipe(
+						filter(event => event instanceof NavigationEnd),
+						takeUntil(this.destroy$)
+				)
+				.subscribe(() => this.syncSearchFromQueryParams());
 	}
 
 	onSellItemClick() {
