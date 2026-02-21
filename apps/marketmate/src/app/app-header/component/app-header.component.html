@@ -121,8 +121,10 @@
                     <mm-search
                         placeholder="Search listings"
                         [value]="searchValue"
+                        [suggestions]="searchSuggestions"
                         (valueChange)="onSearchValueChange($event)"
                         (submitted)="applySearch($event)"
+                        (suggestionSelected)="applySearch($event)"
                         (cleared)="applySearch('')"
                     ></mm-search>
                   </div>

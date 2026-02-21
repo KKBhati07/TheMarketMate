@@ -42,6 +42,7 @@ export const AppUrls = {
 			LISTING: {
 				CREATE: 'v1/listing/create',
 				GET_ALL: 'v1/listing/get_all',
+				SUGGEST: 'v1/listing/suggest',
 				GET_BY_USER: 'v1/listing/get_by_user',
 				GET_FAVORITES: 'v1/listing/get_favorites',
 				GET_CONDITIONS: 'v1/listing/get_conditions',

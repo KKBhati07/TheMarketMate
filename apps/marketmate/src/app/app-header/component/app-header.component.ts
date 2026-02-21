@@ -12,7 +12,7 @@ import {
 } from "@angular/core";
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Params, Router } from "@angular/router";
-import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
+import { BehaviorSubject, filter, of, Subject, takeUntil } from "rxjs";
 import { AuthService, SHARED_UI_DEPS, AppNavButtonComponent, SearchComponent } from "@marketmate/shared";
 import { User } from "@marketmate/shared";
 import { Redirect } from "@marketmate/shared";
@@ -25,6 +25,7 @@ import { Category } from '@marketmate/shared';
 import { NavOption } from '@marketmate/shared';
 import { LoggingService, NotificationService } from '@marketmate/shared';
 import { handleKeyboardActivation } from '@marketmate/shared';
+import { ListingService } from '../../services/listing.service';
 import {
 	PublishEditListingFormComponent
 } from '../../app-util/components/publish-listing-form/publish-edit-listing-form.component';
@@ -40,6 +41,7 @@ import {
 import {
 	CategorySkeletonComponent
 } from '../../app-util/components/app-product-category/category-skeleton/category-skeleton.component';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
 @Component({
 	selector: 'mm-app-header',
@@ -80,6 +82,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 	protected readonly SharedUrls = SharedUrls;
 	protected readonly CONSTANTS = CONSTANTS;
 	searchValue = '';
+	searchSuggestions: string[] = [];
+	private suggestQuery$ = new Subject<string>();
 
 	constructor(
 			private router: Router,
@@ -88,6 +92,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 			private cdr: ChangeDetectorRef,
 			private deviceDetector: DeviceDetectorService,
 			private categoryService: CategoryService,
+			private listingService: ListingService,
 			private filterService: FilterService,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
@@ -103,6 +108,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 		this.checkForUserUpdate();
 		this.syncSearchFromQueryParams();
 		this.subscribeToSearchQueryParams();
+		this.subscribeToSuggestions();
 	}
 
 	@HostListener('document:click', ['$event'])
@@ -313,16 +319,39 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
 	onSearchValueChange(value: string) {
 		this.searchValue = value;
+		this.suggestQuery$.next(value);
 	}
 
 	applySearch(value: string) {
 		const v = (value ?? '').trim();
+		this.searchSuggestions = [];
 		this.filterService.updateFilter({ search: v });
 		this.router.navigate([AppUrls.HOME], {
 			queryParams: v ? { search: v } : { search: null },
 			queryParamsHandling: 'merge',
 			replaceUrl: false,
 		}).then(() => null);
+	}
+
+	private subscribeToSuggestions() {
+		this.suggestQuery$
+				.pipe(
+						map(v => (v ?? '').trim()),
+						debounceTime(250),
+						distinctUntilChanged(),
+						switchMap(q => {
+							if (q.length < 2) return of<string[]>([]);
+							return this.listingService.suggest(q, 8).pipe(
+									map(res => (res.isSuccessful() ? (res.body?.data ?? []) : [])),
+									catchError(() => of<string[]>([])),
+							);
+						}),
+						takeUntil(this.destroy$)
+				)
+				.subscribe(list => {
+					this.searchSuggestions = list;
+					this.cdr.markForCheck();
+				});
 	}
 
 	ngOnDestroy() {

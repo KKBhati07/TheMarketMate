@@ -29,6 +29,10 @@ export class ListingService {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_ALL, page ? { ...queryParams, page } : queryParams)
 	}
 
+	suggest(query: string, limit: number = 8): Observable<ApiHttpResponse<ApiResponse<string[]>>> {
+		return this.apiService.get<ApiResponse<string[]>>(AppUrls.API.V1.LISTING.SUGGEST, { query, limit });
+	}
+
 	getByUser(uuid: string, page: number = 0):
 			Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<Listing>>>> {
 		return this.apiService.get(AppUrls.API.V1.LISTING.GET_BY_USER, { user: uuid, page })
