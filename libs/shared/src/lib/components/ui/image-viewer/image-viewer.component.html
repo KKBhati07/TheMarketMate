@@ -1,45 +1,51 @@
-<div class="image-viewer-container w-100p h-100p flex-row
-justify-content-center align-i-center">
+<div
+    class="image-viewer-container flex-row p-24 justify-content-center align-i-center"
+    [@viewerBackdrop]="animationState"
+>
   <div class="close-btn-container position-absolute">
     <mm-close-btn
-      (clicked)="onCloseClick()"
-      containerClass="w-40 h-40"
-      iconClass="w-28 h-28 fs-28"
-      >
+        (clicked)="onCloseClick()"
+        containerClass="w-40 h-40"
+        iconClass="w-28 h-28 fs-28"
+        backgroundColor="var(--items-bg)"
+        iconColor="var(--primary-color)"
+    >
     </mm-close-btn>
   </div>
 
 
   @if (currentIndex > 0) {
     <div
-      class="back-fw-icon-container cursor-pointer position-absolute left">
+        class="back-fw-icon-container cursor-pointer position-absolute left">
       <mm-back-fw-icon
-        [isForwardIcon]="false"
-        (clicked)="prev()"
-        containerClass=""
-        iconClass="w-36 h-36 fs-36"
-        iconColor="white">
+          [isForwardIcon]="false"
+          (clicked)="prev()"
+          containerClass="w-48 h-48"
+          iconClass="w-36 h-36 fs-36"
+          backgroundColor="var(--items-bg)"
+          iconColor="var(--primary-color)">
       </mm-back-fw-icon>
     </div>
   }
 
   <div
-    class="image-container br-32 m-32 justify-content-center align-i-center flex-row"
-    >
+      class="image-container br-32 m-32 justify-content-center align-i-center flex-row"
+      [@viewerContent]="animationState"
+  >
 
     @if (!renderFallback) {
       <img
-        (error)="renderFallback = true"
-        [src]="currentImage"
-        [alt]="'Image ' + (currentIndex + 1) + ' of ' + images.length"
-        class="image-display br-12"
-        loading="lazy"
-        />
+          (error)="renderFallback = true"
+          [src]="currentImage"
+          [alt]="'Image ' + (currentIndex + 1) + ' of ' + images.length"
+          class="image-display br-12"
+          loading="lazy"
+      />
     } @else {
       <mat-icon
-        class="fs-56 w-56 h-56 broken-img-icon"
-        fontIcon="broken_image"
-        >
+          class="fs-56 w-56 h-56 broken-img-icon"
+          fontIcon="broken_image"
+      >
       </mat-icon>
     }
 
@@ -50,13 +56,14 @@ justify-content-center align-i-center">
 
   @if (currentIndex < images.length - 1) {
     <div
-      class="back-fw-icon-container position-absolute cursor-pointer right">
+        class="back-fw-icon-container position-absolute cursor-pointer right">
       <mm-back-fw-icon
-        [isForwardIcon]="true"
-        (clicked)="next()"
-        containerClass=""
-        iconClass="w-36 h-36 fs-36"
-        iconColor="white">
+          [isForwardIcon]="true"
+          (clicked)="next()"
+          containerClass="w-48 h-48"
+          iconClass="w-36 h-36 fs-36"
+          backgroundColor="var(--items-bg)"
+          iconColor="var(--primary-color)">
       </mm-back-fw-icon>
     </div>
   }

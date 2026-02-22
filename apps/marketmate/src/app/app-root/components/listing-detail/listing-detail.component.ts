@@ -19,7 +19,9 @@ import {
 	FilterService,
 	AuthService,
 	NotificationService,
-	FavoriteService, DeviceDetectorService
+	FavoriteService,
+	DeviceDetectorService,
+	ImageViewerComponent
 } from '@marketmate/shared';
 import { AppUrls as SharedUrls } from '@marketmate/shared';
 import { AppUrls } from '../../../app.urls';
@@ -134,6 +136,26 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 
 	onFavoriteKeydown(event: KeyboardEvent) {
 		handleKeyboardActivation(() => this.onFavoriteIconClick(), event);
+	}
+
+	openImageViewer() {
+		if (!this.allImages.length) return;
+		this.dialog.open(ImageViewerComponent, {
+			data: {
+				images: this.allImages.map(i => i.url),
+				startIndex: this.selectedImageIndex,
+			},
+			panelClass: 'full-screen-dialog',
+			hasBackdrop: true,
+			width: '100vw',
+			height: '100vh',
+			autoFocus: false,
+			restoreFocus: true,
+		});
+	}
+
+	onMainImageKeydown(event: KeyboardEvent) {
+		handleKeyboardActivation(() => this.openImageViewer(), event);
 	}
 
 	getListingIdFromParams(): void {

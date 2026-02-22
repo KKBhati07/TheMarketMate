@@ -1,4 +1,6 @@
 .notification-container {
+  width: min(420px, calc(100vw - 32px));
+
   mm-notification-toast {
     transition: transform 200ms ease, opacity 200ms ease;
   }

@@ -4,26 +4,34 @@
       <div class="gallery-section h-100p flex-column gap-16">
         <div class="main-image-container flex-row align-i-center justify-content-center
 				 br-24 position-relative
-">
+"
+             (click)="openImageViewer()"
+             (keydown)="onMainImageKeydown($event)"
+             tabindex="0"
+             role="button"
+             [attr.aria-label]="'Open image viewer for ' + listing.title"
+        >
           <div
-            (click)="onFavoriteIconClick()"
-            (keydown)="onFavoriteKeydown($event)"
-            tabindex="0"
-            role="button"
-            [attr.aria-label]="listing.is_favorite ? 'Remove from favorites' : 'Add to favorites'"
-            class="favorite-icon position-absolute cursor-pointer"
+              (click)="$event.stopPropagation(); onFavoriteIconClick()"
+              (keydown)="onFavoriteKeydown($event)"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="listing.is_favorite ? 'Remove from favorites' : 'Add to favorites'"
+              class="favorite-icon position-absolute cursor-pointer"
           >
             <mat-icon
-              [class.favorite]="listing.is_favorite"
-              class="fs-28 w-28 h-28"
-              [fontIcon]="listing.is_favorite ? 'favorite' : 'favorite_border'">
+                [class.favorite]="listing.is_favorite"
+                class="fs-28 w-28 h-28"
+                [fontIcon]="listing.is_favorite ? 'favorite' : 'favorite_border'">
             </mat-icon>
           </div>
           @if (allImages.length > 0) {
             <img [src]="allImages[selectedImageIndex]?.url"
-                 [alt]="listing.title + ' image ' + (selectedImageIndex + 1)" class="main-image h-100p w-100p"/>
+                 [alt]="listing.title + ' image ' + (selectedImageIndex + 1)"
+                 class="main-image cursor-pointer h-100p w-100p"/>
           } @else {
-            <div class="broken-image-placeholder h-100p flex-row justify-content-center align-i-center w-100p">
+            <div
+                class="broken-image-placeholder cursor-pointer h-100p flex-row justify-content-center align-i-center w-100p">
               <mat-icon fontIcon="image_not_supported" class="fs-48"
                         style="color: var(--text-secondary)"></mat-icon>
             </div>

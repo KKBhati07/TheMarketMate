@@ -46,6 +46,11 @@ export class NotificationToastComponent {
 				this.iconColor = '#3b82f6'
 				break;
 
+			case 'loading':
+				this.icon = 'hourglass_top'
+				this.iconColor = 'var(--primary-color)'
+				break;
+
 			default:
 				this.icon = 'check_circle'
 				this.iconColor = '#22c55e'
