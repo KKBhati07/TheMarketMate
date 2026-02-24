@@ -125,7 +125,7 @@
 }
 
 .icons-container {
-  background: white;
+  background: var(--header-color);
 
   &:hover {
     background: var(--hover-color);

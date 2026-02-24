@@ -10,8 +10,9 @@
       class="form-input border-none pl-12 fs-16 pr-12
       display-block h-100p w-100p br-32 position-relative"
       type="text"
-      (focus)="isDropdownOpen = true"
+      (focus)="onFocus()"
       (blur)="handleBlur()"
+      (keydown)="onInputKeydown($event)"
       [readonly]="disabled"
   />
 
@@ -24,8 +25,11 @@
       @for (item of filteredData; track item) {
         <div
             (mousedown)="selectItem(item)"
+            (mouseenter)="onOptionMouseEnter($index)"
+            #optionEl
             class="dropdown-option cursor-pointer br-12 p-8 fs-16"
             [class.selected]="item[valueKey] === selectedValue"
+            [class.active]="$index === activeIndex"
         >
           {{ toString(item[labelKey]) | formatText }}
         </div>

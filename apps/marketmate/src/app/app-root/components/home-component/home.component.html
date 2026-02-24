@@ -1,6 +1,6 @@
 <div
   [ngClass]="isMobile?'':'p-12'"
-  class="home-container flex-row pt-4 br-20 mt-100 gap-12">
+  class="home-container flex-row pt-4 br-20 gap-12">
 
   @if (!isMobile) {
     <div class="left-section pb-12 h-100p"
@@ -15,11 +15,21 @@
   <div
     [ngClass]="isMobile?'justify-content-center':'pl-12'"
     [class.mobile]="isMobile"
-    class="right-section pt-4">
+    class="right-section position-relative h-100p pt-4">
 
-    <div class="items-container flex-row br-20 gap-12"
+    <div class="items-container h-100p flex-row br-20 gap-12"
       [ngClass]="isMobile?'justify-content-center':'pl-12'"
       >
+
+      @if (!isLoading && listings.length === 0) {
+        <div class="w-100p h-100p">
+          <mm-empty-state
+            title="No listings found"
+            subtitle="Try changing your filters to see more results."
+            [showSubtitle]="true"
+          ></mm-empty-state>
+        </div>
+      }
 
       @if (!isLoading || listings.length > 0) {
         @for (listing of listings; track trackByListingId($index, listing)) {
@@ -40,6 +50,22 @@
     @if (isLoading && listings.length > 0) {
       <div class="loading-indicator w-100p p-12">
         <p class="text-center">Loading more listings...</p>
+      </div>
+    }
+
+    @if (isMobile) {
+      <div class="mobile-filters-fab position-absolute">
+        <mm-button
+          (click)="openFiltersBottomSheet()"
+          [type]="'button'"
+          [text]="'Filters'"
+          [showIcon]="true"
+          [icon]="'tune'"
+          [position]="'RIGHT'"
+          [class]="'h-44 br-32 gap-12 pl-16 pr-16'"
+          [textClass]="'fs-14 fw-6'"
+          [iconClass]="'fs-18 w-18 h-18'"
+        ></mm-button>
       </div>
     }
   </div>

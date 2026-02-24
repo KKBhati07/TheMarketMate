@@ -1,9 +1,9 @@
 <div
-    class="pill-container flex-row justify-content-center align-i-center cursor-pointer"
+    class="pill-container flex-row justify-content-center align-i-center"
     [ngClass]="[class, selected ? 'selected' : '',clickable? 'cursor-pointer':'']"
     [style.--pill-bg]="backgroundColor"
     [style.--pill-text]="textColor"
     [style.--pill-active]="activeColor"
 >
-  <p [ngClass]="textClass">{{ text }}</p>
+  <p [ngClass]="textClass" class="fw-6">{{ text }}</p>
 </div>

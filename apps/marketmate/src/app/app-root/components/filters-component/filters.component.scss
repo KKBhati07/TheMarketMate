@@ -1,4 +1,12 @@
 .filters-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .filters-header {
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
 
   .expand-icon-container {
     right: 4px;
@@ -7,8 +15,5 @@
     .mat-icon {
       color: var(--header-color);
     }
-  }
-
-  .price-range-filter {
   }
 }

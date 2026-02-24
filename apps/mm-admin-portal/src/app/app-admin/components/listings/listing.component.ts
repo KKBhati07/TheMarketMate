@@ -1,5 +1,15 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { Listing, LoggingService, NotificationService, SHARED_UI_DEPS, AppNavButtonComponent, AppButtonComponent, ListingCardComponent, ListingCardSkeletonComponent } from '@marketmate/shared';
+import {
+	Listing,
+	LoggingService,
+	NotificationService,
+	SHARED_UI_DEPS,
+	AppNavButtonComponent,
+	AppButtonComponent,
+	ListingCardComponent,
+	ListingCardSkeletonComponent,
+	EmptyStateComponent
+} from '@marketmate/shared';
 import { map, Subject, takeUntil } from 'rxjs';
 import { AdminService } from '../../../services/admin.service';
 import { AppUrls } from '../../../utils/app.urls';
@@ -13,7 +23,15 @@ import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/s
 	templateUrl: './listing.component.html',
 	styleUrls: ['./listing.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppButtonComponent, ListingCardComponent, ListingCardSkeletonComponent]
+	imports: [
+		...SHARED_UI_DEPS,
+		AppNavButtonComponent,
+		AppButtonComponent,
+		ListingCardComponent,
+		ListingCardSkeletonComponent,
+		EmptyStateComponent
+	]
+
 })
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 

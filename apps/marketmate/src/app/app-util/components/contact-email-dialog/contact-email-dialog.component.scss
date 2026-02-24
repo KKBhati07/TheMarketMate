@@ -1,0 +1,73 @@
+.email-dialog {
+  width: min(520px, 92vw);
+  background: var(--header-color);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+
+  .header {
+    .title {
+      color: var(--text-main);
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+    }
+  }
+
+  .form {
+    .field {
+      .label {
+        color: var(--text-main);
+        opacity: 0.9;
+      }
+
+      .form-input {
+        background: var(--items-bg);
+        color: var(--text-main);
+        outline: none;
+        border: 1px solid transparent;
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.12);
+          border-color: var(--hover-color);
+        }
+
+        &:hover {
+          border-color: var(--hover-color);
+        }
+
+        &.invalid {
+          border-color: red;
+        }
+      }
+
+      .meta {
+        .invalid-text-container {
+          .invalid-text {
+            color: red;
+          }
+        }
+      }
+
+      .count {
+        color: var(--text-secondary);
+      }
+    }
+  }
+}
+
+
+::ng-deep .cdk-overlay-container .mm-contact-email-dialog-panel {
+  .mat-mdc-dialog-surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .mat-mdc-dialog-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: none !important;
+  }
+}
+

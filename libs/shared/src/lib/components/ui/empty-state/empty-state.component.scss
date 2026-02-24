@@ -1,0 +1,24 @@
+.empty-state-container {
+  background: var(--header-color);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+
+  .icon-container {
+    background: var(--items-bg);
+    border: 1px solid var(--border-color);
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+
+  .title {
+    color: var(--text-main);
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    max-width: 520px;
+  }
+}

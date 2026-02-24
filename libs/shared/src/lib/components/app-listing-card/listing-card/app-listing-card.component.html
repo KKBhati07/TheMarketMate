@@ -25,7 +25,7 @@ cursor-pointer br-24 w-288 h-312">
     <div class="image-container position-relative w-100p h-136">
       @if (showFavoriteIcon) {
         <div
-          (click)="onFavoriteIconClick()"
+          (click)="onFavoriteIconClick($event)"
           (keydown)="onFavoriteKeydown($event)"
           tabindex="0"
           role="button"

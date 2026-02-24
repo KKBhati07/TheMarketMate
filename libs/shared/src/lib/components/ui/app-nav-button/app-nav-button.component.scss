@@ -7,7 +7,7 @@
   }
 
   &.bg {
-    background: #fdfdfd;
+    background: var(--items-bg);
   }
 
   &.log-out-btn {
@@ -21,7 +21,7 @@
     }
 
     &.ic-bg {
-      background: #e0e0e0;
+      background: var(--header-color);
     }
   }
 
@@ -38,11 +38,11 @@
     background-color: var(--primary-color);
 
     mat-icon {
-      color: var(--header-color) !important;
+      color: var(--white-black) !important;
     }
 
     p {
-      color: var(--header-color) !important;
+      color: var(--white-black) !important;
     }
   }
 

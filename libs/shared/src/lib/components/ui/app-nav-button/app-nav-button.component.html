@@ -11,7 +11,7 @@
         [ngClass]="{
 			'item-selected': indicateActiveBtn && (rla.isActive || isActiveRoute),
 			'justify-content-center': !this.showIcon,
-			'inactive': !indicateActiveBtn || !rla.isActive,
+			'inactive': !indicateActiveBtn || !(rla.isActive || isActiveRoute),
 			'in-header-bg': this.headerNav,
 			'bg': !this.headerNav,
 			'log-out-btn': this.isLogoutBtn

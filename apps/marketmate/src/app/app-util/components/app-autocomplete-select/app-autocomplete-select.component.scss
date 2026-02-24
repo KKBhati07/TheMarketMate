@@ -46,6 +46,11 @@
         background: var(--hover-color);
       }
 
+      &.active:not(.selected) {
+        color: white;
+        background: var(--hover-color);
+      }
+
       &.selected {
         background: var(--primary-color);
         font-weight: 500;

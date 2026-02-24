@@ -59,15 +59,18 @@ export class AppNavButtonComponent implements OnDestroy {
 		this.router.events.pipe(
 				takeUntil(this.destroy$),
 				filter(event => event instanceof NavigationEnd)
-		).subscribe(() => {
-			this.checkForActiveRoutes();
+		).subscribe((e) => {
+			this.checkForActiveRoutes(e.url);
 		});
 	}
 
-	checkForActiveRoutes() {
-		const url = this.router.url;
-		this.isActiveRoute =
-				this.otherActiveRoutes.some(r => url.includes(r));
+	checkForActiveRoutes(url?: string) {
+		url = url ?? this.router.url ?? '';
+		const normalizedUrl = url.startsWith('/') ? url.slice(1) : url;
+		this.isActiveRoute = this.otherActiveRoutes.some(r => {
+			const normalizedRoute = r.startsWith('/') ? r.slice(1) : r;
+			return normalizedUrl.includes(normalizedRoute);
+		});
 		this.cdr.markForCheck();
 	}
 

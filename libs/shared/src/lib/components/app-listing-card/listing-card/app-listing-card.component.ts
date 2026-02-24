@@ -94,22 +94,12 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 							this.listing.is_favorite = this.lastConfirmedFavoriteState =
 									res.body?.data?.is_favorite ?? this.listing.is_favorite;
 
-							if (this.listing.is_favorite) {
-								this.notificationService.success({
-									message: `Added to favorites`,
-								});
-							} else {
-								this.notificationService.success({
-									message: `Removed from Favorites`,
-								});
-							}
-
 							this.cdr.markForCheck();
 						}
 					} else {
 						this.listing!.is_favorite = this.lastConfirmedFavoriteState;
 						this.notificationService.error({
-							message: 'Failed to update favorite',
+							message: 'Failed to update favorite, Please retry!',
 						});
 						this.cdr.markForCheck();
 					}
@@ -122,6 +112,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 			this.isSelected = !this.isSelected;
 			this.onSelect.emit({ isSelected: this.isSelected, id: this.listing?.id });
 			this.cdr.markForCheck();
+		} else if (this.listing?.id != null) {
+			this.router.navigate([AppUrls.LISTING.DETAIL(this.listing.id)]).then(() => null);
 		}
 	}
 
@@ -133,7 +125,8 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 				.then(r => null)
 	}
 
-	onFavoriteIconClick() {
+	onFavoriteIconClick(event: Event) {
+		event.stopPropagation();
 		if (!this.authService.Authenticated) {
 			this.router.navigate([AppUrls.AUTH.BASE, AppUrls.AUTH.LOGIN],
 					{ queryParams: { redirect: this.router.url } }).then(r => null);
@@ -170,7 +163,7 @@ export class ListingCardComponent implements OnInit, OnDestroy {
 	}
 
 	onFavoriteKeydown(event: KeyboardEvent) {
-		handleKeyboardActivation(() => this.onFavoriteIconClick(), event);
+		handleKeyboardActivation(() => this.onFavoriteIconClick(event), event);
 	}
 
 	onCategoryKeydown(event: KeyboardEvent) {

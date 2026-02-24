@@ -1,9 +1,40 @@
+@if (isBottomSheet) {
+  <div class="pill-container position-absolute w-100p flex-row justify-content-center">
+    <mm-bottomsheet-pill></mm-bottomsheet-pill>
+  </div>
+  <div class="filters-header flex-row w-100p align-i-center 
+  justify-content-space-b pl-12 pr-12 pt-20">
+    <mm-heading
+    text="Filters"
+    class="pt-8 pb-8 pl-20 pr-20"
+    textClass="fs-18 fw-700 m-0 cursor-default"
+    >
+  </mm-heading>
+    <mm-close-btn
+    (clicked)="closeBottomSheet()"
+    containerClass="w-36 h-36"
+    iconClass="fs-20 w-20 h-20"
+    backgroundColor="var(--items-bg)"
+    iconColor="var(--primary-color)"
+  ></mm-close-btn>
+  </div>
+}
+
 <div
-  [ngClass]="isExpanded?'p-8':''"
     class="filters-container flex-column w-100p align-i-center
-     position-relative br-20 h-100p gap-20">
+     position-relative br-20 gap-20"
+     [ngStyle]="{'border-bottom-right-radius':isBottomSheet?'0px':'',
+                'max-height':isBottomSheet?'60vh':'',
+                'border-bottom-left-radius':isBottomSheet?'0px':''}"
+                [ngClass]="{
+                  'p-8': isExpanded,
+                  'h-100p': !isBottomSheet,
+                  'pl-8': isBottomSheet,
+                  'pr-8': isBottomSheet
+                }"
+                >
+  @if (!isBottomSheet) {
   <div class="expand-icon-container position-absolute"
-    (click)="toggleFilters()"
     (keydown)="onToggleKeydown($event)"
     tabindex="0"
     role="button"
@@ -17,6 +48,7 @@
       >
     </mm-back-fw-icon>
   </div>
+  }
   @if (isExpanded) {
     <div class="price-range-filter mt-24 w-100p">
       <mm-price-slider

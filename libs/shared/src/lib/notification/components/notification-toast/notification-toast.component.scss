@@ -1,21 +1,29 @@
 .toast {
-  background: rgba(0, 0, 0, 0.85);
-  color: #fff;
-  min-width: 300px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
-  border-left: 4px solid black;
+  background: color-mix(in srgb, var(--header-color) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-main);
+  min-width: 320px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--mm-toast-accent, var(--primary-color));
+  overflow: hidden;
 
   .close-btn-container {
-    right: 0;
-    top: 0;
+    right: 10px;
+    top: 10px;
   }
 
-  .close {
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    font-size: 16px;
+  .title {
+    color: var(--text-main);
+    font-weight: 800;
+  }
+
+  .message {
+    color: var(--text-secondary);
+    line-height: 1.35;
   }
 
   .progress {
@@ -24,7 +32,7 @@
     left: 0;
     height: 3px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.4);
+    background: color-mix(in srgb, var(--mm-toast-accent, var(--primary-color)) 65%, transparent);
     animation-name: shrink;
     animation-timing-function: linear;
     animation-fill-mode: forwards;

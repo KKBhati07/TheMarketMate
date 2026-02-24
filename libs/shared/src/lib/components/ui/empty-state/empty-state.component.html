@@ -1,0 +1,24 @@
+<div class="empty-state-container w-100p flex-column h-100p align-i-center justify-content-center br-24 p-24 gap-12">
+  <div class="icon-container w-56 h-56 flex-row align-i-center justify-content-center border-circle">
+    <mat-icon
+     class="fs-32 w-32 h-32"
+    [fontIcon]="icon"></mat-icon>
+  </div>
+
+  <p class="title fs-20 fw-800 m-0 cursor-default">{{ title }}</p>
+  @if (showSubtitle) {
+    <p class="subtitle fs-14 m-0 cursor-default">{{ subtitle }}</p>
+  }
+
+  @if (actionText.length) {
+    <mm-button
+      [type]="'button'"
+      [text]="actionText"
+      [disabled]="actionDisabled"
+      [class]="'h-44 br-32 pl-16 pr-16'"
+      [textClass]="'fs-14 fw-6'"
+      (click)="onActionClick()"
+    ></mm-button>
+  }
+</div>
+

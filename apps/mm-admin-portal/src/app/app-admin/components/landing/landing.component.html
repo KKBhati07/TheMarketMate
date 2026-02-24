@@ -1,5 +1,5 @@
 <div [ngClass]="isMobile?'flex-column':'flex-row'"
-     class="admin-container mt-100 pl-20 pr-20">
+     class="admin-container pl-20 pr-20">
 
   <div class="left-container" [ngClass]="isMobile?'w-100p' +
    ' flex-row gap-12 justify-content-center' :'w-20p'">
@@ -19,7 +19,7 @@
     <mm-nav-button
         [routerLink]="[AppUrls.LISTINGS]"
         [queryParams]="{'posts':'all'}"
-        [otherActiveRoutes]="['admin/listings?posts=deleted']"
+        [otherActiveRoutes]="['listings?posts=deleted']"
         [indicateActiveBtn]="true"
         text="LISTINGS"
         icon="group"

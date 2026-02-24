@@ -1,0 +1,73 @@
+<div class="email-dialog flex-column br-20 p-20 gap-16">
+	<div class="header flex-row align-i-center justify-content-space-b">
+		<div class="flex-column gap-4">
+			<h2 class="title fs-18 fw-700 m-0">Email</h2>
+			<p class="subtitle fs-12 m-0">Edit the subject and message, then send.</p>
+		</div>
+
+		<mm-close-btn
+			(clicked)="close()"
+			containerClass="w-36 h-36"
+			iconClass="fs-20 w-20 h-20"
+			backgroundColor="var(--items-bg)"
+			iconColor="var(--text-main)"
+		></mm-close-btn>
+	</div>
+
+	<form class=" form flex-column gap-12" [formGroup]="form" (ngSubmit)="send()">
+		<div class="field flex-column gap-8">
+			<label class="label fs-12 fw-600">Subject</label>
+			<input
+				class="form-input pl-12 pr-12 fs-14 display-block br-16 h-44"
+				[ngClass]="{ 'invalid': isSubjectRequiredInvalid() }"
+				formControlName="subject"
+				type="text"
+				placeholder="Subject"
+			/>
+			<div class="meta flex-row justify-content-space-b">
+				<div class="invalid-text-container">
+					@if (isSubjectRequiredInvalid()) {
+						<p class="invalid-text fs-12 m-0">* Subject is required</p>
+					}
+				</div>
+				<p class="count fs-12 m-0">{{ subjectRemaining }}</p>
+			</div>
+		</div>
+
+		<div class="field flex-column gap-8">
+			<label class="label fs-12 fw-600">Message</label>
+			<textarea
+				class="form-input pl-12 pr-12 pt-12 pb-12 fs-14 display-block br-16 h-160"
+				[ngClass]="{ 'invalid': isBodyRequiredInvalid() }"
+				formControlName="body"
+				placeholder="Write your message..."
+				style="resize: none"
+			></textarea>
+			<div class="meta flex-row justify-content-space-b">
+				<div class="invalid-text-container">
+					@if (isBodyRequiredInvalid()) {
+						<p class="invalid-text fs-12 m-0">* Message is required</p>
+					}
+				</div>
+				<p class="count fs-12 m-0">{{ bodyRemaining }}</p>
+			</div>
+		</div>
+
+		<div class="actions flex-row justify-content-end gap-12">
+			<mm-button
+				type="button"
+				text="Cancel"
+				[class]="'pl-16 pr-16 h-36'"
+				(click)="close()"
+			></mm-button>
+
+			<mm-button
+				type="submit"
+				text="Send"
+				[disabled]="form.invalid"
+				[class]="'pl-16 pr-16 h-36'"
+			></mm-button>
+		</div>
+	</form>
+</div>
+

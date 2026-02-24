@@ -27,6 +27,10 @@
       font-weight: 800;
     }
 
+    .login-method-toggle {
+      width: 100%;
+    }
+
     .invalid-text-container {
       width: 100%;
 
@@ -39,6 +43,7 @@
       border: none;
       background-color: var(--items-bg);
       outline: none;
+      color: var(--text-main);
       width: 100%;
 
       &:hover {
@@ -50,6 +55,7 @@
       }
 
       .pass-input {
+        color: var(--text-main);
         width: 80%;
         outline: none;
         height: 100%;
@@ -60,6 +66,36 @@
         top: 20px;
         right: 10px;
         font-size: 20px;
+        color: var(--primary-color);
+      }
+    }
+
+    .otp-meta {
+      .otp-meta-text {
+        color: var(--text-color-disable);
+
+        .email {
+          color: var(--primary-color);
+          font-weight: 700;
+        }
+
+        .action {
+          margin-left: 10px;
+          color: var(--primary-color);
+          text-decoration: underline;
+
+          &:hover {
+            color: var(--hover-color);
+          }
+        }
+      }
+    }
+
+    .info-text-container {
+      border: 1px solid var(--hover-color);
+      background-color: rgba(0, 0, 0, 0);
+
+      p {
         color: var(--primary-color);
       }
     }

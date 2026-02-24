@@ -7,10 +7,10 @@ import {
 	OnInit,
 	ViewChild,
 } from '@angular/core';
-import { PriceRange } from '../../../../types/common.type';
+import { PriceRange } from '../../../types/common.type';
 import { FilterService, SHARED_UI_DEPS } from '@marketmate/shared';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
-import { HeadingComponent } from '../product-category/app-heading/heading.component';
+import { HeadingComponent } from '../app-heading/heading.component';
 
 @Component({
 	selector: 'mm-price-slider',
