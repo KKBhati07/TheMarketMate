@@ -17,7 +17,6 @@
     }
     <form class="login-signup-form p-10" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
       <p class="form-heading cursor-default">{{ formHeading }}</p>
-      @if (!iSAdminPortal) {
         <div class="login-method-toggle mt-16 flex-row justify-content-center align-i-center gap-12">
           <mm-nav-button
             tabindex="0"
@@ -44,7 +43,6 @@
             (keydown)="onLoginMethodKeydown('OTP', $event)"
           ></mm-nav-button>
         </div>
-      }
       <input #emailInput id="loginEmail"
         [ngStyle]="{'border-color':getEmailValidation() || isFourOOne?'red':''}"
         class="pass-input-container fs-12 display-block h-60 position-relative br-32 pl-12 mt-30"

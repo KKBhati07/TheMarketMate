@@ -43,6 +43,7 @@
 
     .pass-input-container {
       border: none;
+      color: var(--text-main);
       background-color: var(--items-bg);
       outline: none;
       width: 100%;
@@ -60,6 +61,7 @@
         outline: none;
         height: 100%;
         background-color: var(--item-bg);
+        color: var(--text-main);
       }
 
       .visibility-icon {

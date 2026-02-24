@@ -43,6 +43,7 @@
       border: none;
       background-color: var(--items-bg);
       outline: none;
+      color: var(--text-main);
       width: 100%;
 
       &:hover {
@@ -54,6 +55,7 @@
       }
 
       .pass-input {
+        color: var(--text-main);
         width: 80%;
         outline: none;
         height: 100%;
