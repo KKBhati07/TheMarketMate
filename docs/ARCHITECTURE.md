@@ -15,12 +15,12 @@ The MarketMate frontend is an Nx monorepo containing two Angular applications sh
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │              MarketMate Public App                       │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
-│  │  │   App Root   │  │   Home      │  │   Header    │      │   │
-│  │  │  Component   │  │  Component  │  │  Component  │      │   │
+│  │  │   App Root   │  │   Home      │  │   Header      │    │   │
+│  │  │  Component   │  │  Component  │  │  Component    │    │   │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
-│  │  │   User       │  │   Chat       │  │   Filters    │    │   │
-│  │  │   Profile    │  │  Component   │  │  Component   │    │   │
+│  │  │   User       │  │   Listing    │  │   Filters    │    │   │
+│  │  │   Profile    │  │   Detail     │  │  Component   │    │   │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘    │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                              │                                  │
@@ -33,7 +33,7 @@ The MarketMate frontend is an Nx monorepo containing two Angular applications sh
 │  └──────────────────────────────────────────────────────────┘   │
 │                              │                                  │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │        Shared Library (@marketmate/shared)                │   │
+│  │        Shared Library (@marketmate/shared)               │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │   │
 │  │  │   UI         │  │   Services   │  │   Forms      │    │   │
 │  │  │  Components  │  │              │  │   Components │    │   │
@@ -47,10 +47,16 @@ The MarketMate frontend is an Nx monorepo containing two Angular applications sh
         │                    │                    │
         ▼                    ▼                    ▼
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│  SpringMate  │    │   Chat       │    │   Browser    │
-│  Backend API │    │   Service    │    │   Storage    │
-│  (REST)      │    │  (WebSocket) │    │(LocalStorage)│
+│  Backend API │    │ Storage API  │    │   Browser    │
+│   (REST)     │    │ (REST)       │    │ Storage      │
+│              │    │              │    │ (theme)      │
 └──────────────┘    └──────────────┘    └──────────────┘
+                          │
+                          ▼
+                   ┌──────────────┐
+                   │ Object Store │
+                   │ (S3 via PUT) │
+                   └──────────────┘
 ```
 
 ### Key Architectural Decisions
@@ -60,6 +66,15 @@ The MarketMate frontend is an Nx monorepo containing two Angular applications sh
 - **Lazy-Loaded Routes**: Routes are lazy-loaded for code splitting and performance optimization
 - **Server-Side Rendering (SSR)**: MarketMate app supports SSR with incremental hydration for improved SEO and initial load performance
 - **REST API Communication**: All backend communication via REST API through centralized `ApiService`
+
+### Repo-Verified Runtime Configuration
+
+- **API base URL injection**: Both apps pass `environment.apiUrl` into `provideSharedLib({ apiUrl })` (so the shared `ApiService` is environment-driven)
+- **HttpClient transport**: Both apps use `provideHttpClient(withFetch())` (Fetch-based HttpClient backend)
+- **Local dev ports (Nx dev-server)**:
+  - `marketmate`: port `4200` with `publicHost` `marketmate.local:4200`
+  - `mm-admin-portal`: port `4300` with `publicHost` `marketmate.local:4300`
+- **SSR server entry (marketmate)**: `apps/marketmate/server.ts` boots an Express HTTPS server (default `PORT=4000`) and expects local certs at `/certs/*`
 
 ---
 
@@ -90,10 +105,13 @@ export const appConfig: ApplicationConfig = {
 
 ### Core Services
 
-- **ApiService**: Centralized HTTP client with interceptors for auth headers, error handling, and request/response transformation
-- **AuthService**: Session management with cookie-based JWT (httpOnly cookies managed by backend)
-- **StorageService**: Typed abstraction over localStorage with expiration support
-- **GlobalErrorHandler**: Catches unhandled errors to prevent white-screen crashes, logs to console in dev mode
+- **ApiService**: Centralized HTTP client that wraps responses in `ApiHttpResponse` (so HTTP errors don't throw) and sends requests with `withCredentials: true`
+- **AuthService**: Maintains in-memory auth state and loads session details on app startup via `authInitializerFactory` (cookie-based session via `withCredentials`)
+- **StorageService**: Fetches presigned upload URLs from the backend and uploads files directly to the object store (PUT to the presigned URL)
+- **LocalStorageService**: Browser-only local storage wrapper (currently used for app theme persistence; SSR-safe via platform checks)
+- **ThemeService**: Initializes and applies theme at startup via `themeInitializerFactory`
+- **NotificationService**: App-wide toast/notification event stream and UI container components
+- **GlobalErrorHandler**: Catches unhandled errors and shows a user-facing notification; logs via `LoggingService` in dev mode
 
 ### Library Structure
 
@@ -135,32 +153,35 @@ User Login → AuthService → ApiService → SpringMate Backend
                             Route Guards enforce protection
 ```
 
-**Security Decision**: JWT stored in httpOnly cookies (backend-managed) prevents XSS token theft. Frontend never directly accesses tokens.
+**Frontend behavior**: The frontend always uses `withCredentials` and does not store tokens in JavaScript.
 
 ### Listing Creation Flow
 
 ```
-PublishListingFormComponent → ListingService → ApiService
-                                              ↓
-                                    HTTP POST (withCredentials)
-                                              ↓
-                                    SpringMate Backend
-                                              ↓
-                                    Response → NotificationService
+PublishEditListingFormComponent
+  → StorageService.getPresignPutUrl()
+    → Backend API
+    → presigned URLs + required headers
+  → StorageService.uploadFileToS3() (PUT file bytes)
+    → Object Store
+  → ListingService.createListing()
+    → ApiService (withCredentials)
+    → Backend API
+  → NotificationService (success/error toast)
 ```
 
-### 3. Real-time Chat Flow
+### Contact Seller Flow (Email)
 ```
-ChatInputComponent → ChatSocketService → Socket.IO emit('send_message')
-                                              ↓
-                                    Chat Service (NestJS)
-                                              ↓
-                                    Socket.IO on('new_message')
-                                              ↓
-                                    ChatStateService → ChatWindowComponent
+ListingDetailComponent
+  → ContactOptionsDialogComponent (select EMAIL/CHAT)
+  → ContactEmailDialogComponent (draft subject/body)
+  → ListingService.contactSellerByEmail()
+    → ApiService (withCredentials)
+    → Backend API
+  → NotificationService (success/error toast)
 ```
 
-**Architecture**: Chat state managed in `ChatStateService` (RxJS Subjects) to decouple Socket.IO events from component rendering. Enables offline message queuing and reconnection handling.
+**Note**: "CHAT" exists as a UI option but the actual chat flow is currently a TODO in this repo.
 
 ---
 
@@ -168,16 +189,20 @@ ChatInputComponent → ChatSocketService → Socket.IO emit('send_message')
 
 ### Authentication & Authorization
 
-- **Cookie-Based JWT**: Tokens stored in httpOnly cookies, preventing JavaScript access (XSS protection)
-- **withCredentials**: All API calls include credentials for cookie transmission
-- **Route Guards**: `LoginSignupGuard` prevents authenticated users from accessing auth pages
-- **Session Validation**: `AuthService` validates session on app initialization and route navigation
+- **Cookie-based session**: The frontend relies on browser cookies via `withCredentials` and does not store tokens in JavaScript
+- **Startup session load**: `authInitializerFactory` calls `AuthService.loadUserDetails()` on app startup (fails open so the UI can still boot if the auth endpoint is down)
+- **Route Guards**:
+  - `LoginSignupGuard` prevents authenticated users from accessing auth pages
+  - `AdminGuard` protects admin portal routes by requiring authentication
+- **Auth-aware UX**: Some flows handle `401` by redirecting to login with a `redirect` query param (example: contacting seller by email)
 
 ### API Communication
 
 - **HTTPS Only**: All API calls over HTTPS in production
 - **CORS**: Configured on backend with specific origin whitelist
-- **Request Interceptors**: `ApiService` automatically attaches auth headers and handles token refresh
+- **withCredentials**: API calls include credentials so the browser can send/receive session cookies
+- **App Context Header (Login)**: `AuthService.loginUser(...)` sends `X-App-Context` to distinguish app context (public vs admin) for backend session issuance
+- **SSR-safe HTTP**: `ssrNoHttpInterceptor` blocks HTTP calls during SSR to avoid server-side API fetches (returns an empty `HttpResponse`)
 
 ### Error Handling
 
@@ -200,17 +225,20 @@ ChatInputComponent → ChatSocketService → Socket.IO emit('send_message')
 ### State Management
 
 - **Service-Based State**: RxJS Observables in services (no NgRx)
-- **Local Storage**: User preferences (theme, filters) persisted via `StorageService`
+- **Local Storage**: App theme preference persisted via `LocalStorageService` (SSR-safe via platform checks)
 - **No Global State Store**: State scoped to feature services to avoid over-engineering
 
-**Decision**: Service-based state with RxJS sufficient for current complexity. Signals adopted incrementally for new features. NgRx considered for future if state management becomes complex.
+**Current state**: This repo uses service-based state with RxJS and does not include a global store (e.g. NgRx).
 
 ### SSR & Hydration
 
 - **Server-Side Rendering**: Full SSR support with Express server
 - **Incremental Hydration**: Progressive hydration using `provideClientHydration(withEventReplay())` for better performance
 - **Prerendering**: Static routes are prerendered at build time
-- **SSR Caching**: In-memory caching of rendered pages for improved performance
+- **SSR Caching**: In-memory caching of rendered HTML by URL in `apps/marketmate/server.ts` (5 minute cache-control + Map-based cache)
+- **HTTP Security Headers (SSR)**: SSR server uses `helmet` with CSP directives
+- **Compression (SSR)**: SSR server enables `compression()` for gzip responses
+- **Health Endpoint (SSR)**: SSR server exposes `GET /health` returning `OK`
 
 ---
 
@@ -221,6 +249,9 @@ ChatInputComponent → ChatSocketService → Socket.IO emit('send_message')
 - **TypeScript**: ~5.9.3
 - **Angular Material**: 21.1.2
 - **RxJS**: ~7.8.0
+- **Express**: SSR server (`apps/marketmate/server.ts`)
+- **helmet**: Security headers for SSR responses
+- **compression**: SSR response compression
 
 ## Related Documentation
 
