@@ -227,7 +227,9 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 												});
 									});
 						} else if (method === 'CHAT') {
-							console.warn('TODO: Contact via chat');
+							this.router.navigate([AppUrls.CHAT], {
+								queryParams: { userId: this.listing?.seller?.uuid }
+							});
 						}
 					});
 			return;

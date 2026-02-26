@@ -1,0 +1,136 @@
+.conversation-list-container {
+  background: var(--header-color);
+
+  .conversation-header {
+    background: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+
+    .header-content {
+      .profile-section {
+        flex: 1;
+
+        .profile-avatar {
+          background: var(--primary-color);
+          color: var(--text-inverted);
+          transition: background-color 0.2s;
+
+          &:hover {
+            background: var(--primary-color);
+          }
+        }
+      }
+
+      .header-title {
+        color: var(--text-inverted);
+      }
+    }
+  }
+}
+
+.search-container {
+  .search-box {
+    background: var(--header-color);
+
+    .search-icon {
+      color: var(--primary-color);
+      flex-shrink: 0;
+    }
+
+    .search-input {
+      color: var(--text-main);
+      background: transparent;
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+
+      &::placeholder {
+        color: var(--text-secondary);
+      }
+    }
+  }
+}
+
+
+.conversation-list {
+  overflow-y: auto;
+  flex: 1;
+  background: var(--header-color);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--text-main);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--text-main);
+  }
+
+  .empty-conversations {
+    text-align: center;
+    color: var(--text-main);
+
+    p {
+      color: var(--text-main);
+    }
+
+  }
+
+  .conversation {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.15s;
+
+    &:hover {
+      background: var(--header-color);
+    }
+
+    &.active {
+      background: var(--header-color);
+    }
+
+    .avatar {
+      flex-shrink: 0;
+      .avatar-placeholder {
+        background: var(--primary-color);
+        color: var(--text-inverted);
+      }
+      .online-indicator {
+        bottom: 0;
+        right: 0;
+      }
+    }
+
+    .meta {
+      flex: 1;
+      min-width: 0;
+
+      .meta-header {
+        .name {
+          color: var(--text-main);
+          white-space: nowrap;
+          flex: 1;
+
+          .time {
+            color: var(--text-main);
+          }
+        }
+      }
+    }
+
+    .badge {
+      background: var(--primary-color);
+      color: var(--text-inverted);
+      min-width: 20px;
+      text-align: center;
+      align-self: center;
+      flex-shrink: 0;
+    }
+  }
+}

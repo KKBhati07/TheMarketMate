@@ -1,0 +1,116 @@
+.chat-header {
+  border-bottom: 1px solid var(--border-color);
+  background: var(--primary-color);
+  z-index: 10;
+
+  .back {
+    display: none;
+    border: none;
+    background: none;
+    color: var(--text-inverted);
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--header-color);
+    }
+  }
+
+  .user-info {
+    flex: 1;
+    min-width: 0;
+
+    .avatar {
+      flex-shrink: 0;
+
+      img {
+        object-fit: cover;
+      }
+
+      .avatar-placeholder {
+        background: var(--primary-color);
+        color: var(--text-inverted);
+        font-weight: 600;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .user-details {
+    flex: 1;
+    min-width: 0;
+
+    .user-name {
+      color: var(--text-inverted);
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .user-status {
+      color: var(--text-secondary);
+      font-size: 13px;
+
+      .typing-indicator {
+        color: var(--primary-color);
+        font-style: italic;
+      }
+
+      .status-text {
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--primary-color);
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+
+  .header-actions {
+    .action-btn {
+      border: none;
+      background: none;
+      color: var(--text-inverted);
+      transition: background-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background-color: var(--header-color);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  background: transparent;
+  z-index: 1;
+
+  .empty-messages {
+    color: var(--text-secondary);
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--text-main);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--text-main);
+  }
+}

@@ -8,6 +8,7 @@ import {
 	OnInit,
 	Output
 } from "@angular/core";
+import { Router } from "@angular/router";
 import { handleKeyboardActivation, SHARED_UI_DEPS, AppButtonComponent, BottomSheetPillComponent, BackForwardIconComponent } from '@marketmate/shared';
 import {
 	NotificationService,
@@ -28,6 +29,7 @@ import { StorageService, Directory } from '@marketmate/shared';
 import { CONSTANTS } from '../../../app.constants';
 import { HttpResponse } from '@angular/common/http';
 import { ApiHttpResponse, ApiResponse } from '@marketmate/shared';
+import { AppUrls } from '../../../app.urls';
 
 @Component({
 	selector: 'mm-profile-detail',
@@ -53,6 +55,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							private userService: UserService,
 							private authService: AuthService,
 							private storageService: StorageService,
+							private router: Router,
 							@Inject(MAT_BOTTOM_SHEET_DATA)
 							public data: ProfileDetailsBottomSheetData,
 							private bsr: MatBottomSheetRef,
@@ -60,6 +63,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 							private logger: LoggingService,
 							private dialog: MatDialog) {
 	}
+
+	protected readonly AppUrls = AppUrls;
 
 	ngOnInit() {
 		this.checkForBottomSheet();
@@ -96,6 +101,17 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 			width: '100vw',
 			height: '100vh',
 		});
+	}
+
+	onChatClick() {
+		if (this.isBottomSheet) {
+			this.bsr?.dismiss();
+		}
+		if (this.userDetails?.uuid) {
+			this.router.navigate([AppUrls.CHAT], {
+				queryParams: { userId: this.userDetails.uuid }
+			});
+		}
 	}
 
 	onEditProfileClick() {

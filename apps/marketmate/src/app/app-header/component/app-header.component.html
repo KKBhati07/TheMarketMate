@@ -77,6 +77,20 @@
                   ></mm-nav-button>
                   <ng-container *ngTemplateOutlet="sellItemTemplate"></ng-container>
                 }
+                @if ((isAuthenticated$ | async)) {
+                  <mm-nav-button
+                    [routerLink]="AppUrls.CHAT"
+                    [class]="'pl-4 pr-12 h-40 br-20'"
+                    iconContainerClass="h-32 w-32"
+                    iconClass="h-20 w-20 fs-20"
+                    textClass="fw-6"
+                    text="Chat"
+                    gap="5"
+                    [headerNav]="true"
+                    [showIcon]="true"
+                    icon="chat"
+                  ></mm-nav-button>
+                }
                 @if (isAdmin) {
                   <mm-nav-button
                     (click)="onAdminClick()"

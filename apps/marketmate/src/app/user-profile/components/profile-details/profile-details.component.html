@@ -1,4 +1,4 @@
-<div
+6<div
     [ngStyle]="{
     'border': isBottomSheet || !isExpanded ? 'none'
     :'0.5px solid var(--border-color)',
@@ -96,6 +96,16 @@
           [class]="'w-100p h-34'"
           [text]="isUpdatingProfile ? 'UPDATING...' : 'EDIT PROFILE'"
           [disabled]="isUpdatingProfile">
+        </mm-button>
+      } @else {
+        <mm-button
+          (click)="onChatClick()"
+          class="w-100p h-56" [type]="'button'"
+          [class]="'w-100p h-34'"
+          [text]="'CHAT'"
+          [showIcon]="true"
+          icon="chat"
+          iconClass="fs-20 w-20 h-20">
         </mm-button>
       }
     }

@@ -18,6 +18,12 @@ export const routes: Routes = [
 		path: AppUrls.USER.BASE,
 		loadChildren: () => import('./user-profile/user-profile.routes').then(r => r.userProfileRoutes)
 	},
+	{
+		path: AppUrls.CHAT,
+		// canMatch:
+		loadChildren: () =>
+				import('./app-chat/chat.routes').then(r => r.chatRoutes)
+	},
 	{ path: AppUrls.FOUROFOUR, component: FourOFourComponent },
 	{ path: '**', redirectTo: AppUrls.FOUROFOUR, pathMatch: "full" }
 

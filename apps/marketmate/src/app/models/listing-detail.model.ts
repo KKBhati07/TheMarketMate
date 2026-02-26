@@ -19,6 +19,7 @@ export interface ListingSellerDto {
 	name: string;
 	profileUrl?: string;
 	deleted?: boolean;
+	uuid?: string;
 	emailVerified?: boolean;
 }
 

@@ -1,0 +1,27 @@
+<div
+    class="message-wrapper flex-row pl-8 pr-8 mb-4"
+    [class.self]="isSelf">
+  <div class="bubble p-8" [class.self]="isSelf">
+    <div class="message-content fs-12 mb-4 position-relative fw-4">{{ message.content }}</div>
+    <div class="message-footer flex-row align-i-center gap-4 mt-4 pt-4">
+      <span class="message-time fs-12">{{ formatTime(message.createdAt) }}</span>
+      @if (isSelf && message.status) {
+        <span class="message-status ml-4 flex-row align-i-center" [class.read]="message.status === 'read'">
+          @if (message.status === 'read') {
+            <svg width="16" height="16" viewBox="0 0 16 15" fill="none">
+              <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.175a.366.366 0 0 0-.063-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.175a.365.365 0 0 0-.063-.51z" fill="currentColor"/>
+            </svg>
+          } @else if (message.status === 'delivered') {
+            <svg width="16" height="16" viewBox="0 0 16 15" fill="none">
+              <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.175a.366.366 0 0 0-.063-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.175a.365.365 0 0 0-.063-.51z" fill="currentColor"/>
+            </svg>
+          } @else {
+            <svg width="16" height="16" viewBox="0 0 16 15" fill="none">
+              <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.175a.366.366 0 0 0-.063-.512z" fill="currentColor"/>
+            </svg>
+          }
+        </span>
+      }
+    </div>
+  </div>
+</div>

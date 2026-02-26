@@ -1,0 +1,55 @@
+<header class="chat-header h-60 flex-row align-i-center gap-12 pl-16 pr-16 position-relative">
+  <button class="back cursor-pointer p-8 border-circle flex-row align-i-center justify-content-center" [ngStyle]="{ display: isMobile ? 'flex' : 'none' }" (click)="back.emit()" aria-label="Back">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="user-info flex-row align-i-center gap-12">
+    <div class="avatar w-40 h-40 br-circle overflow-hidden">
+      @if (contactAvatar) {
+        <img class="w-100p h-100p " [src]="contactAvatar" [alt]="contactName">
+      } @else {
+        <div class="avatar-placeholder w-100p h-100p display-flex align-i-center justify-content-center fs-18 fw-600">{{ (contactName.charAt(0) || 'U').toUpperCase() }}</div>
+      }
+    </div>
+    <div class="user-details">
+      <div class="user-name fs-16 fw-500 overflow-hidden mb-4">{{ contactName || 'Chat' }}</div>
+      <div class="user-status fs-12 fw-400 flex-row align-i-center gap-4">
+        @if (isTyping) {
+          <span class="typing-indicator">typing...</span>
+        } @else {
+          <span class="status-text">{{ contactStatus || 'online' }}</span>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="header-actions flex-row align-i-center gap-8">
+    <button class="action-btn cursor-pointer p-8 border-circle flex-row align-i-center justify-content-center" aria-label="Search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="action-btn cursor-pointer p-8 border-circle flex-row align-i-center justify-content-center" aria-label="More options">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="messages pl-16 pr-16 pt-20 pb-20 position-relative flex-column gap-4" #scrollArea>
+  @for (msg of messages; track msg.id) {
+    <app-message-bubble
+        [message]="msg"
+        [isSelf]="isMessageFromSelf(msg)">
+    </app-message-bubble>
+  } @empty {
+    <div class="empty-messages flex-row align-i-center justify-content-center fs-16">
+      <p>No messages yet. Start the conversation!</p>
+    </div>
+  }
+</div>
+
+<app-chat-input (send)="sendMessage($event)"></app-chat-input>

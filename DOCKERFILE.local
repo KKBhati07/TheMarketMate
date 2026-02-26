@@ -14,8 +14,8 @@ COPY package*.json ./
 # Install dependencies (cache this layer)
 RUN npm install
 
-# Copy all files
-COPY . .
+# Copy all files (Not required in dev, as mounting source from Host)
+# COPY . .
 
 # Expose Angular dev server ports (not required with docker-compose)
 EXPOSE 4200 4201

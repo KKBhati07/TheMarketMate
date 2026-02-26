@@ -1,0 +1,73 @@
+<div class="conversation-list-container flex-column h-100p">
+  <div class="conversation-header pt-8 pb-8">
+    <div class="header-content flex-row align-i-center justify-content-space-b pl-16 pr-16 pb-8 pt-8">
+      <div class="profile-section flex-row align-i-center gap-12">
+        <div class="profile-avatar h-40 w-40 border-circle
+        flex-column align-i-center justify-content-center cursor-pointer">
+          <mat-icon class=" profile-pic-icon cursor-pointer fs-28 h-28 w-28"
+                    [fontIcon]="'person'"></mat-icon>
+        </div>
+        <h2 class="header-title fs-20 fw-5 ">Chats</h2>
+      </div>
+    </div>
+    <div class="search-container br-32 h-32 pl-8 pr-8">
+      <div class="search-box pl-8 h-32 br-32 flex-row align-i-center gap-12">
+        <mat-icon class=" search-icon cursor-pointer fs-20 h-20 w-20"
+                  [fontIcon]="'search'"></mat-icon>
+        <input
+            type="text"
+            placeholder="Search or start new chat"
+            class="search-input"
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()">
+      </div>
+    </div>
+  </div>
+
+  <div class="conversation-list h-100p">
+    @if (filteredConversations.length === 0) {
+      <div class="empty-conversations h-100p flex-column align-i-center mb-8  fs-16 fw-5 justify-content-center pl-20 pr-20 pt-40 pb-40">
+        <p>No conversations yet</p>
+        <span class="fs-14 fw-4">Start a new chat to begin messaging</span>
+      </div>
+    } @else {
+      @for (convo of filteredConversations; track convo.id) {
+        <div
+            class="conversation flex-row position-relative gap-12 pl-16 pr-16 pt-16 pb-16 gap-16 cursor-pointer"
+            [class.active]="selectedConversationId === convo.id"
+            (click)="select(convo.id)">
+          <div class="avatar w-48 h-48 border-circle overflow-hidden">
+            @if (convo.avatar) {
+              <img [src]="convo.avatar" [alt]="convo.name">
+            } @else {
+              <div class="avatar-placeholder w-100 h-100 flex-row align-i-center justify-content-center">{{ (convo.name?.charAt(0) || 'U').toUpperCase() }}</div>
+            }
+            @if (convo.isOnline) {
+              <span class="online-indicator w-12 h-12 position-absolute bottom-0 right-0 border-circle"></span>
+            }
+          </div>
+
+          <div class="meta flex-column justify-content-center">
+            <div class="meta-header flex-row justify-content-space-b mb-4 align-i-center">
+              <div class="name fs-16 fw-5 overflow-hidden">{{ convo.name || 'Unknown' }}</div>
+              @if (convo.lastMessage?.createdAt) {
+                <div class="time fs-12 fw-4 ml-8">{{ formatTime(convo.lastMessage!.createdAt) }}</div>
+              }
+            </div>
+            <div class="last-message">
+              @if (convo.lastMessage) {
+                <span class="message-preview">{{ convo.lastMessage.content }}</span>
+              } @else {
+                <span class="no-message">No messages yet</span>
+              }
+            </div>
+          </div>
+
+          @if (convo.unreadCount && convo.unreadCount > 0) {
+            <span class="badge br-12 fs-12 fw-6 p-4 ">{{ convo.unreadCount > 99 ? '99+' : convo.unreadCount }}</span>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

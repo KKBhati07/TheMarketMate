@@ -1,0 +1,41 @@
+<div class="chat-input pt-8 pb-8 pl-16 pr-16 position-relative">
+  <div class="input-container flex-row br-20 pt-4 pb-4 pl-8 pr-8 gap-8">
+    <button class="attach-btn cursor-pointer p-8 border-circle flex-row align-i-center justify-content-center" aria-label="Attach file" type="button">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M9 18C9 18 3 12 3 9C3 6 5.5 3.5 8.5 3.5C11.5 3.5 15 7 15 10C15 13 11 17 11 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 6C15 6 21 12 21 15C21 18 18.5 20.5 15.5 20.5C12.5 20.5 9 17 9 14C9 11 13 7 13 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <div class="input-wrapper flex-row align-i-center gap-4">
+      <textarea
+          #messageInput
+          type="text"
+          placeholder="Type a message"
+          [(ngModel)]="text"
+          (keydown)="onKeyDown($event)"
+          (input)="onInput()"
+          rows="1"
+          class="message-textarea fs-16 pt-8 pb-8 pl-12 pr-12">
+      </textarea>
+      
+      @if (!text.trim()) {
+        <button class="emoji-btn cursor-pointer p-8 border-circle flex-row align-i-center justify-content-center" aria-label="Emoji" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 9H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 9H15.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      } @else {
+        <button class="send-btn cursor-pointer p-8 border-circle flex-row align-i-center justify-content-center" (click)="submit()" aria-label="Send message" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+</div>

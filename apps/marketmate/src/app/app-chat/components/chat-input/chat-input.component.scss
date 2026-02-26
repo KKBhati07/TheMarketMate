@@ -1,0 +1,79 @@
+.chat-input {
+  border-top: 1px solid var(--border-color);
+  background: var(--header-color);
+  z-index: 10;
+
+  .input-container {
+    align-items: flex-end;
+    gap: 8px;
+    background: var(--app-background-color);
+    min-height: 44px;
+
+    .attach-btn,
+    .emoji-btn,
+    .send-btn {
+      border: none;
+      background: none;
+      color: var(--text-main);
+      background: var(--header-color);
+      transition: background-color 0.2s;
+      flex-shrink: 0;
+
+      &:hover {
+        background-color: var(--header-color);
+      }
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  .input-wrapper {
+    flex: 1;
+    min-width: 0;
+
+
+    .message-textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      resize: none;
+      max-height: 100px;
+      overflow-y: auto;
+      background: transparent;
+      color: var(--text-main);
+      line-height: 20px;
+
+      &::placeholder {
+        color: var(--text-secondary);
+      }
+
+      /* Custom scrollbar */
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--text-main);
+        border-radius: 2px;
+      }
+    }
+
+
+    .send-btn {
+      color: var(--primary-color);
+
+      &:hover {
+        background-color: var(--primary-color);
+      }
+    }
+  }
+
+}
