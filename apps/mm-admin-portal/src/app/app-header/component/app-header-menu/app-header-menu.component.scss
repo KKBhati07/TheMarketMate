@@ -5,7 +5,20 @@
   top: 0;
   left: 0;
 
+  .user-name-container {
+    background: var(--items-bg);
+    color: var(--text-main);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+  }
+
   .header-menu-container {
     background: var(--header-color);
+  }
+
+  .header-menu-theme {
+    border: 1px solid var(--border-color);
+    background: var(--items-bg);
+    margin-top: 4px;
   }
 }

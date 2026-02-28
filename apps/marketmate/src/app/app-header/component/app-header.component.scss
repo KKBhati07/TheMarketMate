@@ -1,6 +1,14 @@
 .header-container {
   overflow-x: hidden;
 
+  .app-logo {
+    display: block;
+  }
+
+  .app-logo-light {
+    display: none;
+  }
+
   .header {
     z-index: 3;
     transition: height 0.5s ease;
@@ -98,6 +106,18 @@
     .header {
       left: 10px;
       width: calc(100% - 20px);
+    }
+  }
+}
+
+:host-context(.light-theme) {
+  .header-container {
+    .app-logo-dark {
+      display: none;
+    }
+
+    .app-logo-light {
+      display: block;
     }
   }
 }

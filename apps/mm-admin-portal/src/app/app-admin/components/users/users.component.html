@@ -1,4 +1,14 @@
-@if (!isLoading && users && users.length) {
+<div class="users-page w-100p p-4">
+  <div class="menu-bar flex-row w-100p p-4 h-44 br-32 mb-8">
+    <mm-search
+        placeholder="Search users"
+        [showSuggestions]="false"
+        [value]="searchQuery"
+        (valueChange)="onSearchChange($event)"
+        containerClass="br-32 h-44 pl-12 pr-12 w-320"
+    ></mm-search>
+  </div>
+  @if (!isLoading && users && users.length) {
   <div class="admin-users-container
   h-100p br-44 pt-12 pb-20 ml-8 mb-12">
     @for (user of users; track user) {
@@ -37,4 +47,5 @@
     </div>
   }
 }
+</div>
 

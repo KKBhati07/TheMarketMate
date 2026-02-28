@@ -1,6 +1,14 @@
 .header-container {
   overflow-x: hidden;
 
+  .app-logo {
+    display: block;
+  }
+
+  .app-logo-light {
+    display: none;
+  }
+
   .header {
     z-index: 3;
     transition: height 0.5s ease;
@@ -16,6 +24,59 @@
 
     .upper-container {
       .right-section {
+        .header-theme-toggle {
+          border: 1px solid var(--border-color);
+          background: var(--items-bg);
+          backdrop-filter: blur(10px);
+
+          .header-theme-icon {
+            color: var(--icon-color, rgba(255, 255, 255, 0.85));
+          }
+
+          .header-theme-label {
+            color: var(--text-secondary, var(--border-color));
+            min-width: 2.5rem;
+          }
+        }
+
+        .header-auth-block {
+          flex-wrap: nowrap;
+        }
+
+        .header-user-pill {
+          border: 1px solid var(--border-color);
+          background: var(--items-bg);
+          backdrop-filter: blur(10px);
+          min-height: 40px;
+
+          .header-user-name {
+            color: var(--text-secondary, var(--border-color));
+            margin: 0;
+            letter-spacing: 0.02em;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+
+        .header-avatar {
+          flex-shrink: 0;
+          background: var(--items-bg);
+
+          .profile-pic {
+            object-fit: cover;
+          }
+
+          .profile-pic-icon {
+            color: var(--icon-color, rgba(255, 255, 255, 0.9));
+          }
+
+          &.styles_ri .profile-pic-icon {
+            color: var(--icon-color, rgba(255, 255, 255, 0.9));
+          }
+        }
+
         .profile-pic-container {
           overflow: hidden;
           backdrop-filter: blur(10px);
@@ -98,6 +159,18 @@
     .header {
       left: 10px;
       width: calc(100% - 20px);
+    }
+  }
+}
+
+:host-context(.light-theme) {
+  .header-container {
+    .app-logo-dark {
+      display: none;
+    }
+
+    .app-logo-light {
+      display: block;
     }
   }
 }

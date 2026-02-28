@@ -25,6 +25,7 @@ import { SHARED_UI_DEPS } from '../../../constants/shared-imports';
 export class SearchComponent implements OnInit, OnDestroy {
 	@Input() placeholder = 'Search';
 	@Input() disabled = false;
+	@Input() containerClass = 'br-32 pl-12 pr-12 h-44 w-320';
 	@Input() debounceMs = 350;
 	@Input() showSuggestions = true;
 	@Input() minCharsForSuggestions = 2;
@@ -115,6 +116,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 			if (event.key === 'Enter') {
 				event.preventDefault();
 				this.onSubmit();
+				if (!this.showSuggestions) {
+					this.close();
+				}
 			}
 			return;
 		}

@@ -10,7 +10,15 @@ import {
 } from "@angular/core";
 import { NavigationEnd, Params, Router } from "@angular/router";
 import { BehaviorSubject, filter, Subject, takeUntil } from "rxjs";
-import { AuthService, LoggingService, NotificationService, SHARED_UI_DEPS, AppNavButtonComponent } from "@marketmate/shared";
+import {
+	AuthService,
+	LoggingService,
+	NotificationService,
+	SHARED_UI_DEPS,
+	AppNavButtonComponent,
+	ThemeService,
+	AppToggleComponent
+} from "@marketmate/shared";
 import { User } from "@marketmate/shared";
 import { AppUrls as SharedUrls } from "@marketmate/shared";
 import { AppUrls } from "../../utils/app.urls";
@@ -26,7 +34,12 @@ import { AppHeaderMenuComponent } from './app-header-menu/app-header-menu.compon
 	templateUrl: './app-header.component.html',
 	styleUrls: ['./app-header.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppHeaderMenuComponent]
+	imports: [
+		...SHARED_UI_DEPS,
+		AppNavButtonComponent,
+		AppHeaderMenuComponent,
+		AppToggleComponent
+	]
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
 	protected readonly CONSTANTS = CONSTANTS;
@@ -44,6 +57,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 	expandedCategories = false;
 	renderExpandedContent = false;
 	isLoggingOut = false;
+	isLightTheme = false;
 	@ViewChild('header') header!: ElementRef;
 
 	protected readonly AppUrls = AppUrls;
@@ -56,14 +70,31 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 			private deviceDetector: DeviceDetectorService,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
+			private themeService: ThemeService,
 	) {
 	}
 
 	ngOnInit() {
 		this.checkForActiveRoute();
-		this.setIsMobile()
+		this.setIsMobile();
 		this.checkForAuthenticationAndSetUser();
 		this.checkForUserUpdate();
+		this.updateThemeState();
+	}
+
+	updateThemeState() {
+		const currentTheme = this.themeService.ActiveTheme;
+		this.isLightTheme = currentTheme === CONSTANTS.THEME.LIGHT;
+		this.cdr.markForCheck();
+	}
+
+	onThemeToggle(checked: boolean) {
+		if (checked) {
+			this.themeService.setDark();
+		} else {
+			this.themeService.setLight();
+		}
+		this.updateThemeState();
 	}
 
 	@HostListener('document:click', ['$event'])

@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { LoggingService, NotificationService, User, UserDetailsDto, SHARED_UI_DEPS } from "@marketmate/shared";
+import { LoggingService, NotificationService, SearchComponent, User, UserDetailsDto, SHARED_UI_DEPS } from "@marketmate/shared";
 import { DeviceDetectorService } from "@marketmate/shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
@@ -13,10 +13,11 @@ import { UserListSkeletonComponent } from '../user-list-skeleton/user-list-skele
 	templateUrl: './users.component.html',
 	styleUrls: ['./users.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [...SHARED_UI_DEPS, AdminUserListComponent, UserListSkeletonComponent]
+	imports: [...SHARED_UI_DEPS, AdminUserListComponent, UserListSkeletonComponent, SearchComponent]
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 	users: UserDetailsDto[] = [];
+	searchQuery = '';
 	isMobile = false;
 	isLoading = false;
 	destroy$: Subject<void> = new Subject<void>();
@@ -42,13 +43,21 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 
+	onSearchChange(value: string) {
+		this.searchQuery = (value ?? '').trim();
+		this.currentPage = 0;
+		this.hasMore = true;
+		this.getAllUsers(0, false);
+		this.cdr.markForCheck();
+	}
+
 	getAllUsers(page?: number, append: boolean = false) {
 		if (this.isLoading) return;
 
 		this.isLoading = true;
 		const pageToLoad = page ?? this.currentPage;
 
-		this.adminService.getAllUsers(pageToLoad)
+		this.adminService.getAllUsers(pageToLoad, this.searchQuery || undefined)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					this.isLoading = false;

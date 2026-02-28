@@ -1,0 +1,47 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="80" y1="40" x2="900" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E1B18"/>
+      <stop offset="1" stop-color="#17342D"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="640" rx="28" fill="url(#g1)"/>
+  <circle cx="808" cy="128" r="92" fill="#00C896" fill-opacity="0.14"/>
+  <circle cx="146" cy="516" r="86" fill="#00C896" fill-opacity="0.16"/>
+
+  <rect x="132" y="108" width="696" height="424" rx="26" fill="#122923" stroke="#315E50" stroke-width="2"/>
+  <rect x="166" y="142" width="628" height="52" rx="12" fill="#0F211D"/>
+  <rect x="188" y="160" width="170" height="16" rx="8" fill="#3A6B5C"/>
+  <rect x="668" y="154" width="104" height="28" rx="14" fill="#00C896"/>
+  <text x="694" y="173" font-family="Arial, sans-serif" font-size="13" fill="#0F211D">FILTER</text>
+
+  <rect x="166" y="220" width="188" height="130" rx="14" fill="#16332B"/>
+  <rect x="184" y="236" width="152" height="72" rx="10" fill="#2E5C4E"/>
+  <rect x="184" y="318" width="120" height="10" rx="5" fill="#477969"/>
+  <rect x="184" y="334" width="86" height="8" rx="4" fill="#3F6F5F"/>
+
+  <rect x="386" y="220" width="188" height="130" rx="14" fill="#16332B"/>
+  <rect x="404" y="236" width="152" height="72" rx="10" fill="#2E5C4E"/>
+  <rect x="404" y="318" width="120" height="10" rx="5" fill="#477969"/>
+  <rect x="404" y="334" width="86" height="8" rx="4" fill="#3F6F5F"/>
+
+  <rect x="606" y="220" width="188" height="130" rx="14" fill="#16332B"/>
+  <rect x="624" y="236" width="152" height="72" rx="10" fill="#2E5C4E"/>
+  <rect x="624" y="318" width="120" height="10" rx="5" fill="#477969"/>
+  <rect x="624" y="334" width="86" height="8" rx="4" fill="#3F6F5F"/>
+
+  <rect x="166" y="372" width="408" height="130" rx="14" fill="#10231E"/>
+  <rect x="186" y="392" width="130" height="92" rx="12" fill="#284F43"/>
+  <rect x="332" y="400" width="218" height="14" rx="7" fill="#477969"/>
+  <rect x="332" y="424" width="176" height="10" rx="5" fill="#3F6F5F"/>
+  <rect x="332" y="445" width="134" height="10" rx="5" fill="#3F6F5F"/>
+  <rect x="332" y="463" width="88" height="22" rx="11" fill="#00C896"/>
+
+  <path d="M624 408H780C788.837 408 796 415.163 796 424V486C796 494.837 788.837 502 780 502H715L690 522V502H624C615.163 502 608 494.837 608 486V424C608 415.163 615.163 408 624 408Z" fill="#00C896"/>
+  <rect x="632" y="426" width="146" height="12" rx="6" fill="#0F211D"/>
+  <rect x="632" y="446" width="114" height="10" rx="5" fill="#0F211D"/>
+  <rect x="632" y="464" width="86" height="10" rx="5" fill="#0F211D"/>
+
+  <text x="168" y="92" font-family="Arial, sans-serif" font-size="24" fill="#A5CDC0">Smart listings, faster conversations</text>
+</svg>

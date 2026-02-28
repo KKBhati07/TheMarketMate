@@ -9,9 +9,18 @@
       #header
       class="header position-absolute pr-12 br-32 pl-16">
       <div class="upper-container h-52 flex-row align-i-center justify-content-space-b">
-        <img (click)="onLogoClick()"
-          [src]="CONSTANTS.LOGO.TRANSPARENT"
-          class="w-132 cursor-pointer h-132" alt="app_logo">
+        <img
+            (click)="onLogoClick()"
+            [src]="CONSTANTS.LOGO.DARK_THEME"
+            class="w-132 cursor-pointer h-132 app-logo app-logo-dark"
+            alt="MarketMate logo dark theme"
+        >
+        <img
+            (click)="onLogoClick()"
+            [src]="CONSTANTS.LOGO.LIGHT_THEME"
+            class="w-132 cursor-pointer h-132 app-logo app-logo-light"
+            alt="MarketMate logo light theme"
+        >
           <div class="right-section gap-8 flex-row-reverse align-i-center w-100p h-100p"
             >
             @if (!isLoading) {
@@ -122,6 +131,7 @@
                         placeholder="Search listings"
                         [value]="searchValue"
                         [suggestions]="searchSuggestions"
+                        containerClass="br-32 pl-12 pr-12 h-44 w-320"
                         (valueChange)="onSearchValueChange($event)"
                         (submitted)="applySearch($event)"
                         (suggestionSelected)="applySearch($event)"

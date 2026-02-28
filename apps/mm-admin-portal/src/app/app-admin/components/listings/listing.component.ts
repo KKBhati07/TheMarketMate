@@ -8,7 +8,8 @@ import {
 	AppButtonComponent,
 	ListingCardComponent,
 	ListingCardSkeletonComponent,
-	EmptyStateComponent
+	EmptyStateComponent,
+	SearchComponent
 } from '@marketmate/shared';
 import { map, Subject, takeUntil } from 'rxjs';
 import { AdminService } from '../../../services/admin.service';
@@ -29,7 +30,8 @@ import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/s
 		AppButtonComponent,
 		ListingCardComponent,
 		ListingCardSkeletonComponent,
-		EmptyStateComponent
+		EmptyStateComponent,
+		SearchComponent
 	]
 
 })
@@ -40,6 +42,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 	destroy$: Subject<void> = new Subject<void>();
 	queryParams: Record<string, string | number | boolean> = {}
 	selectedListings: number[] = [];
+	searchQuery = '';
 	isDeletedListingPage: boolean = false;
 	currentPage = 0;
 	hasMore = true;
@@ -81,11 +84,24 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 		})
 	}
 
+	onSearchChange(value: string) {
+		this.searchQuery = (value ?? '').trim();
+		this.currentPage = 0;
+		this.hasMore = true;
+		this.getListings(this.isDeletedListingPage, 0, false);
+		this.cdr.markForCheck();
+	}
+
 	getListings(deleted: boolean = false, page?: number, append: boolean = false) {
 		if (this.isLoading) return;
 
 		this.isLoading = true;
 		this.queryParams['deleted'] = deleted;
+		if (this.searchQuery) {
+			this.queryParams['search'] = this.searchQuery;
+		} else {
+			delete this.queryParams['search'];
+		}
 		const pageToLoad = page ?? this.currentPage;
 
 		this.adminService.getAllListings(this.queryParams, pageToLoad)

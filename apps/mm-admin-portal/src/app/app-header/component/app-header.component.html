@@ -4,11 +4,30 @@
       #header
       class="header h-52 position-absolute pr-12 br-32 pl-16">
       <div class="upper-container h-52 flex-row align-i-center justify-content-space-b">
-        <img (click)="onLogoClick()"
-          [src]="CONSTANTS.LOGO.TRANSPARENT"
-          class="w-132 cursor-pointer h-132" alt="app_logo">
-          <div class="right-section gap-8 flex-row-reverse align-i-center w-100p h-100p"
-            >
+        <img
+            (click)="onLogoClick()"
+            [src]="CONSTANTS.LOGO.DARK_THEME"
+            class="w-132 cursor-pointer h-132 app-logo app-logo-dark"
+            alt="MarketMate logo dark theme"
+        >
+        <img
+            (click)="onLogoClick()"
+            [src]="CONSTANTS.LOGO.LIGHT_THEME"
+            class="w-132 cursor-pointer h-132 app-logo app-logo-light"
+            alt="MarketMate logo light theme"
+        >
+        <div class="right-section gap-12 flex-row-reverse align-i-center w-100p h-100p">
+          @if (!isMobile) {
+            <div class="header-theme-toggle flex-row align-i-center gap-8 br-24 pl-8 pr-8 h-40" aria-label="Theme">
+              <mat-icon class="header-theme-icon fs-20 h-20 w-20" fontIcon="palette" aria-hidden="true"></mat-icon>
+              <span class="header-theme-label fs-12 fw-6">{{ isLightTheme ? 'Light' : 'Dark' }}</span>
+              <mm-toggle
+                  [checked]="!isLightTheme"
+                  (toggleChange)="onThemeToggle($event)"
+                  aria-label="Switch to {{ isLightTheme ? 'dark' : 'light' }} theme"
+              ></mm-toggle>
+            </div>
+          }
             @if (!isLoading) {
               @if ((isAuthenticated$ | async) && isMobile) {
                 <div
@@ -27,34 +46,33 @@
               }
               @if (!isMobile) {
                 @if (isAuthenticated$ | async) {
-                  <div style="border:1px solid var(--border-color);"
-                    class="flex-row gap-12 align-i-center br-32 pt-4 pb-4 pr-4 pl-8">
-                    <p style="color: var(--border-color)" class="fw-7 cursor-default">{{ user?.name ?? 'USER' }}</p>
-                    <div
-                      [ngClass]="!renderIcon?'styles_ri':''"
-                    class=" profile-pic-container p-4 border-circle align-i-center
-                  justify-content-center flex-row w-36 h-36">
-                      @if (!renderIcon) {
-                        <img (error)="renderIcon = true" class="profile-pic"
-                          [src]="user?.profile_url">
-                      } @else {
-                        <mat-icon class=" profile-pic-icon ls-option-icon fs-28 h-28 w-28"
-                        [fontIcon]="'person'"></mat-icon>
-                      }
+                  <div class="header-auth-block flex-row align-i-center gap-12">
+                    <div class="header-user-pill flex-row align-i-center gap-10 br-24 pl-10 pr-6 py-6">
+                      <p class="header-user-name fw-6 fs-14 cursor-default">{{ user?.name ?? 'USER' }}</p>
+                      <div
+                        [ngClass]="!renderIcon ? 'styles_ri' : ''"
+                        class="header-avatar profile-pic-container border-circle flex-row align-i-center justify-content-center w-32 h-32 overflow-hidden">
+                        @if (!renderIcon) {
+                          <img (error)="renderIcon = true" class="profile-pic w-100p h-100p"
+                            [src]="user?.profile_url" loading="lazy" alt="">
+                        } @else {
+                          <mat-icon class="profile-pic-icon fs-24 h-24 w-24" fontIcon="person"></mat-icon>
+                        }
+                      </div>
                     </div>
+                    <mm-nav-button
+                      (click)="onLogOutClick()"
+                      [class]="'pl-4 pr-8 h-40 br-20'"
+                      iconContainerClass="h-32 w-32"
+                      iconClass="h-20 w-20 fs-20"
+                      textClass="fw-6"
+                      [text]="isLoggingOut ? 'LOGGING OUT...' : 'Logout'"
+                      gap="5"
+                      [showIcon]="true"
+                      [headerNav]="true"
+                      icon="logout"
+                    ></mm-nav-button>
                   </div>
-                  <mm-nav-button
-                    (click)="onLogOutClick()"
-                    [class]="'pl-4 pr-8 h-40 br-20'"
-                    iconContainerClass="h-32 w-32"
-                    iconClass="h-20 w-20 fs-20"
-                    textClass="fw-6"
-                    [text]="isLoggingOut ? 'LOGGING OUT...' : 'Logout'"
-                    gap="5"
-                    [showIcon]="true"
-                    [headerNav]="true"
-                    icon="logout"
-                  ></mm-nav-button>
                 } @else {
                   <mm-nav-button
                     [routerLink]="[SharedUrls.AUTH.BASE,SharedUrls.AUTH.LOGIN]"
@@ -93,7 +111,9 @@
       [isAdmin]="isAdmin"
       [userName]="user?.name ?? 'USER'"
       [isAuthenticated]="(isAuthenticated$ | async) ?? false"
+      [isLightTheme]="isLightTheme"
       (onItemClick)="onMenuItemClick($event)"
-      >
+      (themeToggle)="onThemeToggle($event)"
+    >
     </mm-header-menu>
   }
