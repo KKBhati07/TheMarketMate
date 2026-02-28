@@ -4,7 +4,15 @@
   }
 }
 
+.loading-indicator p {
+  text-align: center;
+}
+
 .admin-users-container {
   background: var(--header-color);
   overflow: scroll;
+}
+
+.no-content .no-content-title {
+  text-align: center;
 }

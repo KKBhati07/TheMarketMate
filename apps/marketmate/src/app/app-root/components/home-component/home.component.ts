@@ -17,7 +17,8 @@ import {
 	SHARED_UI_DEPS,
 	ListingCardComponent,
 	ListingCardSkeletonComponent,
-	EmptyStateComponent
+	EmptyStateComponent,
+	SearchComponent
 } from '@marketmate/shared';
 import { DeviceDetectorService } from '@marketmate/shared';
 import { FilterService } from '@marketmate/shared';
@@ -39,13 +40,15 @@ import { AppButtonComponent } from '@marketmate/shared';
 		ListingCardComponent,
 		ListingCardSkeletonComponent,
 		AppButtonComponent,
-		EmptyStateComponent
+		EmptyStateComponent,
+		SearchComponent
 	]
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	destroy$: Subject<void> = new Subject<void>();
 	listings: Listing[] = [];
+	searchQuery = '';
 	isExpanded = true;
 	isMobile = false;
 	render = false;
@@ -107,6 +110,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.route.queryParamMap
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(params => {
+					this.searchQuery = params.get('search') ?? '';
 					const queryParams: Record<string, string | number | boolean> = {};
 					params.keys.forEach(key => {
 						const value = params.get(key);
@@ -117,6 +121,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.currentPage = 0;
 					this.hasMore = true;
 					this.getListings(queryParams, 0, false);
+					this.cdr.markForCheck();
 				});
 	}
 
@@ -252,6 +257,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 			backdropClass,
 			data: { isBottomSheet: true },
 		});
+	}
+
+	onMobileSearchChange(value: string) {
+		const v = (value ?? '').trim();
+		this.filterService.updateFilter({ search: v });
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams: v ? { search: v } : { search: null },
+			queryParamsHandling: 'merge',
+			replaceUrl: true,
+		}).then(() => null);
+		this.cdr.markForCheck();
 	}
 
 	ngOnDestroy() {

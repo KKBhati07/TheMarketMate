@@ -28,9 +28,21 @@
         icon="login"
       ></mm-nav-button>
     } @else {
-      <div style="border: 1px solid var(--border-color)"
-        class="flex-row user-name-container justify-content-center align-i-center br-32 pl-4 pr-4 h-40 br-20">
-        <p class="fw-7">{{ userName }}</p>
+      <div class="header-menu-user flex-row align-i-center gap-10 br-24 pl-8 pr-8 py-6 w-100p h-40">
+        <div class="header-menu-user-avatar border-circle overflow-hidden flex-row align-i-center justify-content-center w-36 h-36">
+          @if (profileUrl && !profileImgError) {
+            <img
+              (error)="profileImgError = true"
+              [src]="profileUrl"
+              alt=""
+              class="w-100p h-100p"
+              loading="lazy"
+            />
+          } @else {
+            <mat-icon class="header-menu-user-avatar-icon fs-24 h-24 w-24" fontIcon="person"></mat-icon>
+          }
+        </div>
+        <p class="header-menu-user-name fw-6 fs-14">{{ userName }}</p>
       </div>
       <mm-nav-button
         (click)="onItemClick.emit('LOGOUT')"

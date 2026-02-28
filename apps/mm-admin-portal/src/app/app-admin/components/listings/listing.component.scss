@@ -4,6 +4,15 @@
   }
 
   .listings-container {
+    overflow: scroll;
     flex-wrap: wrap;
   }
+
+  .right-section.flex-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+.loading-indicator p {
+  text-align: center;
 }

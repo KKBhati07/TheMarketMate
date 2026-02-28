@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import {
+	DeviceDetectorService,
 	Listing,
 	LoggingService,
 	NotificationService,
@@ -11,11 +12,10 @@ import {
 	EmptyStateComponent,
 	SearchComponent
 } from '@marketmate/shared';
-import { map, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { AdminService } from '../../../services/admin.service';
 import { AppUrls } from '../../../utils/app.urls';
-import { ActivatedRoute } from '@angular/router';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { calculateHasMore, calculateNextPage, extractItems } from '@marketmate/shared';
 
 @Component({
@@ -43,6 +43,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 	queryParams: Record<string, string | number | boolean> = {}
 	selectedListings: number[] = [];
 	searchQuery = '';
+	isMobile = false;
 	isDeletedListingPage: boolean = false;
 	currentPage = 0;
 	hasMore = true;
@@ -55,13 +56,25 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 			private adminService: AdminService,
 			private cdr: ChangeDetectorRef,
 			private route: ActivatedRoute,
+			private router: Router,
 			private notificationService: NotificationService,
 			private logger: LoggingService,
+			private deviceDetectorService: DeviceDetectorService,
 	) {
 	}
 
 	ngOnInit() {
+		this.setIsMobile();
 		this.subscribeToParamChange();
+	}
+
+	setIsMobile() {
+		this.deviceDetectorService.isMobile()
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(isMobile => {
+				this.isMobile = isMobile;
+				this.cdr.markForCheck();
+			});
 	}
 
 	ngAfterViewInit() {
@@ -69,26 +82,25 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	subscribeToParamChange() {
-		this.route.queryParamMap.pipe(
-				takeUntil(this.destroy$),
-				map(qpm => {
-					const raw = qpm.get('posts') ?? 'all';
-					return raw.toLowerCase() === 'deleted';
-				}),
-				distinctUntilChanged()
-		).subscribe(deleted => {
-			this.isDeletedListingPage = deleted;
+		this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(qpm => {
+			const raw = qpm.get('posts') ?? 'all';
+			this.isDeletedListingPage = raw.toLowerCase() === 'deleted';
+			this.searchQuery = (qpm.get('search') ?? '').trim();
 			this.currentPage = 0;
 			this.hasMore = true;
-			this.getListings(deleted, 0, false);
-		})
+			this.getListings(this.isDeletedListingPage, 0, false);
+			this.cdr.markForCheck();
+		});
 	}
 
 	onSearchChange(value: string) {
 		this.searchQuery = (value ?? '').trim();
-		this.currentPage = 0;
-		this.hasMore = true;
-		this.getListings(this.isDeletedListingPage, 0, false);
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams: { search: this.searchQuery || null },
+			queryParamsHandling: 'merge',
+			replaceUrl: true
+		});
 		this.cdr.markForCheck();
 	}
 
@@ -211,6 +223,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.isDeletedListingPage) return;
 		this.isSelectionMode = !this.isSelectionMode;
 		this.cdr.markForCheck();
+	}
+
+	/** Query params for posts nav links so search persists when switching All/Deleted. */
+	getPostsQueryParams(posts: 'all' | 'deleted'): Record<string, string> {
+		const params: Record<string, string> = { posts };
+		if (this.searchQuery) params['search'] = this.searchQuery;
+		return params;
 	}
 
 	ngOnDestroy() {

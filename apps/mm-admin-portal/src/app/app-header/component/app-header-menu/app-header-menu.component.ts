@@ -17,7 +17,10 @@ export class AppHeaderMenuComponent {
 	@Input() isAuthenticated: boolean = false;
 	@Input() isAdmin: boolean = false;
 	@Input() userName: string = 'USER';
+	@Input() profileUrl: string | undefined;
 	@Input() isLightTheme: boolean = false;
+
+	profileImgError = false;
 
 	protected readonly AppUrls = AppUrls;
 	protected readonly SharedUrls = SharedUrls;

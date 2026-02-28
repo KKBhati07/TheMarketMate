@@ -54,7 +54,16 @@
     }
 
     @if (isMobile) {
-      <div class="mobile-filters-fab position-absolute">
+      <div class="mobile-filters-fab flex-row w-100p pl-12 position-absolute">
+            <div class="mobile-search-bar mb-8">
+              <mm-search
+                placeholder="Search listings"
+                [showSuggestions]="false"
+                [value]="searchQuery"
+                (valueChange)="onMobileSearchChange($event)"
+                containerClass="br-32 pl-12 pr-12 h-44"
+              ></mm-search>
+            </div>
         <mm-button
           (click)="openFiltersBottomSheet()"
           [type]="'button'"
