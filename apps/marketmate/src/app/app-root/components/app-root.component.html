@@ -1,2 +1,15 @@
-<div class="root-container" >
+<div
+    class="root-container position-relative flex-row align-i-center justify-content-center overflow-hidden w-100p h-100p"
+    [ngClass]="isMobile?'p-12':''"
+>
+  <div class="illustration-container br20">
+    <img
+        [ngClass]="isMobile?'br-14':'br-20'"
+        class="entry-illustration"
+        src="assets/illustrations/marketplace-sell-chat.svg"
+        alt="Marketplace selling and chat illustration"
+        loading="eager"
+        decoding="async"
+    />
+  </div>
 </div>

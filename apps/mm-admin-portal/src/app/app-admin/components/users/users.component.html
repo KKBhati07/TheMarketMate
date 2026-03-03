@@ -1,6 +1,18 @@
-@if (!isLoading && users && users.length) {
-  <div class="admin-users-container
-  h-100p br-44 pt-12 pb-20 ml-8 mb-12">
+<div class="users-page w-100p"
+     [ngClass]="isMobile ? 'p-8' : 'p-4'">
+  <div class="menu-bar w-100p p-4 h-44 br-32 mb-8 align-i-center"
+       [ngClass]="isMobile ? 'flex-column w-100p gap-8 justify-content-center' : 'flex-row justify-content-end'">
+    <mm-search
+        placeholder="Search users"
+        [showSuggestions]="false"
+        [value]="searchQuery"
+        (valueChange)="onSearchChange($event)"
+        [containerClass]="isMobile ? 'br-32 h-44 pl-12 pr-12 w-100p' : 'br-32 h-44 pl-12 pr-12 w-320'"
+    ></mm-search>
+  </div>
+  @if (!isLoading && users && users.length) {
+  <div class="admin-users-container h-100p br-44 mb-12"
+       [ngClass]="isMobile ? 'pl-8 pr-8 pt-8 pb-12' : 'ml-8 pt-12 pb-20'">
     @for (user of users; track user) {
       <div>
         <mm-admin-user-list
@@ -16,12 +28,13 @@
   }
   @if (isLoading && users.length > 0) {
     <div class="loading-indicator w-100p p-12">
-      <p class="text-center">Loading more users...</p>
+      <p>Loading more users...</p>
     </div>
   }
 } @else {
   @if (isLoading) {
-    <div class="admin-users-container h-100p br-44 pt-12 pb-20 ml-8 mb-12">
+    <div class="admin-users-container h-100p br-44 mb-12"
+         [ngClass]="isMobile ? 'pl-8 pr-8 pt-8 pb-12' : 'ml-8 pt-12 pb-20'">
       @for (i of [1,2,3,4,5,6]; track i) {
         <mm-user-list-skeleton></mm-user-list-skeleton>
       }
@@ -29,12 +42,16 @@
   }
   @if (!isLoading && !users.length) {
     <div class="no-content flex-row justify-content-center align-i-center h-100p">
-      <div class="flex-column justify-content-center align-i-center">
-        <mat-icon class="ls-option-icon cursor-pointer fs-100 h-100 w-100"
-        [fontIcon]="'warning'"></mat-icon>
-        <p class="fs-40">No Users Found!</p>
+      <div class="flex-column justify-content-center align-i-center gap-12"
+           [ngClass]="isMobile ? 'pl-12 pr-12' : ''">
+        <mat-icon class="ls-option-icon cursor-pointer w-100 h-100"
+                  [ngClass]="isMobile ? 'fs-60' : 'fs-100'"
+                  [fontIcon]="'warning'"></mat-icon>
+        <p class="fw-6 no-content-title"
+           [ngClass]="isMobile ? 'fs-24' : 'fs-40'">No Users Found!</p>
       </div>
     </div>
   }
 }
+</div>
 

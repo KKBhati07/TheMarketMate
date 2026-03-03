@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { NavOption, SHARED_UI_DEPS, AppNavButtonComponent } from '@marketmate/shared';
+import { NavOption, SHARED_UI_DEPS, AppNavButtonComponent, AppToggleComponent } from '@marketmate/shared';
 import { fadeInOut } from '@marketmate/shared';
 import { AppUrls as SharedUrls } from '@marketmate/shared';
 import { AppUrls } from '../../../utils/app.urls';
@@ -11,21 +11,23 @@ import { AppUrls } from '../../../utils/app.urls';
 	styleUrls: ['./app-header-menu.component.scss'],
 	animations: [fadeInOut],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [...SHARED_UI_DEPS, AppNavButtonComponent]
+	imports: [...SHARED_UI_DEPS, AppNavButtonComponent, AppToggleComponent]
 })
 export class AppHeaderMenuComponent {
 	@Input() isAuthenticated: boolean = false;
 	@Input() isAdmin: boolean = false;
 	@Input() userName: string = 'USER';
+	@Input() profileUrl: string | undefined;
+	@Input() isLightTheme: boolean = false;
+
+	profileImgError = false;
 
 	protected readonly AppUrls = AppUrls;
 	protected readonly SharedUrls = SharedUrls;
 
-	@Output() onItemClick: EventEmitter<NavOption | null>
-			= new EventEmitter<NavOption | null>();
-
-	@Output() closeMenu: EventEmitter<void>
-			= new EventEmitter<void>();
+	@Output() onItemClick: EventEmitter<NavOption | null> = new EventEmitter<NavOption | null>();
+	@Output() closeMenu: EventEmitter<void> = new EventEmitter<void>();
+	@Output() themeToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	constructor() {
 	}

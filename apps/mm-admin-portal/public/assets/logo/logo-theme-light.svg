@@ -1,0 +1,7 @@
+<svg width="220" height="56" viewBox="0 0 220 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="52" height="52" rx="14" fill="#004F3C"/>
+  <path d="M15 38V18H22L28 27L34 18H41V38H34V29L28 38L22 29V38H15Z" fill="#F9FAFB"/>
+  <path d="M41 13C44.3137 13 47 15.6863 47 19C47 22.3137 44.3137 25 41 25C37.6863 25 35 22.3137 35 19C35 15.6863 37.6863 13 41 13Z" fill="#F9FAFB"/>
+  <rect x="66" y="10" width="152" height="36" rx="10" fill="#F9FAFB" stroke="#D3E2D6"/>
+  <text x="78" y="28" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#1D1D1F">MarketMate</text>
+</svg>

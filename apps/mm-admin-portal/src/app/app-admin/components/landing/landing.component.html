@@ -5,6 +5,7 @@
    ' flex-row gap-12 justify-content-center' :'w-20p'">
     <mm-nav-button
         [routerLink]="[AppUrls.USERS]"
+        [otherActiveRoutes]="['users']"
         [indicateActiveBtn]="true"
         text="USERS"
         icon="group"
@@ -19,7 +20,7 @@
     <mm-nav-button
         [routerLink]="[AppUrls.LISTINGS]"
         [queryParams]="{'posts':'all'}"
-        [otherActiveRoutes]="['listings?posts=deleted']"
+        [otherActiveRoutes]="['listings']"
         [indicateActiveBtn]="true"
         text="LISTINGS"
         icon="group"

@@ -5,7 +5,40 @@
   top: 0;
   left: 0;
 
+  .header-menu-user {
+    border: 1px solid var(--border-color);
+    background: var(--items-bg);
+    backdrop-filter: blur(10px);
+  }
+
+  .header-menu-user-avatar {
+    background: var(--items-bg);
+    flex-shrink: 0;
+
+    img {
+      object-fit: cover;
+    }
+
+    .header-menu-user-avatar-icon {
+      color: var(--icon-color, rgba(255, 255, 255, 0.9));
+    }
+  }
+
+  .header-menu-user-name {
+    margin: 0;
+    color: var(--text-secondary, var(--border-color));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .header-menu-container {
     background: var(--header-color);
+  }
+
+  .header-menu-theme {
+    border: 1px solid var(--border-color);
+    background: var(--items-bg);
+    margin-top: 4px;
   }
 }

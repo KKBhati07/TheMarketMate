@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { LoggingService, NotificationService, User, UserDetailsDto, SHARED_UI_DEPS } from "@marketmate/shared";
+import { ActivatedRoute, Router } from "@angular/router";
+import { LoggingService, NotificationService, SearchComponent, UserDetailsDto, SHARED_UI_DEPS } from "@marketmate/shared";
 import { DeviceDetectorService } from "@marketmate/shared";
 import { Subject, takeUntil } from "rxjs";
 import { AdminService } from '../../../services/admin.service';
@@ -13,10 +14,11 @@ import { UserListSkeletonComponent } from '../user-list-skeleton/user-list-skele
 	templateUrl: './users.component.html',
 	styleUrls: ['./users.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [...SHARED_UI_DEPS, AdminUserListComponent, UserListSkeletonComponent]
+	imports: [...SHARED_UI_DEPS, AdminUserListComponent, UserListSkeletonComponent, SearchComponent]
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 	users: UserDetailsDto[] = [];
+	searchQuery = '';
 	isMobile = false;
 	isLoading = false;
 	destroy$: Subject<void> = new Subject<void>();
@@ -24,17 +26,31 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 	hasMore = true;
 	private intersectionObserver?: IntersectionObserver;
 
-	constructor(private adminService: AdminService,
-							private cdr: ChangeDetectorRef,
-							private deviceDetectorService: DeviceDetectorService,
-							private notificationService: NotificationService,
-							private logger: LoggingService,
+	constructor(
+		private adminService: AdminService,
+		private cdr: ChangeDetectorRef,
+		private deviceDetectorService: DeviceDetectorService,
+		private notificationService: NotificationService,
+		private logger: LoggingService,
+		private route: ActivatedRoute,
+		private router: Router,
 	) {
 	}
 
 	ngOnInit() {
-		this.getAllUsers();
 		this.setIsMobile();
+		this.syncSearchFromRoute();
+	}
+
+	private syncSearchFromRoute() {
+		this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+			const search = params.get('search') ?? '';
+			this.searchQuery = search.trim();
+			this.currentPage = 0;
+			this.hasMore = true;
+			this.getAllUsers(0, false);
+			this.cdr.markForCheck();
+		});
 	}
 
 	ngAfterViewInit() {
@@ -42,13 +58,24 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 
+	onSearchChange(value: string) {
+		this.searchQuery = (value ?? '').trim();
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams: { search: this.searchQuery || null },
+			queryParamsHandling: 'merge',
+			replaceUrl: true
+		});
+		this.cdr.markForCheck();
+	}
+
 	getAllUsers(page?: number, append: boolean = false) {
 		if (this.isLoading) return;
 
 		this.isLoading = true;
 		const pageToLoad = page ?? this.currentPage;
 
-		this.adminService.getAllUsers(pageToLoad)
+		this.adminService.getAllUsers(pageToLoad, this.searchQuery || undefined)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(res => {
 					this.isLoading = false;

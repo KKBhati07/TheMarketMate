@@ -1,13 +1,16 @@
-<div class=" p-4 main-container w-100p">
-  <div class="menu-bar flex-row justify-content-space-b w-100p p-4 h-44 br-32">
+<div class="main-container w-100p"
+     [ngClass]="isMobile ? 'p-8' : 'p-4'">
+  <div class="menu-bar w-100p p-4 br-32 align-i-center"
+       [ngClass]="isMobile ? 'flex-column gap-8' : 'flex-row justify-content-space-b h-44 '">
 
-    <div class="left-section flex-row gap-12 h-100p">
+    <div class="left-section justify-content-center flex-row gap-12 h-100p"
+         [ngClass]="isMobile ? 'w-100p' : ''">
       <mm-nav-button
         [routerLink]="[]"
-        [queryParams]="{'posts':'all'}"
+        [queryParams]="getPostsQueryParams('all')"
         text="All Posts"
         textClass="fw-6"
-        [class]=" 'br-32 pl-8 pr-8 h-100p'"
+        [class]=" !isMobile ? 'br-32 pl-8 pr-8 h-100p' : 'br-32 pl-8 pr-8 h-32'"
         [headerNav]="true"
         [indicateActiveBtn]="true"
         >
@@ -16,10 +19,10 @@
       <mm-nav-button
         (click)="isSelectionMode = false"
         [routerLink]="[]"
-        [queryParams]="{'posts':'deleted'}"
+        [queryParams]="getPostsQueryParams('deleted')"
         text="Deleted Posts"
         textClass="fw-6"
-        [class]="'br-32 pl-8 pr-8 h-100p'"
+        [class]=" isMobile ? 'br-32 pl-8 pr-8 h-100p' : 'br-32 pl-8 pr-8 h-32'"
         [headerNav]="true"
         [indicateActiveBtn]="true"
         >
@@ -27,12 +30,20 @@
       </mm-nav-button>
 
     </div>
-    <div class="right-section h-100p">
+    <div class="right-section align-i-center gap-8 h-100p"
+         [ngClass]="isMobile ? 'w-100p flex-wrap flex-column' : 'flex-row'">
+      <mm-search
+          placeholder="Search listings"
+          [showSuggestions]="false"
+          [value]="searchQuery"
+          (valueChange)="onSearchChange($event)"
+          [containerClass]="isMobile ? 'br-32 pl-12 pr-12 h-36 w-100p' : 'br-32 pl-12 pr-12 h-36 w-320'"
+      ></mm-search>
       @if (!isSelectionMode) {
         <mm-button (click)="toggleSelectButton()"
           [disabled]="isDeletedListingPage"
           type="button"
-          class="w-80 h-100p"
+          [class]="isMobile ? 'w-80 h-32' : 'w-80 h-32'"
           text="SELECT"
           textClass="fw-7"
           >
@@ -40,8 +51,7 @@
       }
 
       @if (isSelectionMode) {
-        <div class="flex-row h-100p gap-8">
-          <mm-button
+        <mm-button
             [disabled]="!selectedListings.length"
             (click)="onDeleteClick()"
             [isWarningBtn]="true"
@@ -51,21 +61,21 @@
             type="button"
             >
           </mm-button>
-          <mm-button
+        <mm-button
             (click)="toggleSelectButton()"
             class="w-36 h-100p"
             [showIcon]="true"
             iconClass=" w-20 h-20 fs-20"
             icon="close_small"
             type="button"
-            >
-          </mm-button>
-        </div>
+        >
+        </mm-button>
       }
 
     </div>
   </div>
-  <div class="listings-container mt-8 gap-12 flex-row">
+  <div class="listings-container flex-row"
+       [ngClass]="isMobile ? 'mt-4 gap-8' : 'mt-8 gap-12'">
     @if (!isLoading || listings.length > 0) {
       @for (listing of listings; track listing) {
         <mm-listing-card
@@ -98,7 +108,7 @@
   }
   @if (isLoading && listings.length > 0) {
     <div class="loading-indicator w-100p p-12">
-      <p class="text-center">Loading more listings...</p>
+      <p>Loading more listings...</p>
     </div>
   }
 </div>

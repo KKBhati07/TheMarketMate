@@ -1,6 +1,14 @@
 .header-container {
   overflow-x: hidden;
 
+  .app-logo {
+    display: block;
+  }
+
+  .app-logo-light {
+    display: none;
+  }
+
   .header {
     z-index: 3;
     transition: height 0.5s ease;
@@ -102,6 +110,18 @@
   }
 }
 
+:host-context(.light-theme) {
+  .header-container {
+    .app-logo-dark {
+      display: none;
+    }
+
+    .app-logo-light {
+      display: block;
+    }
+  }
+}
+
 ::ng-deep .publish-listing-from-backdrop.cdk-overlay-backdrop {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -163,6 +183,11 @@
   height: 100vh;
   margin: 0;
   padding: 0;
+}
+
+
+.menu-icon{
+  color: var(--text-main);
 }
 
 

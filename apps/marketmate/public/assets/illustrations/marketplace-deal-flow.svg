@@ -1,0 +1,41 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="base" x1="120" y1="80" x2="840" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0C1715"/>
+      <stop offset="1" stop-color="#162F28"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="188" y1="138" x2="772" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17352D"/>
+      <stop offset="1" stop-color="#1F4439"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="640" rx="28" fill="url(#base)"/>
+  <path d="M58 520C142 464 230 480 330 516C423 549 546 572 664 524C760 485 835 450 902 480V640H58V520Z" fill="#00C896" fill-opacity="0.14"/>
+
+  <rect x="188" y="128" width="584" height="384" rx="22" fill="url(#panel)" stroke="#325F51" stroke-width="2"/>
+  <text x="224" y="172" font-family="Arial, sans-serif" font-size="24" fill="#A4CDBF">From listing to sold</text>
+
+  <rect x="228" y="210" width="146" height="224" rx="16" fill="#102721"/>
+  <rect x="246" y="230" width="110" height="98" rx="10" fill="#2E5C4E"/>
+  <rect x="246" y="338" width="98" height="12" rx="6" fill="#457767"/>
+  <rect x="246" y="358" width="78" height="10" rx="5" fill="#3A6A5B"/>
+  <rect x="246" y="378" width="62" height="22" rx="11" fill="#00C896"/>
+  <text x="262" y="393" font-family="Arial, sans-serif" font-size="13" fill="#102721">LIST</text>
+
+  <path d="M402 320H492" stroke="#00C896" stroke-width="6" stroke-linecap="round"/>
+  <path d="M478 304L502 320L478 336" stroke="#00C896" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="518" y="224" width="214" height="88" rx="14" fill="#102721"/>
+  <path d="M548 246H702C708.627 246 714 251.373 714 258V278C714 284.627 708.627 290 702 290H644L626 304V290H548C541.373 290 536 284.627 536 278V258C536 251.373 541.373 246 548 246Z" fill="#00C896"/>
+  <circle cx="566" cy="268" r="4.5" fill="#102721"/>
+  <circle cx="586" cy="268" r="4.5" fill="#102721"/>
+  <circle cx="606" cy="268" r="4.5" fill="#102721"/>
+  <text x="624" y="272" font-family="Arial, sans-serif" font-size="13" fill="#102721">negotiating...</text>
+
+  <rect x="518" y="336" width="214" height="98" rx="14" fill="#102721"/>
+  <rect x="538" y="356" width="174" height="18" rx="9" fill="#477969"/>
+  <rect x="538" y="384" width="126" height="12" rx="6" fill="#3A6A5B"/>
+  <rect x="640" y="378" width="72" height="28" rx="14" fill="#00C896"/>
+  <text x="657" y="397" font-family="Arial, sans-serif" font-size="13" fill="#102721">SOLD</text>
+</svg>

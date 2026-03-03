@@ -1,0 +1,44 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="100" y1="60" x2="860" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F1E1A"/>
+      <stop offset="1" stop-color="#132A23"/>
+    </linearGradient>
+    <linearGradient id="card" x1="220" y1="180" x2="760" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1A3A31"/>
+      <stop offset="1" stop-color="#24493E"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="640" rx="28" fill="url(#bg)"/>
+  <circle cx="170" cy="140" r="84" fill="#00C896" fill-opacity="0.18"/>
+  <circle cx="812" cy="520" r="112" fill="#00C896" fill-opacity="0.14"/>
+
+  <rect x="182" y="136" width="596" height="392" rx="24" fill="url(#card)" stroke="#2F5E50" stroke-width="2"/>
+
+  <rect x="222" y="178" width="516" height="60" rx="14" fill="#12342B"/>
+  <rect x="246" y="198" width="168" height="20" rx="10" fill="#3E6C5E"/>
+  <rect x="580" y="194" width="132" height="28" rx="14" fill="#00C896"/>
+  <text x="606" y="214" font-family="Arial, sans-serif" font-size="14" fill="#0F1E1A">LIVE LISTING</text>
+
+  <rect x="236" y="272" width="230" height="216" rx="16" fill="#113129"/>
+  <rect x="258" y="294" width="186" height="116" rx="12" fill="#2C5A4D"/>
+  <rect x="258" y="422" width="132" height="14" rx="7" fill="#4B7E6E"/>
+  <rect x="258" y="446" width="100" height="12" rx="6" fill="#3E6C5E"/>
+  <rect x="376" y="442" width="68" height="22" rx="11" fill="#00C896"/>
+
+  <rect x="496" y="272" width="216" height="216" rx="18" fill="#102D25"/>
+  <rect x="542" y="294" width="124" height="166" rx="18" fill="#0B201A" stroke="#2E5C4E" stroke-width="2"/>
+  <rect x="560" y="316" width="88" height="10" rx="5" fill="#315E50"/>
+  <rect x="560" y="336" width="74" height="10" rx="5" fill="#315E50"/>
+  <rect x="560" y="356" width="80" height="10" rx="5" fill="#315E50"/>
+  <rect x="560" y="397" width="88" height="44" rx="10" fill="#00C896"/>
+  <text x="578" y="424" font-family="Arial, sans-serif" font-size="18" fill="#0B201A">$249</text>
+
+  <path d="M456 332H516C526.493 332 535 340.507 535 351V381C535 391.493 526.493 400 516 400H495L474 418V400H456C445.507 400 437 391.493 437 381V351C437 340.507 445.507 332 456 332Z" fill="#00C896"/>
+  <circle cx="467" cy="366" r="4.5" fill="#0B201A"/>
+  <circle cx="486" cy="366" r="4.5" fill="#0B201A"/>
+  <circle cx="505" cy="366" r="4.5" fill="#0B201A"/>
+
+  <text x="252" y="126" font-family="Arial, sans-serif" font-size="26" fill="#A4CDBF">Sell. Chat. Close.</text>
+</svg>

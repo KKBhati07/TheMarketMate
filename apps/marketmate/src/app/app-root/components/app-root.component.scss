@@ -1,12 +1,11 @@
 .root-container {
-  background: url("/assets/backgrounds/background.jpeg");
-  background-size: cover;
-  width: 100%;
-  height: calc(100vh - 56px);
-}
+  background: var(--app-background-color);
 
-@media screen and (max-width: 979px) {
-  .root-container {
-    background: url("/assets/backgrounds/background-portrait.jpeg");
+
+  .entry-illustration {
+    width: min(980px, 100%);
+    height: auto;
+    object-fit: contain;
+    box-shadow: var(--shadow-sm);
   }
 }

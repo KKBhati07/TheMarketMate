@@ -29,6 +29,11 @@
     width: calc(100vw - 40px);
   }
 
+  .mobile-search-bar {
+    flex-shrink: 0;
+    padding: 0 12px;
+  }
+
   .mobile-filters-fab {
     right: 16px;
     bottom: 16px;

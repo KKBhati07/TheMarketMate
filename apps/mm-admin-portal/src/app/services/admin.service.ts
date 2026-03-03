@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiHttpResponse, Listing } from '@marketmate/shared';
-import { ApiResponse,
+import {
+	ApiResponse,
 	PaginatedResponse,
 	UserDetailsDto,
-	UpdateUserResponse } from '@marketmate/shared';
+	UpdateUserResponse
+} from '@marketmate/shared';
 import { AppUrls } from '../utils/app.urls';
 import { ApiService } from '@marketmate/shared';
 
@@ -19,8 +21,11 @@ export class AdminService {
 		return this.apiService.put(AppUrls.API.V1.ADMIN.USERS.UPDATE, data)
 	}
 
-	getAllUsers(page?: number): Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<UserDetailsDto>>>> {
-		return this.apiService.get(AppUrls.API.V1.ADMIN.USERS.GET_ALL, page !== undefined ? { page } : {})
+	getAllUsers(page?: number, search?: string): Observable<ApiHttpResponse<ApiResponse<PaginatedResponse<UserDetailsDto>>>> {
+		const params: Record<string, string | number> = {};
+		if (page !== undefined) params['page'] = page;
+		if (search != null && search.trim()) params['search'] = search.trim();
+		return this.apiService.get(AppUrls.API.V1.ADMIN.USERS.GET_ALL, params)
 	}
 
 	deleteUser(uuid: string): Observable<ApiHttpResponse<void>> {

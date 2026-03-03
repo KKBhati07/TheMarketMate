@@ -5,9 +5,9 @@
      w-100p h-100p">
   <div
       [ngClass]="{
-      'h-264':!isAuthenticated,
-      'h-212':isAuthenticated && isAdmin,
-      'h-160':isAuthenticated && !isAdmin
+      'h-320':!isAuthenticated,
+      'h-268':isAuthenticated && isAdmin,
+      'h-216':isAuthenticated && !isAdmin
       }"
     [@fadeInOut]
       class="header-menu-container
@@ -28,9 +28,21 @@
         icon="login"
       ></mm-nav-button>
     } @else {
-      <div style="border: 1px solid var(--border-color)"
-        class="flex-row justify-content-center align-i-center br-32 pl-4 pr-4 h-40 br-20">
-        <p class="fw-7">{{ userName }}</p>
+      <div class="header-menu-user flex-row align-i-center gap-10 br-24 pl-8 pr-8 py-6 w-100p h-40">
+        <div class="header-menu-user-avatar border-circle overflow-hidden flex-row align-i-center justify-content-center w-36 h-36">
+          @if (profileUrl && !profileImgError) {
+            <img
+              (error)="profileImgError = true"
+              [src]="profileUrl"
+              alt=""
+              class="w-100p h-100p"
+              loading="lazy"
+            />
+          } @else {
+            <mat-icon class="header-menu-user-avatar-icon fs-24 h-24 w-24" fontIcon="person"></mat-icon>
+          }
+        </div>
+        <p class="header-menu-user-name fw-6 fs-14">{{ userName }}</p>
       </div>
       <mm-nav-button
         (click)="onItemClick.emit('LOGOUT')"
@@ -45,6 +57,17 @@
         icon="logout"
       ></mm-nav-button>
     }
+    <div class="header-menu-theme flex-row align-i-center justify-content-space-b pl-8 pr-8 h-48 br-28 w-100p">
+      <div class="flex-row align-i-center gap-8">
+        <mat-icon fontIcon="palette" class="h-28 w-28 fs-28"></mat-icon>
+        <span class="fw-6 fs-16" style="color: var(--primary-color)">{{ isLightTheme ? 'Light' : 'Dark' }}</span>
+      </div>
+      <mm-toggle
+          [checked]="!isLightTheme"
+          (toggleChange)="themeToggle.emit($event)"
+          aria-label="Theme"
+      ></mm-toggle>
+    </div>
   </div>
 </div>
 

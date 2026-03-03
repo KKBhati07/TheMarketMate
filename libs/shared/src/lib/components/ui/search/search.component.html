@@ -7,9 +7,8 @@
     <div class="mm-search-backdrop" (mousedown)="close()"></div>
   }
 
-  <div class="mm-search-container justify-content-space-b flex-row align-i-center br-32 pl-12 pr-12 h-44 w-320"
-       [ngClass]="disabled ? 'disabled' : ''"
-       [class.raised]="isOverlayOpen">
+  <div class="mm-search-container justify-content-space-b flex-row align-i-center {{ containerClass }}"
+       [ngClass]="{'disabled': disabled, 'raised': isOverlayOpen}">
 
     <div class="left-section flex-row align-i-center gap-8 w-100p">
       <mat-icon class="fs-18 w-18 h-18" fontIcon="search"></mat-icon>
