@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { SHARED_UI_DEPS } from '@marketmate/shared';
+import { SHARED_UI_DEPS } from '../../../constants/shared-imports';
 
 @Component({
 	selector: 'mm-pill',

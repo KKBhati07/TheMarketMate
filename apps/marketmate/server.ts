@@ -12,15 +12,6 @@ import bootstrap from './src/main.server';
 import { bootstrapLogger } from '@marketmate/shared';
 
 /**
- * HTTPS certificates for local SSL
- * (used to simulate real prod environment)
- */
-const httpsOptions = {
-	key: fs.readFileSync('/certs/wildcard.marketmate.local-key.pem'),
-	cert: fs.readFileSync('/certs/wildcard.marketmate.local.pem'),
-};
-
-/**
  * In-memory SSR cache
  * Key = URL, Value = rendered HTML
  * (Can be replaced by Redis later)
@@ -45,6 +36,7 @@ export function app(): express.Express {
 						connectSrc: [
 							"'self'",
 							"https://api.marketmate.local:8080", // allow API calls
+							"https://springmate.onrender.com"
 						],
 						scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
 						scriptSrcAttr: ["'unsafe-inline'"],
@@ -76,7 +68,7 @@ export function app(): express.Express {
 	);
 
 	// ---- SSR handler (all routes) ----
-	server.get('**', async (req, res, next): Promise<void> => {
+	server.get('/{*path}', async (req, res, next): Promise<void> => {
 		try {
 			const { protocol, originalUrl, baseUrl, headers } = req;
 			const fullUrl = `${protocol}://${headers.host}${originalUrl}`;
@@ -120,14 +112,38 @@ export function app(): express.Express {
 
 // ---- Bootstrap HTTPS server ----
 function run(): void {
+
 	const port = process.env['PORT'] || 4000;
 	const server = app();
 
-	https.createServer(httpsOptions, server).listen(port, () => {
-		bootstrapLogger.info(
-				`Angular SSR server running at https://marketmate.local:${port}`
-		);
-	});
+	const isDev = process.env['NODE_ENV'] !== 'production';
+
+	if (isDev) {
+
+		/**
+		 * HTTPS certificates for local SSL
+		 * (used to simulate real prod environment)
+		 */
+		const httpsOptions = {
+			key: fs.readFileSync('/certs/wildcard.marketmate.local-key.pem'),
+			cert: fs.readFileSync('/certs/wildcard.marketmate.local.pem'),
+		};
+
+		https.createServer(httpsOptions, server).listen(port, () => {
+			bootstrapLogger.info(
+					`Dev HTTPS server running at https://marketmate.local:${port}`
+			);
+		});
+
+	} else {
+
+		server.listen(port, () => {
+			bootstrapLogger.info(
+					`Production server running at http://0.0.0.0:${port}`
+			);
+		});
+
+	}
 }
 
 run();

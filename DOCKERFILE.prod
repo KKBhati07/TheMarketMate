@@ -1,20 +1,38 @@
-# Dockerfile.prod
-FROM node:20-slim
+# Build
+FROM node:24-slim AS builder
 
 WORKDIR /app
 
-# Copy package files first
+# Copy package files
 COPY package*.json ./
-RUN npm install
 
-# Copy source
+# Install dependencies
+RUN npm ci
+
+# Copy full source
 COPY . .
 
 # Build Angular SSR app
-RUN npx nx build marketmate
+RUN npx nx build marketmate --configuration=production
 
-# Expose HTTPS port
+
+# Runtime
+FROM node:24-slim
+
+WORKDIR /app
+
+# Copy only the built app
+COPY --from=builder /app/dist/marketmate ./dist
+
+# Copy package files again
+COPY package*.json ./
+
+# Install only production deps
+RUN npm ci --omit=dev
+
+ENV NODE_ENV=production
+ENV PORT=4000
+
 EXPOSE 4000
 
-# Start real SSR server
-CMD ["node", "dist/marketmate/server/server.mjs"]
+CMD ["node", "dist/server/server.mjs"]
