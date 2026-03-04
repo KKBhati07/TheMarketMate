@@ -46,6 +46,12 @@
       },
       "configurations": {
         "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/marketmate/src/environments/environment.ts",
+              "with": "apps/marketmate/src/environments/environment.prod.ts"
+            }
+          ],
           "budgets": [
             {
               "type": "initial",

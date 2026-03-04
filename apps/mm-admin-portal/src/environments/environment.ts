@@ -6,7 +6,7 @@ const envDev = {
 
 const envProd = {
 	production: false,
-	apiUrl: 'https://.api.abcc.com/',
+	apiUrl: 'https://springmate.onrender.com/api/'
 };
 
 export const environment = envDev
