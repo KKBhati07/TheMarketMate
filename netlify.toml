@@ -1,0 +1,8 @@
+[build]
+  command = "npx nx build mm-admin-portal --configuration=production"
+  publish = "dist/mm-admin-portal"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
