@@ -36,7 +36,8 @@ export function app(): express.Express {
 						connectSrc: [
 							"'self'",
 							"https://api.marketmate.local:8080", // allow API calls
-							"https://api.marketmatecloud.in"
+							"https://api.marketmatecloud.in",
+							"https://marketmatestore.s3.ap-south-1.amazonaws.com"
 						],
 						scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
 						scriptSrcAttr: ["'unsafe-inline'"],

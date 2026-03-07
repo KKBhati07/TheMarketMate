@@ -7,8 +7,8 @@ const envDev = {
 
 const envProd = {
 	production: false,
-	apiUrl: 'https://springmate.onrender.com/api/',
-	adminAppUrl: 'https://admin.marketmate.com',
+	apiUrl: 'https://api.marketmatecloud.in/api/',
+	adminAppUrl: 'https://admin.marketmatecloud.in',
 };
 
 export const environment = envDev
