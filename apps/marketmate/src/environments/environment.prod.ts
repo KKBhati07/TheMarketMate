@@ -1,5 +1,5 @@
 export const environment = {
 	production: true,
-	apiUrl: 'https://springmate.onrender.com/api/',
-	adminAppUrl: 'https://admin.marketmate.com',
+	apiUrl: 'https://api.marketmatecloud.in/api/',
+	adminAppUrl: 'https://admin.marketmatecloud.in',
 };
