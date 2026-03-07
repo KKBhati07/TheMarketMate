@@ -36,7 +36,7 @@ export function app(): express.Express {
 						connectSrc: [
 							"'self'",
 							"https://api.marketmate.local:8080", // allow API calls
-							"https://springmate.onrender.com"
+							"https://api.marketmatecloud.in"
 						],
 						scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
 						scriptSrcAttr: ["'unsafe-inline'"],
