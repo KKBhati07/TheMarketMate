@@ -24,9 +24,10 @@ import { UserService } from "../../../services/user.service";
 import { AuthService } from "@marketmate/shared";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { ProfileDetailsBottomSheetData } from '../../../types/common.type';
-import { ImageViewerComponent } from '@marketmate/shared';
+import { ImageViewerComponent, FeatureDisabledDialogComponent } from '@marketmate/shared';
 import { StorageService, Directory } from '@marketmate/shared';
 import { CONSTANTS } from '../../../app.constants';
+import { environment } from '../../../../environments/environment';
 import { HttpResponse } from '@angular/common/http';
 import { ApiHttpResponse, ApiResponse } from '@marketmate/shared';
 
@@ -36,7 +37,12 @@ import { ApiHttpResponse, ApiResponse } from '@marketmate/shared';
 	styleUrls: ['./profile-details.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [...SHARED_UI_DEPS, AppButtonComponent, BottomSheetPillComponent, BackForwardIconComponent]
+	imports: [
+		...SHARED_UI_DEPS,
+		AppButtonComponent,
+		BottomSheetPillComponent,
+		BackForwardIconComponent
+	]
 })
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
@@ -299,6 +305,14 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 	onVerifyEmailClick() {
 		if (!this.userDetails?.email || this.requestingOtp) return;
+		if (!environment.emailEnabled) {
+			this.dialog.open(FeatureDisabledDialogComponent, {
+				width: 'min(420px, 92vw)',
+				data: { message: 'Email verification is temporarily disabled. It will be enabled soon.' },
+				panelClass: 'feature-disabled-dialog-panel'
+			});
+			return;
+		}
 		this.requestingOtp = true;
 		this.authService.requestEmailVerificationOtp()
 				.pipe(takeUntil(this.destroy$))
