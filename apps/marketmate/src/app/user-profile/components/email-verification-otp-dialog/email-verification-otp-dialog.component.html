@@ -1,0 +1,56 @@
+<div
+    class="email-verification-otp-dialog position-relative br-36 p-20"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="email-verification-dialog-title"
+    aria-describedby="email-verification-dialog-desc"
+>
+  <div class="dialog-header mb-8 flex-row justify-content-space-b align-i-center">
+    <h2 id="email-verification-dialog-title" class="dialog-title fs-20 fw-600 m-0">Verify your email</h2>
+    <mm-close-btn
+        (clicked)="onClose()"
+        containerClass="w-36 h-36"
+        iconClass="fs-20 w-20 h-20"
+        backgroundColor="var(--items-bg)"
+        iconColor="var(--primary-color)"
+    ></mm-close-btn>
+  </div>
+  <mat-dialog-content class="dialog-content">
+    <p id="email-verification-dialog-desc" class="message fs-14 mb-16">Enter the OTP sent to
+      <strong>{{ data.email }}</strong></p>
+    <form [formGroup]="otpForm" class="otp-form flex-column gap-12" (ngSubmit)="onSubmit()">
+      <label class="fs-14" for="otp">OTP</label>
+      <input
+          id="otp"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          class="form-input w-100p br-32 pl-12 fs-16 h-54"
+          formControlName="otp"
+          placeholder="Enter OTP"
+          maxlength="8"
+          aria-required="true"
+          [attr.aria-invalid]="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched"
+          [attr.aria-describedby]="(otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched) ? 'otp-error' : null"
+      />
+      @if (otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched) {
+        <span id="otp-error" class="error-text fs-12"
+              role="alert">Please enter a valid OTP (at least 4 characters)</span>
+      }
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions class="actions pt-16 flex-row gap-12 justify-content-end align-i-center">
+    <mm-button
+        type="button"
+        [text]="'Close'"
+        [class]="'h-44 br-32 pl-16 pr-16 fs-12'"
+        (click)="onClose()"
+    ></mm-button>
+    <mm-button
+        type="submit"
+        [text]="submitting ? 'Verifying...' : 'Submit'"
+        [disabled]="otpForm.invalid || submitting"
+        [class]="'h-44 br-32 pl-16 pr-16 fs-12'"
+    ></mm-button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,46 @@
+.email-verification-otp-dialog {
+  z-index: 3;
+  background: var(--header-color);
+  min-width: 320px;
+  max-width: 420px;
+
+  .dialog-title {
+    color: var(--text-main);
+  }
+
+  .dialog-content {
+    .message {
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .otp-form {
+      label {
+        color: var(--text-main);
+      }
+
+      .form-input {
+        background-color: var(--items-bg);
+        outline: none;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+
+        &:hover {
+          border-color: var(--primary-color);
+        }
+
+        &:focus {
+          border-color: var(--primary-color);
+        }
+      }
+
+      .error-text {
+        color: #d32f2f;
+      }
+    }
+  }
+
+  .actions {
+    min-height: auto;
+  }
+}

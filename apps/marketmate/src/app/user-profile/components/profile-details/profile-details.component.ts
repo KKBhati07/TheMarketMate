@@ -18,6 +18,7 @@ import {
 import { LoggingService } from "@marketmate/shared";
 import { MatDialog } from "@angular/material/dialog";
 import { UserProfileEditComponent } from "@marketmate/shared";
+import { EmailVerificationOtpDialogComponent } from "../email-verification-otp-dialog/email-verification-otp-dialog.component";
 import { catchError, map, of, Subject, switchMap, takeUntil, tap, throwError, timer } from "rxjs";
 import { UserService } from "../../../services/user.service";
 import { AuthService } from "@marketmate/shared";
@@ -48,6 +49,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 	renderIcon = false
 	@Output() expandComponent = new EventEmitter<boolean>();
 	isUpdatingProfile = false;
+	requestingOtp = false;
 
 	constructor(private cdr: ChangeDetectorRef,
 							private userService: UserService,
@@ -275,17 +277,59 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 		this.userDetails = res.body?.data?.user_details ?? this.userDetails;
 		if (this.userDetails) {
 			this.self = res.body?.data?.self ?? false;
-			this.authService.setUpdatedUser({
-				name: this.userDetails.name,
-				email: this.userDetails.email,
-				uuid: this.userDetails.uuid,
-				profile_url: (this.userDetails.profile_url ?? ''),
-				contact_no: this.userDetails.contact_no,
-				is_admin: this.userDetails.admin,
-				admin: this.userDetails.admin,
-			})
+			this.setUserState();
+
 		}
 		this.cdr.markForCheck();
+	}
+
+	setUserState() {
+		if (!this.userDetails) return;
+		this.authService.setUpdatedUser({
+			name: this.userDetails.name,
+			email: this.userDetails.email,
+			uuid: this.userDetails.uuid,
+			profile_url: (this.userDetails.profile_url ?? ''),
+			contact_no: this.userDetails.contact_no,
+			is_admin: this.userDetails.admin,
+			admin: this.userDetails.admin,
+			email_verified: this.userDetails.email_verified
+		})
+	}
+
+	onVerifyEmailClick() {
+		if (!this.userDetails?.email || this.requestingOtp) return;
+		this.requestingOtp = true;
+		this.authService.requestEmailVerificationOtp()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(res => {
+					if (res.isSuccessful()) {
+						this.openEmailVerificationOtpDialog();
+					} else {
+						this.notificationService.error({ message: res.body?.message ?? 'Failed to send OTP' });
+						this.requestingOtp = false;
+					}
+				});
+	}
+
+	private openEmailVerificationOtpDialog() {
+		const dialogRef = this.dialog.open(EmailVerificationOtpDialogComponent, {
+			panelClass: 'email-verification-otp-dialog-container',
+			backdropClass: 'profile-edit-from-backdrop',
+			hasBackdrop: true,
+			width: 'min(420px, 90vw)',
+			data: { email: this.userDetails?.email ?? '' }
+		});
+		dialogRef.afterClosed()
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((verified: boolean) => {
+					if (verified && this.userDetails) {
+						this.userDetails = { ...this.userDetails, email_verified: true };
+						this.setUserState();
+					}
+					this.requestingOtp = false;
+					this.cdr.markForCheck();
+				});
 	}
 
 	ngOnDestroy() {

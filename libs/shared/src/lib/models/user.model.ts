@@ -4,6 +4,7 @@ export interface User {
 	uuid: string;
 	profile_url?: string;
 	email: string;
+	email_verified: boolean;
 	is_admin: boolean;
 	admin: boolean;
 	contact_no: string | null;
@@ -17,6 +18,7 @@ export interface UserDetailsDto {
 	admin: boolean;
 	contact_no: string | null;
 	profile_url: string | null;
+	email_verified: boolean;
 	deleted?: boolean;
 }
 

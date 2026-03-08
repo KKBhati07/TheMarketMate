@@ -41,6 +41,12 @@
   }
   @if ( isExpanded || isBottomSheet) {
     <div
+        (click)="userDetails?.email_verified ? null : onVerifyEmailClick()"
+        [ngClass]="{'cursor-default': userDetails?.email_verified, 'cursor-pointer': !userDetails?.email_verified}"
+        class=" email-verified-container position-absolute br-32 pl-8 pr-8 pt-4 pb-4 flex-row align-i-center justify-content-center">
+      <p class="fs-12 fw-7 br-32">{{ userDetails?.email_verified ? 'Email Verified' : 'Verify Email' }}</p>
+    </div>
+    <div
         [ngStyle]="{'height': isBottomSheet ? '100%'
     :'80vh'}"
       (click)="userDetails?.profile_url && !renderIcon ? onProfilePicClick():null"

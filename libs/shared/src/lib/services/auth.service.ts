@@ -62,7 +62,9 @@ export class AuthService {
 				profile_url: authDetails.profile_url || undefined,
 				is_admin: authDetails.admin,
 				admin: authDetails.admin,
-				contact_no: authDetails.contact_no
+				contact_no: authDetails.contact_no,
+				email_verified: authDetails.email_verified ?? false,
+
 			};
 			this.isAdmin = authDetails.admin;
 		}
@@ -85,6 +87,18 @@ export class AuthService {
 			type: 'LOGIN' as OtpType,
 			email
 		});
+	}
+
+	requestEmailVerificationOtp(): Observable<ApiHttpResponse<ApiResponse<null>>> {
+		return this.apiService.get<ApiResponse<null>>(AppUrls.API.V1.AUTH.REQUEST_EMAIL_VERIFICATION_OTP);
+	}
+
+	verifyEmailVerificationOtp(email: string, otp: string): Observable<ApiHttpResponse<ApiResponse<{
+		verified: boolean
+	}>>> {
+		return this.apiService.post<ApiResponse<{
+			verified: boolean
+		}>>(AppUrls.API.V1.AUTH.VERIFY_EMAIL_VERIFICATION_OTP, { email, otp });
 	}
 
 	loginWithOtp(email: string, otp: string, appContext: AppContext): Observable<ApiHttpResponse<ApiResponse<any>>> {

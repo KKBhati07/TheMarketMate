@@ -22,10 +22,18 @@
     }
   }
 
-  &.hide-comp {
-  }
+  .email-verified-container {
+    top: 16px;
+    right: 16px;
+    background: var(--primary-color);
 
-  &:hover {
+    p {
+      color: var(--text-main);
+    }
+
+    &:hover {
+      background: var(--hover-color);
+    }
   }
 
   .profile-pic-container {
@@ -51,6 +59,15 @@
     p {
       background: var(--header-color);
       color: var(--text-main);
+    }
+
+    .email-verified {
+      color: var(--primary-color);
+    }
+
+    .verified-badge {
+      background: var(--primary-color);
+      color: white;
     }
 
     div {
@@ -129,4 +146,10 @@
 
 .bottom-sheet-br {
   border-radius: 32px 32px 0 0;
+}
+
+::ng-deep .email-verification-otp-dialog-container .mat-mdc-dialog-surface {
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
