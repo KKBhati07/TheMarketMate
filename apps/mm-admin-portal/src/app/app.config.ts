@@ -28,7 +28,8 @@ export const appConfig: ApplicationConfig = {
 
     // 3. LIBRARY CONFIG: must run first to configure ApiService, AuthService, etc.
     ...provideSharedLib({
-      apiUrl: environment.apiUrl
+      apiUrl: environment.apiUrl,
+      emailEnabled: environment.emailEnabled
     }),
     {
       provide: APP_INITIALIZER,

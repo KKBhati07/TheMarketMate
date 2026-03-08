@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { City, Country, State, SHARED_UI_DEPS, fadeSlideIn } from '@marketmate/shared';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationApiService } from '../../../services/location.service';
-import { FilterService } from '@marketmate/shared';
+import { FilterService, HeadingComponent } from '@marketmate/shared';
 import { LoggingService, NotificationService } from '@marketmate/shared';
 import { AutocompleteSelectComponent } from '../app-autocomplete-select/app-autocomplete-select.component';
-import { HeadingComponent } from '../app-heading/heading.component';
 
 @Component({
 	selector: 'mm-location-selector',

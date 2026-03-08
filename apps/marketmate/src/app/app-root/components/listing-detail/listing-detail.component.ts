@@ -21,7 +21,8 @@ import {
 	NotificationService,
 	FavoriteService,
 	DeviceDetectorService,
-	ImageViewerComponent
+	ImageViewerComponent,
+	FeatureDisabledDialogComponent
 } from '@marketmate/shared';
 import { AppUrls as SharedUrls } from '@marketmate/shared';
 import { AppUrls } from '../../../app.urls';
@@ -37,6 +38,7 @@ import {
 	ContactEmailDialogComponent,
 	ContactEmailDraft
 } from '../../../app-util/components/contact-email-dialog/contact-email-dialog.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
 	selector: 'mm-listing-detail',
@@ -190,8 +192,15 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 					.pipe(takeUntil(this.destroy$))
 					.subscribe((method: ContactMethod | null | undefined) => {
 						if (!method) return;
-						// TODO: implement actual flows
 						if (method === 'EMAIL') {
+							if (!environment.emailEnabled) {
+								this.dialog.open(FeatureDisabledDialogComponent, {
+									width: 'min(420px, 92vw)',
+									data: { message: 'This feature is temporarily disabled. It will be enabled soon.' },
+									panelClass: 'feature-disabled-dialog-panel'
+								});
+								return;
+							}
 							const currentUrl = typeof window !== 'undefined' ? window.location.href : this.router.url;
 							const emailRef = this.dialog.open(ContactEmailDialogComponent, {
 								panelClass: 'mm-contact-email-dialog-panel',
@@ -227,7 +236,11 @@ export class ListingDetailComponent implements OnInit, OnDestroy {
 												});
 									});
 						} else if (method === 'CHAT') {
-							console.warn('TODO: Contact via chat');
+							this.dialog.open(FeatureDisabledDialogComponent, {
+								width: 'min(420px, 92vw)',
+								data: { message: 'Chat is temporarily unavailable. It will be enabled soon.' },
+								panelClass: 'feature-disabled-dialog-panel'
+							});
 						}
 					});
 			return;

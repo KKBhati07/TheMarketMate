@@ -2,7 +2,7 @@ export const AppUrls = {
 	ROOT: '',
 	HOME: 'home',
 	LISTING: {
-		DETAIL: (id: number) => `listing/${id}`,
+		DETAIL: (id: number) => `listing/${ id }`,
 	},
 	AUTH: {
 		BASE: 'auth',
@@ -24,6 +24,8 @@ export const AppUrls = {
 			AUTH: {
 				LOGIN: 'v1/auth/login_with_password',
 				REQUEST_LOGIN_OTP: 'v1/auth/request_login_otp',
+				REQUEST_EMAIL_VERIFICATION_OTP: 'v1/auth/request_email_verification_otp',
+				VERIFY_EMAIL_VERIFICATION_OTP: 'v1/auth/verify_email_verification_otp',
 				OTP_LOGIN: 'v1/auth/login_with_otp',
 				LOGOUT: 'v1/auth/logout',
 				AUTH_DETAILS: 'v1/auth/auth_details'

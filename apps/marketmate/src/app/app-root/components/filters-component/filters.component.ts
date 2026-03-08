@@ -7,12 +7,11 @@ import {
 } from '@angular/core';
 import {
 	handleKeyboardActivation, SHARED_UI_DEPS, BackForwardIconComponent, BottomSheetPillComponent,
-	CloseBtnComponent
+	CloseBtnComponent, HeadingComponent
 } from '@marketmate/shared';
 import { PriceSliderComponent } from '../../../app-util/components/price-slider/price-slider.component';
 import { LocationSelectorComponent } from '../../../app-util/components/location-selector/location-selector.component';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { HeadingComponent } from '../../../app-util/components/app-heading/heading.component';
 
 @Component({
 	selector: 'mm-filters-component',
