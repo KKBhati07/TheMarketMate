@@ -8,9 +8,8 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { PriceRange } from '../../../types/common.type';
-import { FilterService, SHARED_UI_DEPS } from '@marketmate/shared';
+import { FilterService, HeadingComponent, SHARED_UI_DEPS } from '@marketmate/shared';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
-import { HeadingComponent } from '../app-heading/heading.component';
 
 @Component({
 	selector: 'mm-price-slider',

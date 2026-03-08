@@ -1,0 +1,26 @@
+<div class="feature-disabled-dialog position-relative br-36 p-20">
+  <mm-heading
+      text="Feature unavailable"
+      class="pt-8 pb-8 pl-20 pr-20"
+      textClass="fs-20 fw-700 m-0 cursor-default"
+  >
+  </mm-heading>
+  <mat-dialog-content class="dialog-content">
+    <p class="message fs-14">{{ message }}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions class="actions flex-row gap-12 justify-content-end align-i-center">
+    <mm-close-btn
+        (clicked)="close()"
+        containerClass="w-36 h-36"
+        iconClass="fs-20 w-20 h-20"
+        backgroundColor="var(--items-bg)"
+        iconColor="var(--primary-color)"
+    ></mm-close-btn>
+    <mm-button
+        type="button"
+        [text]="'Understood'"
+        class="h-44 br-32 pl-16 pr-16 fs-12"
+        (click)="understood()"
+    ></mm-button>
+  </mat-dialog-actions>
+</div>

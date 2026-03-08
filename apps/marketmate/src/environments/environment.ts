@@ -3,12 +3,14 @@ const envDev = {
 	// apiUrl: 'http://localhost:8080/api/',
 	apiUrl: 'https://api.marketmate.local:8080/api/',
 	adminAppUrl: 'https://admin.marketmate.local:4300/',
+	emailEnabled: true,
 };
 
 const envProd = {
 	production: false,
 	apiUrl: 'https://api.marketmatecloud.in/api/',
 	adminAppUrl: 'https://admin.marketmatecloud.in',
+	emailEnabled: true,
 };
 
 export const environment = envDev

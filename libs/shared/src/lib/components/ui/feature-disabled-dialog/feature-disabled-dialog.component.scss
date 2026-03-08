@@ -1,0 +1,18 @@
+.feature-disabled-dialog {
+  position: relative;
+  z-index: 3;
+  background: var(--header-color);
+  min-width: 320px;
+  max-width: 420px;
+
+  .dialog-content {
+    .message {
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+  }
+
+  .actions {
+    min-height: auto;
+  }
+}

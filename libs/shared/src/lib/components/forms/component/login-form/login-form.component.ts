@@ -7,6 +7,7 @@ import {
 	Input,
 	OnDestroy,
 	OnInit,
+	Optional,
 	PLATFORM_ID,
 	ViewChild,
 	AfterViewInit
@@ -17,6 +18,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from "../../../../services/auth.service";
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from "@angular/material/bottom-sheet";
+import { MatDialog } from "@angular/material/dialog";
 import { AppUrls } from "../../../../common.urls";
 import { Subject, takeUntil } from "rxjs";
 import { AppContext } from '../../../../types/common.type';
@@ -24,6 +26,8 @@ import { SHARED_UI_DEPS } from '../../../../constants/shared-imports';
 import { BottomSheetPillComponent } from '../../../ui/bottomsheet-pill/bottomsheet-pill.component';
 import { AppButtonComponent } from '../../../ui/app-button/app-button.component';
 import { AppNavButtonComponent } from '../../../ui/app-nav-button/app-nav-button.component';
+import { SHARED_LIB_CONFIG } from '../../../../utils/tokens.util';
+import { FeatureDisabledDialogComponent } from '../../../ui/feature-disabled-dialog/feature-disabled-dialog.component';
 
 type LoginMethod = 'PASSWORD' | 'OTP';
 
@@ -66,9 +70,11 @@ export class LoginFormComponent implements OnInit, AfterViewInit, OnDestroy {
 			private route: ActivatedRoute,
 			private cdr: ChangeDetectorRef,
 			private authService: AuthService,
+			private dialog: MatDialog,
 			@Inject(MAT_BOTTOM_SHEET_DATA) public data: { openInBottomSheet: boolean },
 			private bsr: MatBottomSheetRef,
-			@Inject(PLATFORM_ID) private platformId: Object
+			@Inject(PLATFORM_ID) private platformId: Object,
+			@Optional() @Inject(SHARED_LIB_CONFIG) private sharedConfig: { emailEnabled?: boolean } | null
 	) {
 		this.loginForm = this.fb.group({
 			email: ['', [Validators.required, Validators.email]],
@@ -152,6 +158,15 @@ export class LoginFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	setLoginMethod(method: LoginMethod) {
 		if (this.iSAdminPortal) return;
 		if (this.loginMethod === method) return;
+
+		if (method === 'OTP' && this.sharedConfig?.emailEnabled === false) {
+			this.dialog.open(FeatureDisabledDialogComponent, {
+				width: 'min(420px, 92vw)',
+				data: { message: 'This feature is temporarily disabled. It will be enabled soon.' },
+				panelClass: 'feature-disabled-dialog-panel'
+			});
+			return;
+		}
 
 		this.loginMethod = method;
 		this.otpStep = 1;

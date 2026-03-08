@@ -9,12 +9,14 @@ export * from './lib/components/ui/back-forward-icon/back-forward-icon.component
 export * from './lib/components/ui/bottomsheet-pill/bottomsheet-pill.component';
 export * from './lib/components/ui/close-btn/close-btn.component';
 export * from './lib/components/ui/confirm-delete-dialog/app-confirm-delete-dialog.component';
+export * from './lib/components/ui/feature-disabled-dialog/feature-disabled-dialog.component';
 export * from './lib/components/ui/four-o-four/four-o-four.component';
 export * from './lib/components/ui/image-viewer/image-viewer.component';
 export * from './lib/components/ui/image-preview/image-preview.component';
 export * from './lib/components/ui/app-loader/app-loader.component';
 export * from './lib/components/ui/user-profile-edit/user-profile-edit.component';
 export * from './lib/components/ui/app-pill/pill.component';
+export * from './lib/components/ui/app-heading/heading.component';
 export * from './lib/components/ui/empty-state/empty-state.component';
 export * from './lib/components/ui/search/search.component';
 export * from './lib/components/app-listing-card/listing-card-skeleton/listing-card-skeleton.component';
