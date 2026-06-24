@@ -45,6 +45,7 @@ export function app(): express.Express {
 						connectSrc: [
 							"'self'",
 							"https://api.marketmate.local:8080", // allow API calls
+							"https://chat.marketmate.local:4400", // allow chat WebSocket
 						],
 						scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
 						scriptSrcAttr: ["'unsafe-inline'"],

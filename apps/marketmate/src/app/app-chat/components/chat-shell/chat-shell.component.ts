@@ -33,20 +33,27 @@ export class ChatShellComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		const userId = this.route.snapshot.queryParams['userId'];
-		if (userId) {
-			this.startConversationWithUser(userId);
-		} else {
-			const conversationId = this.route.snapshot.paramMap.get('conversationId');
-			if (conversationId) {
-				void this.onSelectConversation(conversationId);
-			}
-		}
-
 		const conversationsSub = this.chatState.conversationList.subscribe((conversations) => {
 			this.conversations = conversations;
 		});
 		this.subscriptions.add(conversationsSub);
+
+		void this.initChat();
+	}
+
+	private async initChat() {
+		await this.loadConversationList();
+
+		const userId = this.route.snapshot.queryParams['userId'];
+		if (userId) {
+			await this.startConversationWithUser(userId);
+			return;
+		}
+
+		const conversationId = this.route.snapshot.paramMap.get('conversationId');
+		if (conversationId) {
+			await this.onSelectConversation(conversationId);
+		}
 	}
 
 	ngOnDestroy() {
@@ -60,43 +67,63 @@ export class ChatShellComponent implements OnInit, OnDestroy {
 		}
 
 		try {
-			// Join conversation - connect() is called inside joinConversation
 			const response = await this.chatSocket.joinConversation(otherUserUuid);
 			if (response?.conversationId) {
 				this.activeConversation = response.conversationId;
 				this.chatState.setActiveConversation(response.conversationId);
-				// Remove query parameter from URL after successful connection
-				// this.router.navigate([], {
-				// 	relativeTo: this.route,
-				// 	queryParams: { userId: null },
-				// 	queryParamsHandling: 'merge',
-				// 	replaceUrl: true
-				// });
+				this.chatState.markConversationRead(response.conversationId);
+				await this.loadMessageHistory(response.conversationId);
+				await this.loadConversationList();
 			}
 		} catch (error) {
 			console.error('Error starting conversation:', error);
-			// Optionally show user-friendly error message
 		}
 	}
 
 	async onSelectConversation(id: string) {
+		await this.openConversation(id);
+	}
+
+	private async openConversation(id: string) {
 		this.chatState.setActiveConversation(id);
 		this.chatState.markConversationRead(id);
-
-		const selectedConversation = this.conversations.find((c) => c.id === id);
-		if (selectedConversation?.lastMessage) {
-			this.chatState.addMessage(selectedConversation.lastMessage);
-		}
-
 		this.activeConversation = id;
 
-		if (isPlatformBrowser(this.platformId)) {
-			try {
-				await this.chatSocket.joinConversationById(id);
-				console.log(`Joined conversation room: ${id}`);
-			} catch (error) {
-				console.error('Error joining conversation room:', error);
+		if (!isPlatformBrowser(this.platformId)) {
+			return;
+		}
+
+		try {
+			await this.chatSocket.joinConversationById(id);
+			await this.loadMessageHistory(id);
+		} catch (error) {
+			console.error('Error opening conversation:', error);
+		}
+	}
+
+	private async loadMessageHistory(conversationId: string) {
+		try {
+			const response = await this.chatSocket.getMessages(conversationId);
+			if (response.success) {
+				this.chatState.setMessages(conversationId, response.messages);
+			} else {
+				console.warn('Failed to load message history:', response.error);
 			}
+		} catch (error) {
+			console.error('Error loading message history:', error);
+		}
+	}
+
+	private async loadConversationList() {
+		try {
+			const response = await this.chatSocket.listConversations();
+			if (response.success) {
+				this.chatState.setConversations(response.conversations);
+			} else {
+				console.warn('Failed to load conversation list:', response.error);
+			}
+		} catch (error) {
+			console.error('Error loading conversation list:', error);
 		}
 	}
 

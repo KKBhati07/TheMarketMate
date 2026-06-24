@@ -15,6 +15,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Message } from '../../../models/message.model';
 import { ChatSocketService } from '../../../services/chat-socket.service';
 import { ChatStateService } from '../../../services/chat-state.service';
+import { AuthService } from '@marketmate/shared';
 import { MessageBubbleComponent } from '../message-bubble/message-bubble.component';
 import { ChatInputComponent } from '../chat-input/chat-input.component';
 import { Subject, takeUntil } from 'rxjs';
@@ -60,6 +61,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 	constructor(
 			private chatSocket: ChatSocketService,
 			private chatState: ChatStateService,
+			private authService: AuthService,
 			private deviceDetector: DeviceDetectorService,
 			private cdr: ChangeDetectorRef,
 			@Inject(PLATFORM_ID) private platformId: Object
@@ -104,10 +106,13 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 	sendMessage(text: string) {
 		if (!text.trim() || !this.conversationId) return;
 
+		const senderUuid = this.authService.UserDetails?.uuid;
+		if (!senderUuid) return;
+
 		const newMessage: Message = {
 			id: `tmp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
 			conversationId: this.conversationId,
-			senderUuid: 'current-user-uuid', // TODO: Get from auth service
+			senderUuid,
 			content: text.trim(),
 			createdAt: new Date().toISOString(),
 			status: 'sent'
@@ -127,8 +132,8 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 	}
 
 	isMessageFromSelf(message: Message): boolean {
-		// TODO: Compare with actual logged-in user UUID
-		return message.senderUuid === 'current-user-uuid';
+		const currentUserUuid = this.authService.UserDetails?.uuid;
+		return !!currentUserUuid && message.senderUuid === currentUserUuid;
 	}
 
 	scrollToBottom() {

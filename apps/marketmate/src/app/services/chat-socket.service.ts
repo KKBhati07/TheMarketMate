@@ -5,6 +5,14 @@ import { environment } from '../../environments/environment';
 import { Message } from '../models/message.model';
 import { Observable, Subject } from 'rxjs';
 
+export interface ListConversationItem {
+	conversationId: string;
+	otherParticipantUuid: string;
+	participants: string[];
+	createdAt: string;
+	lastMessage: Message | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ChatSocketService {
 	private socket!: Socket;
@@ -190,6 +198,101 @@ export class ChatSocketService {
 					reject(new Error('Invalid response from server'));
 				}
 			});
+		});
+	}
+
+	async getMessages(
+		conversationId: string,
+		limit = 200,
+		offset = 0,
+	): Promise<{ success: true; messages: Message[] } | { success: false; error: { code: string; message: string } }> {
+		if (!this.isBrowser) {
+			return Promise.reject(new Error('Socket operations not available during SSR'));
+		}
+
+		if (!this.socket || !this.socket.connected) {
+			await this.connect();
+		}
+
+		return new Promise((resolve, reject) => {
+			if (!this.socket || !this.socket.connected) {
+				reject(new Error('Socket not connected'));
+				return;
+			}
+
+			const timeout = setTimeout(() => {
+				reject(new Error('Get messages timeout'));
+			}, 10000);
+
+			this.socket.emit(
+				'get_messages',
+				{ conversationId, limit, offset },
+				(response: { success: boolean; messages?: Message[]; error?: { code: string; message: string } }) => {
+					clearTimeout(timeout);
+					if (!response) {
+						reject(new Error('Invalid response from server'));
+						return;
+					}
+					if (response.success === false && response.error) {
+						resolve({ success: false, error: response.error });
+						return;
+					}
+					if (response.success && Array.isArray(response.messages)) {
+						resolve({ success: true, messages: response.messages });
+						return;
+					}
+					reject(new Error('Invalid response from server'));
+				},
+			);
+		});
+	}
+
+	async listConversations(): Promise<
+		| { success: true; conversations: ListConversationItem[] }
+		| { success: false; error: { code: string; message: string } }
+	> {
+		if (!this.isBrowser) {
+			return Promise.reject(new Error('Socket operations not available during SSR'));
+		}
+
+		if (!this.socket || !this.socket.connected) {
+			await this.connect();
+		}
+
+		return new Promise((resolve, reject) => {
+			if (!this.socket || !this.socket.connected) {
+				reject(new Error('Socket not connected'));
+				return;
+			}
+
+			const timeout = setTimeout(() => {
+				reject(new Error('List conversations timeout'));
+			}, 10000);
+
+			this.socket.emit(
+				'list_conversations',
+				{},
+				(response: {
+					success: boolean;
+					conversations?: ListConversationItem[];
+					error?: { code: string; message: string };
+				}) => {
+					clearTimeout(timeout);
+					if (!response) {
+						reject(new Error('Invalid response from server'));
+						return;
+					}
+					if (response.success === false && response.error) {
+						resolve({ success: false, error: response.error });
+						return;
+					}
+					if (response.success && Array.isArray(response.conversations)) {
+						resolve({ success: true, conversations: response.conversations });
+						return;
+					}
+					reject(new Error('Invalid response from server'));
+				},
+			);
 		});
 	}
 

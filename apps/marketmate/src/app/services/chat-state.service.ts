@@ -1,8 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
+import { AuthService } from '@marketmate/shared';
 import { Message } from '../models/message.model';
 import { Conversation } from '../models/coversation.model';
+import { ListConversationItem } from './chat-socket.service';
+
+export type ConversationListEntry = Conversation & {
+	name?: string;
+	avatar?: string;
+	isOnline?: boolean;
+	otherParticipantUuid?: string;
+};
 
 @Injectable({ providedIn: 'root' })
 export class ChatStateService {
@@ -12,10 +21,10 @@ export class ChatStateService {
 	private readonly EMPTY_MESSAGES: Message[] = [];
 	private readonly messagesByConversation$ = new BehaviorSubject<Record<string, Message[]>>({});
 	private readonly activeConversationId$ = new BehaviorSubject<string | null>(null);
-	private readonly conversations$ = new BehaviorSubject<
-		(Conversation & { name?: string; avatar?: string; isOnline?: boolean })[]
-	>([]);
+	private readonly conversations$ = new BehaviorSubject<ConversationListEntry[]>([]);
 	private readonly typingByConversation$ = new BehaviorSubject<Record<string, boolean>>({});
+
+	constructor(private readonly authService: AuthService) {}
 
 	conversationList = this.conversations$.asObservable();
 
@@ -63,6 +72,66 @@ export class ChatStateService {
 		this.upsertConversationFromMessage(m);
 	}
 
+	setMessages(conversationId: string, messages: Message[] | Record<string, unknown>[]) {
+		const normalized = messages
+			.map((msg) => this.normalizeMessage(msg))
+			.filter((msg): msg is Message => msg !== null);
+
+		const sorted = [...normalized].sort(
+			(a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+		);
+
+		const byConversation = this.messagesByConversation$.value;
+		const existing = byConversation[conversationId] ?? this.EMPTY_MESSAGES;
+		const serverIds = new Set(sorted.map((m) => m.id));
+		const pendingOptimistic = existing.filter(
+			(m) => this.isOptimisticId(m.id) && !serverIds.has(m.id),
+		);
+		let merged = [...sorted, ...pendingOptimistic].sort(
+			(a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+		);
+
+		if (merged.length > this.MAX_MESSAGES_PER_CONVERSATION) {
+			merged = merged.slice(merged.length - this.MAX_MESSAGES_PER_CONVERSATION);
+		}
+
+		this.messagesByConversation$.next({
+			...byConversation,
+			[conversationId]: merged,
+		});
+
+		const lastMessage = merged[merged.length - 1];
+		if (lastMessage) {
+			this.upsertConversationFromMessage(lastMessage);
+		}
+	}
+
+	setConversations(items: ListConversationItem[]) {
+		const existingById = new Map(
+			this.conversations$.value.map((conversation) => [conversation.id, conversation]),
+		);
+
+		const next: ConversationListEntry[] = items.map((item) => {
+			const existing = existingById.get(item.conversationId);
+			const lastMessage = item.lastMessage
+				? this.normalizeMessage(item.lastMessage)
+				: undefined;
+
+			return {
+				id: item.conversationId,
+				participants: item.participants,
+				lastMessage: lastMessage ?? undefined,
+				unreadCount: 0,
+				name: existing?.name ?? 'Unknown',
+				avatar: existing?.avatar,
+				isOnline: existing?.isOnline ?? false,
+				otherParticipantUuid: item.otherParticipantUuid,
+			};
+		});
+
+		this.conversations$.next(next);
+	}
+
 	setTyping(conversationId: string, isTyping: boolean) {
 		const current = this.typingByConversation$.value;
 		if (isTyping) {
@@ -82,28 +151,35 @@ export class ChatStateService {
 
 	upsertConversationFromMessage(
 		message: Message,
-		overrides?: Partial<Conversation & { name?: string; avatar?: string; isOnline?: boolean }>
+		overrides?: Partial<ConversationListEntry>
 	) {
 		const activeId = this.activeConversationId$.value;
 		const conversations = this.conversations$.value;
 		const existingIndex = conversations.findIndex((c) => c.id === message.conversationId);
 		const existing = existingIndex >= 0 ? conversations[existingIndex] : undefined;
 
-		const unreadIncrement = message.senderUuid !== 'current-user-uuid' && message.conversationId !== activeId ? 1 : 0;
+		const currentUserUuid = this.authService.UserDetails?.uuid;
+		const unreadIncrement =
+			currentUserUuid &&
+			message.senderUuid !== currentUserUuid &&
+			message.conversationId !== activeId
+				? 1
+				: 0;
 		const nextUnreadCount = existing
 			? (message.conversationId === activeId ? 0 : (existing.unreadCount ?? 0) + unreadIncrement)
 			: unreadIncrement;
 
-		const base: Conversation & { name?: string; avatar?: string; isOnline?: boolean } = existing ?? {
+		const base: ConversationListEntry = existing ?? {
 			id: message.conversationId,
 			participants: [],
 			unreadCount: 0,
 			name: overrides?.name ?? 'Unknown',
 			avatar: overrides?.avatar,
 			isOnline: overrides?.isOnline ?? false,
+			otherParticipantUuid: overrides?.otherParticipantUuid,
 		};
 
-		const updated: Conversation & { name?: string; avatar?: string; isOnline?: boolean } = {
+		const updated: ConversationListEntry = {
 			...base,
 			...overrides,
 			id: message.conversationId,
@@ -111,7 +187,7 @@ export class ChatStateService {
 			unreadCount: nextUnreadCount,
 		};
 
-		let next: (Conversation & { name?: string; avatar?: string; isOnline?: boolean })[];
+		let next: ConversationListEntry[];
 		if (existingIndex === 0) {
 			next = [updated, ...conversations.slice(1)];
 		} else if (existingIndex > 0) {
